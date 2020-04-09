@@ -160,66 +160,37 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var _default =
 {
   data: function data() {
     return {
       modalName: null,
-      value: "",
-      value1: "男",
-      value2: "我我" };
+      Personalinformationlist: [
+      {
+        title: "昵称",
+        zhi: "明天的我又进步了",
+        showname: "DialogModal1",
+        dialogtitle: "您要修改的昵称",
+        placeholdertext: "请输入你要修改的昵称",
+        value3: "" },
+
+      {
+        title: "性别",
+        zhi: "男",
+        showname: "DialogModal2",
+        dialogtitle: "您要修改的性别",
+        placeholdertext: "请输入你要修改的性别",
+        value3: "" },
+
+      {
+        title: "个性签名",
+        zhi: "示范法纠纷解决分公司登记分",
+        showname: "DialogModal3",
+        dialogtitle: "您要修改的个性签名",
+        placeholdertext: "请输入你要修改的个性签名",
+        value3: "" }] };
+
+
 
   },
   methods: {
@@ -229,11 +200,9 @@ var _default =
     hideModal: function hideModal(e) {
       this.modalName = null;
     },
-    Modify: function Modify(value3) {
-      console.log(value3);
-      // this.value = this.value
-
-      // this.modalName = null
+    Modify: function Modify(value4, index) {
+      this.Personalinformationlist[index].zhi = value4;
+      this.modalName = null;
     } } };exports.default = _default;
 
 /***/ })

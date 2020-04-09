@@ -1,97 +1,45 @@
 <template>
 	<view class="nickname-box">
-		<view class="nickname">
-			<view class="cu-bar bg-white margin-top" :style="{'min-height':'80rpx'}" @click="showModal" data-target="DialogModal1">
+		<view class="nickname" v-for="(item,index) in Personalinformationlist" :key="index">
+			<view 
+				class="cu-bar bg-white margin-top" 
+				:style="{'min-height':'80rpx'}" 
+				@tap="showModal" 
+				:data-target="item.showname" 
+				
+			>
 				<view class="action">
-					<text>昵称</text>
+					<text>{{item.title}}</text>
 				</view>
+				
 				<view class="action">
 					<!--  @tap="showModal" -->
-					<text :style="{'margin-right': '44rpx'}">{{value?value:"明天的你又努力了"}}</text>
+					<text :style="{'margin-right': '44rpx'}">{{item.zhi}}</text>
 					<text class="lg text-gray cuIcon-right"></text>
 				</view>
 			</view>
-			<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
+			<view class="cu-modal" :class="modalName==item.showname?'show':''">
+				<!-- <form @submit="formsubmit"> -->
 				<view class="cu-dialog">
 					<view class="cu-bar bg-white justify-end">
-						<view class="content">您要修改的昵称</view>
+						<view class="content">{{item.dialogtitle}}</view>
 						<view class="action" @tap="hideModal">
 							<text class="cuIcon-close text-red"></text>
 						</view>
 					</view>
 					<view class="padding-xl">
-						<input :value="value" type="text" placeholder="请输入你要修改的昵称">
+						<input v-model="item.value3" type="text" :placeholder="item.placeholdertext">
 					</view>
 					<view class="cu-bar bg-white justify-end">
 						<view class="action">
-							<button class="cu-btn bg-green margin-left" @tap="Modify(value)">确定</button>
+							<button class="cu-btn bg-green margin-left" @tap="Modify(item.value3,index)">确定</button>
 						</view>
 					</view>
 				</view>
+				<!-- </form> -->
 			</view>
 		</view>
-		
-		<view class="nickname">
-			<view class="cu-bar bg-white margin-top" :style="{'min-height':'80rpx'}" @click="showModal" data-target="DialogModal1">
-				<view class="action">
-					<text>性别</text>
-				</view>
-				<view class="action">
-					<!--  @tap="showModal" -->
-					<text :style="{'margin-right': '44rpx'}">{{value1?value1:"男"}}</text>
-					<text class="lg text-gray cuIcon-right"></text>
-				</view>
-			</view>
-			<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
-				<view class="cu-dialog">
-					<view class="cu-bar bg-white justify-end">
-						<view class="content">您要修改的昵称</view>
-						<view class="action" @tap="hideModal">
-							<text class="cuIcon-close text-red"></text>
-						</view>
-					</view>
-					<view class="padding-xl">
-						<input :value=value1 type="text" placeholder="请输入您要修改的昵称">
-					</view>
-					<view class="cu-bar bg-white justify-end">
-						<view class="action">
-							<button class="cu-btn bg-green margin-left" @tap="Modify(value1)">确定</button>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-		
-		<view class="nickname">
-			<view class="cu-bar bg-white margin-top" :style="{'min-height':'80rpx'}" @click="showModal" data-target="DialogModal1">
-				<view class="action">
-					<text>个性签名</text>
-				</view>
-				<view class="action">
-					<!--  @tap="showModal" -->
-					<text :style="{'margin-right': '44rpx'}">{{value2?value2:"明天的你又努力了"}}</text>
-					<text class="lg text-gray cuIcon-right"></text>
-				</view>
-			</view>
-			<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
-				<view class="cu-dialog">
-					<view class="cu-bar bg-white justify-end">
-						<view class="content">您要修改的个性签名</view>
-						<view class="action" @tap="hideModal">
-							<text class="cuIcon-close text-red"></text>
-						</view>
-					</view>
-					<view class="padding-xl">
-						<input :value="value2" type="text" placeholder="请输入您要修改的个性签名">
-					</view>
-					<view class="cu-bar bg-white justify-end">
-						<view class="action">
-							<button class="cu-btn bg-green margin-left" @tap="Modify(value2)">确定</button>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
+		<!-- 刚才在这删除的 -->
 	</view>
 	
 </template>
@@ -101,9 +49,32 @@
 		data(){
 			return {
 				modalName: null,
-				value:"",
-				value1:"男",
-				value2:"我我"
+				Personalinformationlist:[
+					{
+						title:"昵称",
+						zhi:"明天的我又进步了",
+						showname:"DialogModal1",
+						dialogtitle:"您要修改的昵称",
+						placeholdertext:"请输入你要修改的昵称",
+						value3:""
+					},
+					{
+						title:"性别",
+						zhi:"男",
+						showname:"DialogModal2",
+						dialogtitle:"您要修改的性别",
+						placeholdertext:"请输入你要修改的性别",
+						value3:""
+					},
+					{
+						title:"个性签名",
+						zhi:"示范法纠纷解决分公司登记分",
+						showname:"DialogModal3",
+						dialogtitle:"您要修改的个性签名",
+						placeholdertext:"请输入你要修改的个性签名",
+						value3:""
+					}
+				]
 			}
 		},
 		methods:{
@@ -113,11 +84,9 @@
 			hideModal(e) {
 				this.modalName = null
 			},
-			Modify(value3){
-				console.log(value3)
-				// this.value = this.value
-				
-				// this.modalName = null
+			Modify(value4,index){
+				this.Personalinformationlist[index].zhi = value4
+				this.modalName = null
 			},
 		}
 	}
