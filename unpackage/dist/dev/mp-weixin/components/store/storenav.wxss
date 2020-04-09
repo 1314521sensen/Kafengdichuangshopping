@@ -1,0 +1,8 @@
+
+.nav .cu-item.cur.data-v-7658a7cf{
+	border-bottom:0;
+	font-size: 40rpx;
+	-webkit-transition: .5s;
+	transition: .5s;
+}
+

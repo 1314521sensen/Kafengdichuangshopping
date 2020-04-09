@@ -1,0 +1,31 @@
+.sortinglist .searhbusiness-midden.data-v-5a622b60 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  padding-left: 20rpx;
+}
+.sortinglist .searhbusiness-midden .Returnsicon.data-v-5a622b60 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.sortinglist .searhbusiness-midden .Returnsicon text.data-v-5a622b60 {
+  font-size: 44rpx;
+}
+.sortinglist .searhbusiness-midden .inp.data-v-5a622b60 {
+  width: 94%;
+}
+.sortinglist .searhbusiness-midden .inp .xiaoheight.data-v-5a622b60 {
+  min-height: 80rpx;
+}
+.sortinglist .searhbusiness-midden .inp .xiaoheight .inpheight.data-v-5a622b60 {
+  height: 50rpx;
+  line-height: 50rpx;
+}
+

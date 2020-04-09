@@ -1,0 +1,52 @@
+<template>
+	<view class="orders-icon-list" :style="{'justify-content':`${align}`}">
+		<view class="orders-item" v-for="(item,index) in iconList" :key="index">
+			<view class="icon">
+				<image :src=item.images alt="">
+			</view>
+			<text>{{item.textname}}</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default{
+		data(){
+			return {
+				
+			}
+		},
+		props:["iconList","align"]
+		
+	}
+</script>
+
+<style lang="less" scoped>
+	.orders-icon-list{
+		display:flex;
+		justify-content: space-around;
+		// height:200rpx;
+		// background-color:green;
+		.orders-item{
+			width: 18%;
+			height:100%;
+			// background-color: red;
+			.icon{
+				width: 40%;
+				height:52rpx;
+				// background-color:pink;
+				margin:auto;
+				image{
+					width: 100%;
+					height:100%;
+				}	
+			}
+			text{
+				display:block;
+				text-align:center;
+				margin-top:8rpx;
+				font-size: 22rpx;
+			}
+		}
+	}
+</style>

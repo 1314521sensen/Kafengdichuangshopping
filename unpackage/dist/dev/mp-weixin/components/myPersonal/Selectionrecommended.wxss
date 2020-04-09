@@ -1,0 +1,12 @@
+.Selectionrecommended.data-v-4147d4e3 {
+  background-color: #fff;
+  margin-top: 30rpx;
+}
+.Selectionrecommended .title.data-v-4147d4e3 {
+  font-size: 36rpx;
+  color: red;
+  text-align: center;
+  line-height: 70rpx;
+  padding: 12rpx 0 0;
+}
+

@@ -1,0 +1,137 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		// #ifdef MP-WEIXIN
+		{
+			"path" : "pages/Accessinformation/Accessinformation",
+			"style" : {}
+		},
+		// #endif
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+            "path" : "pages/classification/classification",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/shoppingCart/shoppingCart",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/PersonalMy/PersonalMy",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/bannerRouter/bannerRouter",
+		    "style" : {}
+		}
+        ,{
+            "path" : "pages/Details/Details",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/SearchTo/SearchTo",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Sortinglist/Sortinglist",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Personaldata/Personaldata",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/orderpageRouter/orderpageRouter",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/addressTo/addressTo",
+            "style" : {}
+        },
+		{
+		    "path" : "components/address/address",
+		    "style" : {}
+		},
+		{
+		    "path" : "components/collection/collection",
+		    "style" : {}
+		}
+        ,{
+            "path" : "pages/login/login",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/Allcoupons/allcoupons",
+		    "style" : {}
+		}
+        ,{
+            "path" : "pages/Store/store",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/SMSlogin/SMSlogin",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Freeregistration/Freeregistration",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Purchasepage/Purchasepage",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Temporarynonpayment/Temporarynonpayment",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Paysuccess/Paysuccess",
+            "style" : {}
+        }
+    ],
+	
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F2F2F2",
+		"navigationStyle": "custom"
+	},
+	
+	"tabBar": {
+		    "color": "#7A7E83",
+		    "selectedColor": "#3cc51f",
+		    "borderStyle": "black",
+		    "backgroundColor": "#ffffff",
+		    "list": [
+				{
+		        "pagePath": "pages/index/index",
+		        "iconPath": "static/tabber/indexwei.png",
+		        "selectedIconPath": "static/tabber/index.png",
+		        "text": "首页"
+		    }, 
+			{
+			    "pagePath": "pages/classification/classification",
+			    "iconPath": "static/tabber/classificationwei.png",
+			    "selectedIconPath": "static/tabber/classification.png",
+			    "text": "分类"
+			}, 
+			{
+		        "pagePath": "pages/shoppingCart/shoppingCart",
+		        "iconPath": "static/tabber/carwei.png",
+		        "selectedIconPath": "static/tabber/car.png",
+		        "text": "购物车"
+		    },
+			{
+			    "pagePath": "pages/PersonalMy/PersonalMy",
+			    "iconPath": "static/tabber/mywei.png",
+			    "selectedIconPath": "static/tabber/my.png",
+			    "text": "我的"
+			}
+			]
+		}
+}

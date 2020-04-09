@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "iconlist": "/components/myPersonal/iconlist"
+  }
+}

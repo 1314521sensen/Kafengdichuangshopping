@@ -1,0 +1,48 @@
+.login.data-v-5355cf9e {
+  height: 100vh;
+  background-color: #fff;
+}
+.login .app-login.data-v-5355cf9e {
+  width: 100%;
+}
+.login .app-login .logo.data-v-5355cf9e {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  height: 300rpx;
+}
+.login .app-login .from.data-v-5355cf9e {
+  padding: 0 30rpx;
+}
+.login .app-login .from .inp.data-v-5355cf9e {
+  border-bottom: 2rpx solid #ff5000;
+  min-height: 60rpx;
+  margin-bottom: 80rpx;
+}
+.login .app-login .from .inp-bottom.data-v-5355cf9e {
+  margin-bottom: 25rpx;
+}
+.login .app-login .from .sms-and-registration.data-v-5355cf9e {
+  font-size: 24rpx;
+  color: #999;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.login .app-login .from .loginButton.data-v-5355cf9e {
+  margin-top: 60rpx;
+  margin-bottom: 0;
+}
+.login .app-login .from .loginButton button.data-v-5355cf9e {
+  border-radius: 35rpx;
+}
+

@@ -1,0 +1,16 @@
+.address .confirm-box .confirm.data-v-673f14aa {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+}
+.address .confirm-box .confirm .cu-btn.data-v-673f14aa {
+  height: 80rpx;
+}
+.cu-bar.data-v-673f14aa {
+  min-height: 86rpx;
+}
+.cu-bar.btn-group uni-button.data-v-673f14aa {
+  margin: 0;
+}
+

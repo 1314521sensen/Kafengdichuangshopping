@@ -1,0 +1,42 @@
+.store .store-top .store-bg.data-v-3edda86e {
+  color: #fff;
+}
+.store .store-top .store-bg .fuceng.data-v-3edda86e {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0 30rpx;
+}
+.store .store-top .store-bg .fuceng .store-title.data-v-3edda86e {
+  padding-top: 25rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.store .store-top .store-bg .fuceng .evaluation.data-v-3edda86e {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin-top: 20rpx;
+}
+.store .store-top .store-bg .fuceng .evaluation .icon.data-v-3edda86e {
+  width: 80rpx;
+  height: 36rpx;
+  background-color: red;
+  border-radius: 22rpx;
+  font-size: 22rpx;
+  text-align: center;
+  line-height: 36rpx;
+  margin-top: 5rpx;
+}
+.store .store-top .store-bg .fuceng .evaluation .comprehensiveevaluation.data-v-3edda86e {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.store .store-top .store-bg .fuceng .evaluation .comprehensiveevaluation text.data-v-3edda86e {
+  font-size: 28rpx;
+  margin-left: 25rpx;
+}
+.store .rolling.data-v-3edda86e {
+  padding: 0 14rpx;
+}
+

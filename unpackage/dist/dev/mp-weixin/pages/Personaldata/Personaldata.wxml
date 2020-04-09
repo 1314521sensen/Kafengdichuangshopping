@@ -1,0 +1,1 @@
+<view class="personaldata data-v-67e16dec"><actionbar vue-id="709ad180-1" url="/pages/PersonalMy/PersonalMy" message="个人资料" class="data-v-67e16dec" bind:__l="__l"></actionbar><modelkuang vue-id="709ad180-2" class="data-v-67e16dec" bind:__l="__l"></modelkuang></view>

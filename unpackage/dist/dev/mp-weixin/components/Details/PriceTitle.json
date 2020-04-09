@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "bottompopup": "/components/Details/BottomPopup",
+    "evaluation": "/components/Details/evaluation"
+  }
+}

@@ -1,0 +1,27 @@
+.PriceTitle .PriceTitle-top.data-v-3eff78fb {
+  background-color: #fff;
+  padding: 28rpx 10rpx 14rpx;
+}
+.PriceTitle .price.data-v-3eff78fb {
+  margin-bottom: 10rpx;
+}
+.PriceTitle .price text.data-v-3eff78fb {
+  font-size: 44rpx;
+  color: #ff5000;
+}
+.PriceTitle .CommodityTitle text.data-v-3eff78fb {
+  font-size: 30rpx;
+  font-weight: bold;
+}
+.PriceTitle .sales.data-v-3eff78fb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 14rpx;
+}
+

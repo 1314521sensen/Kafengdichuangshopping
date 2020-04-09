@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "uni-app",
+  "usingComponents": {
+    "pageheight": "/components/pageheight/pageheight",
+    "search": "/components/indexcomponents/search",
+    "banner": "/components/indexcomponents/banner",
+    "scratchable-latex": "/components/indexcomponents/ScratchableLatex",
+    "coupons": "/components/indexcomponents/coupons",
+    "shoppinglist": "/components/indexcomponents/shoppinglist"
+  }
+}

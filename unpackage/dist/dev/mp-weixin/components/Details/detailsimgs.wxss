@@ -1,0 +1,11 @@
+.detailsimgs.data-v-287f0f36 {
+  width: 100%;
+}
+.detailsimgs .imgs.data-v-287f0f36 {
+  width: 80%;
+  margin: 20rpx auto 0;
+}
+.detailsimgs .imgs image.data-v-287f0f36 {
+  width: 100%;
+}
+

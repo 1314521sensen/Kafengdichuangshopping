@@ -1,0 +1,1 @@
+<view class="coupons data-v-43b42b49"><view class="coupons-midden data-v-43b42b49"><text class="data-v-43b42b49">省钱优惠券</text><view data-event-opts="{{[['tap',[['Ledsecurities',['$event']]]]]}}" class="coupons-icon data-v-43b42b49" bindtap="__e"><text class="data-v-43b42b49">立即领优惠券</text><text class="lg text-gray cuIcon-right data-v-43b42b49"></text></view></view></view>

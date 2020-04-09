@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "pageheight": "/components/pageheight/pageheight",
+    "actionbar": "/components/actionbar/actionbar",
+    "list": "/components/indexcomponents/list"
+  }
+}

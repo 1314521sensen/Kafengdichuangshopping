@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "pageheight": "/components/pageheight/pageheight",
+    "list": "/components/indexcomponents/list"
+  }
+}

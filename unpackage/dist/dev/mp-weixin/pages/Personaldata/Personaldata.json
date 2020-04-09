@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "actionbar": "/components/actionbar/actionbar",
+    "modelkuang": "/components/personaldata/modelkuang"
+  }
+}

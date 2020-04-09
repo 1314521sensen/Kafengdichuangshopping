@@ -1,0 +1,50 @@
+.storevideo .storerecommended-title.data-v-6dbadbb2 {
+  color: #000;
+  padding-left: 16rpx;
+  margin: 28rpx 0;
+}
+.storevideo .storerecommended-title text.data-v-6dbadbb2 {
+  font-size: 33rpx;
+  color: #565656;
+  font-weight: bold;
+}
+.storevideo .scroll-view.data-v-6dbadbb2 {
+  height: 80vh;
+}
+.storevideo .scroll-view .videolist.data-v-6dbadbb2 {
+  background-color: #fff;
+}
+.storevideo .scroll-view .videolist .video.data-v-6dbadbb2 {
+  height: 500rpx;
+}
+.storevideo .scroll-view .videolist .video video.data-v-6dbadbb2 {
+  width: 100%;
+  height: 100%;
+}
+.storevideo .scroll-view .videolist .Describeprice.data-v-6dbadbb2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  padding: 0 15rpx 10rpx;
+  line-height: 92rpx;
+}
+.storevideo .scroll-view .videolist .Describeprice text.data-v-6dbadbb2 {
+  display: block;
+}
+.storevideo .scroll-view .videolist .Describeprice .describe.data-v-6dbadbb2 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 60%;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+.storevideo .scroll-view .videolist .Describeprice .Describeprice-price.data-v-6dbadbb2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+

@@ -1,0 +1,5 @@
+
+.minheight{
+	min-height:70rpx;
+}
+

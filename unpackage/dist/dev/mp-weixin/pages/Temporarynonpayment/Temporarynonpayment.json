@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "actionbar": "/components/actionbar/actionbar"
+  }
+}

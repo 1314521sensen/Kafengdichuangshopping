@@ -1,0 +1,31 @@
+page.data-v-91df156c {
+  background-color: #fff;
+}
+.smslogin .sms.data-v-91df156c {
+  padding: 0 25rpx;
+}
+.smslogin .sms form .cu-form-group.data-v-91df156c {
+  border-bottom: 2rpx solid #ff5000;
+  margin-bottom: 20rpx;
+}
+.smslogin .sms form .sms-and-registration.data-v-91df156c {
+  font-size: 24rpx;
+  color: #999;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.smslogin .sms form .loginButton.data-v-91df156c {
+  margin-top: 60rpx;
+  margin-bottom: 0;
+}
+.smslogin .sms form .loginButton button.data-v-91df156c {
+  border-radius: 35rpx;
+}
+.cu-form-group + .cu-form-group.data-v-91df156c {
+  border-top: 0;
+}
+

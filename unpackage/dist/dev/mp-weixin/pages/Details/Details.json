@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "detailsbanner": "/components/indexcomponents/banner",
+    "pricetitle": "/components/Details/PriceTitle",
+    "imgs": "/components/Details/detailsimgs",
+    "bottomcar": "/components/Details/detailsbottomcar"
+  }
+}

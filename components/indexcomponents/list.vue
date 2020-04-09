@@ -1,0 +1,92 @@
+<template>
+	<view class="list">
+		<view class="cu-list menu-avatar">
+			<view class="cu-item" v-for="(item,index) in list" :key="index" @click="linkDetails(url)">
+				<view class="cu-item-left">
+					<view class="cu-avatar round lg" :style="{'background-image':'url('+item.images+')'}"></view>
+				</view>
+				<view class="cu-item-right">
+					<view class="content">
+						<view class="text-grey">{{item.describe}}</view>
+						<view class="price">
+							￥{{item.price}}
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data(){
+			return {
+				
+			}
+		},
+		methods:{
+			linkDetails(url){
+				//当点击的时候跳转到详情页
+				//根据index和我的组件中传过来的url 判断跳到哪里
+				if(url){
+					url = url
+				}else{
+					url = "/pages/Details/Details"
+				}
+				uni.navigateTo({
+					url
+				})
+			}
+		},
+		props:["list","url"]
+	}
+</script>
+
+<style lang="less" scoped>
+	.list{
+		.cu-list.menu-avatar>.cu-item{
+			height:200rpx;
+			align-items: center;
+			margin-bottom:20rpx;
+			&:last-child{
+				margin-bottom:0;
+			}
+			.cu-avatar{
+				position: static !important;
+			}
+			.cu-item-left{
+				
+			}
+			.cu-item-right{
+					width: calc(100% - 20px - 30px - 60px - 10px) !important;
+				 .content{
+				 	position: static !important;
+				 	width: 100% !important;
+				 	left:0 !important;
+					display: flex;
+					flex-wrap: wrap;
+					align-items: stretch !important;
+				 	.text-grey{
+				 		line-height:28rpx;
+				 		color:#000;
+				 		font-size: 28rpx;
+				 	}
+				 	.price{
+				 		color:red;
+				 		font-weight: bold;
+				 		font-size: 30rpx;
+						margin-top:60rpx;
+				 	}
+				 }
+			}
+		}
+		.cu-avatar.lg{
+			width: 200rpx;
+			height:190rpx;
+			border-radius:8rpx;
+		}
+		
+	}
+	
+</style>

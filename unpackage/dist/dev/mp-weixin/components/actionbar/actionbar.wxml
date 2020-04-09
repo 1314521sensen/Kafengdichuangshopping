@@ -1,0 +1,1 @@
+<view class="actionbar"><view class="cu-bar bg-white minheight"><view data-event-opts="{{[['tap',[['returnsmy',['$0'],['url']]]]]}}" class="action" bindtap="__e"><text class="cuIcon-back text-gray"></text></view><view class="content text-bold">{{''+message+''}}</view></view></view>

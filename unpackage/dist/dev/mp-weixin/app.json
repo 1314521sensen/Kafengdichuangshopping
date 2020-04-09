@@ -1,0 +1,68 @@
+{
+  "pages": [
+    "pages/Accessinformation/Accessinformation",
+    "pages/index/index",
+    "pages/classification/classification",
+    "pages/shoppingCart/shoppingCart",
+    "pages/PersonalMy/PersonalMy",
+    "pages/bannerRouter/bannerRouter",
+    "pages/Details/Details",
+    "pages/SearchTo/SearchTo",
+    "pages/Sortinglist/Sortinglist",
+    "pages/Personaldata/Personaldata",
+    "pages/orderpageRouter/orderpageRouter",
+    "pages/addressTo/addressTo",
+    "components/address/address",
+    "components/collection/collection",
+    "pages/login/login",
+    "pages/Allcoupons/allcoupons",
+    "pages/Store/store",
+    "pages/SMSlogin/SMSlogin",
+    "pages/Freeregistration/Freeregistration",
+    "pages/Purchasepage/Purchasepage",
+    "pages/Temporarynonpayment/Temporarynonpayment"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F2F2F2",
+    "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tabber/indexwei.png",
+        "selectedIconPath": "static/tabber/index.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/classification/classification",
+        "iconPath": "static/tabber/classificationwei.png",
+        "selectedIconPath": "static/tabber/classification.png",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/shoppingCart/shoppingCart",
+        "iconPath": "static/tabber/carwei.png",
+        "selectedIconPath": "static/tabber/car.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/PersonalMy/PersonalMy",
+        "iconPath": "static/tabber/mywei.png",
+        "selectedIconPath": "static/tabber/my.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {
+    "pageheight": "/components/pageheight/pageheight"
+  }
+}
