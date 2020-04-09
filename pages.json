@@ -92,6 +92,10 @@
             "path" : "pages/Paysuccess/Paysuccess",
             "style" : {}
         }
+        ,{
+            "path" : "pages/Allevaluation/Allevaluation",
+            "style" : {}
+        }
     ],
 	
 	"globalStyle": {

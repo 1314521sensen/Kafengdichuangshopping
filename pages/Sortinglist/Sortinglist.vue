@@ -1,34 +1,21 @@
 <template>
 	<view class="sortinglist">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<view class="seachinput">
-			<view class="searhbusiness-midden">
-				<view class="Returnsicon" @click="Returns">
-					<text class="cuIcon-back text-gray"></text>
-				</view>
-				<view class="inp">
-					<view class="cu-bar search xiaoheight">
-						<view class="search-form round inpheight">
-							<text class="cuIcon-search"></text>
-							<input :value="value" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" :placeholder="value2" confirm-type="search"></input>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
+		<seachinput :value2="value2" :value="value"></seachinput>
 		<sorting></sorting>
 		<horizontallylist :horizontallylist="horizontallylist"></horizontallylist>
 	</view>
 </template>
 
 <script>
+	import seachinput from "@/components/sortinglist/seachinput.vue"
 	import sorting from "@/components/sortinglist/sorting.vue"
 	import horizontallylist from "@/components/sortinglist/horizontallylist.vue"
 	const app = getApp();
 	export default {
 		//这是商品排序列表大组件
 		data() {
-			return {
+			return { //这两个value需要传参传个去
 				value:"",
 				value2:"",
 				statusBar:0,
@@ -72,26 +59,11 @@
 			}
 		},
 		methods: {
-			InputFocus(){
-				this.returnstopone(`/pages/SearchTo/SearchTo?value=${this.value}`)
-			},
-			InputBlur(){
-				
-			},
-			Returns(){
-				//"
-				this.returnstopone("/pages/SearchTo/SearchTo")
-			},
-			returnstopone(url){
-				//封装一个方法 返回上一级
-				uni.navigateTo({
-					url
-				})
-			}
 		},
 		components:{
 			sorting,
-			horizontallylist
+			horizontallylist,
+			seachinput
 		},
 		onLoad(opctry){
 			this.value = opctry.value
@@ -101,28 +73,5 @@
 </script>
 
 <style lang="less" scoped>
-	.sortinglist{
-		.searhbusiness-midden{
-			display:flex;
-			justify-content: space-between;
-			align-items: center;
-			padding-left:20rpx;
-			.Returnsicon{
-				flex:1;
-				text{
-					font-size: 44rpx;
-				}
-			}
-			.inp{
-				width: 94%;
-				.xiaoheight{
-					min-height:80rpx;
-					.inpheight{
-						height:50rpx;
-						line-height:50rpx;
-					}
-				}
-			}
-		}
-	}
+
 </style>

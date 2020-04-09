@@ -9,7 +9,7 @@
 								商品评价
 								<text>(51)</text>
 							</view>
-							<view class="action">
+							<view class="action" @tap="Allevaluation">
 								<!-- <button class="cu-btn bg-green shadow"  >Bottom</button> -->
 								<text>查看更多</text>
 								<text class="lg text-gray cuIcon-right"></text>
@@ -41,6 +41,14 @@
 		data(){
 			return {
 				
+			}
+		},
+		methods:{
+			Allevaluation(){
+				//当点击的时候 跳到全部评论的路由
+				uni.navigateTo({
+				    url:"/pages/Allevaluation/Allevaluation"
+				});
 			}
 		}
 	}

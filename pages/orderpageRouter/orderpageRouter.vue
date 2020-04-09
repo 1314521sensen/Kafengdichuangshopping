@@ -54,7 +54,17 @@
 		components:{
 			list,
 		},
-		onLoad(){
+		onLoad(option){
+			// console.log(option.index)
+			let orderindex = option.index
+			if(orderindex){
+				this.TabCur = orderindex
+				// console.log(this.Myorder[orderindex])
+				this.items = this.Myorder[orderindex]
+			}else{
+				this.TabCur = 0;
+				this.items = this.Myorder[0]
+			}
 			this.statusBar = app.globalData.statusBar
 		}
 	}

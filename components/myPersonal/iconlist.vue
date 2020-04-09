@@ -1,6 +1,6 @@
 <template>
 	<view class="orders-icon-list" :style="{'justify-content':`${align}`}">
-		<view class="orders-item" v-for="(item,index) in iconList" :key="index">
+		<view class="orders-item" v-for="(item,index) in iconList" :key="index" @tap="iconclik(index)">
 			<view class="icon">
 				<image :src=item.images alt="">
 			</view>
@@ -16,7 +16,16 @@
 				
 			}
 		},
-		props:["iconList","align"]
+		props:["iconList","align"],
+		methods:{
+			iconclik(index){ //接收下标  根据下标跳转到相应的链接下面的下标
+				// /pages/orderpageRouter/orderpageRouter 链接
+				uni.navigateTo({
+					//这块目前还没发现 哪引用着  后期发现再改
+					url:`/pages/orderpageRouter/orderpageRouter?index=${index+1}`
+				})
+			}
+		}
 		
 	}
 </script>
