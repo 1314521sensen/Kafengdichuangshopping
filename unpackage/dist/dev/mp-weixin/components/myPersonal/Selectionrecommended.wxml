@@ -1,1 +1,1 @@
-<view class="Selectionrecommended data-v-4147d4e3"><view class="title data-v-4147d4e3"><text class="data-v-4147d4e3">精选推荐</text></view><horizontallylist vue-id="45a7bdbf-1" horizontallylist="{{horizontallylist}}" class="data-v-4147d4e3" bind:__l="__l"></horizontallylist></view>
+<view class="Selectionrecommended data-v-a0c4e312"><view class="title data-v-a0c4e312"><text class="data-v-a0c4e312">精选推荐</text></view><horizontallylist vue-id="45a7bdbf-1" horizontallylist="{{horizontallylist}}" class="data-v-a0c4e312" bind:__l="__l"></horizontallylist></view>

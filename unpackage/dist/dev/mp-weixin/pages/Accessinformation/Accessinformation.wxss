@@ -1,12 +1,12 @@
-page.data-v-19a1325c {
+page.data-v-28b81370 {
   background-color: #fff;
 }
-.Layerthickness.data-v-19a1325c {
+.Layerthickness.data-v-28b81370 {
   position: relative;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
 }
-.Layerthickness .btninformation.data-v-19a1325c {
+.Layerthickness .btninformation.data-v-28b81370 {
   position: absolute;
   bottom: 0rpx;
   left: 5%;

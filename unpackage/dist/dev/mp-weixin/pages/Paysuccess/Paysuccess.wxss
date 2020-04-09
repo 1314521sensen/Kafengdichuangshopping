@@ -1,0 +1,27 @@
+.Paysuccess.data-v-40257816 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+}
+.Paysuccess .Paysuccess-box.data-v-40257816 {
+  width: 100%;
+}
+.Paysuccess .Paysuccess-box .Paysuccess-text.data-v-40257816 {
+  padding-top: 0;
+  font-size: 32rpx !important;
+  font-weight: bold;
+}
+.Paysuccess .Paysuccess-box .timesreturn.data-v-40257816 {
+  font-size: 26rpx;
+  color: #999;
+}
+

@@ -1,23 +1,23 @@
-.store .store-top .store-bg.data-v-3edda86e {
+.store .store-top .store-bg.data-v-ef031f4c {
   color: #fff;
 }
-.store .store-top .store-bg .fuceng.data-v-3edda86e {
+.store .store-top .store-bg .fuceng.data-v-ef031f4c {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 0 30rpx;
 }
-.store .store-top .store-bg .fuceng .store-title.data-v-3edda86e {
+.store .store-top .store-bg .fuceng .store-title.data-v-ef031f4c {
   padding-top: 25rpx;
   font-size: 40rpx;
   font-weight: bold;
 }
-.store .store-top .store-bg .fuceng .evaluation.data-v-3edda86e {
+.store .store-top .store-bg .fuceng .evaluation.data-v-ef031f4c {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   margin-top: 20rpx;
 }
-.store .store-top .store-bg .fuceng .evaluation .icon.data-v-3edda86e {
+.store .store-top .store-bg .fuceng .evaluation .icon.data-v-ef031f4c {
   width: 80rpx;
   height: 36rpx;
   background-color: red;
@@ -27,16 +27,16 @@
   line-height: 36rpx;
   margin-top: 5rpx;
 }
-.store .store-top .store-bg .fuceng .evaluation .comprehensiveevaluation.data-v-3edda86e {
+.store .store-top .store-bg .fuceng .evaluation .comprehensiveevaluation.data-v-ef031f4c {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
 }
-.store .store-top .store-bg .fuceng .evaluation .comprehensiveevaluation text.data-v-3edda86e {
+.store .store-top .store-bg .fuceng .evaluation .comprehensiveevaluation text.data-v-ef031f4c {
   font-size: 28rpx;
   margin-left: 25rpx;
 }
-.store .rolling.data-v-3edda86e {
+.store .rolling.data-v-ef031f4c {
   padding: 0 14rpx;
 }
 

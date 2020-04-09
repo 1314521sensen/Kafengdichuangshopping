@@ -12,8 +12,8 @@
 	export default {
 		data() {
 			return {
-				value:"",
-				statusBar:0
+				statusBar:0,
+				value:""
 			}
 		},
 		methods: {
@@ -22,10 +22,11 @@
 		components:{
 			searchbusiness
 		},
-		onLoad:function(option){
-			this.value=option.value
+		onLoad(option){
+			// console.log()
+			this.value = option.value
 			this.statusBar = app.globalData.statusBar
-		},
+		}
 	}
 </script>
 

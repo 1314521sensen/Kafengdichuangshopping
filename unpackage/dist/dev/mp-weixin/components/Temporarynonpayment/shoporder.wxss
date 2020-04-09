@@ -1,0 +1,110 @@
+.shoporder .purchase-order .order.data-v-1e5cdf78 {
+  background-color: #fff;
+  margin-top: 44rpx;
+  padding: 0 0 20rpx 20rpx;
+}
+.shoporder .purchase-order .order .order-title.data-v-1e5cdf78 {
+  font-size: 32rpx;
+  padding: 20rpx 0;
+  font-weight: bold;
+}
+.shoporder .purchase-order .order .shopgoosorder.data-v-1e5cdf78 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  margin-top: 28rpx;
+}
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-left.data-v-1e5cdf78 {
+  width: 30%;
+  height: 200rpx;
+}
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-left image.data-v-1e5cdf78 {
+  width: 100%;
+  height: 100%;
+}
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-right.data-v-1e5cdf78 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  padding-top: 10rpx;
+}
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-title.data-v-1e5cdf78 {
+  overflow: hidden;
+  width: 70%;
+  height: 80rpx;
+  font-size: 28rpx;
+}
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic.data-v-1e5cdf78 {
+  width: 20%;
+}
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic text.data-v-1e5cdf78 {
+  display: block;
+  text-align: right;
+  font-size: 30rpx;
+}
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic text.data-v-1e5cdf78:first-child {
+  font-weight: bold;
+}
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic text.data-v-1e5cdf78:last-child {
+  font-size: 24rpx;
+}
+.shoporder .purchase-order .order .Deliverynote.data-v-1e5cdf78 {
+  margin-top: 48rpx;
+  padding: 0 20rpx;
+}
+.shoporder .purchase-order .order .Deliverynote .commodityprice.data-v-1e5cdf78 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  font-size: 32rpx;
+  margin-top: 10rpx;
+}
+.shoporder .purchase-order .order .Deliverynote .Realpayment.data-v-1e5cdf78 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  margin-top: 20rpx;
+}
+.shoporder .purchase-order .order .Deliverynote .Realpayment text.data-v-1e5cdf78 {
+  font-size: 35rpx;
+  color: #999;
+}
+.shoporder .purchase-order .order .Deliverynote .Realpayment text.data-v-1e5cdf78:last-child {
+  color: #ff5300;
+}
+.shoporder .orderSerial.data-v-1e5cdf78 {
+  padding: 64rpx 20rpx;
+  background-color: #fff;
+  margin-top: 20rpx;
+}
+.shoporder .orderSerial .orderSerial-title.data-v-1e5cdf78 {
+  font-size: 32rpx;
+}
+.shoporder .orderSerial .serial.data-v-1e5cdf78 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  font-size: 28rpx;
+  color: #999;
+}
+.shoporder .orderSerial .serial .serialsame text.data-v-1e5cdf78 {
+  display: block;
+  margin-top: 24rpx;
+}
+.shoporder .orderSerial .serial .serial-right text.data-v-1e5cdf78 {
+  margin: 30rpx 0 0 30rpx;
+}
+

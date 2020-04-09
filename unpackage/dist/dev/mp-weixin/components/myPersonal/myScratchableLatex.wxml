@@ -1,1 +1,1 @@
-<view class="myScratchableLatex data-v-dd3f4b44"><scratchablelatex vue-id="487406a4-1" cuIconList="{{cuIconList}}" gridCol="{{gridCol}}" width="40%" height="60" class="data-v-dd3f4b44" bind:__l="__l"></scratchablelatex></view>
+<view class="myScratchableLatex data-v-09812e1c"><scratchablelatex vue-id="487406a4-1" cuIconList="{{cuIconList}}" gridCol="{{gridCol}}" width="40%" height="60" class="data-v-09812e1c" bind:__l="__l"></scratchablelatex></view>

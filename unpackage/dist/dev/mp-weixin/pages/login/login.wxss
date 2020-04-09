@@ -1,11 +1,11 @@
-.login.data-v-5355cf9e {
+.login.data-v-c612d0ec {
   height: 100vh;
   background-color: #fff;
 }
-.login .app-login.data-v-5355cf9e {
+.login .app-login.data-v-c612d0ec {
   width: 100%;
 }
-.login .app-login .logo.data-v-5355cf9e {
+.login .app-login .logo.data-v-c612d0ec {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -17,18 +17,18 @@
           align-items: center;
   height: 300rpx;
 }
-.login .app-login .from.data-v-5355cf9e {
+.login .app-login .from.data-v-c612d0ec {
   padding: 0 30rpx;
 }
-.login .app-login .from .inp.data-v-5355cf9e {
+.login .app-login .from .inp.data-v-c612d0ec {
   border-bottom: 2rpx solid #ff5000;
   min-height: 60rpx;
   margin-bottom: 80rpx;
 }
-.login .app-login .from .inp-bottom.data-v-5355cf9e {
+.login .app-login .from .inp-bottom.data-v-c612d0ec {
   margin-bottom: 25rpx;
 }
-.login .app-login .from .sms-and-registration.data-v-5355cf9e {
+.login .app-login .from .sms-and-registration.data-v-c612d0ec {
   font-size: 24rpx;
   color: #999;
   display: -webkit-box;
@@ -38,11 +38,11 @@
   -webkit-justify-content: space-between;
           justify-content: space-between;
 }
-.login .app-login .from .loginButton.data-v-5355cf9e {
+.login .app-login .from .loginButton.data-v-c612d0ec {
   margin-top: 60rpx;
   margin-bottom: 0;
 }
-.login .app-login .from .loginButton button.data-v-5355cf9e {
+.login .app-login .from .loginButton button.data-v-c612d0ec {
   border-radius: 35rpx;
 }
 

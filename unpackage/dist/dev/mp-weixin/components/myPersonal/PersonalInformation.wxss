@@ -1,18 +1,18 @@
-.Personal-information.data-v-71b55768 {
+.Personal-information.data-v-43b81b54 {
   border-radius: 16rpx;
   padding: 0 20rpx 10rpx;
 }
-.Personal-information .Personal-bg.data-v-71b55768 {
+.Personal-information .Personal-bg.data-v-43b81b54 {
   background-color: #000;
   padding-bottom: 25rpx;
   border-radius: 16rpx;
 }
-.Personal-information .Personal-bg .Personal-top.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top.data-v-43b81b54 {
   background-color: #fff;
   padding-bottom: 20rpx;
   border-radius: 16rpx;
 }
-.Personal-information .Personal-bg .Personal-top .Personaladdlogin.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personaladdlogin.data-v-43b81b54 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -21,7 +21,7 @@
           justify-content: space-between;
   padding: 14rpx 20rpx 0;
 }
-.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal.data-v-43b81b54 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -29,29 +29,29 @@
   -webkit-align-items: center;
           align-items: center;
 }
-.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-portrait.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-portrait.data-v-43b81b54 {
   width: 120rpx;
   height: 120rpx;
   border-radius: 50%;
 }
-.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-portrait image.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-portrait image.data-v-43b81b54 {
   width: 100%;
   height: 100%;
   border-radius: 50%;
 }
-.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-information.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-information.data-v-43b81b54 {
   padding-top: 10rpx;
   margin-left: 22rpx;
 }
-.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-information text.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-information text.data-v-43b81b54 {
   display: block;
   font-size: 30rpx;
 }
-.Personal-information .Personal-bg .Personal-top .Personaladdlogin .login .cu-btn.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personaladdlogin .login .cu-btn.data-v-43b81b54 {
   height: 50rpx;
   line-height: 50rpx;
 }
-.Personal-information .Personal-bg .Personal-top .Personal-list.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personal-list.data-v-43b81b54 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -59,14 +59,14 @@
           justify-content: space-around;
   margin-top: 30rpx;
 }
-.Personal-information .Personal-bg .Personal-top .Personal-list .money-list text.data-v-71b55768 {
+.Personal-information .Personal-bg .Personal-top .Personal-list .money-list text.data-v-43b81b54 {
   display: block;
   text-align: center;
   font-weight: bold;
   font-size: 24rpx;
   color: #616161;
 }
-.Personal-information .Personal-bg .Personal-top .Personal-list .money-list text.data-v-71b55768:first-child {
+.Personal-information .Personal-bg .Personal-top .Personal-list .money-list text.data-v-43b81b54:first-child {
   color: red;
 }
 

@@ -30,8 +30,8 @@
 		<view class="confirm-box">
 			<view class="confirm">
 				<view class="cu-bar btn-group">
-					<button class="cu-btn bg-red shadow-blur round">取消</button>
-					<button class="cu-btn bg-green shadow-blur round" @click="submits">保存</button>
+					<button class="cu-btn bg-red shadow-blur round" @tap="Addresscancel">取消</button>
+					<button class="cu-btn bg-green shadow-blur round" @tap="submits">保存</button>
 				</view>
 			</view>
 		</view>
@@ -53,14 +53,24 @@
 		methods:{
 			submits(){
 				// console.log(this.value1,this.value2,this.value3,this.value4)
-				if(this.value1){
-					uni.navigateTo({
-						url:`/pages/addressTo/addressTo?value1=${this.value1}&value2=${this.value2}&value4=${this.value4}`,
-					})
+				if(this.value1 && this.value2 && this.value3 && this.value4){
+					// console.log(1)
+					//这是跳转上页
+					//当点击的时候把值加入到把数据提交到数据库当中 在另一个页面进行数据的请求 渲染
 				}else{
-					console.log("请输入正确的信息")
+					uni.showToast({
+						title:"请输入完整信息",
+						mask:true,
+						icon:"none"
+					})
 				}
 				
+			},
+			//这是取消的
+			Addresscancel(){
+				uni.navigateBack({
+				    delta: 1
+				});
 			}
 		},
 		onLoad(){

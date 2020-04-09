@@ -1,44 +1,44 @@
-page.data-v-4d60ae2c {
+page.data-v-1eca77d6 {
   background-color: #fff;
 }
-.freeregistration.data-v-4d60ae2c {
+.freeregistration.data-v-1eca77d6 {
   padding: 0 30rpx;
 }
-.freeregistration .freeregistration-title.data-v-4d60ae2c {
+.freeregistration .freeregistration-title.data-v-1eca77d6 {
   overflow: hidden;
 }
-.freeregistration .freeregistration-title text.data-v-4d60ae2c {
+.freeregistration .freeregistration-title text.data-v-1eca77d6 {
   display: block;
   font-size: 40rpx;
   margin-top: 28rpx;
 }
-.freeregistration .freeregistration-title text.data-v-4d60ae2c:last-child {
+.freeregistration .freeregistration-title text.data-v-1eca77d6:last-child {
   font-size: 30rpx;
   color: #999;
 }
-.freeregistration form.data-v-4d60ae2c {
+.freeregistration form.data-v-1eca77d6 {
   padding: 0 30rpx;
 }
-.freeregistration form .inp.data-v-4d60ae2c {
+.freeregistration form .inp.data-v-1eca77d6 {
   border-bottom: 2rpx solid #ff5000;
   min-height: 80rpx;
   margin-bottom: 36rpx;
 }
-.freeregistration form .inp-bottom.data-v-4d60ae2c {
+.freeregistration form .inp-bottom.data-v-1eca77d6 {
   margin-bottom: 25rpx;
 }
-.freeregistration form .cu-form-group.data-v-4d60ae2c {
+.freeregistration form .cu-form-group.data-v-1eca77d6 {
   border-bottom: 2rpx solid #ff5000;
   margin-bottom: 20rpx;
 }
-.freeregistration form .loginButton.data-v-4d60ae2c {
+.freeregistration form .loginButton.data-v-1eca77d6 {
   margin-top: 60rpx;
   margin-bottom: 0;
 }
-.freeregistration form .loginButton button.data-v-4d60ae2c {
+.freeregistration form .loginButton button.data-v-1eca77d6 {
   border-radius: 35rpx;
 }
-.cu-form-group + .cu-form-group.data-v-4d60ae2c {
+.cu-form-group + .cu-form-group.data-v-1eca77d6 {
   border-top: 0;
 }
 

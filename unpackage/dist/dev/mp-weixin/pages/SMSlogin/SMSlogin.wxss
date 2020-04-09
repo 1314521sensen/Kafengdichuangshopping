@@ -1,14 +1,14 @@
-page.data-v-91df156c {
+page.data-v-04fe9c36 {
   background-color: #fff;
 }
-.smslogin .sms.data-v-91df156c {
+.smslogin .sms.data-v-04fe9c36 {
   padding: 0 25rpx;
 }
-.smslogin .sms form .cu-form-group.data-v-91df156c {
+.smslogin .sms form .cu-form-group.data-v-04fe9c36 {
   border-bottom: 2rpx solid #ff5000;
   margin-bottom: 20rpx;
 }
-.smslogin .sms form .sms-and-registration.data-v-91df156c {
+.smslogin .sms form .sms-and-registration.data-v-04fe9c36 {
   font-size: 24rpx;
   color: #999;
   display: -webkit-box;
@@ -18,14 +18,14 @@ page.data-v-91df156c {
   -webkit-justify-content: space-between;
           justify-content: space-between;
 }
-.smslogin .sms form .loginButton.data-v-91df156c {
+.smslogin .sms form .loginButton.data-v-04fe9c36 {
   margin-top: 60rpx;
   margin-bottom: 0;
 }
-.smslogin .sms form .loginButton button.data-v-91df156c {
+.smslogin .sms form .loginButton button.data-v-04fe9c36 {
   border-radius: 35rpx;
 }
-.cu-form-group + .cu-form-group.data-v-91df156c {
+.cu-form-group + .cu-form-group.data-v-04fe9c36 {
   border-top: 0;
 }
 

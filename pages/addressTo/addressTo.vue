@@ -3,7 +3,7 @@
 		<pageheight :statusBar="statusBar"></pageheight>
 		<actionbar url="/pages/PersonalMy/PersonalMy" message="添加地址"></actionbar>
 		<view class="newaddressTO-box">
-			<view class="newaddressTO" @click="tonews">
+			<view class="newaddressTO" @tap="tonews">
 				<button class="cu-btn bg-red lg">新建</button>
 			</view>
 		</view>
@@ -45,9 +45,8 @@
 		components:{
 			actionbar
 		},
-		onLoad(option){
-			this.addaddresslist.push(option)
-			this.statusBar = app.globalData.statusBar
+		onShow(){
+			//当页面每次显示的时候去渲染数据库里面的数据
 		}
 	}
 </script>

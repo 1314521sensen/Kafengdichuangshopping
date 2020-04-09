@@ -1,23 +1,23 @@
-.addressTo .newaddressTO-box .newaddressTO.data-v-46f7b66a {
+.addressTo .newaddressTO-box .newaddressTO.data-v-5c105b54 {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 70rpx;
 }
-.addressTo .newaddressTO-box .newaddressTO button.data-v-46f7b66a {
+.addressTo .newaddressTO-box .newaddressTO button.data-v-5c105b54 {
   width: 100%;
 }
-.addressTo .cu-list .cu-item .cu-avatar.data-v-46f7b66a {
+.addressTo .cu-list .cu-item .cu-avatar.data-v-5c105b54 {
   color: #000;
   background-color: #fff;
   font-size: 26rpx;
   font-weight: bold;
 }
-.addressTo .cu-list .cu-item .content .text-grey.data-v-46f7b66a {
+.addressTo .cu-list .cu-item .content .text-grey.data-v-5c105b54 {
   color: #000;
 }
-.addressTo .cu-list .cu-item .content .text-cut.data-v-46f7b66a {
+.addressTo .cu-list .cu-item .content .text-cut.data-v-5c105b54 {
   color: #000;
   text-overflow: clip;
   white-space: normal;

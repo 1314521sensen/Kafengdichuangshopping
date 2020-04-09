@@ -96,7 +96,7 @@
 			display:flex;
 			align-items: center;
 			width: 220rpx;
-			// height:148rpx;
+			height:148rpx;
 			background-color:#cd293f;
 			padding:8rpx 0;
 			.coupons-midden{

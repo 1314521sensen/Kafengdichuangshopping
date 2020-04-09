@@ -1,16 +1,16 @@
-.address .confirm-box .confirm.data-v-673f14aa {
+.address .confirm-box .confirm.data-v-3c42763e {
   position: fixed;
   width: 100%;
   left: 0;
   bottom: 0;
 }
-.address .confirm-box .confirm .cu-btn.data-v-673f14aa {
+.address .confirm-box .confirm .cu-btn.data-v-3c42763e {
   height: 80rpx;
 }
-.cu-bar.data-v-673f14aa {
+.cu-bar.data-v-3c42763e {
   min-height: 86rpx;
 }
-.cu-bar.btn-group uni-button.data-v-673f14aa {
+.cu-bar.btn-group uni-button.data-v-3c42763e {
   margin: 0;
 }
 

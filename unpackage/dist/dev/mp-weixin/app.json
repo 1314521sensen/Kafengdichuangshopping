@@ -20,7 +20,9 @@
     "pages/SMSlogin/SMSlogin",
     "pages/Freeregistration/Freeregistration",
     "pages/Purchasepage/Purchasepage",
-    "pages/Temporarynonpayment/Temporarynonpayment"
+    "pages/Temporarynonpayment/Temporarynonpayment",
+    "pages/Paysuccess/Paysuccess",
+    "pages/Allevaluation/Allevaluation"
   ],
   "subPackages": [],
   "window": {
@@ -64,5 +66,6 @@
   },
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight"
-  }
+  },
+  "sitemapLocation": "sitemap44.json"
 }

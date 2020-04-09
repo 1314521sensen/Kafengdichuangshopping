@@ -1,0 +1,22 @@
+.EvaluationContent.data-v-7f8f30b2 {
+  padding: 20rpx 0;
+  background-color: #fff;
+}
+.EvaluationContent .minContent.data-v-7f8f30b2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin-top: 20rpx;
+}
+.EvaluationContent .minContent view.data-v-7f8f30b2:first-child {
+  padding: 0;
+}
+.EvaluationContent .minContent text.data-v-7f8f30b2 {
+  margin-left: 30rpx;
+}
+.EvaluationContent .content-area.data-v-7f8f30b2 {
+  padding: 0 20rpx 0 35rpx;
+  font-size: 20rpx;
+  margin-top: 14rpx;
+}
+

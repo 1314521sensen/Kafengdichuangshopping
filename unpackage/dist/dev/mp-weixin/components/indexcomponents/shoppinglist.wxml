@@ -1,1 +1,1 @@
-<view class="shoppinglist data-v-530a7e4c"><view class="shopping-title data-v-530a7e4c">这里是背景图片 先用颜色替代</view><list vue-id="7f3bc07e-1" list="{{list}}" class="data-v-530a7e4c" bind:__l="__l"></list></view>
+<view class="shoppinglist data-v-cef56590"><view class="shopping-title data-v-cef56590">这里是背景图片 先用颜色替代</view><list vue-id="7f3bc07e-1" list="{{list}}" class="data-v-cef56590" bind:__l="__l"></list></view>
