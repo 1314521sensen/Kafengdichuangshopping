@@ -51,6 +51,7 @@
 			InputBlur(e) {
 				this.InputBottom = 0
 				this.value = e.detail.value
+				//仅微信端调用 不加的话 手机端 会重复搜索
 				// #ifdef MP-WEIXIN
 					this.Enter()
 				// #endif
