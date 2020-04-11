@@ -10,7 +10,7 @@
 					_this.globalData.statusBar = e.statusBarHeight
 					// console.log(e.statusBarHeight)
 				}
-			})  
+			})
 		},
 		onShow: function() {
 			

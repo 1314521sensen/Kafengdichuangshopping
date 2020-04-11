@@ -150,6 +150,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 var _default =
 {
 
@@ -167,14 +169,21 @@ var _default =
     InputBlur: function InputBlur(e) {
       this.InputBottom = 0;
       this.value = e.detail.value;
+
+      this.Enter();
+
     },
     Returns: function Returns() {
       uni.reLaunch({
         url: "/pages/index/index" });
 
     },
-    seachshijian: function seachshijian() {
-
+    //因为微信小程序 有个胶囊阻碍 故加个键盘事件
+    Enter: function Enter() {
+      this.enterseach();
+    },
+    //封装个方法 同时使用
+    enterseach: function enterseach() {
       //如果输入的内容为空就会走这里
       if (this.value == "") {
         return this.value2 = "搜索内容不能为空";
@@ -188,6 +197,9 @@ var _default =
       uni.navigateTo({
         url: "/pages/Sortinglist/Sortinglist?value=".concat(this.value) });
 
+    },
+    seachshijian: function seachshijian() {
+      this.enterseach();
     },
     delectrecord: function delectrecord() {
       this.list = [];

@@ -7072,6 +7072,9 @@ var render = function() {
                               _i: 9
                             },
                             on: {
+                              confirm: function($event) {
+                                return _vm.$handleViewEvent($event)
+                              },
                               focus: function($event) {
                                 return _vm.$handleViewEvent($event)
                               },

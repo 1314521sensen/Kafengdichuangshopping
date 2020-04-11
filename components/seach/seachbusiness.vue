@@ -9,11 +9,13 @@
 					<view class="cu-bar search bg-white">
 						<view class="search-form round">
 							<text class="cuIcon-search"></text>
-							<input :value="value?value:value3" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" :placeholder="value2" confirm-type="search"></input>
+							<input :value="value?value:value3" @confirm="Enter" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" :placeholder="value2" confirm-type="search"></input>
 						</view>
-						<view class="action">
-							<button class="cu-btn bg-green shadow-blur round" @click="seachshijian">搜索</button>
-						</view>
+						<!-- #ifdef APP-PLUS || H5 -->
+							<view class="action">
+								<button class="cu-btn bg-green shadow-blur round" @click="seachshijian">搜索</button>
+							</view>
+						<!-- #endif -->
 					</view>
 				</view>
 			</view>
@@ -49,14 +51,21 @@
 			InputBlur(e) {
 				this.InputBottom = 0
 				this.value = e.detail.value
+				// #ifdef MP-WEIXIN
+					this.Enter()
+				// #endif
 			},
 			Returns(){
 				uni.reLaunch({
 				    url:"/pages/index/index"
 				});
 			},
-			seachshijian(){
-				
+			//因为微信小程序 有个胶囊阻碍 故加个键盘事件
+			Enter(){
+				this.enterseach()
+			},
+			//封装个方法 同时使用
+			enterseach(){
 				//如果输入的内容为空就会走这里
 				if(this.value==""){
 					return this.value2="搜索内容不能为空"
@@ -70,6 +79,9 @@
 				uni.navigateTo({
 					url:`/pages/Sortinglist/Sortinglist?value=${this.value}`
 				})
+			},
+			seachshijian(){
+				this.enterseach()
 			},
 			delectrecord(){
 				this.list=[]
