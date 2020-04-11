@@ -4556,19 +4556,19 @@ scroll-view.cu-steps .cu-item {
 page {
 	background-color: #DDDDDD;
 }
-checkbox .uni-checkbox-input{
+/* checkbox .uni-checkbox-input{
 	border-radius:50%;
 	width: 34rpx;
 	height:34rpx;
-}
-checkbox .uni-checkbox-input:hover{
+} */
+/* checkbox .uni-checkbox-input:hover{
 	border-color:#ccc !important;
 	background-color: #ee6c29;
 	top:2rpx;
 	right:8rpx;
-}
-.checkboxs .uni-checkbox-input:hover{
+} */
+/* .checkboxs .uni-checkbox-input:hover{
 	right:8rpx;
 	top:0rpx !important;
-}
+} */
 

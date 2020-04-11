@@ -136,117 +136,64 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var shoppingcatlist = function shoppingcatlist() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shoppingcartlist */ "components/shoppingcartlist/shoppingcartlist").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shoppingcartlist.vue */ 230));};var shopingbottompay = function shopingbottompay() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shopingbottompay */ "components/shoppingcartlist/shopingbottompay").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shopingbottompay.vue */ 237));};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var app = getApp();var _default =
 {
-  //这是购物车
+
   data: function data() {
     return {
-      statusBar: 0,
-      value: 1,
-      carlist: [],
-      bool: true };
+      totalpic: 0,
+      bool: true,
+      zizujianlist: [],
+      xiabiao: null,
+      returnsindex: [] };
 
   },
   methods: {
-    //这是在缓存中取值
-    getAddcart: function getAddcart() {var _this2 = this;
-      uni.getStorage({
-        key: "Addcart",
-        success: function success(res) {
-          // console.log(res);
-          _this2.carlist = res.data;
-          // console.log(res)
-        } });
-
+    getChild1: function getChild1(e) {
+      // console.log(e)
+      if (e) {
+        this.totalpic = e;
+      } else {
+        this.totalpic = 0;
+      }
     },
-    //这是减
-    Reduction: function Reduction() {
-
+    //这是传过来的数组
+    deteledatalist: function deteledatalist(e) {
+      this.zizujianlist = e;
     },
-    //这是加
-    add: function add(value1) {
+    //这是传过来的下标
+    deteledatasubscript: function deteledatasubscript(e) {
+      this.xiabiao = e;
     },
+    //这是shopingbottompay组件传过来的删除后的数组  在将下标返回去删除
+    deteindexdata: function deteindexdata(e) {
+      this.returnsindex = e;
+      // console.log(e) 这是删除后的数组
+    },
+    // console.log(this.totalpic)
     //这是管理
     showmanagement: function showmanagement() {
       if (this.bool) {
@@ -254,22 +201,23 @@ var app = getApp();var _default =
       } else {
         this.bool = true;
       }
-    },
-    checkboxChange: function checkboxChange(e) {
-
-      //拿到每一个数组
-      var items = this.carlist;
-      console.log(e.detail.value);
     } },
 
   onLoad: function onLoad() {
     this.statusBar = app.globalData.statusBar;
   },
   onShow: function onShow() {
-    var _this = this;
-    _this.getAddcart();
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+  },
+  created: function created() {
+    //父组件事件接收子组件传过来的值
+    this.getChild1();
+    // this.deteledatalist()
+    // this.deteledatasubscript()
+  },
+  components: {
+    shoppingcatlist: shoppingcatlist,
+    shopingbottompay: shopingbottompay } };exports.default = _default;
 
 /***/ }),
 
