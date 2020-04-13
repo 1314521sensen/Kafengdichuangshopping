@@ -25,8 +25,8 @@
 				uni.navigateTo({
 					url:"/pages/Allcoupons/allcoupons"
 				})
-			}
-		}
+			},
+		},
 	}
 </script>
 

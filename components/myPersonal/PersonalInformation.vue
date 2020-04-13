@@ -74,7 +74,20 @@
 				uni.navigateTo({
 					url
 				})
+			},
+			getcouponslistdata(){
+				// console.log(this.couponslistdata)
+				if(this.couponslistdata.length<=0){
+					console.log(1)
+				}else{
+					this.moneylist[2].num = this.couponslistdata.length
+				}
 			}
+		},
+		props:["couponslistdata"],
+		created(){
+			//当数据发生改变的时候 执行从父组件传过来的值的方法
+			this.getcouponslistdata()
 		}
 	}
 </script>

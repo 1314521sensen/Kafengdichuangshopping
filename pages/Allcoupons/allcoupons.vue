@@ -1,6 +1,5 @@
 <template>
 	<view class="allcoupons">
-		<pageheight :statusBar="statusBar"></pageheight>
 		<actionbar url="/pages/PersonalMy/PersonalMy" message="优惠券"></actionbar>
 		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
 			<view class="nav-text">
@@ -14,7 +13,8 @@
 		</view> -->
 		<!-- {{coupons[TabCur]}}
 		{{items}} -->
-		<securitiesbottom v-if="items==coupons[TabCur]"></securitiesbottom>
+		<!-- @getchildlist 用来接收子组件传过来的值 -->
+		<securitiesbottom v-if="items==coupons[TabCur]" @getchildlist="getchildlist"></securitiesbottom>
 	</view>
 </template>
 
@@ -34,7 +34,8 @@
 					"未使用",
 					"已使用",
 					"已过期"
-				]
+				],
+				getchildlistdata:[],
 			}
 		},
 		methods:{
@@ -45,14 +46,30 @@
 				this.items = items
 				this.TabCur = id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			},
+			//子组件的数据 在methods定义接收  在生命周期的函数中 负责执行该函数
+			getchildlist(e){
+				this.getchildlistdata = e;
+				//再将新的数组加入到缓存中
+				uni.setStorage({
+					key:"couponsData",
+					data:this.getchildlistdata,
+					success:(res)=>{
+						
+					}
+				})
 			}
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
+			
 		},
 		components:{
-			actionbar,
 			securitiesbottom
+		},
+		updated(){//在数据发生改变的时候接受
+			const _this = this;
+			this.getchildlist()
 		}
 	}
 </script>

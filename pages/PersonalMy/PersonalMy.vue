@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<pageheight :statusBar="statusBar"></pageheight>
-		<information></information>
+		<information :couponslistdata="couponslistdata"></information>
 		<mycoupons></mycoupons>
 		<orders></orders>
 		<myScratchableLatex></myScratchableLatex>
@@ -24,6 +24,7 @@
 		data() {
 			return {
 				statusBar:0,
+				couponslistdata:[],
 			}
 		},
 		components:{
@@ -39,6 +40,19 @@
 		},
 		methods: {
 			
+		},
+		onShow(){
+			//当数据发生改变得时候 就获取缓存中的值
+			uni.getStorage({
+				key:"couponsData",
+				success:(res)=>{
+					// console.log(res)
+					this.couponslistdata = res.data
+				},
+				fail(err){
+					this.couponslistdata = null
+				}
+			})
 		}
 	}
 </script>
