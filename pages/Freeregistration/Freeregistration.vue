@@ -20,7 +20,7 @@
 				</view>
 				<view class="cu-form-group inp">
 					<input placeholder="请输入验证码" name="phonecode"></input>
-					<button class='cu-btn bg-green shadow' @click="countdown">{{countdowntext}}</button>
+					<button class='cu-btn bg-green shadow' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
 				</view>
 				<view class="loginButton">
 					<button class="cu-btn block bg-orange margin-tb-sm lg" loading form-type="submit">
@@ -38,13 +38,36 @@
 		data() {
 			return {
 				countdowntext:"验证码",
-				
+				wait:60,
+				disabled:false
 			}
 		},
 		methods: {
 			//验证码
 			countdown(){
-				
+				this.time()
+			},
+			//验证码的秒数
+			time(){
+				let times = null
+				this.disabled = true
+				//这块点击反复执行定时器
+				// clearInterval(times)
+				let {countdowntext,wait} = this.$data
+				// console.log(countdowntext,wait)
+					times = setInterval(()=>{
+						wait--
+						// console.log(wait)
+						this.countdowntext = wait
+						if(wait==0){
+							this.disabled = false
+							countdowntext = "重新获取验证码"
+							clearInterval(times)
+							this.countdowntext = countdowntext
+							this.wait = 60
+						}
+						
+					},1000)
 			},
 			//提交
 			smslogin(e){

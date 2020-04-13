@@ -9,7 +9,7 @@
 				</view>
 				<view class="cu-form-group">
 					<input placeholder="请输入验证码" name="sms"></input>
-					<button class='cu-btn bg-green shadow' @click="countdown">{{countdowntext}}</button>
+					<button class='cu-btn bg-green shadow' @click="countdown" :disabled="bool">{{countdowntext}}</button>
 				</view>
 				<view class="sms-and-registration">
 					<text @click="registration">免费注册</text>
@@ -31,8 +31,9 @@
 		data() {//这是短信登录
 			return {
 				countdowntext:"验证码",
-				wait:10,
-				disabled:true
+				wait:60,
+				disabled:true,
+				bool:false
 			}
 		},
 		methods: {
@@ -47,6 +48,7 @@
 			},
 			time(){
 				let times = null
+				this.bool = true
 				//这块点击反复执行定时器
 				// clearInterval(times)
 				let {countdowntext,wait} = this.$data
@@ -56,6 +58,7 @@
 						// console.log(wait)
 						this.countdowntext = wait
 						if(wait==0){
+							this.bool = false
 							countdowntext = "重新获取验证码"
 							clearInterval(times)
 							this.countdowntext = countdowntext
