@@ -3,7 +3,7 @@
 		<view class="cu-bar search bg-gradual-blue">
 			<view class="search-form round">
 				<text class="cuIcon-search"></text>
-				<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索你想要的商品" confirm-type="search"></input>
+				<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索你想要的商品" confirm-type="search" id="inp"></input>
 			</view>
 			<view class="action">
 				<button class="cu-btn bg-green shadow-blur round">搜索</button>
@@ -29,6 +29,11 @@
 			InputBlur(e) {
 				this.InputBottom = 0
 			}
+		},
+		mounted(){
+			let inp = document.getElementById("inp")
+			// console.log(inp)
+			this.$emit("inpblue",inp)
 		}
 	}
 </script>

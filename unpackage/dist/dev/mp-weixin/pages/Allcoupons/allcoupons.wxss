@@ -1,3 +1,9 @@
+
+.minheight{
+	min-height:70rpx;
+}
+
+
 .nav-text.data-v-415d0b56 {
   display: -webkit-box;
   display: -webkit-flex;

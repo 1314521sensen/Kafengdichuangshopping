@@ -95,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   pageheight: () =>
-    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 190))
+    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 197))
 }
 var render = function() {
   var _vm = this
@@ -134,7 +134,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var orders = function orders() {return __webpack_require__.e(/*! import() | components/myPersonal/orders */ "components/myPersonal/orders").then(__webpack_require__.bind(null, /*! @/components/myPersonal/orders.vue */ 244));};var myScratchableLatex = function myScratchableLatex() {return __webpack_require__.e(/*! import() | components/myPersonal/myScratchableLatex */ "components/myPersonal/myScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/myPersonal/myScratchableLatex.vue */ 251));};var information = function information() {return __webpack_require__.e(/*! import() | components/myPersonal/PersonalInformation */ "components/myPersonal/PersonalInformation").then(__webpack_require__.bind(null, /*! @/components/myPersonal/PersonalInformation.vue */ 258));};var mycoupons = function mycoupons() {return __webpack_require__.e(/*! import() | components/myPersonal/coupons */ "components/myPersonal/coupons").then(__webpack_require__.bind(null, /*! @/components/myPersonal/coupons.vue */ 265));};var Selectionrecommended = function Selectionrecommended() {return __webpack_require__.e(/*! import() | components/myPersonal/Selectionrecommended */ "components/myPersonal/Selectionrecommended").then(__webpack_require__.bind(null, /*! @/components/myPersonal/Selectionrecommended.vue */ 272));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var orders = function orders() {return __webpack_require__.e(/*! import() | components/myPersonal/orders */ "components/myPersonal/orders").then(__webpack_require__.bind(null, /*! @/components/myPersonal/orders.vue */ 251));};var myScratchableLatex = function myScratchableLatex() {return __webpack_require__.e(/*! import() | components/myPersonal/myScratchableLatex */ "components/myPersonal/myScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/myPersonal/myScratchableLatex.vue */ 258));};var information = function information() {return __webpack_require__.e(/*! import() | components/myPersonal/PersonalInformation */ "components/myPersonal/PersonalInformation").then(__webpack_require__.bind(null, /*! @/components/myPersonal/PersonalInformation.vue */ 265));};var mycoupons = function mycoupons() {return __webpack_require__.e(/*! import() | components/myPersonal/coupons */ "components/myPersonal/coupons").then(__webpack_require__.bind(null, /*! @/components/myPersonal/coupons.vue */ 272));};var Selectionrecommended = function Selectionrecommended() {return __webpack_require__.e(/*! import() | components/myPersonal/Selectionrecommended */ "components/myPersonal/Selectionrecommended").then(__webpack_require__.bind(null, /*! @/components/myPersonal/Selectionrecommended.vue */ 279));};
 
 
 
@@ -159,7 +159,8 @@ var app = getApp();var _default =
   //这是个人中心
   data: function data() {
     return {
-      statusBar: 0 };
+      statusBar: 0,
+      couponslistdata: [] };
 
   },
   components: {
@@ -173,7 +174,23 @@ var app = getApp();var _default =
   onLoad: function onLoad() {
     this.statusBar = app.globalData.statusBar;
   },
-  methods: {} };exports.default = _default;
+  methods: {},
+
+
+  onShow: function onShow() {var _this = this;
+    //当数据发生改变得时候 就获取缓存中的值
+    uni.getStorage({
+      key: "couponsData",
+      success: function success(res) {
+        // console.log(res)
+        _this.couponslistdata = res.data;
+      },
+      fail: function fail(err) {
+        this.couponslistdata = null;
+      } });
+
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })
 

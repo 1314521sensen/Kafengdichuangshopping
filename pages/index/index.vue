@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<search></search>
+		<search  @inpblue="inpblue"></search>
 		<banner :swiperList="swiperList" height="300"></banner>
 		<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol"></ScratchableLatex>
 		<coupons></coupons>
@@ -119,9 +119,14 @@
 		},
 		
 		methods: {
-			
+			inpblue(e){
+				if(e){
+					e.blur()
+				}
+			}
 		},
 		onLoad(){
+			
 			// console.log(app.globalData)
 			this.statusBar = app.globalData.statusBar
 		},
@@ -132,6 +137,9 @@
 			coupons,
 			shoppinglist,
 			// pageheight
+		},
+		onShow(){
+			this.inpblue()
 		}
 	}
 </script>

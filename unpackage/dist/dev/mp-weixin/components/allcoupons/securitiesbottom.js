@@ -116,7 +116,10 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+//
+//
+//
 //
 //
 //
@@ -161,18 +164,61 @@ var _default =
   //这是卷的下面
   data: function data() {
     return {
-      modalName: null };
+      modalName: null,
+      couponslist: [
+      {
+        id: 0,
+        imgs: "/static/securities/01.webp",
+        title: "无线蓝牙音响外放无线蓝牙音响外放",
+        rules: "退货包运费",
+        Aftetvolumetext: "领劵后",
+        Aftetvolumepic: 9.8, //这是领劵后的金额
+        Broughtvolumepic: 1.5, //这是优惠卷的金额
+        Broughtvolumerules: "满48可用" //这是领取卷使用的规则
+      },
+      {
+        id: 1,
+        imgs: "/static/securities/01.webp",
+        title: "无线蓝牙音响外放无线蓝牙音响外放",
+        rules: "退货包运费",
+        Aftetvolumetext: "领劵后",
+        Aftetvolumepic: 20, //这是领劵后的金额
+        Broughtvolumepic: 5, //这是优惠卷的金额
+        Broughtvolumerules: "满98可用" //这是领取卷使用的规则
+      },
+      {
+        id: 2,
+        imgs: "/static/securities/01.webp",
+        title: "无线蓝牙音响外放无线蓝牙音响外放",
+        rules: "退货包运费",
+        Aftetvolumetext: "领劵后",
+        Aftetvolumepic: 30, //这是领劵后的金额
+        Broughtvolumepic: 10, //这是优惠卷的金额
+        Broughtvolumerules: "满77可用" //这是领取卷使用的规则
+      }],
+
+      //这个空数组是用来存储用户领取了哪张优惠卷
+      addlist: [] };
 
   },
   methods: {
     receive: function receive(e) {
       this.modalName = e.currentTarget.dataset.target;
+      this.addlist.push(this.couponslist[this.modalName]);
+      //将数据发送到父级 allcoupons中
+      this.$emit("getchildlist", this.addlist);
     },
     hideModal: function hideModal(e) {
       //隐藏窗口
+      //当用户点击了确定 将提示框关闭
       this.modalName = null;
-      //加入到缓存里面
+      // 关闭以后在来个我文本提示框
+      uni.showToast({
+        title: "优惠券领取成功",
+        icon: "none" });
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

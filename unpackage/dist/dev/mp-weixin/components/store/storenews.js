@@ -116,7 +116,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var horizontallylist = function horizontallylist() {return __webpack_require__.e(/*! import() | components/sortinglist/horizontallylist */ "components/sortinglist/horizontallylist").then(__webpack_require__.bind(null, /*! @/components/sortinglist/horizontallylist.vue */ 321));};var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var horizontallylist = function horizontallylist() {return __webpack_require__.e(/*! import() | components/sortinglist/horizontallylist */ "components/sortinglist/horizontallylist").then(__webpack_require__.bind(null, /*! @/components/sortinglist/horizontallylist.vue */ 328));};var _default =
 
 
 

@@ -1,6 +1,9 @@
 .securitiesbottom.data-v-01cb995e {
   margin-top: 15rpx;
 }
+.securitiesbottom .securitiesbottomitem.data-v-01cb995e {
+  margin-top: 20rpx;
+}
 .securitiesbottom .securities.data-v-01cb995e {
   display: -webkit-box;
   display: -webkit-flex;

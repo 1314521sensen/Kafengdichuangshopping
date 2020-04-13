@@ -95,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   pageheight: () =>
-    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 190))
+    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 197))
 }
 var render = function() {
   var _vm = this
@@ -134,7 +134,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var search = function search() {return __webpack_require__.e(/*! import() | components/indexcomponents/search */ "components/indexcomponents/search").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/search.vue */ 195));};var banner = function banner() {return __webpack_require__.e(/*! import() | components/indexcomponents/banner */ "components/indexcomponents/banner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/banner.vue */ 202));};var ScratchableLatex = function ScratchableLatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 209));};var coupons = function coupons() {return __webpack_require__.e(/*! import() | components/indexcomponents/coupons */ "components/indexcomponents/coupons").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/coupons.vue */ 216));};var shoppinglist = function shoppinglist() {return __webpack_require__.e(/*! import() | components/indexcomponents/shoppinglist */ "components/indexcomponents/shoppinglist").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/shoppinglist.vue */ 223));};
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var search = function search() {return __webpack_require__.e(/*! import() | components/indexcomponents/search */ "components/indexcomponents/search").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/search.vue */ 202));};var banner = function banner() {return __webpack_require__.e(/*! import() | components/indexcomponents/banner */ "components/indexcomponents/banner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/banner.vue */ 209));};var ScratchableLatex = function ScratchableLatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 216));};var coupons = function coupons() {return __webpack_require__.e(/*! import() | components/indexcomponents/coupons */ "components/indexcomponents/coupons").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/coupons.vue */ 223));};var shoppinglist = function shoppinglist() {return __webpack_require__.e(/*! import() | components/indexcomponents/shoppinglist */ "components/indexcomponents/shoppinglist").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/shoppinglist.vue */ 230));};
 
 
 
@@ -254,10 +254,16 @@ var app = getApp();var _default =
 
   },
 
-  methods: {},
-
+  methods: {
+    inpblue: function inpblue(e) {
+      if (e) {
+        e.blur();
+        console.log(111);
+      }
+    } },
 
   onLoad: function onLoad() {
+
     // console.log(app.globalData)
     this.statusBar = app.globalData.statusBar;
   },
@@ -268,6 +274,9 @@ var app = getApp();var _default =
     coupons: coupons,
     shoppinglist: shoppinglist
     // pageheight
+  },
+  onShow: function onShow() {
+    this.inpblue();
   } };exports.default = _default;
 
 /***/ })
