@@ -116,7 +116,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var scratchablelatex = function scratchablelatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 216));};var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var scratchablelatex = function scratchablelatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 218));};var _default =
 
 
 

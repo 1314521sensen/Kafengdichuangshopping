@@ -2,10 +2,12 @@
 	<view class="content">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<search  @inpblue="inpblue"></search>
-		<banner :swiperList="swiperList" height="300"></banner>
-		<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol"></ScratchableLatex>
-		<coupons></coupons>
-		<shoppinglist></shoppinglist>
+		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
+			<banner :swiperList="swiperList" height="300"></banner>
+			<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol"></ScratchableLatex>
+			<coupons></coupons>
+			<shoppinglist></shoppinglist>
+		</scroll-view>
 	</view>
 </template>
 
@@ -123,6 +125,10 @@
 				if(e){
 					e.blur()
 				}
+			},
+			//监控scroll-view 滚动标签是否滚动到底部
+			scrollbottom(){
+				console.log(22)
 			}
 		},
 		onLoad(){
@@ -140,10 +146,17 @@
 		},
 		onShow(){
 			this.inpblue()
+		},
+		//页面滚动到底部的事件
+		onReachBottom(){
+			console.log(1)
 		}
 	}
 </script>
 
-<style>
-	
+<style lang="less" scoped>
+	.scroll-view{
+		overflow: hidden;
+		height:100vh;
+	}
 </style>

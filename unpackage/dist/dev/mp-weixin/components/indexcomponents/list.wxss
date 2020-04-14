@@ -1,3 +1,7 @@
+.list .shopping-title.data-v-c1810460 {
+  height: 70rpx;
+  background-color: deeppink ;
+}
 .list .cu-list.menu-avatar > .cu-item.data-v-c1810460 {
   height: 200rpx;
   -webkit-box-align: center;

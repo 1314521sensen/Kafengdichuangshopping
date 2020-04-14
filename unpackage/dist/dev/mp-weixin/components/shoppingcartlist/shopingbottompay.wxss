@@ -43,7 +43,7 @@
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
-  width: 45%;
+  width: 50%;
 }
 .detailscar .same .same-right .same-right-text.data-v-8eec1742 {
   display: -webkit-box;

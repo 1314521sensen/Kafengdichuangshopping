@@ -1,19 +1,22 @@
 <template>
 	<view class="list">
 		<view class="cu-list menu-avatar">
-			<view class="cu-item" v-for="(item,index) in list" :key="index" @click="linkDetails(url)">
-				<view class="cu-item-left">
-					<view class="cu-avatar round lg" :style="{'background-image':'url('+item.images+')'}"></view>
-				</view>
-				<view class="cu-item-right">
-					<view class="content">
-						<view class="text-grey">{{item.describe}}</view>
-						<view class="price">
-							￥{{item.price}}
+				<!-- 这是背景图片 -->
+				<view class="shopping-title">这里是背景图片 先用颜色替代</view>
+				
+				<view class="cu-item" v-for="(item,index) in list" :key="index" @click="linkDetails(url)">
+					<view class="cu-item-left">
+						<view class="cu-avatar round lg" :style="{'background-image':'url('+item.images+')'}"></view>
+					</view>
+					<view class="cu-item-right">
+						<view class="content">
+							<view class="text-grey">{{item.describe}}</view>
+							<view class="price">
+								￥{{item.price}}
+							</view>
 						</view>
 					</view>
 				</view>
-			</view>
 		</view>
 	</view>
 </template>
@@ -39,12 +42,22 @@
 				})
 			}
 		},
-		props:["list","url"]
+		props:["list","url"],
+		
 	}
 </script>
 
 <style lang="less" scoped>
 	.list{
+		.shopping-title{
+			//由于背景图片没高度 给来一个高度
+			height:70rpx;
+			background-color:deeppink ;//背景图片没有 先用颜色替代
+			// background-image:url() //这里背景图片到时候有图片在渲染  先把图片的其他属性写上
+			// background:no-repeat 0 0;
+			// background-size: 100% 100%;
+			
+		}
 		.cu-list.menu-avatar>.cu-item{
 			height:200rpx;
 			align-items: center;
@@ -88,5 +101,4 @@
 		}
 		
 	}
-	
 </style>

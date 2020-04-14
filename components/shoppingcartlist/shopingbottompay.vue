@@ -8,11 +8,11 @@
 					<label>全选</label>
 				</view> -->
 				<view class="same-right">
-					<!-- {{}} -->
 						<view class="same-right-text">
 							<text>合计:</text>
 							<!-- 如果传过来的数组里面的checked为false的时候就为0否则就用本身的值 -->
-							<text>¥{{zizujianlist[xiabiao].checked?totalpic:0}}</text>
+							<!-- 这里报错的原因是因为 父组件给子组件传值的时候异步传 开始的时候 传过来的是[](一个空数组) 导致的里面没有checked -->
+							<text>¥{{zizujianlist.length<=0?0:(zizujianlist[xiabiao].checked?totalpic:0)}}</text>
 						</view>
 					<button class="cu-btn round bg-orange" @tap="settlement">结算</button>
 				</view>
@@ -36,7 +36,6 @@
 	export default{
 		data(){
 			return {
-				
 			}
 		},
 		methods:{
@@ -46,6 +45,7 @@
 					try{
 						if(this.zizujianlist[this.xiabiao].checked){
 							//点击购买现在还没通知
+							console.log(11)
 						}
 					}
 					catch(err){
@@ -115,7 +115,8 @@
 				// }
 			}
 		},
-		props:["totalpic","bool","zizujianlist","xiabiao"]
+		props:["totalpic","bool","zizujianlist","xiabiao"],
+		
 	}
 </script>
 
@@ -148,7 +149,7 @@
 				display:flex;
 				justify-content: space-between;
 				align-items: center;
-				width: 45%;
+				width: 50%;
 				// background-color:yellow;
 					.same-right-text{
 						display:flex;
