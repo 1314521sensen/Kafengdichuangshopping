@@ -8,22 +8,6 @@
 			<coupons></coupons>
 			<shoppinglist></shoppinglist>
 		</scroll-view>
-		<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
-			<view class="cu-dialog">
-				<view class="cu-bar bg-white justify-end">
-					<view class="content">请绑定账号</view>
-				</view>
-				<view class="padding-xl">
-					如果没有账号,请进行注册
-				</view>
-				<view class="cu-bar bg-white Popup-tanchuang">
-					<view class="action">
-						<button class="cu-btn bg-green text-white" @tap="Popuplogin(true)">已有账号</button>
-						<button class="cu-btn bg-red margin-left" @tap="Popuplogin(false)">没有账号</button>
-					</view>
-				</view>
-			</view>
-		</view>
 	</view>
 </template>
 
@@ -146,50 +130,30 @@
 			//监控scroll-view 滚动标签是否滚动到底部
 			scrollbottom(){
 				console.log(22)
-			},
-			showModal() {
-				this.modalName = "DialogModal1"
-			},
-			Popuplogin(boollogin){
-				if(boollogin){
-					this.hideModal()
-					uni.navigateTo({
-						url:"/pages/login/login"
-					})
-				}else{
-					this.hideModal()
-					uni.navigateTo({
-						url:"/pages/Freeregistration/Freeregistration"
-					})
-				}
-			},
-			hideModal() {
-				this.modalName = null
-			},
+			}
 		},
 		onLoad(){
 			//当用户点击了登录以后 进入首页 给用户来个弹窗 如果用户绑定了信息 就把用户状态(状态现在还没写)保存到缓存中 因为这个弹窗只能执行一次
 			// #ifdef MP-WEIXIN
 				console.log("此页面作用于微信")
-				this.showModal()
-				// uni.showModal({
-				// 	title:"请绑定账号",
-				// 	content:"如果没有账号，请进行注册",
-				// 	showCancel:true,
-				// 	cancelText:"已有账号",
-				// 	confirmText:"没有账号",
-				// 	success(res){//当用户点击了确认以后
-				// 		if(res.confirm){ //如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
-				// 			uni.navigateTo({
-				// 				url:"/pages/Freeregistration/Freeregistration"
-				// 			})
-				// 		}else{ //如果为false的情况下  用户点击了取消
-				// 			uni.navigateTo({
-				// 				url:"/pages/login/login"
-				// 			})
-				// 		}
-				// 	}
-				// })
+				uni.showModal({
+					title:"请绑定账号",
+					content:"如果没有账号，请进行注册",
+					showCancel:true,
+					cancelText:"已有账号",
+					confirmText:"没有账号",
+					success(res){//当用户点击了确认以后
+						if(res.confirm){ //如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
+							uni.navigateTo({
+								url:"/pages/Freeregistration/Freeregistration"
+							})
+						}else{ //如果为false的情况下  用户点击了取消
+							uni.navigateTo({
+								url:"/pages/login/login"
+							})
+						}
+					}
+				})
 			// #endif
 			// console.log(app.globalData)
 			this.statusBar = app.globalData.statusBar
@@ -215,7 +179,7 @@
 <style lang="less" scoped>
 	.scroll-view{
 		overflow: hidden;
-		height:100vh;
+		height:100vh;	
 	}
 	.Popup-tanchuang{
 		.action{

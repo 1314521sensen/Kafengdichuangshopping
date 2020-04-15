@@ -156,22 +156,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var app = getApp();var _default =
 {
   //这是首页
@@ -284,50 +268,30 @@ var app = getApp();var _default =
     //监控scroll-view 滚动标签是否滚动到底部
     scrollbottom: function scrollbottom() {
       console.log(22);
-    },
-    showModal: function showModal() {
-      this.modalName = "DialogModal1";
-    },
-    Popuplogin: function Popuplogin(boollogin) {
-      if (boollogin) {
-        this.hideModal();
-        uni.navigateTo({
-          url: "/pages/login/login" });
-
-      } else {
-        this.hideModal();
-        uni.navigateTo({
-          url: "/pages/Freeregistration/Freeregistration" });
-
-      }
-    },
-    hideModal: function hideModal() {
-      this.modalName = null;
     } },
 
   onLoad: function onLoad() {
     //当用户点击了登录以后 进入首页 给用户来个弹窗 如果用户绑定了信息 就把用户状态(状态现在还没写)保存到缓存中 因为这个弹窗只能执行一次
 
     console.log("此页面作用于微信");
-    this.showModal();
-    // uni.showModal({
-    // 	title:"请绑定账号",
-    // 	content:"如果没有账号，请进行注册",
-    // 	showCancel:true,
-    // 	cancelText:"已有账号",
-    // 	confirmText:"没有账号",
-    // 	success(res){//当用户点击了确认以后
-    // 		if(res.confirm){ //如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
-    // 			uni.navigateTo({
-    // 				url:"/pages/Freeregistration/Freeregistration"
-    // 			})
-    // 		}else{ //如果为false的情况下  用户点击了取消
-    // 			uni.navigateTo({
-    // 				url:"/pages/login/login"
-    // 			})
-    // 		}
-    // 	}
-    // })
+    uni.showModal({
+      title: "请绑定账号",
+      content: "如果没有账号，请进行注册",
+      showCancel: true,
+      cancelText: "已有账号",
+      confirmText: "没有账号",
+      success: function success(res) {//当用户点击了确认以后
+        if (res.confirm) {//如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
+          uni.navigateTo({
+            url: "/pages/Freeregistration/Freeregistration" });
+
+        } else {//如果为false的情况下  用户点击了取消
+          uni.navigateTo({
+            url: "/pages/login/login" });
+
+        }
+      } });
+
 
     // console.log(app.globalData)
     this.statusBar = app.globalData.statusBar;
