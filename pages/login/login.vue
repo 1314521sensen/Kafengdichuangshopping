@@ -1,6 +1,6 @@
 <template>
 	<view class="login">
-		 <!-- #ifdef APP-PLUS -->
+		 <!-- #ifdef APP-PLUS || MP-WEIXIN -->
 			<view class="app-login">
 				<!-- 这是图标 -->
 				<logobg></logobg>
@@ -11,17 +11,23 @@
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<input v-model="value2" placeholder="请输入您的密码" name="input" type="password"></input>
 					</view>
-					<view class="cu-form-group margin-top inp">
-						<view class="title">+86</view>
-						<input placeholder="请输入手机号" name="input"></input>
-					</view>
-					<view class="cu-form-group margin-top inp">
-						<input placeholder="请输入验证码" name="sms"></input>
-						<button class='cu-btn bg-green shadow' @click="countdown" :disabled="disabled">{{countdowntext}}</button>
-					</view>
+					<!-- #ifdef APP-PLUS -->
+						<view class="cu-form-group margin-top inp">
+							<view class="title">+86</view>
+							<input placeholder="请输入手机号" name="input"></input>
+						</view>
+						<view class="cu-form-group margin-top inp">
+							<input placeholder="请输入验证码" name="sms"></input>
+							<button class='cu-btn bg-green shadow' @click="countdown" :disabled="disabled">{{countdowntext}}</button>
+						</view>
+					<!-- #endif -->
 					<view class="sms-and-registration">
-						<text @click="smslogin('/pages/SMSlogin/SMSlogin')">短信验证码登录</text>
-						<text @click="smslogin('/pages/Freeregistration/Freeregistration')">免费注册</text>
+						<!-- #ifdef APP-PLUS || MP-WEIXIN -->
+							<text @click="smslogin('/pages/SMSlogin/SMSlogin')">短信验证码登录</text>
+						<!-- #endif -->
+						<!-- #ifdef APP-PLUS -->
+							<text @click="smslogin('/pages/Freeregistration/Freeregistration')">免费注册</text>
+						<!-- #endif -->
 					</view>
 					<view class="loginButton" v-if="bool">
 						<button class="cu-btn block bg-orange margin-tb-sm lg" @click="Logsubmit">

@@ -274,18 +274,20 @@ var app = getApp();var _default =
 
     console.log("此页面作用于微信");
     uni.showModal({
-      title: "请绑定手机号",
-      content: "在进行操作",
+      title: "请绑定账号",
+      content: "如果没有账号，请进行注册",
       showCancel: true,
-      cancelText: "取消",
-      confirmText: "确认",
+      cancelText: "已有账号",
+      confirmText: "没有账号",
       success: function success(res) {//当用户点击了确认以后
         if (res.confirm) {//如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
           uni.navigateTo({
-            url: "/pages/Personaldata/Personaldata" });
+            url: "/pages/Freeregistration/Freeregistration" });
 
         } else {//如果为false的情况下  用户点击了取消
-          console.log(2);
+          uni.navigateTo({
+            url: "/pages/login/login" });
+
         }
       } });
 

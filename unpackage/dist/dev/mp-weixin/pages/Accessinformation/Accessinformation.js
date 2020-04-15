@@ -151,15 +151,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
-    return {};
-
+    return {
+      message: "点击登录",
+      disabled: false,
+      i: 0,
+      bg: "rgb(243,143,49)" };
 
   },
   methods: {
-    clickgetUserInfo: function clickgetUserInfo() {
+    clickgetUserInfo: function clickgetUserInfo() {var _this = this;
       uni.getProvider({
         service: "oauth",
         success: function success(res) {//这里获取到是哪个平台
@@ -173,9 +182,25 @@ var _default =
                   provider: "weixin",
                   success: function success(infoRes) {
                     console.log(infoRes); //这获取了用户的信息
-                    uni.switchTab({
-                      url: "/pages/index/index" });
+                    //这里加点特效
+                    var i = 0;var
+                    times = null,r = 158,g = 52,b = 79;
+                    _this.disabled = true;
+                    times = setInterval(function () {
+                      i++;var _ref =
+                      [r++, g++, b++];r = _ref[0];g = _ref[1];b = _ref[2];
+                      _this.message = "正在拼命加载";
+                      // 57 181 74
+                      _this.i = i + "%";
+                      _this.bg = "rgb(".concat(r, ",").concat(g, ",").concat(b, ")");
+                      if (i == 100) {
+                        clearInterval(times);
+                        _this.disabled = false;
+                        uni.switchTab({
+                          url: "/pages/index/index" });
 
+                      }
+                    }, 100);
                   },
                   fail: function fail(err) {
                     console.log(err);

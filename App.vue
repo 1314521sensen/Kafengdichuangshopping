@@ -11,6 +11,12 @@
 					// console.log(e.statusBarHeight)
 				}
 			})
+			//提示用户平台有多次登录让用户认真操作每一步
+			uni.showToast({
+				title:"平台为确保用户的信息安全,进行了多型登录",
+				icon:"none",
+				duration:3000
+			})
 		},
 		onShow: function() {
 			

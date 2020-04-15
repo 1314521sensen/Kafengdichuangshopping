@@ -11,9 +11,11 @@
 					<input placeholder="请输入验证码" name="sms"></input>
 					<button class='cu-btn bg-green shadow' @click="countdown" :disabled="bool">{{countdowntext}}</button>
 				</view>
-				<view class="sms-and-registration">
-					<text @click="registration">免费注册</text>
-				</view>
+				<!-- #ifdef APP-PLUS -->
+					<view class="sms-and-registration">
+						<text @click="registration">免费注册</text>
+					</view>
+				<!-- #endif -->
 				<view class="loginButton">
 					<button class="cu-btn block bg-orange margin-tb-sm lg" form-type="submit" :disabled="disabled">
 						<text class="cuIcon-loading2 cuIconfont-spin"></text>短信登录
