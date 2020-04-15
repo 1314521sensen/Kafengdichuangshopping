@@ -165,12 +165,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
 {
   data: function data() {
     return {
       value1: "",
       value2: "",
-      bool: false };
+      bool: false,
+      countdowntext: "验证码",
+      wait: 60,
+      disabled: false };
 
   },
   methods: {
@@ -193,6 +204,31 @@ __webpack_require__.r(__webpack_exports__);
       uni.navigateTo({
         url: url });
 
+    },
+    //点击验证码时
+    countdown: function countdown() {
+      this.time();
+    },
+    time: function time() {var _this = this;
+      var times = null;
+      this.disabled = true;
+      //这块点击反复执行定时器
+      // clearInterval(times)
+      var _this$$data = this.$data,countdowntext = _this$$data.countdowntext,wait = _this$$data.wait;
+      // console.log(countdowntext,wait)
+      times = setInterval(function () {
+        wait--;
+        // console.log(wait)
+        _this.countdowntext = wait;
+        if (wait == 0) {
+          _this.disabled = false;
+          countdowntext = "重新获取验证码";
+          clearInterval(times);
+          _this.countdowntext = countdowntext;
+          _this.wait = 60;
+        }
+
+      }, 1000);
     } },
 
   components: {

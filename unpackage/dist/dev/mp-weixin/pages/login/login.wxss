@@ -23,7 +23,7 @@
 .login .app-login .from .inp.data-v-c612d0ec {
   border-bottom: 2rpx solid #ff5000;
   min-height: 60rpx;
-  margin-bottom: 80rpx;
+  margin-bottom: 46rpx;
 }
 .login .app-login .from .inp-bottom.data-v-c612d0ec {
   margin-bottom: 25rpx;
@@ -44,5 +44,8 @@
 }
 .login .app-login .from .loginButton button.data-v-c612d0ec {
   border-radius: 35rpx;
+}
+.cu-form-group + .cu-form-group.data-v-c612d0ec {
+  border-top: 0;
 }
 

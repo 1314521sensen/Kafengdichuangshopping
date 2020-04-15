@@ -132,7 +132,26 @@
 			}
 		},
 		onLoad(){
-			
+			//当用户点击了登录以后 进入首页 给用户来个弹窗 如果用户绑定了信息 就把用户状态(状态现在还没写)保存到缓存中 因为这个弹窗只能执行一次
+			// #ifdef MP-WEIXIN
+				console.log("此页面作用于微信")
+				uni.showModal({
+					title:"请绑定手机号",
+					content:"在进行操作",
+					showCancel:true,
+					cancelText:"取消",
+					confirmText:"确认",
+					success(res){//当用户点击了确认以后
+						if(res.confirm){ //如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
+							uni.navigateTo({
+								url:"/pages/Personaldata/Personaldata"
+							})
+						}else{ //如果为false的情况下  用户点击了取消
+							console.log(2)
+						}
+					}
+				})
+			// #endif
 			// console.log(app.globalData)
 			this.statusBar = app.globalData.statusBar
 		},

@@ -136,7 +136,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var search = function search() {return __webpack_require__.e(/*! import() | components/indexcomponents/search */ "components/indexcomponents/search").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/search.vue */ 204));};var banner = function banner() {return __webpack_require__.e(/*! import() | components/indexcomponents/banner */ "components/indexcomponents/banner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/banner.vue */ 211));};var ScratchableLatex = function ScratchableLatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 218));};var coupons = function coupons() {return __webpack_require__.e(/*! import() | components/indexcomponents/coupons */ "components/indexcomponents/coupons").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/coupons.vue */ 225));};var shoppinglist = function shoppinglist() {return __webpack_require__.e(/*! import() | components/indexcomponents/shoppinglist */ "components/indexcomponents/shoppinglist").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/shoppinglist.vue */ 232));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var search = function search() {return __webpack_require__.e(/*! import() | components/indexcomponents/search */ "components/indexcomponents/search").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/search.vue */ 204));};var banner = function banner() {return __webpack_require__.e(/*! import() | components/indexcomponents/banner */ "components/indexcomponents/banner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/banner.vue */ 211));};var ScratchableLatex = function ScratchableLatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 218));};var coupons = function coupons() {return __webpack_require__.e(/*! import() | components/indexcomponents/coupons */ "components/indexcomponents/coupons").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/coupons.vue */ 225));};var shoppinglist = function shoppinglist() {return __webpack_require__.e(/*! import() | components/indexcomponents/shoppinglist */ "components/indexcomponents/shoppinglist").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/shoppinglist.vue */ 232));};
 
 
 
@@ -270,6 +270,25 @@ var app = getApp();var _default =
     } },
 
   onLoad: function onLoad() {
+    //当用户点击了登录以后 进入首页 给用户来个弹窗 如果用户绑定了信息 就把用户状态(状态现在还没写)保存到缓存中 因为这个弹窗只能执行一次
+
+    console.log("此页面作用于微信");
+    uni.showModal({
+      title: "请绑定手机号",
+      content: "在进行操作",
+      showCancel: true,
+      cancelText: "取消",
+      confirmText: "确认",
+      success: function success(res) {//当用户点击了确认以后
+        if (res.confirm) {//如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
+          uni.navigateTo({
+            url: "/pages/Personaldata/Personaldata" });
+
+        } else {//如果为false的情况下  用户点击了取消
+          console.log(2);
+        }
+      } });
+
 
     // console.log(app.globalData)
     this.statusBar = app.globalData.statusBar;
@@ -289,6 +308,7 @@ var app = getApp();var _default =
   onReachBottom: function onReachBottom() {
     console.log(1);
   } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

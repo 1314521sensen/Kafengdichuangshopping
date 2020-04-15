@@ -12,6 +12,10 @@
 						<input v-model="value2" placeholder="请输入您的密码" name="input" type="password"></input>
 					</view>
 					<view class="cu-form-group margin-top inp">
+						<view class="title">+86</view>
+						<input placeholder="请输入手机号" name="input"></input>
+					</view>
+					<view class="cu-form-group margin-top inp">
 						<input placeholder="请输入验证码" name="sms"></input>
 						<button class='cu-btn bg-green shadow' @click="countdown" :disabled="disabled">{{countdowntext}}</button>
 					</view>

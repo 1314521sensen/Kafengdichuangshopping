@@ -114,7 +114,19 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -161,7 +173,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 //
 //
 var _default =
-{
+{ //注:这里的name 每个input 还位绑定
   data: function data() {
     return {
       modalName: null,
@@ -188,9 +200,13 @@ var _default =
         showname: "DialogModal3",
         dialogtitle: "您要修改的个性签名",
         placeholdertext: "请输入你要修改的个性签名",
-        value3: "" }] };
+        value3: "" }],
 
 
+      phonevalue: "",
+      countdowntext: "验证码",
+      wait: 60,
+      disabled: true };
 
   },
   methods: {
@@ -203,7 +219,49 @@ var _default =
     Modify: function Modify(value4, index) {
       this.Personalinformationlist[index].zhi = value4;
       this.modalName = null;
+    },
+    //点击验证码时
+    countdown: function countdown() {
+      this.time();
+    },
+    time: function time() {var _this = this;
+      var times = null;
+      this.disabled = true;
+      //这块点击反复执行定时器
+      // clearInterval(times)
+      var _this$$data = this.$data,countdowntext = _this$$data.countdowntext,wait = _this$$data.wait;
+      // console.log(countdowntext,wait)
+      times = setInterval(function () {
+        wait--;
+        // console.log(wait)
+        _this.countdowntext = wait;
+        if (wait == 0) {
+          _this.disabled = false;
+          countdowntext = "重新获取验证码";
+          clearInterval(times);
+          _this.countdowntext = countdowntext;
+          _this.wait = 60;
+        }
+
+      }, 1000);
+    },
+    //这时候输入手机号的表单事件
+    Modifyphone: function Modifyphone() {
+      //当输入的手机号的时候 如果手机号的长度是11位那么就解锁点击验证码的状态
+      if (this.phonevalue.length == 11) {
+        this.disabled = false;
+      }
+    },
+    //当用户点击了保存了以后
+    btnsave: function btnsave(e) {//e是表单中的信息
+      // console.log(e)
+      //当用户点击了保存后 存一个状态在缓存中 或者发给服务器
+      // 并强制用户跳转到首页
+      uni.switchTab({
+        url: "/pages/index/index" });
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })
 
