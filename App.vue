@@ -17,6 +17,9 @@
 		},
 		onHide: function() {
 			
+		},
+		methods:{
+			
 		}
 	}
 </script>

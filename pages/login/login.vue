@@ -11,6 +11,10 @@
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<input v-model="value2" placeholder="请输入您的密码" name="input" type="password"></input>
 					</view>
+					<view class="cu-form-group margin-top inp">
+						<input placeholder="请输入验证码" name="sms"></input>
+						<button class='cu-btn bg-green shadow' @click="countdown" :disabled="disabled">{{countdowntext}}</button>
+					</view>
 					<view class="sms-and-registration">
 						<text @click="smslogin('/pages/SMSlogin/SMSlogin')">短信验证码登录</text>
 						<text @click="smslogin('/pages/Freeregistration/Freeregistration')">免费注册</text>
@@ -35,7 +39,10 @@
 			return {
 				value1:"",
 				value2:"",
-				bool:false
+				bool:false,
+				countdowntext:"验证码",
+				wait:60,
+				disabled:false,
 			}
 		},
 		methods: {
@@ -58,6 +65,31 @@
 				uni.navigateTo({
 					url
 				})
+			},
+			//点击验证码时
+			countdown(){
+				this.time()
+			},
+			time(){
+				let times = null
+				this.disabled = true
+				//这块点击反复执行定时器
+				// clearInterval(times)
+				let {countdowntext,wait} = this.$data
+				// console.log(countdowntext,wait)
+					times = setInterval(()=>{
+						wait--
+						// console.log(wait)
+						this.countdowntext = wait
+						if(wait==0){
+							this.disabled = false
+							countdowntext = "重新获取验证码"
+							clearInterval(times)
+							this.countdowntext = countdowntext
+							this.wait = 60
+						}
+						
+					},1000)
 			}
 		},
 		components:{
@@ -85,7 +117,7 @@
 				.inp{
 					border-bottom:2rpx solid #ff5000;
 					min-height:60rpx;
-					margin-bottom:80rpx;
+					margin-bottom:46rpx;
 				}
 				.inp-bottom{
 					margin-bottom:25rpx;
@@ -105,5 +137,8 @@
 				}
 			}
 		}
+	}
+	.cu-form-group+.cu-form-group{
+		border-top:0;
 	}
 </style>

@@ -45,7 +45,7 @@
 					try{
 						if(this.zizujianlist[this.xiabiao].checked){
 							//点击购买现在还没通知
-							console.log(11)
+							
 						}
 					}
 					catch(err){
