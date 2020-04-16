@@ -1,42 +1,45 @@
 <template>
 	<view class="login">
-		 <!-- #ifdef APP-PLUS || MP-WEIXIN -->
+		 
 			<view class="app-login">
 				<!-- 这是图标 -->
 				<logobg></logobg>
 				<view class="from">
-					<view class="cu-form-group margin-top inp">
-						<input v-model="value1" @blur="Losefocus" placeholder="请输入您的账号" name="input" type="text"></input>
-					</view>
-					<view class="cu-form-group margin-top inp inp-bottom">
-						<input v-model="value2" placeholder="请输入您的密码" name="input" type="password"></input>
-					</view>
-					<!-- #ifdef APP-PLUS -->
+					<form @submit="ordinarylogin">
 						<view class="cu-form-group margin-top inp">
-							<view class="title">+86</view>
-							<input placeholder="请输入手机号" name="input"></input>
+							<input  @blur="Losefocus" placeholder="请输入您的账号" v-model="username" name="username" type="text"></input>
 						</view>
-						<view class="cu-form-group margin-top inp">
-							<input placeholder="请输入验证码" name="sms"></input>
-							<button class='cu-btn bg-green shadow' @click="countdown" :disabled="disabled">{{countdowntext}}</button>
+						<view class="cu-form-group margin-top inp inp-bottom">
+							<input  placeholder="请输入您的密码" name="password" type="password"></input>
 						</view>
-					<!-- #endif -->
-					<view class="sms-and-registration">
-						<!-- #ifdef APP-PLUS || MP-WEIXIN -->
-							<text @click="smslogin('/pages/SMSlogin/SMSlogin')">短信验证码登录</text>
+						<!--#ifdef APP-PLUS || H5 -->
+							<view class="cu-form-group margin-top inp">
+								<view class="title">+86</view>
+								<input placeholder="请输入手机号" @change="validationphone" v-model="phone" name="phone"></input>
+							</view>
+							<view class="cu-form-group margin-top inp">
+								<input placeholder="请输入验证码" name="sms"></input>
+								<button class='cu-btn bg-green shadow' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
+							</view>
 						<!-- #endif -->
-						<!-- #ifdef APP-PLUS -->
-							<text @click="smslogin('/pages/Freeregistration/Freeregistration')">免费注册</text>
-						<!-- #endif -->
-					</view>
-					<view class="loginButton" v-if="bool">
-						<button class="cu-btn block bg-orange margin-tb-sm lg" @click="Logsubmit">
-							<text class="cuIcon-loading2 cuIconfont-spin"></text> 登录
-						</button>
-					</view>
+						<view class="sms-and-registration">
+							<!-- 这里的app和微信显示暂时先注释 -->
+							<!--#ifdef APP-PLUS || MP-WEIXIN || H5 -->
+								<text @tap="smslogin('/pages/SMSlogin/SMSlogin')">短信验证码登录</text>
+							<!-- #endif -->
+							<!-- #ifdef APP-PLUS || H5 -->
+								<text @tap="smslogin('/pages/Freeregistration/Freeregistration')">免费注册</text>
+							<!--#endif -->
+						</view>
+						<view class="loginButton" v-if="bool">
+							<button class="cu-btn block bg-orange margin-tb-sm lg" form-type="submit">
+								<text class="cuIcon-loading2 cuIconfont-spin"></text> 登录
+							</button>
+						</view>
+					</form>
 				</view>
 			</view>
-		 <!-- #endif -->
+		 
 		<!-- 这是微信的登录的 微信登录需要在页面刚加载的时候就获取用户 -->
 	</view>
 </template>
@@ -47,54 +50,167 @@
 	export default {
 		data() {
 			return {
-				value1:"",
-				value2:"",
 				bool:false,
 				countdowntext:"验证码",
 				wait:60,
-				disabled:false,
+				disabled:true,
+				username:"",
+				phone:"",
+				times:null
 			}
 		},
 		methods: {
+			//当失去焦点的时候
 			Losefocus(){
 				this.bool = true
 			},
-			Logsubmit(){
-				let value1 = this.value1;
-				let value2 = this.value2
-				if(value1=="" && value2==""){
-					return false
+		// #ifdef APP-PLUS || H5
+			//点击验证码时
+			countdown(){
+				this.regphone()
+				//在这里发起验证码的请求  //注：微信的话没有手机号登录  没有验证码
+				uni.request({
+					url:"http://hbk.huiboke.com/api/common/getSMSCaptcha",
+					method:"POST",
+					data:{
+						mobile:this.phone,
+						type:1,
+						username:this.username
+					},
+					success(res){
+						console.log(res)
+					},
+					fail(err){
+						console.log(err)
+					}
+				})
+				this.time()
+			},
+			
+			//这是当输入手机号失去焦点的时候
+			validationphone(){
+				this.regphone()
+			},
+			//封装个方法来验证手机号
+			regphone(){
+				let regusername = /^[\W|\w]{5,100}$/;
+				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				if(this.username.match(regusername) && this.phone.match(userphone)){
+					this.disabled = false
+					clearInterval(this.times)
 				}else{
-					//进行请求后台数据接口 进行匹配密码跳转首页 将用户名和密码应用到缓存里
-					uni.switchTab({
-						url:"/pages/index/index"
+					this.disabled = true
+					clearInterval(this.times)
+					this.wait = 60
+					uni.showToast({
+						title:"请输入正确的手机号或者用户名不能为空",
+						icon:"none"
 					})
 				}
 			},
+		// #endif
+			//这是点击跳转到短信登录
 			smslogin(url){
 				uni.navigateTo({
 					url
 				})
 			},
-			//点击验证码时
-			countdown(){
-				this.time()
+			//封装一个提示框的方法
+			toast(message){
+				uni.showToast({
+					title:message,
+					icon:"none"
+				})
 			},
+			//封装一个app和微信端 不同的登录请求方法
+			Ordinarydifferentlogin(data,username,password){
+				uni.request({
+					url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
+					method:"POST",
+					data,
+					success:(res)=>{
+						// console.log(res)
+						if(res.data.code==0){
+							this.toast("登录成功")
+							//就将用户的昵称密码存储起来
+							uni.setStorage({
+								key:"userlogininfo",
+								data:[{username,password}],
+								success(res){
+									uni.switchTab({
+										url:"/pages/index/index"
+									})
+								}
+							})
+						}else{
+							this.toast("验证码错误")
+						}
+					},
+					fail:(err)=>{
+						this.toast("登录失败")
+					}
+				})
+			},
+			//当用户点击的button
+			ordinarylogin(e){
+				let {username,password,phone,sms} = e.detail.value
+				//写两个正则
+				//这是验证账号
+				let regusername = /^[\W|\w]{5,100}$/;
+				//这是验证密码
+				let reguserpassword = /^\w{6,16}$/;
+				// #ifdef APP-PLUS || H5
+				//这是APP端
+					let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+					username.match(regusername)
+					if(username.match(regusername) && password.match(reguserpassword) && phone.match(userphone) && sms!==""){
+						let data = {
+							login_type:"normal",
+							username:username,
+							password:password,
+							user_phone:phone,
+							code:sms
+						}
+						this.Ordinarydifferentlogin(data,username,password)
+					}else{
+						this.toast("请填写完整信息")
+					}
+				// #endif
+				// #ifdef MP-WEIXIN
+					//这是微信端
+					uni.getStorage({
+						key:"wxcodekey",
+						success:(res)=>{
+							if(username.match(regusername) && password.match(reguserpassword)){
+								let data = {
+									login_type:"weixin",
+									username:username,
+									password:password,
+									opened:res.data
+								}
+								this.Ordinarydifferentlogin(data,username,password)
+							}else{
+								this.toast("请填写完整信息")
+							}
+						}
+					})
+				// #endif
+			},
+			//这是封装点击验证码的倒计时
 			time(){
-				let times = null
 				this.disabled = true
 				//这块点击反复执行定时器
 				// clearInterval(times)
 				let {countdowntext,wait} = this.$data
 				// console.log(countdowntext,wait)
-					times = setInterval(()=>{
+					this.times = setInterval(()=>{
 						wait--
 						// console.log(wait)
 						this.countdowntext = wait
 						if(wait==0){
 							this.disabled = false
 							countdowntext = "重新获取验证码"
-							clearInterval(times)
+							clearInterval(this.times)
 							this.countdowntext = countdowntext
 							this.wait = 60
 						}
@@ -150,5 +266,19 @@
 	}
 	.cu-form-group+.cu-form-group{
 		border-top:0;
+	}
+	.cu-form-group+.cu-form-group{
+		border-top:0;
+	}
+	.cu-form-group+.cu-form-group{
+		border-top:0;
+	}
+	// button[disabled]:not([type])
+	button[disabled]:not([type]){
+		color:#fff;
+		background-color:#39b54a;
+	}
+	.cu-btn[disabled]{
+		opacity: 1;
 	}
 </style>

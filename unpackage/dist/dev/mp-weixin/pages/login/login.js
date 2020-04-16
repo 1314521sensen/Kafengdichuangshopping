@@ -179,59 +179,175 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
 {
   data: function data() {
     return {
-      value1: "",
-      value2: "",
       bool: false,
       countdowntext: "验证码",
       wait: 60,
-      disabled: false };
+      disabled: true,
+      username: "",
+      phone: "",
+      times: null };
 
   },
   methods: {
+    //当失去焦点的时候
     Losefocus: function Losefocus() {
       this.bool = true;
     },
-    Logsubmit: function Logsubmit() {
-      var value1 = this.value1;
-      var value2 = this.value2;
-      if (value1 == "" && value2 == "") {
-        return false;
-      } else {
-        //进行请求后台数据接口 进行匹配密码跳转首页 将用户名和密码应用到缓存里
-        uni.switchTab({
-          url: "/pages/index/index" });
 
-      }
-    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //这是点击跳转到短信登录
     smslogin: function smslogin(url) {
       uni.navigateTo({
         url: url });
 
     },
-    //点击验证码时
-    countdown: function countdown() {
-      this.time();
+    //封装一个提示框的方法
+    toast: function toast(message) {
+      uni.showToast({
+        title: message,
+        icon: "none" });
+
     },
-    time: function time() {var _this = this;
-      var times = null;
+    //封装一个app和微信端 不同的登录请求方法
+    Ordinarydifferentlogin: function Ordinarydifferentlogin(data, username, password) {var _this = this;
+      uni.request({
+        url: "http://hbk.huiboke.com/api/login_and_register/userLogin",
+        method: "POST",
+        data: data,
+        success: function success(res) {
+          // console.log(res)
+          if (res.data.code == 0) {
+            _this.toast("登录成功");
+            //就将用户的昵称密码存储起来
+            uni.setStorage({
+              key: "userlogininfo",
+              data: [{ username: username, password: password }],
+              success: function success(res) {
+                uni.switchTab({
+                  url: "/pages/index/index" });
+
+              } });
+
+          } else {
+            _this.toast("验证码错误");
+          }
+        },
+        fail: function fail(err) {
+          _this.toast("登录失败");
+        } });
+
+    },
+    //当用户点击的button
+    ordinarylogin: function ordinarylogin(e) {var _this2 = this;var _e$detail$value =
+      e.detail.value,username = _e$detail$value.username,password = _e$detail$value.password,phone = _e$detail$value.phone,sms = _e$detail$value.sms;
+      //写两个正则
+      //这是验证账号
+      var regusername = /^[\W|\w]{5,100}$/;
+      //这是验证密码
+      var reguserpassword = /^\w{6,16}$/;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //这是微信端
+      uni.getStorage({
+        key: "wxcodekey",
+        success: function success(res) {
+          if (username.match(regusername) && password.match(reguserpassword)) {
+            var data = {
+              login_type: "weixin",
+              username: username,
+              password: password,
+              opened: res.data };
+
+            _this2.Ordinarydifferentlogin(data, username, password);
+          } else {
+            _this2.toast("请填写完整信息");
+          }
+        } });
+
+
+    },
+    //这是封装点击验证码的倒计时
+    time: function time() {var _this3 = this;
       this.disabled = true;
       //这块点击反复执行定时器
       // clearInterval(times)
       var _this$$data = this.$data,countdowntext = _this$$data.countdowntext,wait = _this$$data.wait;
       // console.log(countdowntext,wait)
-      times = setInterval(function () {
+      this.times = setInterval(function () {
         wait--;
         // console.log(wait)
-        _this.countdowntext = wait;
+        _this3.countdowntext = wait;
         if (wait == 0) {
-          _this.disabled = false;
+          _this3.disabled = false;
           countdowntext = "重新获取验证码";
-          clearInterval(times);
-          _this.countdowntext = countdowntext;
-          _this.wait = 60;
+          clearInterval(_this3.times);
+          _this3.countdowntext = countdowntext;
+          _this3.wait = 60;
         }
 
       }, 1000);

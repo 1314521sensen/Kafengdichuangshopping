@@ -182,7 +182,8 @@ var app = getApp();var _default =
       //这个发起请求获取验证码
       var json = {
         mobile: this.phone,
-        type: "Number" };
+        type: 1,
+        phone: this.phone };
 
       app.globalData.VerificationCode(json);
       this.time();
@@ -245,14 +246,32 @@ var app = getApp();var _default =
         } });
 
 
-      console.log(jsons);
       if (phone.match(userphone) && sms !== "") {//验证通过 就进行请求登录
         uni.request({
           url: "http://hbk.huiboke.com/api/login_and_register/userLogin",
           method: "POST",
           data: jsons,
           success: function success(res) {
-            console.log(res, "用户短信登录成功");
+            var token = res.data.data.token;
+            if (res.data.code == 0) {
+              uni.request({
+                url: "http://hbk.huiboke.com/api/user/getAreas",
+                data: {
+                  parent_id: token },
+                //这里是tokey值 这里出现跨域问题明天搞
+                success: function success(resinfo) {
+                  console.log(resinfo);
+                } });
+
+              uni.switchTab({
+                url: "/pages/index/index" });
+
+            } else {
+              uni.showToast({
+                title: "验证码错误",
+                icon: "none" });
+
+            }
           },
           fail: function fail(err) {
             uni.showToast({

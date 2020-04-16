@@ -117,7 +117,17 @@
 						method:"POST",
 						data:jsons,
 						success(res){
+							let token =  res.data.data.token
 							if(res.data.code==0){
+								uni.request({
+									url:`http://hbk.huiboke.com/api/user/getAreas`,
+									data:{
+										parent_id:token
+									},//这里是tokey值 这里出现跨域问题明天搞
+									success:(resinfo)=>{
+										console.log(resinfo)
+									}
+								})
 								uni.switchTab({
 									url:"/pages/index/index"
 								})
