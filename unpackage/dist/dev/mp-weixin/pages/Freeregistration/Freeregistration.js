@@ -176,7 +176,8 @@ var app = getApp();var _default =
       countdowntext: "验证码",
       wait: 60,
       disabled: true,
-      phone: "" };
+      phone: "",
+      times: null };
 
   },
   methods: {
@@ -201,8 +202,10 @@ var app = getApp();var _default =
       var userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
       if (this.phone.match(userphone)) {
         this.disabled = false;
+        clearInterval(this.times);
       } else {
         this.disabled = true;
+        clearInterval(this.times);
         uni.showToast({
           title: "请输入正确的手机号",
           icon: "none" });
@@ -211,20 +214,19 @@ var app = getApp();var _default =
     },
     //验证码的秒数
     time: function time() {var _this = this;
-      var times = null;
       this.disabled = true;
       //这块点击反复执行定时器
       // clearInterval(times)
       var _this$$data = this.$data,countdowntext = _this$$data.countdowntext,wait = _this$$data.wait;
       // console.log(countdowntext,wait)
-      times = setInterval(function () {
+      this.times = setInterval(function () {
         wait--;
         // console.log(wait)
         _this.countdowntext = wait;
         if (wait == 0) {
           _this.disabled = false;
           countdowntext = "重新获取验证码";
-          clearInterval(times);
+          clearInterval(_this.times);
           _this.countdowntext = countdowntext;
           _this.wait = 60;
         }
@@ -264,23 +266,25 @@ var app = getApp();var _default =
           } });
 
 
+        console.log(registeredjson);
         //这里进行请求
-        uni.request({
-          url: "http://hbk.huiboke.com/api/login_and_register/userRegister",
-          method: "POST",
-          data: registeredjson,
-          success: function success() {//请求成功的时候
-            uni.reLaunch({
-              url: "/pages/login/login" });
-
-          },
-          fail: function fail() {//请求失败的时候
-            uni.showToast({
-              title: "注册失败",
-              icon: "none" });
-
-          } });
-
+        // uni.request({
+        // 	url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
+        // 	method:"POST",
+        // 	data:registeredjson,
+        // 	success(res){//请求成功的时候
+        // 		console.log(res)
+        // 		// uni.reLaunch({
+        // 		// 	url:"/pages/login/login"
+        // 		// })
+        // 	},
+        // 	fail(){//请求失败的时候
+        // 		uni.showToast({
+        // 			title:"注册失败",
+        // 			icon:"none"
+        // 		})
+        // 	}
+        // })
       } else {
         uni.showToast({
           title: "您填写的信息不正确",

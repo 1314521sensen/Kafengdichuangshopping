@@ -66,6 +66,5 @@
   },
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight"
-  },
-  "sitemapLocation": "sitemap57.json"
+  }
 }

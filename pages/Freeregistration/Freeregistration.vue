@@ -8,7 +8,7 @@
 			<form @submit="smslogin">
 				<view class="cu-form-group margin-top inp">
 					<view class="title">账号:</view>
-					<input placeholder="请输入您要注册的账号" name="username" type="text"></input>
+					<input placeholder="请输入您要注册的账号" v-model="username" name="username" type="text"></input>
 				</view>
 				<view class="cu-form-group margin-top inp inp-bottom">
 					<view class="title">密码:</view>
@@ -41,18 +41,22 @@
 				countdowntext:"验证码",
 				wait:60,
 				disabled:true,
-				phone:""
+				username:"",
+				phone:"",
+				times:null
 			}
 		},
 		methods: {
 			//验证码
 			countdown(){
 				this.regphone()
-				//在app.vue里面的globalData对象中封装了方法 用来请求信息
+				//在app.vue里面的globalData对象中封装了方法 用来请求信息 用户注册的时候传用户名
 				let json = {
 					mobile:this.phone,
-					type:"Number"
+					type:2,
+					username:this.username
 				}
+				// console.log(json)
 				//在app.vue中封装了函数 用来请求短信验证码
 				app.globalData.VerificationCode(json)
 				this.time()
@@ -64,32 +68,34 @@
 			//封装个匹配手机号的方法
 			regphone(){
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
-				if(this.phone.match(userphone)){
+				//用户和手机不能为空
+				if(this.username && this.phone.match(userphone)){
 					this.disabled = false
+					clearInterval(this.times)
 				}else{
 					this.disabled = true
+					clearInterval(this.times)
 					uni.showToast({
-						title:"请输入正确的手机号",
+						title:"请输入正确的手机号或者用户名不能为空",
 						icon:"none"
 					})
 				}
 			},
 			//验证码的秒数
 			time(){
-				let times = null
 				this.disabled = true
 				//这块点击反复执行定时器
 				// clearInterval(times)
 				let {countdowntext,wait} = this.$data
 				// console.log(countdowntext,wait)
-					times = setInterval(()=>{
+					this.times = setInterval(()=>{
 						wait--
 						// console.log(wait)
 						this.countdowntext = wait
 						if(wait==0){
 							this.disabled = false
 							countdowntext = "重新获取验证码"
-							clearInterval(times)
+							clearInterval(this.times)
 							this.countdowntext = countdowntext
 							this.wait = 60
 						}
@@ -134,10 +140,17 @@
 						url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
 						method:"POST",
 						data:registeredjson,
-						success(){//请求成功的时候
-							uni.reLaunch({
-								url:"/pages/login/login"
-							})
+						success(res){//请求成功的时候
+							if(res.data.code==0){
+								// uni.reLaunch({
+								// 	url:"/pages/login/login"
+								// })
+							}else{
+								uni.showToast({
+									title:"该用户已经注册过了",
+									icon:"none"
+								})
+							}
 						},
 						fail(){//请求失败的时候
 							uni.showToast({

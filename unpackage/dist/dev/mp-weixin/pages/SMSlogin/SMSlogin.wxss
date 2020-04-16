@@ -28,4 +28,14 @@ page.data-v-04fe9c36 {
 .cu-form-group + .cu-form-group.data-v-04fe9c36 {
   border-top: 0;
 }
+.cu-form-group + .cu-form-group.data-v-04fe9c36 {
+  border-top: 0;
+}
+button[disabled].data-v-04fe9c36:not([type]) {
+  color: #fff;
+  background-color: #39b54a;
+}
+.cu-btn[disabled].data-v-04fe9c36 {
+  opacity: 1;
+}
 

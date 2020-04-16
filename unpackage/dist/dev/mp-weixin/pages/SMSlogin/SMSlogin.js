@@ -133,7 +133,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var logobg = function logobg() {return __webpack_require__.e(/*! import() | components/login/loginbg */ "components/login/loginbg").then(__webpack_require__.bind(null, /*! @/components/login/loginbg.vue */ 349));};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var logobg = function logobg() {return __webpack_require__.e(/*! import() | components/login/loginbg */ "components/login/loginbg").then(__webpack_require__.bind(null, /*! @/components/login/loginbg.vue */ 349));};
 
 
 
@@ -164,50 +164,109 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var app = getApp();var _default =
 {
   data: function data() {//这是短信登录
     return {
       countdowntext: "验证码",
       wait: 60,
-      disabled: true,
-      bool: false };
+      bool: true,
+      phone: "",
+      times: null };
 
   },
   methods: {
     //点击验证码时
-    countdown: function countdown() {
-      this.disabled = false;
-      //这是当前的时候
-      // let date = new Date()
-      // //这是1分钟后的时间
-      // let latetime = new Date()
+    countdown: function countdown() {//
+      this.regphone();
+      //这个发起请求获取验证码
+      var json = {
+        mobile: this.phone,
+        type: "Number" };
+
+      app.globalData.VerificationCode(json);
       this.time();
     },
+    //验证手机号
+    validationphone: function validationphone() {
+      this.regphone();
+    },
+    //封装个匹配手机号的方法
+    regphone: function regphone() {
+      var userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+      if (this.phone.match(userphone)) {
+        this.bool = false;
+        clearInterval(this.times);
+      } else {
+        this.bool = true;
+        clearInterval(this.times);
+        this.wait = 60;
+        uni.showToast({
+          title: "请输入正确的手机号",
+          icon: "none" });
+
+      }
+    },
     time: function time() {var _this = this;
-      var times = null;
-      this.bool = true;
-      //这块点击反复执行定时器
-      // clearInterval(times)
-      var _this$$data = this.$data,countdowntext = _this$$data.countdowntext,wait = _this$$data.wait;
+      this.bool = true;var _this$$data =
+
+      this.$data,countdowntext = _this$$data.countdowntext,wait = _this$$data.wait;
       // console.log(countdowntext,wait)
-      times = setInterval(function () {
+      this.times = setInterval(function () {
         wait--;
         // console.log(wait)
         _this.countdowntext = wait;
         if (wait == 0) {
           _this.bool = false;
           countdowntext = "重新获取验证码";
-          clearInterval(times);
+          clearInterval(_this.times);
           _this.countdowntext = countdowntext;
           _this.wait = 60;
         }
 
       }, 1000);
     },
-    //点击button的时候
-    smslogin: function smslogin(e) {
-      console.log("点击按钮生效");
-      console.log(e);
+    //点击button的时候 就进行登录验证
+    smslogin: function smslogin(e) {var _e$detail$value =
+      e.detail.value,phone = _e$detail$value.phone,sms = _e$detail$value.sms;
+      var userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+      //这是给后端穿的参
+      var jsons = {
+        login_type: "mobile",
+        user_phone: phone,
+        code: sms
+
+
+        //获取缓存中的微信code码换取后台的openid
+      };uni.getStorage({
+        key: "wxcodekey",
+        success: function success(res) {
+          jsons.opened = res.data;
+        } });
+
+
+      console.log(jsons);
+      if (phone.match(userphone) && sms !== "") {//验证通过 就进行请求登录
+        uni.request({
+          url: "http://hbk.huiboke.com/api/login_and_register/userLogin",
+          method: "POST",
+          data: jsons,
+          success: function success(res) {
+            console.log(res, "用户短信登录成功");
+          },
+          fail: function fail(err) {
+            uni.showToast({
+              title: "手机号或验证码不正确",
+              icon: "none" });
+
+          } });
+
+      } else {
+        uni.showToast({
+          title: "手机号或验证码不正确",
+          icon: "none" });
+
+      }
     },
     registration: function registration() {
       uni.navigateTo({
