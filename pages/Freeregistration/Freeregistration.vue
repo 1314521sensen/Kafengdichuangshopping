@@ -8,7 +8,7 @@
 			<form @submit="smslogin">
 				<view class="cu-form-group margin-top inp">
 					<view class="title">账号:</view>
-					<input placeholder="请输入您要注册的账号" name="input" type="text"></input>
+					<input placeholder="请输入您要注册的账号" name="username" type="text"></input>
 				</view>
 				<view class="cu-form-group margin-top inp inp-bottom">
 					<view class="title">密码:</view>
@@ -16,7 +16,7 @@
 				</view>
 				<view class="cu-form-group inp">
 					<view class="title">+86</view>
-					<input placeholder="请输入手机号" name="phone"></input>
+					<input placeholder="请输入手机号" v-model="phone" @change="validationphone" name="phone"></input>
 				</view>
 				<view class="cu-form-group inp">
 					<input placeholder="请输入验证码" name="phonecode"></input>
@@ -33,19 +33,46 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		//免费注册
 		data() {
 			return {
 				countdowntext:"验证码",
 				wait:60,
-				disabled:false
+				disabled:true,
+				phone:""
 			}
 		},
 		methods: {
 			//验证码
 			countdown(){
+				this.regphone()
+				//在app.vue里面的globalData对象中封装了方法 用来请求信息
+				let json = {
+					mobile:this.phone,
+					type:"Number"
+				}
+				//在app.vue中封装了函数 用来请求短信验证码
+				app.globalData.VerificationCode(json)
 				this.time()
+			},
+			//验证手机号
+			validationphone(){
+				this.regphone()
+			},
+			//封装个匹配手机号的方法
+			regphone(){
+				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				if(this.phone.match(userphone)){
+					this.disabled = false
+				}else{
+					this.disabled = true
+					uni.showToast({
+						title:"请输入正确的手机号",
+						icon:"none"
+					})
+				}
 			},
 			//验证码的秒数
 			time(){
@@ -71,23 +98,59 @@
 			},
 			//提交
 			smslogin(e){
-				let {input,password} = e.detail.value
-				// console.log(input,password)
-				if(input && password){
-					//设置缓存
-					uni.setStorage({
-					    key: 'registered',
-					    data: {
-							"input":input,
-							"password":password
+				// console.log(e)
+				//获取里面的每一个值
+				let {username,password,phone,phonecode} = e.detail.value
+				//写两个正则
+				//来匹配账号
+				//账号必须为5到100位
+				let regname = /^[\W|\w]{5,100}$/;
+				//密码为6-16位 单词，数字加_
+				let userpassword = /^\w{6,16}$/;
+				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				if(username.match(regname) && password.match(userpassword) && phone.match(userphone) && phonecode!==""){
+					//如果都通过了 发起请求 就可以跳转到登录页面
+					//这里是要传给后台的信息
+					//这是app端的数据
+					let registeredjson = {
+						username:username,
+						password:password,
+						mobile_phone:phone,
+						code:phonecode
+					}
+					//这块来获取缓存中的微信的code码  拿code码去后端换取openid
+					// #ifdef MP-WEIXIN
+						//取缓存中值
+						uni.getStorage({
+							key:"wxcodekey",
+							success(res){
+								//成功了 就把code的码 给对象新增加了属性
+								registeredjson.openid = res.data
+							}
+						})
+					// #endif
+					//这里进行请求
+					uni.request({
+						url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
+						method:"POST",
+						data:registeredjson,
+						success(){//请求成功的时候
+							uni.reLaunch({
+								url:"/pages/login/login"
+							})
 						},
-					    success(res){
-							console.log(res)
-						},
-						fail(err){
-							console.log(err)
+						fail(){//请求失败的时候
+							uni.showToast({
+								title:"注册失败",
+								icon:"none"
+							})
 						}
-					});
+					})
+				}else{
+					uni.showToast({
+						title:"您填写的信息不正确",
+						icon:"none"
+					})
 				}
 			}
 		}
@@ -137,5 +200,13 @@
 	}
 	.cu-form-group+.cu-form-group{
 		border-top:0;
+	}
+	// button[disabled]:not([type])
+	button[disabled]:not([type]){
+		color:#fff;
+		background-color:#39b54a;
+	}
+	.cu-btn[disabled]{
+		opacity: 1;
 	}
 </style>

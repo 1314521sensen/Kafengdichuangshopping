@@ -167,20 +167,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _default =
+
+var app = getApp();var _default =
 {
   //免费注册
   data: function data() {
     return {
       countdowntext: "验证码",
       wait: 60,
-      disabled: false };
+      disabled: true,
+      phone: "" };
 
   },
   methods: {
     //验证码
     countdown: function countdown() {
+      this.regphone();
+      //在app.vue里面的globalData对象中封装了方法 用来请求信息
+      var json = {
+        mobile: this.phone,
+        type: "Number"
+
+        //在app.vue中封装了函数 用来请求短信验证码
+      };app.globalData.VerificationCode(json);
       this.time();
+    },
+    //验证手机号
+    validationphone: function validationphone() {
+      this.regphone();
+    },
+    //封装个匹配手机号的方法
+    regphone: function regphone() {
+      var userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+      if (this.phone.match(userphone)) {
+        this.disabled = false;
+      } else {
+        this.disabled = true;
+        uni.showToast({
+          title: "请输入正确的手机号",
+          icon: "none" });
+
+      }
     },
     //验证码的秒数
     time: function time() {var _this = this;
@@ -205,23 +232,59 @@ var _default =
       }, 1000);
     },
     //提交
-    smslogin: function smslogin(e) {var _e$detail$value =
-      e.detail.value,input = _e$detail$value.input,password = _e$detail$value.password;
-      // console.log(input,password)
-      if (input && password) {
-        //设置缓存
-        uni.setStorage({
-          key: 'registered',
-          data: {
-            "input": input,
-            "password": password },
+    smslogin: function smslogin(e) {
+      // console.log(e)
+      //获取里面的每一个值
+      var _e$detail$value = e.detail.value,username = _e$detail$value.username,password = _e$detail$value.password,phone = _e$detail$value.phone,phonecode = _e$detail$value.phonecode;
+      //写两个正则
+      //来匹配账号
+      //账号必须为5到100位
+      var regname = /^[\W|\w]{5,100}$/;
+      //密码为6-16位 单词，数字加_
+      var userpassword = /^\w{6,16}$/;
+      var userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+      if (username.match(regname) && password.match(userpassword) && phone.match(userphone) && phonecode !== "") {
+        //如果都通过了 发起请求 就可以跳转到登录页面
+        //这里是要传给后台的信息
+        //这是app端的数据
+        var registeredjson = {
+          username: username,
+          password: password,
+          mobile_phone: phone,
+          code: phonecode
 
+          //这块来获取缓存中的微信的code码  拿code码去后端换取openid
+
+          //取缓存中值
+        };uni.getStorage({
+          key: "wxcodekey",
           success: function success(res) {
-            console.log(res);
-          },
-          fail: function fail(err) {
-            console.log(err);
+            //成功了 就把code的码 给对象新增加了属性
+            registeredjson.openid = res.data;
           } });
+
+
+        //这里进行请求
+        uni.request({
+          url: "http://hbk.huiboke.com/api/login_and_register/userRegister",
+          method: "POST",
+          data: registeredjson,
+          success: function success() {//请求成功的时候
+            uni.reLaunch({
+              url: "/pages/login/login" });
+
+          },
+          fail: function fail() {//请求失败的时候
+            uni.showToast({
+              title: "注册失败",
+              icon: "none" });
+
+          } });
+
+      } else {
+        uni.showToast({
+          title: "您填写的信息不正确",
+          icon: "none" });
 
       }
     } } };exports.default = _default;

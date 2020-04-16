@@ -1,7 +1,18 @@
 <script>
 	export default {
 		globalData:{
-			statusBar:0
+			statusBar:0,
+			VerificationCode(json){//封装一个方法来获取验证码
+				console.log(json)
+				uni.request({
+					url:"http://hbk.huiboke.com/api/common/getSMSCaptcha",
+					method:"POST",
+					data:json,
+					success(res){//成功的回调
+						console.log(res)
+					},
+				})
+			}
 		},
 		onLaunch: function() {
 			const _this = this

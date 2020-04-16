@@ -98,7 +98,18 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
 {
   globalData: {
-    statusBar: 0 },
+    statusBar: 0,
+    VerificationCode: function VerificationCode(json) {//封装一个方法来获取验证码
+      console.log(json);
+      uni.request({
+        url: "http://hbk.huiboke.com/api/common/getSMSCaptcha",
+        method: "POST",
+        data: json,
+        success: function success(res) {//成功的回调
+          console.log(res);
+        } });
+
+    } },
 
   onLaunch: function onLaunch() {
     var _this = this;

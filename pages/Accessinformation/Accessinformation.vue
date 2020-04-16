@@ -34,10 +34,17 @@
 								provider:"weixin",
 								success:(loginRes)=>{//这里获取到code码
 									// console.log(JSON.stringify(loginRes))
+									//获取到code码 发送到后端获取openid
+									console.log(loginRes.code)
+									//将code码发给后台
+									uni.setStorage({
+										key:"wxcodekey",
+										data:loginRes.code
+									})
 									uni.getUserInfo({
 										provider:"weixin",
 										success:(infoRes)=>{
-											console.log(infoRes) //这获取了用户的信息
+											// console.log(infoRes) //这获取了用户的信息
 											//这里加点特效
 											let i = 0;
 											let [times,r,g,b] = [null,158,52,79]

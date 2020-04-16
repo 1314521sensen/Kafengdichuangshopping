@@ -211,8 +211,11 @@ __webpack_require__.r(__webpack_exports__);
         sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album'], //从相册选择
         success: function success(res) {
+          // console.log(res.tempFiles[0].path)
+          //tempFiles
           if (_this2.imgList.length != 0) {
-            _this2.imgList = _this2.imgList.concat(res.tempFilePaths);
+            _this2.imgList = _this2.imgList.concat(res.tempFiles);
+
           } else {
             _this2.imgList = res.tempFilePaths;
           }
@@ -222,6 +225,18 @@ __webpack_require__.r(__webpack_exports__);
     Confirmupload: function Confirmupload() {
       this.imgList = this.imgList;
       this.modalName = null;
+      console.log(this.imgList);
+      // uni.uploadFile({
+      // 	url:"http://hbk.huiboke.com/api/common/uploadImage?type=user",
+      // 	filePath:this.imgList,
+      // 	key:"file",
+      // 	success(res){
+      // 		console.log(res)
+      // 	},
+      // 	fail(err){
+      // 		console.log(err)
+      // 	}
+      // })
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

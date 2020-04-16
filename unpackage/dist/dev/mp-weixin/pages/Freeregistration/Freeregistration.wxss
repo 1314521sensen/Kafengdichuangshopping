@@ -41,4 +41,11 @@ page.data-v-1eca77d6 {
 .cu-form-group + .cu-form-group.data-v-1eca77d6 {
   border-top: 0;
 }
+button[disabled].data-v-1eca77d6:not([type]) {
+  color: #fff;
+  background-color: #39b54a;
+}
+.cu-btn[disabled].data-v-1eca77d6 {
+  opacity: 1;
+}
 

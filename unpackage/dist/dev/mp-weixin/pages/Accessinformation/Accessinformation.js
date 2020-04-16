@@ -178,10 +178,17 @@ var _default =
               provider: "weixin",
               success: function success(loginRes) {//这里获取到code码
                 // console.log(JSON.stringify(loginRes))
+                //获取到code码 发送到后端获取openid
+                console.log(loginRes.code);
+                //将code码发给后台
+                uni.setStorage({
+                  key: "wxcodekey",
+                  data: loginRes.code });
+
                 uni.getUserInfo({
                   provider: "weixin",
                   success: function success(infoRes) {
-                    console.log(infoRes); //这获取了用户的信息
+                    // console.log(infoRes) //这获取了用户的信息
                     //这里加点特效
                     var i = 0;var
                     times = null,r = 158,g = 52,b = 79;
