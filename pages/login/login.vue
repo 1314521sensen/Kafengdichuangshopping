@@ -1,6 +1,5 @@
 <template>
 	<view class="login">
-		 
 			<view class="app-login">
 				<!-- 这是图标 -->
 				<logobg></logobg>
@@ -129,17 +128,31 @@
 					method:"POST",
 					data,
 					success:(res)=>{
-						// console.log(res)
+						uni.setStorage({
+							key:"usertokey",
+							data:res.data.data.token
+						})
 						if(res.data.code==0){
-							this.toast("登录成功")
-							//就将用户的昵称密码存储起来
-							uni.setStorage({
-								key:"userlogininfo",
-								data:[{username,password}],
-								success(res){
-									uni.switchTab({
-										url:"/pages/index/index"
-									})
+							uni.request({
+								url:"http://hbk.huiboke.com/api/user/getUserDetail",
+								method:"POST",
+								data:{
+									token:res.data.data.token
+								},
+								success:(resinfo)=>{
+									if(resinfo.data.code==0){
+										this.toast("登录成功")
+										uni.setStorage({
+											key:"userinfokey",
+											data:resinfo.data.data
+										})
+										uni.switchTab({
+											url:"/pages/index/index"
+										})
+									}
+								},
+								fail:(err)=>{
+									this.toast("登录失败")
 								}
 							})
 						}else{

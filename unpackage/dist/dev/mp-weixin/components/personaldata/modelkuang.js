@@ -211,11 +211,12 @@ __webpack_require__.r(__webpack_exports__);
         sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album'], //从相册选择
         success: function success(res) {
+          console.log(res);
           // console.log(res.tempFiles[0].path)
           //tempFiles
           if (_this2.imgList.length != 0) {
             _this2.imgList = _this2.imgList.concat(res.tempFiles);
-
+            console.log(_this2.imgList);
           } else {
             _this2.imgList = res.tempFilePaths;
           }

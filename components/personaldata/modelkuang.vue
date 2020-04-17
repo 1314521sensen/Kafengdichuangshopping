@@ -93,11 +93,12 @@
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success: (res) => {
+						console.log(res)
 						// console.log(res.tempFiles[0].path)
 						//tempFiles
 						if (this.imgList.length != 0) {
 							this.imgList = this.imgList.concat(res.tempFiles)
-							
+							console.log(this.imgList)
 						} else {
 							this.imgList = res.tempFilePaths
 						}

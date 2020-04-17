@@ -181,7 +181,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 {
   data: function data() {
     return {
@@ -264,17 +263,31 @@ __webpack_require__.r(__webpack_exports__);
         method: "POST",
         data: data,
         success: function success(res) {
-          // console.log(res)
-          if (res.data.code == 0) {
-            _this.toast("登录成功");
-            //就将用户的昵称密码存储起来
-            uni.setStorage({
-              key: "userlogininfo",
-              data: [{ username: username, password: password }],
-              success: function success(res) {
-                uni.switchTab({
-                  url: "/pages/index/index" });
+          uni.setStorage({
+            key: "usertokey",
+            data: res.data.data.token });
 
+          if (res.data.code == 0) {
+            uni.request({
+              url: "http://hbk.huiboke.com/api/user/getUserDetail",
+              method: "POST",
+              data: {
+                token: res.data.data.token },
+
+              success: function success(resinfo) {
+                if (resinfo.data.code == 0) {
+                  _this.toast("登录成功");
+                  uni.setStorage({
+                    key: "userinfokey",
+                    data: resinfo.data.data });
+
+                  uni.switchTab({
+                    url: "/pages/index/index" });
+
+                }
+              },
+              fail: function fail(err) {
+                _this.toast("登录失败");
               } });
 
           } else {

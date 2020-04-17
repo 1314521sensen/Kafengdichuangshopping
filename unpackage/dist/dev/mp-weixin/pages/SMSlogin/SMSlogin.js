@@ -253,18 +253,35 @@ var app = getApp();var _default =
           data: jsons,
           success: function success(res) {
             var token = res.data.data.token;
+            console.log(token);
+            //当用户登录成功以后 将token存到缓存当中 为以后方便使用
+            uni.setStorage({
+              key: "usertokey",
+              data: res.data.data.token });
+
             if (res.data.code == 0) {
               uni.request({
-                url: "http://hbk.huiboke.com/api/user/getAreas",
+                url: "http://hbk.huiboke.com/api/user/getUserDetail",
+                method: "POST",
                 data: {
-                  parent_id: token },
+                  token: token },
                 //这里是tokey值 这里出现跨域问题明天搞
                 success: function success(resinfo) {
                   console.log(resinfo);
+                  if (resinfo.data.code == 0) {
+                    uni.setStorage({
+                      key: "userinfokey",
+                      data: resinfo.data.data });
+
+                    uni.switchTab({
+                      url: "/pages/index/index" });
+
+                  }
+                },
+                fail: function fail(err) {
+                  console.log(err);
                 } });
 
-              uni.switchTab({
-                url: "/pages/index/index" });
 
             } else {
               uni.showToast({
