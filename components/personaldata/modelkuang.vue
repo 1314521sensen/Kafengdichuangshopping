@@ -20,7 +20,7 @@
 					<view class="cu-form-group">
 						<view class="grid col-4 grid-square flex-sub">
 							<view class="bg-img" v-for="(item,index) in imgList" :key="index" @tap="ViewImage" :data-url="imgList[index]">
-							 <image :src="imgList[index]" mode="aspectFill"></image>
+							 <image :src="pathurl" mode="aspectFill"></image>
 							 <!-- 这是那× -->
 								<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="index">
 									<text class='cuIcon-close'></text>
@@ -39,7 +39,7 @@
 		</view>
 		<!-- 这是昵称 -->
 		
-		<Nickname></Nickname>
+		<Nickname :bool="bool" :text="text" @changebool="changebool" @changetext="changetext" :json="json"></Nickname>
 	</view>
 </template>
 
@@ -49,9 +49,14 @@
 		data(){
 			return {
 				// CustomBar: this.CustomBar,
+				bool:true,
+				text:"保存",
 				modalName: null,
 				value:"",
-				imgList: []
+				imgList: [],
+				pathurl:"",
+				show_img_list:[],
+				json:{},
 			}
 		},
 		components:{
@@ -75,51 +80,58 @@
 				});
 			},
 			DelImg(e) {
-				uni.showModal({
-					title: '亲!!!',
-					content: '确定要删除这个头像吗？',
-					cancelText: '再看看',
-					confirmText: '确定',
-					success: res => {
-						if (res.confirm) {
-							this.imgList.splice(e.currentTarget.dataset.index, 1)
-						}
-					}
-				})
+				this.imgList.splice(e.currentTarget.dataset.index, 1)
 			},
 			ChooseImage() {
+				const _self = this;
 				uni.chooseImage({
 					count: 1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success: (res) => {
 						console.log(res)
-						// console.log(res.tempFiles[0].path)
-						//tempFiles
-						if (this.imgList.length != 0) {
-							this.imgList = this.imgList.concat(res.tempFiles)
-							console.log(this.imgList)
-						} else {
-							this.imgList = res.tempFilePaths
-						}
+						this.imgList = res.tempFiles
+						this.pathurl = res.tempFilePaths[0]
 					}
 				});
 			},
+			//点击上传
 			Confirmupload(){
-				this.imgList = this.imgList
+				this.bool = false
+				this.text = "确认修改"
+				// if(this.imgList[0].size>5120){
+				// 	this.modalName = null
+				// 	uni.showToast({
+				// 		title:"图片的大小不许超过5M",
+				// 		icon:"none",
+				// 		duration:2000
+				// 	})
+				// 	return false
+				// }else{
+					
+					uni.uploadFile({
+						url:"http://hbk.huiboke.com/api/common/uploadImage?type=user",
+						filePath:this.pathurl,
+						name:"file",
+						// header:{
+						// 	'content-type':"multipart/form-data"
+						// },
+						fileType:"image",
+						success(res){ //这里的src不能用明天搞
+							this.json = JSON.parse(res.data)
+							this.pathurl = this.json.data.src
+						}
+					})
+				// }
+				//这是将弹窗关闭
 				this.modalName = null
-				console.log(this.imgList)
-				// uni.uploadFile({
-				// 	url:"http://hbk.huiboke.com/api/common/uploadImage?type=user",
-				// 	filePath:this.imgList,
-				// 	key:"file",
-				// 	success(res){
-				// 		console.log(res)
-				// 	},
-				// 	fail(err){
-				// 		console.log(err)
-				// 	}
-				// })
+			},
+			//改变子组件传过来的值
+			changebool(e){
+				this.bool = e
+			},
+			changetext(e){
+				this.text = e
 			}
 		}
 	}

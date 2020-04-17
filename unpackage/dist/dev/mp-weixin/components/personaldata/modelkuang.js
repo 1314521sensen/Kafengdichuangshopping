@@ -167,9 +167,14 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       // CustomBar: this.CustomBar,
+      bool: true,
+      text: "保存",
       modalName: null,
       value: "",
-      imgList: [] };
+      imgList: [],
+      pathurl: "",
+      show_img_list: [],
+      json: {} };
 
   },
   components: {
@@ -192,52 +197,59 @@ __webpack_require__.r(__webpack_exports__);
         current: e.currentTarget.dataset.url });
 
     },
-    DelImg: function DelImg(e) {var _this = this;
-      uni.showModal({
-        title: '亲!!!',
-        content: '确定要删除这个头像吗？',
-        cancelText: '再看看',
-        confirmText: '确定',
-        success: function success(res) {
-          if (res.confirm) {
-            _this.imgList.splice(e.currentTarget.dataset.index, 1);
-          }
-        } });
-
+    DelImg: function DelImg(e) {
+      this.imgList.splice(e.currentTarget.dataset.index, 1);
     },
-    ChooseImage: function ChooseImage() {var _this2 = this;
+    ChooseImage: function ChooseImage() {var _this = this;
+      var _self = this;
       uni.chooseImage({
         count: 1, //默认9
         sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album'], //从相册选择
         success: function success(res) {
           console.log(res);
-          // console.log(res.tempFiles[0].path)
-          //tempFiles
-          if (_this2.imgList.length != 0) {
-            _this2.imgList = _this2.imgList.concat(res.tempFiles);
-            console.log(_this2.imgList);
-          } else {
-            _this2.imgList = res.tempFilePaths;
-          }
+          _this.imgList = res.tempFiles;
+          _this.pathurl = res.tempFilePaths[0];
         } });
 
     },
+    //点击上传
     Confirmupload: function Confirmupload() {
-      this.imgList = this.imgList;
+      this.bool = false;
+      this.text = "确认修改";
+      // if(this.imgList[0].size>5120){
+      // 	this.modalName = null
+      // 	uni.showToast({
+      // 		title:"图片的大小不许超过5M",
+      // 		icon:"none",
+      // 		duration:2000
+      // 	})
+      // 	return false
+      // }else{
+
+      uni.uploadFile({
+        url: "http://hbk.huiboke.com/api/common/uploadImage?type=user",
+        filePath: this.pathurl,
+        name: "file",
+        // header:{
+        // 	'content-type':"multipart/form-data"
+        // },
+        fileType: "image",
+        success: function success(res) {//这里的src不能用明天搞
+          this.json = JSON.parse(res.data);
+          this.pathurl = this.json.data.src;
+        } });
+
+      // }
+      //这是将弹窗关闭
       this.modalName = null;
-      console.log(this.imgList);
-      // uni.uploadFile({
-      // 	url:"http://hbk.huiboke.com/api/common/uploadImage?type=user",
-      // 	filePath:this.imgList,
-      // 	key:"file",
-      // 	success(res){
-      // 		console.log(res)
-      // 	},
-      // 	fail(err){
-      // 		console.log(err)
-      // 	}
-      // })
+    },
+    //改变子组件传过来的值
+    changebool: function changebool(e) {
+      this.bool = e;
+    },
+    changetext: function changetext(e) {
+      this.text = e;
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

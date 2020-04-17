@@ -161,17 +161,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var _default =
 { //注:这里的name 每个input 还位绑定
   data: function data() {
@@ -181,86 +170,190 @@ var _default =
       {
         title: "昵称",
         zhi: "明天的我又进步了",
-        showname: "DialogModal1",
+        showname: "1",
         dialogtitle: "您要修改的昵称",
         placeholdertext: "请输入你要修改的昵称",
-        value3: "" },
+        value3: "",
+        name: "usernick",
+        disabled: false },
+
+      {
+        title: "真实姓名",
+        zhi: "刘伟森",
+        showname: "2",
+        dialogtitle: "您要修改的真实姓名",
+        placeholdertext: "真实姓名一但修改无法编辑",
+        value3: "",
+        name: "username",
+        disabled: false },
 
       {
         title: "性别",
         zhi: "男",
-        showname: "DialogModal2",
+        showname: "3",
         dialogtitle: "您要修改的性别",
-        placeholdertext: "请输入你要修改的性别",
-        value3: "" },
+        placeholdertext: "性别一但修改无法编辑",
+        value3: "",
+        name: "usersex",
+        disabled: false },
 
       {
-        title: "个性签名",
-        zhi: "示范法纠纷解决分公司登记分",
-        showname: "DialogModal3",
-        dialogtitle: "您要修改的个性签名",
-        placeholdertext: "请输入你要修改的个性签名",
-        value3: "" }],
+        title: "省份",
+        zhi: "山东",
+        showname: "4",
+        dialogtitle: "您要修改的省份",
+        placeholdertext: "请输入你要修改的省份",
+        value3: "",
+        name: "province",
+        disabled: false },
+
+      {
+        title: "城市",
+        zhi: "德州",
+        showname: "5",
+        dialogtitle: "您要修改的城市",
+        placeholdertext: "请输入你要修改的城市",
+        value3: "",
+        name: "city",
+        disabled: false },
+
+      {
+        title: "县",
+        zhi: "德城区",
+        showname: "6",
+        dialogtitle: "您要修改的县",
+        placeholdertext: "请输入你要修改的县",
+        value3: "",
+        name: "area",
+        disabled: false }],
 
 
       phonevalue: "",
       countdowntext: "验证码",
       wait: 60,
-      disabled: true };
+      disabled: true,
+      tokey: "" };
 
   },
+
   methods: {
-    showModal: function showModal(e) {
+    showModal: function showModal(e, disabled) {
       this.modalName = e.currentTarget.dataset.target;
+      //拿道下标 当用户点击列表的时候弹出窗 后面的input不能编译
+      var index = parseInt(this.modalName);
+      this.Personalinformationlist[index - 1].disabled = true;
     },
     hideModal: function hideModal(e) {
       this.modalName = null;
     },
-    Modify: function Modify(value4, index) {
+    Modify: function Modify(value4, index, bool) {
+      this.Personalinformationlist[index].disabled = false;
       this.Personalinformationlist[index].zhi = value4;
+      this.$emit("changebool", false);
+      this.$emit("changetext", "确认修改");
+      //当用户点击确定的时候 证明用户已经更改了信息 获取缓存中的值 进行比对
       this.modalName = null;
     },
-    //点击验证码时
-    countdown: function countdown() {
-      this.time();
-    },
-    time: function time() {var _this = this;
-      var times = null;
-      this.disabled = true;
-      //这块点击反复执行定时器
-      // clearInterval(times)
-      var _this$$data = this.$data,countdowntext = _this$$data.countdowntext,wait = _this$$data.wait;
-      // console.log(countdowntext,wait)
-      times = setInterval(function () {
-        wait--;
-        // console.log(wait)
-        _this.countdowntext = wait;
-        if (wait == 0) {
-          _this.disabled = false;
-          countdowntext = "重新获取验证码";
-          clearInterval(times);
-          _this.countdowntext = countdowntext;
-          _this.wait = 60;
-        }
 
-      }, 1000);
-    },
-    //这时候输入手机号的表单事件
-    Modifyphone: function Modifyphone() {
-      //当输入的手机号的时候 如果手机号的长度是11位那么就解锁点击验证码的状态
-      if (this.phonevalue.length == 11) {
-        this.disabled = false;
-      }
-    },
     //当用户点击了保存了以后
     btnsave: function btnsave(e) {//e是表单中的信息
-      // console.log(e)
+      var _e$mp$detail$value = e.mp.detail.value,usernick = _e$mp$detail$value.usernick,username = _e$mp$detail$value.username,usersex = _e$mp$detail$value.usersex,province = _e$mp$detail$value.province,city = _e$mp$detail$value.city,area = _e$mp$detail$value.area;
+      // console.log(e.mp.detail.value.usernick)
+      // console.log(usernick,username,usersex,province,city,area)
+      if (this.text == "确认修改") {
+        if (usernick && username && usersex && province && city && area) {
+          //这是验证账号
+          var regusernick = /^[\W|\w]{5,100}$/;
+          //验证账号
+          var regusername = /^\W{2,5}$/;
+          //验证性别
+          var regsex = /^[男|女]{1,1}$/;
+          var num = "";
+          if (usersex == "男") {
+            num = 0;
+          } else {
+            num = 1;
+          }
+          if (regusernick.test(usernick) && regusername.test(username) && regsex.test(usersex)) {
+            console.log(this.tokey); //获取到tokey
+            console.log(json);
+            //当全部的验证成功了  就发起请求
+            // uni.request({
+            // 	url:""
+            // })
+
+
+          } else {
+            uni.showToast({
+              title: "请正确填写信息",
+              icon: "none" });
+
+          }
+        } else {
+          uni.showToast({
+            title: "请填写完整的信息",
+            icon: "none" });
+
+        }
+      }
+
+      // let arr = []
+      // arr.push(e.mp.detail.value)
+      // arr.forEach((item,index)=>{
+      // 	console.log(item)
+      // })
       //当用户点击了保存后 存一个状态在缓存中 或者发给服务器
       // 并强制用户跳转到首页
-      uni.switchTab({
-        url: "/pages/index/index" });
+      // uni.switchTab({
+      // 	url:"/pages/index/index"
+      // })
+    }
 
-    } } };exports.default = _default;
+    //这后期或许用
+    // //这时候输入手机号的表单事件
+    // Modifyphone(){
+    // 	//当输入的手机号的时候 如果手机号的长度是11位那么就解锁点击验证码的状态
+    // 	if(this.phonevalue.length==11){
+    // 		this.disabled = false
+    // 	}
+    // },
+    // time(){
+    // 	let times = null
+    // 	this.disabled = true
+    // 	//这块点击反复执行定时器
+    // 	// clearInterval(times)
+    // 	let {countdowntext,wait} = this.$data
+    // 	// console.log(countdowntext,wait)
+    // 		times = setInterval(()=>{
+    // 			wait--
+    // 			// console.log(wait)
+    // 			this.countdowntext = wait
+    // 			if(wait==0){
+    // 				this.disabled = false
+    // 				countdowntext = "重新获取验证码"
+    // 				clearInterval(times)
+    // 				this.countdowntext = countdowntext
+    // 				this.wait = 60
+    // 			}
+
+    // 		},1000)
+    // },
+    //点击验证码时
+    // countdown(){
+    // 	this.time()
+    // },
+  },
+  props: ["bool", "text", "json"],
+  created: function created() {var _this2 = this;
+    //当页面初始化的时候取出tokey
+    var _this = this;
+    uni.getStorage({
+      key: "usertokey",
+      success: function success(res) {
+        _this2.tokey = res.data;
+      } });
+
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })
