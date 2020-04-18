@@ -270,11 +270,11 @@ var app = getApp();var _default =
         method: "POST",
         data: data,
         success: function success(res) {
-          // console.log(res)//微信少返了一个data.data.tokey
-          // uni.setStorage({
-          // 	key:"usertokey",
-          // 	data:res.data.data.token
-          // })
+          console.log(res); //微信少返了一个data.data.tokey
+          uni.setStorage({
+            key: "usertokey",
+            data: res.data.data.token });
+
           if (res.data.code == 0) {
             console.log("已经走过来了");
             uni.request({
