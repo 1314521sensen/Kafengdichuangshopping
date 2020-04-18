@@ -4,14 +4,14 @@
 }
 
 
-.nav-text.data-v-415d0b56 {
+.nav-text.data-v-685c45b8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-around;
           justify-content: space-around;
 }
-.nav .cu-item.data-v-415d0b56 {
+.nav .cu-item.data-v-685c45b8 {
   height: 74rpx;
 }
 

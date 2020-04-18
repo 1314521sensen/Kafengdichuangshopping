@@ -124,6 +124,12 @@
 						mobile_phone:phone,
 						code:phonecode
 					}
+					//将用户微信与微信绑定的参数
+					let bingjson = {
+						login_type:"weixin",
+						bind_type:"account",
+						username:username
+					}
 					//这块来获取缓存中的微信的code码  拿code码去后端换取openid
 					// #ifdef MP-WEIXIN
 						//取缓存中值
@@ -132,6 +138,7 @@
 							success(res){
 								//成功了 就把code的码 给对象新增加了属性
 								registeredjson.openid = res.data
+								bingjson.openid = res.data
 							}
 						})
 					// #endif
@@ -142,9 +149,16 @@
 						data:registeredjson,
 						success(res){//请求成功的时候
 							if(res.data.code==0){
-								uni.reLaunch({
-									url:"/pages/login/login"
-								})
+								// #ifdef MP-WEIXIN
+									console.log(bingjson)//明天这需要测试
+									app.globalData.userbinding(bingjson)
+								// #endif
+								// #ifdef APP-PLUS
+									//app直接跳转不用绑定
+									uni.reLaunch({
+										url:"/pages/login/login"
+									})
+								// #endif
 							}else{
 								uni.showToast({
 									title:"该用户已经注册过了",

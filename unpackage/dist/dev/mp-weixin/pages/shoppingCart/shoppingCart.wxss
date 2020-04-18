@@ -1,7 +1,7 @@
-.shoppingcart.data-v-9e3dd694 {
+.shoppingcart.data-v-77184e18 {
   padding: 0 20rpx;
 }
-.shoppingcart .cart .cart-title.data-v-9e3dd694 {
+.shoppingcart .cart .cart-title.data-v-77184e18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -10,14 +10,14 @@
           justify-content: space-between;
   padding: 0 25rpx;
 }
-.shoppingcart .cart .cart-title text.data-v-9e3dd694 {
+.shoppingcart .cart .cart-title text.data-v-77184e18 {
   display: block;
   font-size: 40rpx;
 }
-.shoppingcart .cart .cart-title text.data-v-9e3dd694:first-child {
+.shoppingcart .cart .cart-title text.data-v-77184e18:first-child {
   font-weight: bold;
 }
-.shoppingcart .cart .cart-title text.data-v-9e3dd694:last-child {
+.shoppingcart .cart .cart-title text.data-v-77184e18:last-child {
   font-size: 35rpx;
 }
 

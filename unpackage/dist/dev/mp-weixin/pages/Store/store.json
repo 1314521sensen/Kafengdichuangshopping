@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
     "storenav": "/components/store/storenav",
     "storerecommended": "/components/store/storerecommended",
     "storebady": "/components/store/storebady",

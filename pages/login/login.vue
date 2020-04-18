@@ -46,6 +46,7 @@
 <script>
 	//引入图标组件
 	import logobg from "@/components/login/loginbg.vue"
+	const app = getApp()
 	export default {
 		data() {
 			return {
@@ -122,17 +123,25 @@
 				})
 			},
 			//封装一个app和微信端 不同的登录请求方法
-			Ordinarydifferentlogin(data,username,password){
+			Ordinarydifferentlogin(data,username,password,bingjson){
+				//绑定只是为了测试
+				// #ifdef MP-WEIXIN
+					//在这加个微信与平台绑定
+					// console.log(bingjson)
+					console.log(app.globalData.userbinding(bingjson))
+				// #endif
 				uni.request({
 					url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
 					method:"POST",
 					data,
 					success:(res)=>{
-						uni.setStorage({
-							key:"usertokey",
-							data:res.data.data.token
-						})
+						// console.log(res)//微信少返了一个data.data.tokey
+						// uni.setStorage({
+						// 	key:"usertokey",
+						// 	data:res.data.data.token
+						// })
 						if(res.data.code==0){
+							console.log("已经走过来了")
 							uni.request({
 								url:"http://hbk.huiboke.com/api/user/getUserDetail",
 								method:"POST",
@@ -141,14 +150,17 @@
 								},
 								success:(resinfo)=>{
 									if(resinfo.data.code==0){
-										this.toast("登录成功")
-										uni.setStorage({
-											key:"userinfokey",
-											data:resinfo.data.data
-										})
-										uni.switchTab({
-											url:"/pages/index/index"
-										})
+										// #ifdef MP-WEIXIN || H5
+											this.toast("登录成功")
+											uni.setStorage({
+												key:"userinfokey",
+												data:resinfo.data.data
+											})
+											uni.switchTab({
+												url:"/pages/index/index"
+											})
+										//#endif
+										//明天微信绑定放在这
 									}
 								},
 								fail:(err)=>{
@@ -201,7 +213,15 @@
 									password:password,
 									opened:res.data
 								}
-								this.Ordinarydifferentlogin(data,username,password)
+								//将微信和app绑定
+								
+								let bingjson = {
+									login_type:"weixin",
+									bind_type:"account",
+									openid:res.data,
+									username:username
+								}
+								this.Ordinarydifferentlogin(data,username,password,bingjson)
 							}else{
 								this.toast("请填写完整信息")
 							}

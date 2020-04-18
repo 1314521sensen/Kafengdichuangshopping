@@ -1,11 +1,11 @@
-.login.data-v-c612d0ec {
+.login.data-v-32a7046c {
   height: 100vh;
   background-color: #fff;
 }
-.login .app-login.data-v-c612d0ec {
+.login .app-login.data-v-32a7046c {
   width: 100%;
 }
-.login .app-login .logo.data-v-c612d0ec {
+.login .app-login .logo.data-v-32a7046c {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -17,18 +17,18 @@
           align-items: center;
   height: 300rpx;
 }
-.login .app-login .from.data-v-c612d0ec {
+.login .app-login .from.data-v-32a7046c {
   padding: 0 30rpx;
 }
-.login .app-login .from .inp.data-v-c612d0ec {
+.login .app-login .from .inp.data-v-32a7046c {
   border-bottom: 2rpx solid #ff5000;
   min-height: 60rpx;
   margin-bottom: 46rpx;
 }
-.login .app-login .from .inp-bottom.data-v-c612d0ec {
+.login .app-login .from .inp-bottom.data-v-32a7046c {
   margin-bottom: 25rpx;
 }
-.login .app-login .from .sms-and-registration.data-v-c612d0ec {
+.login .app-login .from .sms-and-registration.data-v-32a7046c {
   font-size: 24rpx;
   color: #999;
   display: -webkit-box;
@@ -38,27 +38,27 @@
   -webkit-justify-content: space-between;
           justify-content: space-between;
 }
-.login .app-login .from .loginButton.data-v-c612d0ec {
+.login .app-login .from .loginButton.data-v-32a7046c {
   margin-top: 60rpx;
   margin-bottom: 0;
 }
-.login .app-login .from .loginButton button.data-v-c612d0ec {
+.login .app-login .from .loginButton button.data-v-32a7046c {
   border-radius: 35rpx;
 }
-.cu-form-group + .cu-form-group.data-v-c612d0ec {
+.cu-form-group + .cu-form-group.data-v-32a7046c {
   border-top: 0;
 }
-.cu-form-group + .cu-form-group.data-v-c612d0ec {
+.cu-form-group + .cu-form-group.data-v-32a7046c {
   border-top: 0;
 }
-.cu-form-group + .cu-form-group.data-v-c612d0ec {
+.cu-form-group + .cu-form-group.data-v-32a7046c {
   border-top: 0;
 }
-button[disabled].data-v-c612d0ec:not([type]) {
+button[disabled].data-v-32a7046c:not([type]) {
   color: #fff;
   background-color: #39b54a;
 }
-.cu-btn[disabled].data-v-c612d0ec {
+.cu-btn[disabled].data-v-32a7046c {
   opacity: 1;
 }
 

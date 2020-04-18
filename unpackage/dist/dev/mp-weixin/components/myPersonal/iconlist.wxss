@@ -1,24 +1,24 @@
-.orders-icon-list.data-v-4228b99f {
+.orders-icon-list.data-v-6153cbfd {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-around;
           justify-content: space-around;
 }
-.orders-icon-list .orders-item.data-v-4228b99f {
+.orders-icon-list .orders-item.data-v-6153cbfd {
   width: 18%;
   height: 100%;
 }
-.orders-icon-list .orders-item .icon.data-v-4228b99f {
+.orders-icon-list .orders-item .icon.data-v-6153cbfd {
   width: 40%;
   height: 52rpx;
   margin: auto;
 }
-.orders-icon-list .orders-item .icon image.data-v-4228b99f {
+.orders-icon-list .orders-item .icon image.data-v-6153cbfd {
   width: 100%;
   height: 100%;
 }
-.orders-icon-list .orders-item text.data-v-4228b99f {
+.orders-icon-list .orders-item text.data-v-6153cbfd {
   display: block;
   text-align: center;
   margin-top: 8rpx;

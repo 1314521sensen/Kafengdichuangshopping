@@ -1,1 +1,1 @@
-<view class="shoppinglist"><list vue-id="7f3bc07e-1" list="{{list}}" bind:__l="__l"></list></view>
+<view class="shoppinglist"><list vue-id="1" list="{{list}}" bind:__l="__l"></list></view>

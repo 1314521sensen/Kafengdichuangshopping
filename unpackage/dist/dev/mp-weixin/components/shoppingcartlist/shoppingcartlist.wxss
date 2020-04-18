@@ -1,13 +1,13 @@
-.cart-list.data-v-60d057d8 {
+.cart-list.data-v-18e72c1c {
   padding-bottom: 100rpx;
 }
-.cart-list .cart-item.data-v-60d057d8 {
+.cart-list .cart-item.data-v-18e72c1c {
   padding: 20rpx 10rpx;
   background-color: #fff;
   border-radius: 16rpx;
   margin-top: 40rpx;
 }
-.cart-list .cart-item .cart-item-top.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-top.data-v-18e72c1c {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -16,16 +16,16 @@
           align-items: center;
   padding: 14rpx 0;
 }
-.cart-list .cart-item .cart-item-top text.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-top text.data-v-18e72c1c {
   font-size: 34rpx;
   font-weight: bold;
 }
-.cart-list .cart-item .cart-item-top text.data-v-60d057d8:last-child {
+.cart-list .cart-item .cart-item-top text.data-v-18e72c1c:last-child {
   font-weight: normal;
   font-size: 28rpx;
   margin: 8rpx 0 0 10rpx;
 }
-.cart-list .cart-item .cart-item-bottom.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom.data-v-18e72c1c {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -33,36 +33,36 @@
           justify-content: space-around;
   margin-top: 20rpx;
 }
-.cart-list .cart-item .cart-item-bottom .cu-form-group.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .cu-form-group.data-v-18e72c1c {
   padding: 0;
 }
-.cart-list .cart-item .cart-item-bottom .Select-box.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .Select-box.data-v-18e72c1c {
   border-radius: 50%;
   width: 8%;
   height: 50rpx;
 }
-.cart-list .cart-item .cart-item-bottom .Select-box .checkbox-inp.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .Select-box .checkbox-inp.data-v-18e72c1c {
   width: 36rpx;
   height: 36rpx;
 }
-.cart-list .cart-item .cart-item-bottom .images.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .images.data-v-18e72c1c {
   width: 26%;
   height: 180rpx;
 }
-.cart-list .cart-item .cart-item-bottom .images image.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .images image.data-v-18e72c1c {
   width: 100%;
   height: 100%;
 }
-.cart-list .cart-item .cart-item-bottom .describe.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe.data-v-18e72c1c {
   -webkit-box-flex: 50%;
   -webkit-flex: 50%;
           flex: 50%;
   padding-left: 20rpx;
 }
-.cart-list .cart-item .cart-item-bottom .describe .shopping-Title.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .shopping-Title.data-v-18e72c1c {
   height: 80rpx;
 }
-.cart-list .cart-item .cart-item-bottom .describe .shoping-title.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .shoping-title.data-v-18e72c1c {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -72,14 +72,14 @@
           flex-wrap: wrap;
   font-size: 30rpx;
 }
-.cart-list .cart-item .cart-item-bottom .describe .ModelSize.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .ModelSize.data-v-18e72c1c {
   margin-top: 44rpx;
 }
-.cart-list .cart-item .cart-item-bottom .describe .ModelSize text.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .ModelSize text.data-v-18e72c1c {
   background-color: #f2f2f2;
   color: #999;
 }
-.cart-list .cart-item .cart-item-bottom .describe .price-box.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .price-box.data-v-18e72c1c {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -89,18 +89,18 @@
   margin-top: 44rpx;
   padding-right: 10rpx;
 }
-.cart-list .cart-item .cart-item-bottom .describe .price-box text.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .price-box text.data-v-18e72c1c {
   font-size: 30rpx;
   color: #ee6c29;
   font-weight: bold;
   margin-top: 8rpx;
 }
-.cart-list .cart-item .cart-item-bottom .describe .price-box .numbers.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .price-box .numbers.data-v-18e72c1c {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
 }
-.cart-list .cart-item .cart-item-bottom .describe .price-box .numbers button.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .price-box .numbers button.data-v-18e72c1c {
   width: 74rpx;
   height: 44rpx;
   line-height: 1.1;
@@ -110,7 +110,7 @@
   background-color: #fff;
   color: #999;
 }
-.cart-list .cart-item .cart-item-bottom .describe .price-box .numbers input.data-v-60d057d8 {
+.cart-list .cart-item .cart-item-bottom .describe .price-box .numbers input.data-v-18e72c1c {
   width: 108rpx;
   height: 20rpx;
   border-top: 2rpx solid #ccc;

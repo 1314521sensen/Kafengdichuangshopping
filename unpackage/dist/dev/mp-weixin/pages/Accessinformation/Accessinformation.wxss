@@ -1,7 +1,7 @@
-page.data-v-28b81370 {
+page.data-v-f71745ac {
   background-color: #fff;
 }
-.Layerthickness.data-v-28b81370 {
+.Layerthickness.data-v-f71745ac {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -15,7 +15,7 @@ page.data-v-28b81370 {
   height: 100vh;
   background-color: rgba(255, 255, 255, 0.5);
 }
-.Layerthickness .btninformation.data-v-28b81370 {
+.Layerthickness .btninformation.data-v-f71745ac {
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;

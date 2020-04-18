@@ -10,9 +10,21 @@
 					data:json,
 					success(res){//成功的回调
 						console.log(res)
-					},
+					}
 				})
-			}
+			},
+			// #ifdef MP-WEIXIN
+				userbinding(bingjson){//2将用户微信账户与app平台账户绑定
+					uni.request({
+						url:"http://hbk.huiboke.com/api/login_and_register/bindUser",
+						method:"POST",
+						data:bingjson,
+						success(res){
+							console.log(res)
+						}
+					})
+				}
+			// #endif
 		},
 		onLaunch: function() {
 			const _this = this

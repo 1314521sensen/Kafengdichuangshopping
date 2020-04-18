@@ -1,20 +1,20 @@
-.EvaluationContent.data-v-7f8f30b2 {
+.EvaluationContent.data-v-d644ccd8 {
   padding: 20rpx 0;
   background-color: #fff;
 }
-.EvaluationContent .minContent.data-v-7f8f30b2 {
+.EvaluationContent .minContent.data-v-d644ccd8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   margin-top: 20rpx;
 }
-.EvaluationContent .minContent view.data-v-7f8f30b2:first-child {
+.EvaluationContent .minContent view.data-v-d644ccd8:first-child {
   padding: 0;
 }
-.EvaluationContent .minContent text.data-v-7f8f30b2 {
+.EvaluationContent .minContent text.data-v-d644ccd8 {
   margin-left: 30rpx;
 }
-.EvaluationContent .content-area.data-v-7f8f30b2 {
+.EvaluationContent .content-area.data-v-d644ccd8 {
   padding: 0 20rpx 0 35rpx;
   font-size: 20rpx;
   margin-top: 14rpx;

@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
     "shoppingcatlist": "/components/shoppingcartlist/shoppingcartlist",
     "shopingbottompay": "/components/shoppingcartlist/shopingbottompay"
   }

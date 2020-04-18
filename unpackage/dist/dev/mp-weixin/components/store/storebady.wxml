@@ -1,1 +1,1 @@
-<view class="shoppngbady data-v-307a8c2c"><scroll-view class="scroll-view data-v-307a8c2c" scroll-y="true"><horizontallylist vue-id="320d16aa-1" horizontallylist="{{horizontallylist}}" class="data-v-307a8c2c" bind:__l="__l"></horizontallylist></scroll-view></view>
+<view class="shoppngbady data-v-b54d04ec"><scroll-view class="scroll-view data-v-b54d04ec" scroll-y="true"><horizontallylist vue-id="1" horizontallylist="{{horizontallylist}}" class="data-v-b54d04ec" bind:__l="__l"></horizontallylist></scroll-view></view>

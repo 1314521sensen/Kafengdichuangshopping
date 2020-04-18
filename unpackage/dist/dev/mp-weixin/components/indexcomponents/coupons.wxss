@@ -1,14 +1,14 @@
-.coupons.data-v-44df594b {
+.coupons.data-v-4d43e6ae {
   width: 100%;
   overflow: hidden;
 }
-.coupons .rows.data-v-44df594b {
+.coupons .rows.data-v-4d43e6ae {
   width: 300%;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
 }
-.coupons .rows .coupons-for.data-v-44df594b {
+.coupons .rows .coupons-for.data-v-4d43e6ae {
   width: 100%;
   display: -webkit-box;
   display: -webkit-flex;
@@ -24,7 +24,7 @@
   margin: 20rpx auto;
   border-radius: 16rpx;
 }
-.coupons .rows .coupons-for .coupons-list.data-v-44df594b {
+.coupons .rows .coupons-for .coupons-list.data-v-4d43e6ae {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -36,13 +36,13 @@
   background-color: #cd293f;
   padding: 8rpx 0;
 }
-.coupons .rows .coupons-for .coupons-list .coupons-midden.data-v-44df594b {
+.coupons .rows .coupons-for .coupons-list .coupons-midden.data-v-4d43e6ae {
   width: 80%;
   background-color: #ec3636;
   margin: auto;
   padding: 8rpx 0 8rpx 10rpx;
 }
-.coupons .rows .coupons-for .coupons-list .coupons-midden text.data-v-44df594b {
+.coupons .rows .coupons-for .coupons-list .coupons-midden text.data-v-4d43e6ae {
   display: block;
   color: yellow;
   font-size: 38rpx;
@@ -52,11 +52,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.coupons .rows .coupons-for .coupons-list .coupons-midden text.data-v-44df594b:first-child {
+.coupons .rows .coupons-for .coupons-list .coupons-midden text.data-v-4d43e6ae:first-child {
   font-size: 12rpx;
   text-align: left;
 }
-.coupons .rows .coupons-for .coupons-list .coupons-midden text.data-v-44df594b:last-child {
+.coupons .rows .coupons-for .coupons-list .coupons-midden text.data-v-4d43e6ae:last-child {
   font-size: 12rpx;
   margin-bottom: 0;
   text-align: left;

@@ -1,45 +1,45 @@
-.sorting .nav-text.data-v-0280a708 {
+.sorting .nav-text.data-v-1deabeda {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-around;
           justify-content: space-around;
 }
-.sorting .cuitemheight.data-v-0280a708 {
+.sorting .cuitemheight.data-v-1deabeda {
   height: 70rpx;
   line-height: 70rpx;
   border-bottom: 0;
 }
-.sorting .sorting-bottom.data-v-0280a708 {
+.sorting .sorting-bottom.data-v-1deabeda {
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
 }
-.sorting .sorting-bottom .comprehensive.data-v-0280a708 {
+.sorting .sorting-bottom .comprehensive.data-v-1deabeda {
   width: 20%;
   background-color: #fff;
   margin-right: 44rpx;
 }
-.sorting .sorting-bottom .comprehensive text.data-v-0280a708 {
+.sorting .sorting-bottom .comprehensive text.data-v-1deabeda {
   display: block;
   font-size: 20rpx;
   text-align: center;
   margin-bottom: 12rpx;
 }
-.sorting .sorting-bottom .comprehensive text.data-v-0280a708:last-child {
+.sorting .sorting-bottom .comprehensive text.data-v-1deabeda:last-child {
   margin-bottom: 0;
 }
-.sorting .sorting-bottom .comprehensive.data-v-0280a708:nth-child(2) {
+.sorting .sorting-bottom .comprehensive.data-v-1deabeda:nth-child(2) {
   height: 0;
 }
-.sorting .sorting-bottom .show.data-v-0280a708 {
+.sorting .sorting-bottom .show.data-v-1deabeda {
   opacity: 1;
 }
-.sorting .sorting-bottom .hiden.data-v-0280a708 {
+.sorting .sorting-bottom .hiden.data-v-1deabeda {
   opacity: 0;
 }
-.sorting .sorting-bottom .screening.data-v-0280a708 {
+.sorting .sorting-bottom .screening.data-v-1deabeda {
   position: absolute;
   width: 100%;
   height: 230rpx;

@@ -1,4 +1,4 @@
-.searhbusiness .searhbusiness-midden.data-v-25310484 {
+.searhbusiness .searhbusiness-midden.data-v-0c92901c {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -10,22 +10,22 @@
           align-items: center;
   padding-left: 20rpx;
 }
-.searhbusiness .searhbusiness-midden .Returnsicon.data-v-25310484 {
+.searhbusiness .searhbusiness-midden .Returnsicon.data-v-0c92901c {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
           flex: 1;
 }
-.searhbusiness .searhbusiness-midden .Returnsicon text.data-v-25310484 {
+.searhbusiness .searhbusiness-midden .Returnsicon text.data-v-0c92901c {
   font-size: 44rpx;
 }
-.searhbusiness .searhbusiness-midden .inp.data-v-25310484 {
+.searhbusiness .searhbusiness-midden .inp.data-v-0c92901c {
   width: 94%;
 }
-.searhbusiness .historicalrecord.data-v-25310484 {
+.searhbusiness .historicalrecord.data-v-0c92901c {
   padding: 0 28rpx;
   margin-top: 30rpx;
 }
-.searhbusiness .historicalrecord .historicalrecord-title.data-v-25310484 {
+.searhbusiness .historicalrecord .historicalrecord-title.data-v-0c92901c {
   font-size: 26rpx;
   font-weight: bold;
   display: -webkit-box;
@@ -35,7 +35,7 @@
   -webkit-justify-content: space-between;
           justify-content: space-between;
 }
-.searhbusiness .historicalrecord .historicalrecord-content.data-v-25310484 {
+.searhbusiness .historicalrecord .historicalrecord-content.data-v-0c92901c {
   width: 70%;
   display: -webkit-box;
   display: -webkit-flex;
@@ -45,7 +45,7 @@
   margin-top: 20rpx;
   font-size: 20rpx;
 }
-.searhbusiness .historicalrecord .historicalrecord-content text.data-v-25310484 {
+.searhbusiness .historicalrecord .historicalrecord-content text.data-v-0c92901c {
   padding: 6rpx;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 16rpx;

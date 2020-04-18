@@ -1,19 +1,19 @@
-.PriceTitle .PriceTitle-top.data-v-59108232 {
+.PriceTitle .PriceTitle-top.data-v-3791e8c9 {
   background-color: #fff;
   padding: 28rpx 10rpx 14rpx;
 }
-.PriceTitle .price.data-v-59108232 {
+.PriceTitle .price.data-v-3791e8c9 {
   margin-bottom: 10rpx;
 }
-.PriceTitle .price text.data-v-59108232 {
+.PriceTitle .price text.data-v-3791e8c9 {
   font-size: 44rpx;
   color: #ff5000;
 }
-.PriceTitle .CommodityTitle text.data-v-59108232 {
+.PriceTitle .CommodityTitle text.data-v-3791e8c9 {
   font-size: 30rpx;
   font-weight: bold;
 }
-.PriceTitle .sales.data-v-59108232 {
+.PriceTitle .sales.data-v-3791e8c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
