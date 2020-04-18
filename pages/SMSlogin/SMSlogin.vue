@@ -101,12 +101,20 @@
 					user_phone:phone,
 					code:sms
 				}
-				// #ifdef MP-WEIXIN
+				// #ifdef MP-WEIXIN	
+					//将用户微信和app进行绑定的数据
+					let bingjson = {
+						login_type:"weixin",
+						bind_type:"mobile",
+						userphone:phone,
+						code:sms
+					}
 					//获取缓存中的微信code码换取后台的openid
 					uni.getStorage({
 						key:"wxcodekey",
 						success(res){
 							jsons.opened = res.data
+							bingjson.openid = res.data
 						}
 					})
 				// #endif
@@ -117,7 +125,7 @@
 						data:jsons,
 						success(res){
 							let token =  res.data.data.token
-							console.log(token)
+							// console.log(token)
 							//当用户登录成功以后 将token存到缓存当中 为以后方便使用
 							uni.setStorage({
 								key:"usertokey",
@@ -129,17 +137,25 @@
 									method:"POST",
 									data:{
 										token:token
-									},//这里是tokey值 这里出现跨域问题明天搞
+									},
 									success:(resinfo)=>{
-										console.log(resinfo)
+										// console.log(resinfo)
 										if(resinfo.data.code==0){
+											//不管微信还是app都要加入缓存
 											uni.setStorage({
 												key:"userinfokey",
 												data:resinfo.data.data
 											})
-											uni.switchTab({
-												url:"/pages/index/index"
-											})
+											// #ifdef APP-PLUS || H5
+												uni.switchTab({
+													url:"/pages/index/index"
+												})
+											// #endif
+											//微信 将微信和app平台绑定
+											// #ifdef MP-WEIXIN
+												// console.log(bingjson)
+												app.globalData.userbinding(bingjson)
+											// #endif
 										}
 									},
 									fail(err){

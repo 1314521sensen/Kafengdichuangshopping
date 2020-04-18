@@ -20,7 +20,17 @@
 						method:"POST",
 						data:bingjson,
 						success(res){
-							console.log(res)
+							if(res.data.code==0){
+								uni.showToast({
+									title:"绑定成功",
+									icon:"none",
+									success(){
+										console.log("绑定成功跳转")
+									}
+								})
+							}else{
+								console.log("绑定失败")
+							}
 						}
 					})
 				}

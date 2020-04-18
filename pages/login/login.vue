@@ -128,7 +128,7 @@
 				// #ifdef MP-WEIXIN
 					//在这加个微信与平台绑定
 					// console.log(bingjson)
-					console.log(app.globalData.userbinding(bingjson))
+					// app.globalData.userbinding(bingjson)
 				// #endif
 				uni.request({
 					url:"http://hbk.huiboke.com/api/login_and_register/userLogin",

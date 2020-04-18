@@ -263,7 +263,7 @@ var app = getApp();var _default =
 
       //在这加个微信与平台绑定
       // console.log(bingjson)
-      console.log(app.globalData.userbinding(bingjson));
+      // app.globalData.userbinding(bingjson)
 
       uni.request({
         url: "http://hbk.huiboke.com/api/login_and_register/userLogin",
