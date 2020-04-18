@@ -102,41 +102,24 @@
 			//这是滚动的时候列表
 			MultiColumnChange(e) {
 				let data = {
-					multiArray: this.multiArray,//这是联动的地区数组
-					multiIndex: this.multiIndex//这是联动的下标
+					multiArray: this.multiArray,
+					multiIndex: this.multiIndex
 				};
+				
 				data.multiIndex[e.detail.column] = e.detail.value;
-				//这是选择的一级联动的每一个下标
-				console.log(e.detail.value)
-				//如果滚动的二级联动下标就是1  滚动三级联动就是2 
-				// console.log(e.detail.column)
-				uni.request({
-					url:"http://hbk.huiboke.com/api/common/getAreas",
-					data:{
-						parent_id:e.detail.value
-					},
-					success(rescity){
-						// console.log(rescity.data.data)
-						rescity.data.data.forEach((item,index)=>{
-							console.log(item)
-						})
-					}
-				})
-				//0的时候全部显示
+				console.log(data.multiIndex[e.detail.column])
 				switch (e.detail.column) {
-					
 					case 0:
 						switch (data.multiIndex[0]) {
 							case 0:
-								data.multiArray[1] = ['扁性动物', '线形动物', '环节动物', '软体动物', '节肢动物'];//这是二级联动
-								data.multiArray[2] = ['猪肉绦虫', '吸血虫'];//这是三级开始要显示的
+								data.multiArray[1] = ['扁性动物', '线形动物', '环节动物', '软体动物', '节肢动物'];
+								data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
 								break;
 							case 1:
-								data.multiArray[1] = ['鱼', '两栖动物', '爬行动物'];//这是二级联动要显示的
-								data.multiArray[2] = ['鲫鱼', '带鱼'];//这是三级联动要显示的
+								data.multiArray[1] = ['鱼', '两栖动物', '爬行动物'];
+								data.multiArray[2] = ['鲫鱼', '带鱼'];
 								break;
 						}
-						//这是下标数组的下标
 						data.multiIndex[1] = 0;
 						data.multiIndex[2] = 0;
 						break;
@@ -145,7 +128,7 @@
 							case 0:
 								switch (data.multiIndex[1]) {
 									case 0:
-										data.multiArray[2] = ['猪肉绦虫', '吸血虫'];//这是三级联动要显示的
+										data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
 										break;
 									case 1:
 										data.multiArray[2] = ['蛔虫'];
