@@ -47,8 +47,7 @@
 				//这个发起请求获取验证码
 				let json = {
 					mobile:this.phone,
-					type:1,
-					phone:this.phone
+					type:1
 				}
 				app.globalData.VerificationCode(json)
 				this.time()

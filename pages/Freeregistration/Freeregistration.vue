@@ -142,9 +142,9 @@
 						data:registeredjson,
 						success(res){//请求成功的时候
 							if(res.data.code==0){
-								// uni.reLaunch({
-								// 	url:"/pages/login/login"
-								// })
+								uni.reLaunch({
+									url:"/pages/login/login"
+								})
 							}else{
 								uni.showToast({
 									title:"该用户已经注册过了",

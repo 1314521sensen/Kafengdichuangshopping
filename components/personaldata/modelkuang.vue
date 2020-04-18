@@ -7,7 +7,7 @@
 					<text>头像</text> 
 				</view>
 				<view class="action">
-					<view class="cu-avatar sm round margin-left" :style="{'background-image':'url('+imgList[0]+')'}"></view>
+					<view class="cu-avatar sm round margin-left" :style="{'background-image':'url('+pathurl+')'}"></view>
 				</view>
 			</view>
 			<view class="cu-modal" :class="modalName=='Image'?'show':''">
@@ -39,7 +39,7 @@
 		</view>
 		<!-- 这是昵称 -->
 		
-		<Nickname :bool="bool" :text="text" @changebool="changebool" @changetext="changetext" :json="json"></Nickname>
+		<Nickname :bool="bool" :text="text" @changebool="changebool" @changetext="changetext" :json="json" @jsons="jsons"></Nickname>
 	</view>
 </template>
 
@@ -56,7 +56,7 @@
 				imgList: [],
 				pathurl:"",
 				show_img_list:[],
-				json:{},
+				json:"",
 			}
 		},
 		components:{
@@ -89,7 +89,6 @@
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success: (res) => {
-						console.log(res)
 						this.imgList = res.tempFiles
 						this.pathurl = res.tempFilePaths[0]
 					}
@@ -99,6 +98,12 @@
 			Confirmupload(){
 				this.bool = false
 				this.text = "确认修改"
+				console.log()
+				//设置缓存 将这个图片存到缓存里
+				uni.setStorage({
+					key:"dandutouxiang",
+					data:this.pathurl
+				})
 				// if(this.imgList[0].size>5120){
 				// 	this.modalName = null
 				// 	uni.showToast({
@@ -108,18 +113,19 @@
 				// 	})
 				// 	return false
 				// }else{
-					
+					const _this = this
 					uni.uploadFile({
 						url:"http://hbk.huiboke.com/api/common/uploadImage?type=user",
 						filePath:this.pathurl,
 						name:"file",
-						// header:{
-						// 	'content-type':"multipart/form-data"
-						// },
 						fileType:"image",
-						success(res){ //这里的src不能用明天搞
+						success(res){
+							
 							this.json = JSON.parse(res.data)
-							this.pathurl = this.json.data.src
+							// console.log(this.json,"333")
+							this.pathurl =this.json.data.src
+							_this.jsons(this.json)
+							// console.log(_this.jsons)//这能走过来
 						}
 					})
 				// }
@@ -132,8 +138,23 @@
 			},
 			changetext(e){
 				this.text = e
+			},
+			jsons(e,jsonsrc){
+				// console.log(e)
+				// e = jsonsrc
+				this.json = e
+				console.log(this.json)
 			}
-		}
+		},
+		// created() {
+		// 	const _this = this
+		// 	uni.getStorage({
+		// 		key:"dandutouxiang",
+		// 		success(res){
+		// 			_this.pathurl = res.data
+		// 		}
+		// 	})
+		// }
 	}
 </script>
 

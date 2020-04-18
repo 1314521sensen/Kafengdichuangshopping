@@ -39,6 +39,15 @@
 					<!-- </form> -->
 				</view>
 			</view>
+			<!-- 地区选择 -->
+			<view class="cu-form-group">
+				<view class="title">多列选择</view>
+				<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray">
+					<view class="picker">
+						{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}，{{multiArray[2][multiIndex[2]]}}
+					</view>
+				</picker>
+			</view>
 			<button data-v-287a241a="" class="cu-btn block bg-green margin-tb-sm lg" form-type="submit" :disabled="bool">{{text}}</button>
 		</form>
 	</view>
@@ -50,10 +59,11 @@
 		data(){
 			return {
 				modalName: null,
+				//这是表单的渲染列表
 				Personalinformationlist:[
 					{
 						title:"昵称",
-						zhi:"明天的我又进步了",
+						zhi:"",
 						showname:"1",
 						dialogtitle:"您要修改的昵称",
 						placeholdertext:"请输入你要修改的昵称",
@@ -63,55 +73,23 @@
 					},
 					{
 						title:"真实姓名",
-						zhi:"刘伟森",
+						zhi:"",
 						showname:"2",
 						dialogtitle:"您要修改的真实姓名",
 						placeholdertext:"真实姓名一但修改无法编辑",
 						value3:"",
 						name:"username",
 						disabled:false
-					},
-					{
-						title:"性别",
-						zhi:"男",
-						showname:"3",
-						dialogtitle:"您要修改的性别",
-						placeholdertext:"性别一但修改无法编辑",
-						value3:"",
-						name:"usersex",
-						disabled:false
-					},
-					{
-						title:"省份",
-						zhi:"山东",
-						showname:"4",
-						dialogtitle:"您要修改的省份",
-						placeholdertext:"请输入你要修改的省份",
-						value3:"",
-						name:"province",
-						disabled:false
-					},
-					{
-						title:"城市",
-						zhi:"德州",
-						showname:"5",
-						dialogtitle:"您要修改的城市",
-						placeholdertext:"请输入你要修改的城市",
-						value3:"",
-						name:"city",
-						disabled:false
-					},
-					{
-						title:"县",
-						zhi:"德城区",
-						showname:"6",
-						dialogtitle:"您要修改的县",
-						placeholdertext:"请输入你要修改的县",
-						value3:"",
-						name:"area",
-						disabled:false
 					}
 				],
+				//这是默认选择地区列表
+				multiArray: [
+					[],//这是一级联动
+					[],//这是二级联动开始必须显示的
+					[]//这是三级联动默认显示的
+				],
+				//这是选择的下标
+				multiIndex: [0, 0, 0],
 				phonevalue:"",
 				countdowntext:"验证码",
 				wait:60,
@@ -121,6 +99,94 @@
 		},
 		
 		methods:{
+			//这是滚动的时候列表
+			MultiColumnChange(e) {
+				let data = {
+					multiArray: this.multiArray,//这是联动的地区数组
+					multiIndex: this.multiIndex//这是联动的下标
+				};
+				data.multiIndex[e.detail.column] = e.detail.value;
+				//这是选择的一级联动的每一个下标
+				console.log(e.detail.value)
+				//如果滚动的二级联动下标就是1  滚动三级联动就是2 
+				// console.log(e.detail.column)
+				uni.request({
+					url:"http://hbk.huiboke.com/api/common/getAreas",
+					data:{
+						parent_id:e.detail.value
+					},
+					success(rescity){
+						// console.log(rescity.data.data)
+						rescity.data.data.forEach((item,index)=>{
+							console.log(item)
+						})
+					}
+				})
+				//0的时候全部显示
+				switch (e.detail.column) {
+					
+					case 0:
+						switch (data.multiIndex[0]) {
+							case 0:
+								data.multiArray[1] = ['扁性动物', '线形动物', '环节动物', '软体动物', '节肢动物'];//这是二级联动
+								data.multiArray[2] = ['猪肉绦虫', '吸血虫'];//这是三级开始要显示的
+								break;
+							case 1:
+								data.multiArray[1] = ['鱼', '两栖动物', '爬行动物'];//这是二级联动要显示的
+								data.multiArray[2] = ['鲫鱼', '带鱼'];//这是三级联动要显示的
+								break;
+						}
+						//这是下标数组的下标
+						data.multiIndex[1] = 0;
+						data.multiIndex[2] = 0;
+						break;
+					case 1:
+						switch (data.multiIndex[0]) {
+							case 0:
+								switch (data.multiIndex[1]) {
+									case 0:
+										data.multiArray[2] = ['猪肉绦虫', '吸血虫'];//这是三级联动要显示的
+										break;
+									case 1:
+										data.multiArray[2] = ['蛔虫'];
+										break;
+									case 2:
+										data.multiArray[2] = ['蚂蚁', '蚂蟥'];
+										break;
+									case 3:
+										data.multiArray[2] = ['河蚌', '蜗牛', '蛞蝓'];
+										break;
+									case 4:
+										data.multiArray[2] = ['昆虫', '甲壳动物', '蛛形动物', '多足动物'];
+										break;
+								}
+								break;
+							case 1:
+								switch (data.multiIndex[1]) {
+									case 0:
+										data.multiArray[2] = ['鲫鱼', '带鱼'];
+										break;
+									case 1:
+										data.multiArray[2] = ['青蛙', '娃娃鱼'];
+										break;
+									case 2:
+										data.multiArray[2] = ['蜥蜴', '龟', '壁虎'];
+										break;
+								}
+								break;
+						}
+						data.multiIndex[2] = 0;
+						break;
+				}
+				this.multiArray = data.multiArray;
+				this.multiIndex = data.multiIndex;
+			},
+			//MultiChange这是选中的下标
+			MultiChange(e) {
+				// console.log(e)
+				this.multiIndex = e.detail.value
+				console.log(this.multiIndex)
+			},
 			showModal(e,disabled) {
 				this.modalName = e.currentTarget.dataset.target
 				//拿道下标 当用户点击列表的时候弹出窗 后面的input不能编译
@@ -138,60 +204,111 @@
 				//当用户点击确定的时候 证明用户已经更改了信息 获取缓存中的值 进行比对
 				this.modalName = null
 			},
-			
+			toast(titletext){
+				uni.showToast({
+					title:titletext,
+					icon:"none"
+				})
+			},
 			//当用户点击了保存了以后
-			btnsave(e){ //e是表单中的信息
-				let {usernick,username,usersex,province,city,area} = e.mp.detail.value
-				// console.log(e.mp.detail.value.usernick)
-				// console.log(usernick,username,usersex,province,city,area)
-				if(this.text=="确认修改"){
-					if(usernick && username && usersex && province && city && area){
-						//这是验证账号
-						let regusernick = /^[\W|\w]{5,100}$/;
-						//验证账号
-						let regusername = /^\W{2,5}$/;
-						//验证性别
-						let regsex = /^[男|女]{1,1}$/
-						let num = ""
-						if(usersex=="男"){
-							num = 0
-						}else{
-							num = 1
-						}
-						if(regusernick.test(usernick) && regusername.test(username) && regsex.test(usersex)){
-							console.log(this.tokey)//获取到tokey
-							console.log(json)
-							//当全部的验证成功了  就发起请求
-							// uni.request({
-							// 	url:""
-							// })
-							
-							
-						}else{
-							uni.showToast({
-								title:"请正确填写信息",
-								icon:"none"
-							})
-						}
-					}else{
-						uni.showToast({
-							title:"请填写完整的信息",
-							icon:"none"
-						})
-					}
-				}
+			// btnsave(e){ //e是表单中的信息
+			// 	let {usernick,username,usersex,province,city,area} = e.mp.detail.value
+			// 	console.log()
+			// 	// console.log(e.mp.detail.value.usernick)
+			// 	// console.log(usernick,username,usersex,province,city,area)
+			// 	if(this.text=="确认修改"){
+			// 		console.log("点击确认走过来了")
+			// 		if(usernick && username && usersex && province && city && area){
+			// 			console.log("验证账号")
+			// 			//这是验证账号
+			// 			let regusernick = /^[\W|\w]{5,100}$/;
+			// 			//验证账号
+			// 			let regusername = /^\W{2,5}$/;
+			// 			//验证性别
+			// 			let regsex = /^[男|女]{1,1}$/
+			// 			let num = ""
+			// 			if(usersex=="男"){
+			// 				num = 0
+			// 			}else{
+			// 				num = 1
+			// 			}
+			// 			if(regusernick.test(usernick) && regusername.test(username) && regsex.test(usersex)){
+			// 				console.log(this.tokey,"已经获取到tokey")//获取到tokey
+			// 				this.$emit("jsons",this.json)
+			// 				console.log(this.json,"已经接收到父组件修改子组件的值")//就拿到了父组件里面的值
+			// 				let {code} = this.json
+			// 				console.log(code,"已经获取到code码")
+			// 				//如果code==0的时候代表tokey没过期 
+			// 				if(code==0){
+			// 					let {src} = this.json.data
+			// 					console.log(src)
+			// 					//当全部的验证成功了  就发起请求
+			// 					uni.request({
+			// 						url:"http://hbk.huiboke.com/api/user/updateUserDetail",
+			// 						method:"POST",
+			// 						data:{
+			// 							token:this.tokey,
+			// 							user_nick:usernick,
+			// 							real_name:username,
+			// 							user_sex:usersex,
+			// 							province:province,
+			// 							city:city,
+			// 							area:area,
+			// 							user_pic:src
+			// 						},
+			// 						success:(res)=>{
+			// 							console.log(res,"已经请求用户信息成功")
+			// 							if(res.data.code==0){
+			// 								console.log("信息已经修改")
+			// 								//在把新值存进缓存
+			// 								uni.setStorage({
+			// 									key:"userinfokey",
+			// 									data:{
+			// 										user_nick:usernick,
+			// 										real_name:username,
+			// 										user_sex:usersex,
+			// 										province:province,
+			// 										city:city,
+			// 										area:area,
+			// 										user_pic:src
+			// 									},
+			// 									success:()=> {
+			// 										console.log("已经存进缓存中")
+			// 										this.toast("信息修改成功")
+			// 										this.$emit("changebool",true)
+			// 										this.$emit("changetext","保存")
+			// 									}
+			// 								})
+			// 							}
+			// 						},
+			// 						fail(err){
+			// 							console.log("请求失败")
+			// 							console.log(err)
+			// 						}
+			// 					})
+								
+			// 				}else{
+			// 					this.toast("请重新登录")
+			// 				}
+			// 			}else{
+			// 				this.toast("请正确填写信息")
+			// 			}
+			// 		}else{
+			// 			this.toast("请填写完整的信息")
+			// 		}
+			// 	}
 				
-				// let arr = []
-				// arr.push(e.mp.detail.value)
-				// arr.forEach((item,index)=>{
-				// 	console.log(item)
-				// })
-				//当用户点击了保存后 存一个状态在缓存中 或者发给服务器
-				// 并强制用户跳转到首页
-				// uni.switchTab({
-				// 	url:"/pages/index/index"
-				// })
-			}
+			// 	// let arr = []
+			// 	// arr.push(e.mp.detail.value)
+			// 	// arr.forEach((item,index)=>{
+			// 	// 	console.log(item)
+			// 	// })
+			// 	//当用户点击了保存后 存一个状态在缓存中 或者发给服务器
+			// 	// 并强制用户跳转到首页
+			// 	// uni.switchTab({
+			// 	// 	url:"/pages/index/index"
+			// 	// })
+			// },
 			
 			//这后期或许用
 			// //这时候输入手机号的表单事件
@@ -226,17 +343,96 @@
 			// countdown(){
 			// 	this.time()
 			// },
+			//封装用户点击修改实时刷新的
+			// userupdata(){
+			// 	const _this = this
+			// 	uni.getStorage({
+			// 		key:"usertokey",
+			// 		success(res){
+			// 			console.log(res.data)
+			// 			uni.request({
+			// 				url:"http://hbk.huiboke.com/api/user/getUserDetail",
+			// 				method:"POST",
+			// 				data:{
+			// 					token:res.data
+			// 				},
+			// 				success(resinfo){
+			// 					console.log(resinfo)
+			// 					let {user_nick,real_name,user_sex,province,city,area} = resinfo.data.data
+			// 					let userarr = []
+			// 					userarr.push(user_nick,real_name,user_sex,province,city,area)
+			// 					console.log(userarr)
+			// 					_this.Personalinformationlist.forEach((item,index)=>{
+			// 					// 	// console.log()
+			// 						item.zhi = userarr[index]
+			// 					// 	// console.log()
+			// 					})
+			// 				}
+			// 			})
+			// 			// let {user_nick,real_name,user_sex,province,city,area} = res.data
+			// 			// // console.log(user_nick,real_name,user_sex,province,city,area)
+						
+			// 			// // console.log(userarr)
+						
+			// 		}
+			// 	})
+			// }
 		},
 		props:["bool","text","json"],
 		created() {
-			//当页面初始化的时候取出tokey
 			const _this = this
+			//页面初始的时候去请求实现 去满足一级联动
+			uni.request({//请求到区
+				url:"http://hbk.huiboke.com/api/common/getAreas",
+				data:{
+					parent_id:0//开始的时候取下标0
+				},
+				success(res){
+					let {area_id} = res.data.data[0]//得到区的第一个值
+					res.data.data.forEach((item,index)=>{
+						_this.multiArray[0].push(item.area_name)
+					})
+					uni.request({
+						url:"http://hbk.huiboke.com/api/common/getAreas",
+						data:{
+							parent_id:area_id
+						},
+						success(rescity){
+							// console.log(rescity.data.data[0])
+							let {area_id} = rescity.data.data[0]
+							rescity.data.data.forEach((item,index)=>{
+								_this.multiArray[1].push(item.area_name)
+							})
+							uni.request({
+								url:"http://hbk.huiboke.com/api/common/getAreas",
+								data:{
+									parent_id:area_id
+								},
+								success(rescounty){
+									rescounty.data.data.forEach((item,index)=>{
+										_this.multiArray[2].push(item.area_name)
+									})
+									
+								}
+							})
+						}
+					})
+				}
+			})
+			//当页面初始化的时候取出tokey
+			
 			uni.getStorage({
 				key:"usertokey",
 				success:(res)=>{
 					this.tokey = res.data
+					console.log(this.tokey)
 				}
 			})
+			// _this.userupdata()
+		},
+		beforeUpdate() {
+			const _this = this
+			// _this.userupdata()
 		}
 	}
 </script>
