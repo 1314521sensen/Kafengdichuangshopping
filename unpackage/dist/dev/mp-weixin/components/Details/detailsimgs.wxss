@@ -1,11 +1,11 @@
-.detailsimgs.data-v-423a9928 {
+.detailsimgs.data-v-230f86ca {
   width: 100%;
 }
-.detailsimgs .imgs.data-v-423a9928 {
+.detailsimgs .imgs.data-v-230f86ca {
   width: 80%;
   margin: 20rpx auto 0;
 }
-.detailsimgs .imgs image.data-v-423a9928 {
+.detailsimgs .imgs image.data-v-230f86ca {
   width: 100%;
 }
 

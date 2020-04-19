@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "actionbar": "/components/actionbar/actionbar",
     "securitiesbottom": "/components/allcoupons/securitiesbottom"
   }
 }

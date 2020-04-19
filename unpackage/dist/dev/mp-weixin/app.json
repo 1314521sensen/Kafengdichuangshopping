@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/Accessinformation/Accessinformation",
+    "components/indexcomponents/indexbindinfo",
     "pages/index/index",
     "pages/classification/classification",
     "pages/shoppingCart/shoppingCart",
@@ -66,6 +67,5 @@
   },
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight"
-  },
-  "sitemapLocation": "sitemap40.json"
+  }
 }

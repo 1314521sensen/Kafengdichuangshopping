@@ -1,13 +1,13 @@
-.cu-bar.data-v-09ed6877 {
+.cu-bar.data-v-2a7b53ce {
   min-height: 70rpx;
 }
-.cu-bar .action.data-v-09ed6877:first-child {
+.cu-bar .action.data-v-2a7b53ce:first-child {
   font-size: 24rpx !important;
 }
-.cu-bar .action:first-child text.data-v-09ed6877 {
+.cu-bar .action:first-child text.data-v-2a7b53ce {
   margin-left: 12rpx;
 }
-.cu-bar .determine.data-v-09ed6877:first-child {
+.cu-bar .determine.data-v-2a7b53ce:first-child {
   width: 100%;
   display: block;
   text-align: center;
@@ -15,21 +15,21 @@
   font-weight: bold;
   color: #fff;
 }
-.cu-zidingyi.data-v-09ed6877 {
+.cu-zidingyi.data-v-2a7b53ce {
   border-radius: 20rpx 20rpx 0 0 !important;
 }
-.padding-xl.data-v-09ed6877 {
+.padding-xl.data-v-2a7b53ce {
   padding: 40rpx 0 0 0;
 }
-.padding-xl text.data-v-09ed6877 {
+.padding-xl text.data-v-2a7b53ce {
   display: block;
   text-align: center;
   font-size: 36rpx;
 }
-.padding-xl .popup-list.data-v-09ed6877 {
+.padding-xl .popup-list.data-v-2a7b53ce {
   margin-top: 20rpx;
 }
-.padding-xl .popup-list .popup-list-auxiliary.data-v-09ed6877 {
+.padding-xl .popup-list .popup-list-auxiliary.data-v-2a7b53ce {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -42,17 +42,17 @@
   border-bottom: 2rpx solid #999;
   padding: 10rpx 0;
 }
-.padding-xl .popup-list .popup-list-auxiliary.data-v-09ed6877:last-child {
+.padding-xl .popup-list .popup-list-auxiliary.data-v-2a7b53ce:last-child {
   border: 0;
 }
-.padding-xl .popup-list .popup-list-auxiliary .popup-list-same.data-v-09ed6877 {
+.padding-xl .popup-list .popup-list-auxiliary .popup-list-same.data-v-2a7b53ce {
   padding-left: 14rpx;
 }
-.padding-xl .popup-list .popup-list-auxiliary .popup-list-left.data-v-09ed6877 {
+.padding-xl .popup-list .popup-list-auxiliary .popup-list-left.data-v-2a7b53ce {
   width: 20%;
   color: #999;
 }
-.padding-xl .popup-list .popup-list-auxiliary .popup-list-right.data-v-09ed6877 {
+.padding-xl .popup-list .popup-list-auxiliary .popup-list-right.data-v-2a7b53ce {
   width: 80%;
   color: #000;
 }

@@ -1,0 +1,13 @@
+.inp input.data-v-4eabb8fb {
+  margin-bottom: 20rpx;
+}
+.inp input.data-v-4eabb8fb:last-child {
+  margin-bottom: 0;
+}
+.btn.data-v-4eabb8fb {
+  width: 100%;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+

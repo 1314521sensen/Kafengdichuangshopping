@@ -1,7 +1,7 @@
-.horizontallylist.data-v-1634be2e {
+.horizontallylist.data-v-56c4e987 {
   margin-top: 20rpx;
 }
-.horizontallylist .horizontally.data-v-1634be2e {
+.horizontallylist .horizontally.data-v-56c4e987 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -12,23 +12,23 @@
           flex-wrap: wrap;
   padding: 0 15rpx;
 }
-.horizontallylist .horizontally .list.data-v-1634be2e {
+.horizontallylist .horizontally .list.data-v-56c4e987 {
   width: 49%;
   background-color: #fff;
   margin-bottom: 10rpx;
   overflow: hidden;
 }
-.horizontallylist .horizontally .list.data-v-1634be2e:last-child {
+.horizontallylist .horizontally .list.data-v-56c4e987:last-child {
   margin-bottom: 0;
 }
-.horizontallylist .horizontally .list image.data-v-1634be2e {
+.horizontallylist .horizontally .list image.data-v-56c4e987 {
   width: 100%;
   height: 384rpx;
 }
-.horizontallylist .horizontally .list .list-titile.data-v-1634be2e {
+.horizontallylist .horizontally .list .list-titile.data-v-56c4e987 {
   padding: 0 10rpx;
 }
-.horizontallylist .horizontally .list .list-titile text.data-v-1634be2e {
+.horizontallylist .horizontally .list .list-titile text.data-v-56c4e987 {
   display: block;
   font-size: 30rpx;
   color: #000;
@@ -36,10 +36,10 @@
   font-weight: bold;
   margin-top: 8rpx;
 }
-.horizontallylist .horizontally .list .list-titile text.data-v-1634be2e:last-child {
+.horizontallylist .horizontally .list .list-titile text.data-v-56c4e987:last-child {
   margin-top: 30rpx;
 }
-.horizontallylist .horizontally .list .list-titile .horizontallyprice.data-v-1634be2e {
+.horizontallylist .horizontally .list .list-titile .horizontallyprice.data-v-56c4e987 {
   color: red;
 }
 

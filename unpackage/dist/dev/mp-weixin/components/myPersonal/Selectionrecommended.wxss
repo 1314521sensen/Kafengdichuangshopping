@@ -1,8 +1,8 @@
-.Selectionrecommended.data-v-30da03d5 {
+.Selectionrecommended.data-v-a0c4e312 {
   background-color: #fff;
   margin-top: 30rpx;
 }
-.Selectionrecommended .title.data-v-30da03d5 {
+.Selectionrecommended .title.data-v-a0c4e312 {
   font-size: 36rpx;
   color: red;
   text-align: center;

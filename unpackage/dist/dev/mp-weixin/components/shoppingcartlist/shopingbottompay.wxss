@@ -1,4 +1,4 @@
-.detailscar.data-v-4702eb86 {
+.detailscar.data-v-8eec1742 {
   position: fixed;
   bottom: 0rpx;
   width: 100%;
@@ -8,7 +8,7 @@
   background: #fff;
   padding: 15rpx 0;
 }
-.detailscar .same.data-v-4702eb86 {
+.detailscar .same.data-v-8eec1742 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -20,7 +20,7 @@
           align-items: center;
   padding: 0 10rpx;
 }
-.detailscar .same .same-left.data-v-4702eb86 {
+.detailscar .same .same-left.data-v-8eec1742 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -30,10 +30,10 @@
   width: 30%;
   height: 50rpx;
 }
-.detailscar .same .same-left label.data-v-4702eb86 {
+.detailscar .same .same-left label.data-v-8eec1742 {
   margin-left: 10rpx;
 }
-.detailscar .same .same-right.data-v-4702eb86 {
+.detailscar .same .same-right.data-v-8eec1742 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -45,7 +45,7 @@
           align-items: center;
   width: 50%;
 }
-.detailscar .same .same-right .same-right-text.data-v-4702eb86 {
+.detailscar .same .same-right .same-right-text.data-v-8eec1742 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -53,16 +53,16 @@
   -webkit-align-items: center;
           align-items: center;
 }
-.detailscar .same .same-right .same-right-text text.data-v-4702eb86 {
+.detailscar .same .same-right .same-right-text text.data-v-8eec1742 {
   display: block;
   font-size: 32rpx;
 }
-.detailscar .same .same-right .same-right-text text.data-v-4702eb86:last-child {
+.detailscar .same .same-right .same-right-text text.data-v-8eec1742:last-child {
   color: #ee6c29;
   font-size: 28rpx;
   margin: 8rpx 0 0 6rpx;
 }
-.detailscar .delete.data-v-4702eb86 {
+.detailscar .delete.data-v-8eec1742 {
   margin-top: 10rpx;
 }
 

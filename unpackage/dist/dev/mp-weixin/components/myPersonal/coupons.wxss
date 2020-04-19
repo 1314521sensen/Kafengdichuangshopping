@@ -1,8 +1,8 @@
-.coupons.data-v-3c469b17 {
+.coupons.data-v-4fa71d96 {
   background-color: #fff;
   padding: 0 20rpx;
 }
-.coupons .coupons-midden.data-v-3c469b17 {
+.coupons .coupons-midden.data-v-4fa71d96 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -17,7 +17,7 @@
   color: #f00;
   padding: 0 30rpx;
 }
-.coupons .coupons-midden .coupons-icon.data-v-3c469b17 {
+.coupons .coupons-midden .coupons-icon.data-v-4fa71d96 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -31,7 +31,7 @@
   line-height: 44rpx;
   padding-left: 10rpx;
 }
-.coupons .coupons-midden .coupons-icon text.data-v-3c469b17 {
+.coupons .coupons-midden .coupons-icon text.data-v-4fa71d96 {
   font-weight: bold;
   color: #fff;
   font-size: 25rpx;

@@ -17,7 +17,7 @@
 	export default {
 		data() {
 			return {
-				message:"点击登录",
+				message:"进入商城",
 				disabled:false,
 				i:0,
 				bg:`rgb(243,143,49)`
@@ -34,12 +34,65 @@
 								provider:"weixin",
 								success:(loginRes)=>{//这里获取到code码
 									// console.log(JSON.stringify(loginRes))
-									//获取到code码 发送到后端获取openid
-									console.log(loginRes.code)
-									//将code码发给后台
-									uni.setStorage({
-										key:"wxcodekey",
-										data:loginRes.code
+									// console.log(loginRes)
+									let appid = 'wx2fd0ff4416ce6219'
+									let SECRET = 'e1d79c653010b1b3991b4b26edb9d143'
+									uni.request({
+										url:`https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${SECRET}&js_code=${loginRes.code}&grant_type=authorization_code`,
+										success:(wxres)=>{
+											// console.log()//成功换取openid 和secet
+											uni.request({
+												url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
+												method:"POST",
+												data:{
+													login_type:'weixin',
+													opened:wxres.data.openid
+												},
+												success:(bangres)=>{
+													// console.log(bangres)
+													// console.log(bangres.data.data.token)
+													//这是存wxopenid
+													uni.setStorage({
+														key:"wxcodekey",
+														data:wxres.data.openid
+													})
+													uni.setStorage({
+														key:"bindtokey",
+														data:bangres.data.data.token
+													})
+													// console.log(bangres)
+													if(bangres.data.code==0){
+														uni.setStorage({ //保存binddingcode状态 
+															key:"binddingcode",
+															data:bangres.data.code
+														})
+													}else{
+														uni.setStorage({
+															key:"binddingcode",
+															data:bangres.data.code
+														})
+													}
+													let i = 0;
+													let [times,r,g,b] = [null,158,52,79]
+													this.disabled = true
+													times = setInterval(()=>{
+														i++
+														[r,g,b] = [r++,g++,b++]
+														this.message = "正在拼命加载"
+														// 57 181 74
+														this.i = i+"%"
+														this.bg = `rgb(${r},${g},${b})`
+														if(i==100){
+															clearInterval(times)
+															this.disabled = false
+															uni.switchTab({
+																url:"/pages/index/index"
+															})
+														}
+													},100)
+												}
+											})
+										}
 									})
 									uni.getUserInfo({
 										provider:"weixin",

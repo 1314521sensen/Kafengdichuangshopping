@@ -1,12 +1,12 @@
-.storenews .scroll-view.data-v-77980bc9 {
+.storenews .scroll-view.data-v-02b91a6b {
   height: 80vh;
 }
-.storenews .scroll-view .storerecommended-title.data-v-77980bc9 {
+.storenews .scroll-view .storerecommended-title.data-v-02b91a6b {
   color: #000;
   padding-left: 16rpx;
   margin: 28rpx 0;
 }
-.storenews .scroll-view .storerecommended-title text.data-v-77980bc9 {
+.storenews .scroll-view .storerecommended-title text.data-v-02b91a6b {
   font-size: 33rpx;
   color: #565656;
 }

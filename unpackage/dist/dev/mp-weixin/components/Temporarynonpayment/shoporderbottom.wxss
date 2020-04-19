@@ -1,11 +1,11 @@
-.shopoderbottom.data-v-4234da81 {
+.shopoderbottom.data-v-490e4423 {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   background-color: #fff;
 }
-.shopoderbottom .shopoderbottomflex.data-v-4234da81 {
+.shopoderbottom .shopoderbottomflex.data-v-490e4423 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -14,17 +14,17 @@
           justify-content: flex-end;
   padding-right: 20rpx;
 }
-.shopoderbottom .shopoderbottomflex button.data-v-4234da81:first-child {
+.shopoderbottom .shopoderbottomflex button.data-v-490e4423:first-child {
   margin-right: 24rpx;
 }
-.shopoderbottom .btn.data-v-4234da81 {
+.shopoderbottom .btn.data-v-490e4423 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   margin-top: 10rpx;
   padding: 10rpx;
 }
-.shopoderbottom .btn button.data-v-4234da81 {
+.shopoderbottom .btn button.data-v-490e4423 {
   width: 50%;
 }
 

@@ -135,21 +135,53 @@
 		onLoad(){
 			//当用户点击了登录以后 进入首页 给用户来个弹窗 如果用户绑定了信息 就把用户状态(状态现在还没写)保存到缓存中 因为这个弹窗只能执行一次
 			// #ifdef MP-WEIXIN
-				console.log("此页面作用于微信")
-				uni.showModal({
-					title:"请绑定账号",
-					content:"如果没有账号，请进行注册",
-					showCancel:true,
-					cancelText:"已有账号",
-					confirmText:"没有账号",
-					success(res){//当用户点击了确认以后
-						if(res.confirm){ //如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
-							uni.navigateTo({
-								url:"/pages/Freeregistration/Freeregistration"
+				uni.getStorage({
+					key:"binddingcode",
+					success(res){
+						if(res.data==0){//代表是咱平台的用户 就绑定选择手机号绑定还是微信绑定
+							console.log("0")
+							// components/indexcomponents/indexbindinfo
+							//根据用户的选择不同 传参 如果用户选择了  (1.又想绑定 2.手机号绑定)
+							uni.showModal({
+								title:"请绑定账户",
+								content:"如果没有可以进行手机号绑定",
+								showCancel:true,
+								cancelText:"邮箱绑定",
+								confirmText:"手机绑定",
+								cancelColor:"#ff0000",
+								confirmColor:"#00ff00",
+								success(res){
+									
+									if(res.confirm){//如果为true的话就是手机绑定
+										uni.navigateTo({
+											url:`/components/indexcomponents/indexbindinfo?bind=${0}`
+										})
+									}else{//否则就邮箱绑定
+										uni.navigateTo({
+											url:`/components/indexcomponents/indexbindinfo?bind=${1}`
+										})
+									}
+								}
 							})
-						}else{ //如果为false的情况下  用户点击了取消
-							uni.navigateTo({
-								url:"/pages/login/login"
+						}else{
+							console.log("1")
+							uni.showModal({
+								title:"请进行登录",
+								content:"如果没有账号，请进行注册",
+								showCancel:true,
+								cancelText:"已有账号",
+								confirmText:"没有账号",
+								success(res){//当用户点击了确认以后
+									if(res.confirm){ //如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
+										uni.navigateTo({
+											url:"/pages/Freeregistration/Freeregistration"
+										})
+									}else{ //如果为false的情况下  用户点击了取消
+										uni.navigateTo({
+											url:"/pages/login/login"
+										})
+									}
+								}
 							})
 						}
 					}
@@ -168,6 +200,7 @@
 		},
 		onShow(){
 			this.inpblue()
+			
 		},
 		//页面滚动到底部的事件
 		onReachBottom(){

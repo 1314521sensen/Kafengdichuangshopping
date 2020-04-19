@@ -40,14 +40,6 @@
 				</view>
 			</view>
 			<!-- 地区选择 -->
-			<view class="cu-form-group">
-				<view class="title">多列选择</view>
-				<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray">
-					<view class="picker">
-						{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}，{{multiArray[2][multiIndex[2]]}}
-					</view>
-				</picker>
-			</view>
 			<button data-v-287a241a="" class="cu-btn block bg-green margin-tb-sm lg" form-type="submit" :disabled="bool">{{text}}</button>
 		</form>
 	</view>
@@ -56,6 +48,7 @@
 
 <script>
 	export default{ //注:这里的name 每个input 还位绑定
+	
 		data(){
 			return {
 				modalName: null,
@@ -82,94 +75,15 @@
 						disabled:false
 					}
 				],
-				//这是默认选择地区列表
-				multiArray: [
-					[],//这是一级联动
-					[],//这是二级联动开始必须显示的
-					[]//这是三级联动默认显示的
-				],
-				//这是选择的下标
-				multiIndex: [0, 0, 0],
 				phonevalue:"",
 				countdowntext:"验证码",
 				wait:60,
 				disabled:true,
-				tokey:""
+				tokey:"",
 			}
 		},
 		
 		methods:{
-			//这是滚动的时候列表
-			MultiColumnChange(e) {
-				let data = {
-					multiArray: this.multiArray,
-					multiIndex: this.multiIndex
-				};
-				
-				data.multiIndex[e.detail.column] = e.detail.value;
-				console.log(data.multiIndex[e.detail.column])
-				switch (e.detail.column) {
-					case 0:
-						switch (data.multiIndex[0]) {
-							case 0:
-								data.multiArray[1] = ['扁性动物', '线形动物', '环节动物', '软体动物', '节肢动物'];
-								data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
-								break;
-							case 1:
-								data.multiArray[1] = ['鱼', '两栖动物', '爬行动物'];
-								data.multiArray[2] = ['鲫鱼', '带鱼'];
-								break;
-						}
-						data.multiIndex[1] = 0;
-						data.multiIndex[2] = 0;
-						break;
-					case 1:
-						switch (data.multiIndex[0]) {
-							case 0:
-								switch (data.multiIndex[1]) {
-									case 0:
-										data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
-										break;
-									case 1:
-										data.multiArray[2] = ['蛔虫'];
-										break;
-									case 2:
-										data.multiArray[2] = ['蚂蚁', '蚂蟥'];
-										break;
-									case 3:
-										data.multiArray[2] = ['河蚌', '蜗牛', '蛞蝓'];
-										break;
-									case 4:
-										data.multiArray[2] = ['昆虫', '甲壳动物', '蛛形动物', '多足动物'];
-										break;
-								}
-								break;
-							case 1:
-								switch (data.multiIndex[1]) {
-									case 0:
-										data.multiArray[2] = ['鲫鱼', '带鱼'];
-										break;
-									case 1:
-										data.multiArray[2] = ['青蛙', '娃娃鱼'];
-										break;
-									case 2:
-										data.multiArray[2] = ['蜥蜴', '龟', '壁虎'];
-										break;
-								}
-								break;
-						}
-						data.multiIndex[2] = 0;
-						break;
-				}
-				this.multiArray = data.multiArray;
-				this.multiIndex = data.multiIndex;
-			},
-			//MultiChange这是选中的下标
-			MultiChange(e) {
-				// console.log(e)
-				this.multiIndex = e.detail.value
-				console.log(this.multiIndex)
-			},
 			showModal(e,disabled) {
 				this.modalName = e.currentTarget.dataset.target
 				//拿道下标 当用户点击列表的时候弹出窗 后面的input不能编译
@@ -361,47 +275,14 @@
 			// 	})
 			// }
 		},
+		components:{
+			
+		},
 		props:["bool","text","json"],
 		created() {
 			const _this = this
 			//页面初始的时候去请求实现 去满足一级联动
-			uni.request({//请求到区
-				url:"http://hbk.huiboke.com/api/common/getAreas",
-				data:{
-					parent_id:0//开始的时候取下标0
-				},
-				success(res){
-					let {area_id} = res.data.data[0]//得到区的第一个值
-					res.data.data.forEach((item,index)=>{
-						_this.multiArray[0].push(item.area_name)
-					})
-					uni.request({
-						url:"http://hbk.huiboke.com/api/common/getAreas",
-						data:{
-							parent_id:area_id
-						},
-						success(rescity){
-							// console.log(rescity.data.data[0])
-							let {area_id} = rescity.data.data[0]
-							rescity.data.data.forEach((item,index)=>{
-								_this.multiArray[1].push(item.area_name)
-							})
-							uni.request({
-								url:"http://hbk.huiboke.com/api/common/getAreas",
-								data:{
-									parent_id:area_id
-								},
-								success(rescounty){
-									rescounty.data.data.forEach((item,index)=>{
-										_this.multiArray[2].push(item.area_name)
-									})
-									
-								}
-							})
-						}
-					})
-				}
-			})
+			
 			//当页面初始化的时候取出tokey
 			
 			uni.getStorage({

@@ -1,31 +1,31 @@
-.securitiesbottom.data-v-043407af {
+.securitiesbottom.data-v-01cb995e {
   margin-top: 15rpx;
 }
-.securitiesbottom .securitiesbottomitem.data-v-043407af {
+.securitiesbottom .securitiesbottomitem.data-v-01cb995e {
   margin-top: 20rpx;
 }
-.securitiesbottom .securities.data-v-043407af {
+.securitiesbottom .securities.data-v-01cb995e {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   background-color: #fff;
   padding: 15rpx 10rpx;
 }
-.securitiesbottom .securities .securities-left.data-v-043407af {
+.securitiesbottom .securities .securities-left.data-v-01cb995e {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   width: 80%;
 }
-.securitiesbottom .securities .securities-left .securities-left-imgs.data-v-043407af {
+.securitiesbottom .securities .securities-left .securities-left-imgs.data-v-01cb995e {
   width: 40%;
   height: 220rpx;
 }
-.securitiesbottom .securities .securities-left .securities-left-imgs image.data-v-043407af {
+.securitiesbottom .securities .securities-left .securities-left-imgs image.data-v-01cb995e {
   width: 100%;
   height: 100%;
 }
-.securitiesbottom .securities .securities-left .securities-left-right.data-v-043407af {
+.securitiesbottom .securities .securities-left .securities-left-right.data-v-01cb995e {
   overflow: hidden;
   display: -webkit-box;
   display: -webkit-flex;
@@ -38,36 +38,36 @@
   width: 60%;
   padding-left: 20rpx;
 }
-.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-top.data-v-043407af {
+.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-top.data-v-01cb995e {
   overflow: hidden;
   font-size: 30rpx;
   font-weight: bold;
 }
-.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-top text.data-v-043407af {
+.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-top text.data-v-01cb995e {
   display: block;
   white-space: nowrap;
 }
-.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-top text.data-v-043407af:last-child {
+.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-top text.data-v-01cb995e:last-child {
   font-size: 27rpx;
   color: #FF5706;
   margin-top: 14rpx;
 }
-.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom.data-v-043407af {
+.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom.data-v-01cb995e {
   color: #e02e24;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
 }
-.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom text.data-v-043407af {
+.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom text.data-v-01cb995e {
   font-size: 24rpx;
   margin-top: 6rpx;
 }
-.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom text.data-v-043407af:last-child {
+.securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom text.data-v-01cb995e:last-child {
   font-size: 36rpx;
   font-weight: bold;
   margin: 0 0 0 10rpx;
 }
-.securitiesbottom .securities .securities-right.data-v-043407af {
+.securitiesbottom .securities .securities-right.data-v-01cb995e {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -84,7 +84,7 @@
   text-align: center;
   color: #e02e24;
 }
-.securitiesbottom .securities .securities-right .securities-right-top.data-v-043407af {
+.securitiesbottom .securities .securities-right .securities-right-top.data-v-01cb995e {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -92,16 +92,16 @@
   -webkit-justify-content: center;
           justify-content: center;
 }
-.securitiesbottom .securities .securities-right .securities-right-top text.data-v-043407af {
+.securitiesbottom .securities .securities-right .securities-right-top text.data-v-01cb995e {
   font-weight: bold;
   font-size: 25rpx;
   margin-top: 10rpx;
 }
-.securitiesbottom .securities .securities-right .securities-right-top text.data-v-043407af:last-child {
+.securitiesbottom .securities .securities-right .securities-right-top text.data-v-01cb995e:last-child {
   font-size: 36rpx;
   margin-top: 0rpx;
 }
-.securitiesbottom .securities .securities-right button.data-v-043407af {
+.securitiesbottom .securities .securities-right button.data-v-01cb995e {
   width: 90%;
   height: 52rpx;
   font-size: 20rpx;

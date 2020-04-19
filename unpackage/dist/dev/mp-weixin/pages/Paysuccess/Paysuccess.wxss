@@ -1,4 +1,4 @@
-.Paysuccess.data-v-6724b278 {
+.Paysuccess.data-v-40257816 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -12,15 +12,15 @@
   height: 100vh;
   background-color: #fff;
 }
-.Paysuccess .Paysuccess-box.data-v-6724b278 {
+.Paysuccess .Paysuccess-box.data-v-40257816 {
   width: 100%;
 }
-.Paysuccess .Paysuccess-box .Paysuccess-text.data-v-6724b278 {
+.Paysuccess .Paysuccess-box .Paysuccess-text.data-v-40257816 {
   padding-top: 0;
   font-size: 32rpx !important;
   font-weight: bold;
 }
-.Paysuccess .Paysuccess-box .timesreturn.data-v-6724b278 {
+.Paysuccess .Paysuccess-box .timesreturn.data-v-40257816 {
   font-size: 26rpx;
   color: #999;
 }

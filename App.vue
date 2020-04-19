@@ -30,6 +30,7 @@
 								})
 							}else{
 								console.log("绑定失败")
+								return 
 							}
 						}
 					})

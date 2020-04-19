@@ -101,14 +101,6 @@
 					user_phone:phone,
 					code:sms
 				}
-				// #ifdef MP-WEIXIN	
-					//将用户微信和app进行绑定的数据
-					let bingjson = {
-						login_type:"weixin",
-						bind_type:"mobile",
-						userphone:phone,
-						code:sms
-					}
 					//获取缓存中的微信code码换取后台的openid
 					uni.getStorage({
 						key:"wxcodekey",
@@ -117,7 +109,6 @@
 							bingjson.openid = res.data
 						}
 					})
-				// #endif
 				if(phone.match(userphone) && sms!==""){//验证通过 就进行请求登录
 					uni.request({
 						url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
@@ -150,11 +141,6 @@
 												uni.switchTab({
 													url:"/pages/index/index"
 												})
-											// #endif
-											//微信 将微信和app平台绑定
-											// #ifdef MP-WEIXIN
-												// console.log(bingjson)
-												app.globalData.userbinding(bingjson)
 											// #endif
 										}
 									},

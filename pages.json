@@ -5,6 +5,9 @@
 			"path" : "pages/Accessinformation/Accessinformation",
 			"style" : {}
 		},
+		{
+			"path":"components/indexcomponents/indexbindinfo"
+		},
 		// #endif
 		{
 			"path": "pages/index/index",
