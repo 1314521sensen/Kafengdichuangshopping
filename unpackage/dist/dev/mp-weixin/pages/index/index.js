@@ -290,30 +290,6 @@ var app = getApp();var _default =
         } });
 
     },
-    //这是用户绑定手机号邮箱的提示框
-    showphoneandemailstate: function showphoneandemailstate() {
-      uni.showModal({
-        title: "请绑定账户",
-        content: "如果没有可以进行手机号绑定",
-        showCancel: true,
-        cancelText: "邮箱绑定",
-        confirmText: "手机绑定",
-        cancelColor: "#ff0000",
-        confirmColor: "#00ff00",
-        success: function success(res) {
-
-          if (res.confirm) {//如果为true的话就是手机绑定
-            uni.navigateTo({
-              url: "/components/indexcomponents/indexbindinfo?bind=".concat(0) });
-
-          } else {//否则就邮箱绑定
-            uni.navigateTo({
-              url: "/components/indexcomponents/indexbindinfo?bind=".concat(1) });
-
-          }
-        } });
-
-    },
     //这是封装的 用户是否绑定了登录 和是否绑定了手机号或者邮箱
     booltanchuang: function booltanchuang() {
       var _this = this;
@@ -338,18 +314,6 @@ var app = getApp();var _default =
                   key: "loginstate",
                   success: function success(resbindloginstate) {//如果取出来证明用户已经登录了
                     if (resbindloginstate.data == 1) {//证明用户已经绑定登录了
-                      uni.getStorage({
-                        key: "userbindstate",
-                        success: function success(resuserbindstate) {//如果取出了值  判断用户有没有绑定手机号邮箱
-                          if (resuserbindstate.data == 1) {//如果 用户绑定手机号的状态码 为1的话 证明用户已经绑定了 不用再弹出来
-
-                          } else {//否则 就代表用户还未绑定 就弹出绑定的手机或邮箱的框
-                            _this.showphoneandemailstate();
-                          }
-                        },
-                        fail: function fail() {//如果没取出来 证明用户还未绑定 就弹出用户绑定的框
-                          _this.showphoneandemailstate();
-                        } });
 
                     } else {//就弹出用户登录的框
                       _this.showloginstate();

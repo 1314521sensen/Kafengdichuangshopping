@@ -155,7 +155,12 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
         name: '我的咨询' },
       {
         badge: 0,
-        name: '充值/提现' }],
+        name: '充值/提现' },
+
+      {
+        badge: 0,
+        name: '设置',
+        url: "/components/setcenter/setcenter" }],
 
 
       gridCol: 5 //这是格数

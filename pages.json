@@ -5,9 +5,6 @@
 			"path" : "pages/Accessinformation/Accessinformation",
 			"style" : {}
 		},
-		{
-			"path":"components/indexcomponents/indexbindinfo"
-		},
 		// #endif
 		{
 			"path": "pages/index/index",
@@ -98,7 +95,13 @@
         ,{
             "path" : "pages/Allevaluation/Allevaluation",
             "style" : {}
-        }
+        },
+		{
+			"path":"components/setcenter/setcenter"
+		},
+		{
+			"path":"components/indexcomponents/indexbindinfo"
+		}
     ],
 	
 	"globalStyle": {

@@ -131,10 +131,12 @@
 					data,
 					success:(res)=>{
 						console.log(res)
+					// #ifdef APP-PLUS || H5 || MP-WEIXIN
 						uni.setStorage({//这个是把tokey存起来
 							key:"bindtokey",
 							data:res.data.data.token
 						})
+					// #endif
 						if(res.data.code==0){
 							// #ifdef MP-WEIXIN
 								//如果登录成功了 就设置 用户登录状态码loginstate 为1

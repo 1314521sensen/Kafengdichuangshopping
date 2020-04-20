@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/Accessinformation/Accessinformation",
-    "components/indexcomponents/indexbindinfo",
     "pages/index/index",
     "pages/classification/classification",
     "pages/shoppingCart/shoppingCart",
@@ -23,7 +22,9 @@
     "pages/Purchasepage/Purchasepage",
     "pages/Temporarynonpayment/Temporarynonpayment",
     "pages/Paysuccess/Paysuccess",
-    "pages/Allevaluation/Allevaluation"
+    "pages/Allevaluation/Allevaluation",
+    "components/setcenter/setcenter",
+    "components/indexcomponents/indexbindinfo"
   ],
   "subPackages": [],
   "window": {
@@ -67,6 +68,5 @@
   },
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight"
-  },
-  "sitemapLocation": "sitemap18.json"
+  }
 }

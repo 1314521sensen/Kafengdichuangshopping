@@ -183,28 +183,32 @@ var app = getApp();var _default =
     return {
       modalName: null,
       xiabiao: 0,
+      regbool: "",
+      id: "",
+      tokey: "",
+      disabled: false,
       list: [
       [
       {
-        title: "手机号绑定",
+        title: "邮箱号绑定",
         indextarget: "DialogModal1",
-        Modaltitle: "请绑定手机号",
-        Modaltext1: "请输入手机号",
+        Modaltitle: "请绑定邮箱号",
+        Modaltext1: "请输入邮箱号",
         showtext: "",
         Modaltext2: "请输入验证码",
-        righttext: "获取短信验证码",
+        righttext: "获取邮箱验证码",
         value: "" }],
 
 
       [
       {
-        title: "邮箱绑定",
+        title: "更换邮箱绑定",
         indextarget: "DialogModal2",
-        Modaltitle: "请绑定邮箱",
-        Modaltext1: "请输入邮箱号",
+        Modaltitle: "请绑定新邮箱",
+        Modaltext1: "请输入新邮箱号",
         showtext: "",
         Modaltext2: "请输入验证码",
-        righttext: "获取邮箱验证码",
+        righttext: "获取新邮箱验证码",
         value: "" }]] };
 
 
@@ -219,34 +223,99 @@ var app = getApp();var _default =
     hideModal: function hideModal(e) {
       this.modalName = null;
     },
-    //封装一个验证这手机和邮箱的
-    regsms: function regsms(smsregs) {
-      var userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
-      var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
-      if (this.xiabiao == 0) {//验证手机号
-        if (smsregs !== "") {
-          if (userphone.test(smsregs)) {
+    //弹窗功能
+    showtext: function showtext(message) {
+      uni.showToast({
+        title: message,
+        icon: "none" });
 
+    },
+    //封装一个验证邮箱和新邮箱的
+    regsms: function regsms(smsregs) {
+      var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+      if (this.xiabiao == 0) {//验证邮箱
+        // console.log("执行下标0")
+        if (smsregs !== "") {//如果邮箱号为空的话
+          if (reg.test(smsregs)) {
+            this.regbool = true;
+          } else {//如果验证不正确就让 list[0][0].value = smsregs刚才输入的值 引入后面的弹窗被挡住了只能这样 要不然让用户重新输入 用户会很烦
+            this.list[0][0].value = smsregs;
+            this.hideModal(); //然后进行关闭
+            //关闭以后提示用户
+            this.showtext("请输入正确的邮箱号");
+            this.regbool = false;
           }
+        } else {
+          this.hideModal();
+          this.showtext("请输入邮箱号");
+          return;
         }
-      } else {//验证邮箱号
+      } else {//下标等于2  验证新邮箱号
+        console.log("执行下标2");
         if (smsregs !== "") {
           if (reg.test(smsregs)) {
-            console.log("youxiang");
+            this.regbool = true;
+          } else {
+            this.list[0][0].value = smsregs;
+            this.hideModal(); //然后进行关闭
+            //关闭以后提示用户
+            this.showtext("请输入正确的邮箱号");
+            this.regbool = false;
           }
         }
       }
     },
     //这是验证码
-    smsreg: function smsreg(smsregs) {
+    smsreg: function smsreg(smsregs, index) {
       this.regsms(smsregs);
+      this.disabled = true;
+      if (this.regbool) {//验证全部通过就向用户发送验证码 //http://hbk.huiboke.com/api/common/getEmailCaptcha
+        console.log(this.id);
+        var json = {
+          email: smsregs,
+          type: 5,
+          userid: this.id };
+
+        app.globalData.emailreg(json);
+        this.list[0][0].righttext = "验证码已发送";
+      }
     },
     bindlogin: function bindlogin(e) {var _e$detail$value =
       e.detail.value,account = _e$detail$value.account,sms = _e$detail$value.sms;
       this.regsms(account);
+      this.disabled = false;
+      if (sms !== "") {//验证码不为空就发起请求绑定
+        //http://hbk.huiboke.com/api/user/bindNewEmail
+        // console.log(this.tokey )
 
-      // console.log(account,sms)
-      // if(account.match())
+        uni.request({
+          url: "http://hbk.huiboke.com/api/user/bindNewEmail",
+          method: "POST",
+          data: {
+            token: this.tokey,
+            email: account,
+            sms: sms },
+
+          success: function success(res) {
+            console.log(account, sms);
+            console.log(res);
+            if (res.data.code == 0) {//表示已经绑定成功了
+              //就把缓存中的值改了 下次进来的是用户更改邮箱
+              uni.setStorage({
+                key: "userbindstate",
+                data: 1 });
+
+              this.hideModal();
+            }
+          },
+          fail: function fail(err) {
+            console.log(err);
+          } });
+
+      } else {
+        this.showtext("验证码不能为空");
+        this.hideModal();
+      }
     } },
 
   onLoad: function onLoad(option) {
@@ -261,16 +330,41 @@ var app = getApp();var _default =
     uni.getStorage({
       key: "bindtokey",
       success: function success(res) {
-        // console.log(res.data)
+        _this.tokey = res.data;
         //开始加载的时候获取用户手机号或者邮箱
+        // uni.request({
+        // 	url:"http://hbk.huiboke.com/api/user/getUserBindInfo",
+        // 	method:"POST",
+        // 	data:{
+        // 		token:res.data
+        // 	},
+        // 	success(resinfo) {
+        // 		console.log(resinfo)
+        // 	}
+        // })
+      } });
+
+    //获取用户的信息先获取tokey
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        // console.log(res.data)//取出tokey
         uni.request({
-          url: "http://hbk.huiboke.com/api/user/getUserBindInfo",
+          url: "http://hbk.huiboke.com/api/user/getUserDetail",
           method: "POST",
           data: {
             token: res.data },
 
-          success: function success(resinfo) {
-            console.log(resinfo);
+          success: function success(resid) {
+            console.log(resid.data.data.user_id);
+            //把id值设置在缓存中
+            uni.setStorage({
+              key: "useremailid",
+              data: resid.data.data.user_id,
+              success: function success() {
+                _this.id = resid.data.data.user_id;
+              } });
+
           } });
 
       } });

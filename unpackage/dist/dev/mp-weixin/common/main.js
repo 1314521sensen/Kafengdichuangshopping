@@ -109,6 +109,16 @@ __webpack_require__.r(__webpack_exports__);
           console.log(res);
         } });
 
+    },
+    emailreg: function emailreg(json) {
+      uni.request({
+        url: "http://hbk.huiboke.com/api/common/getEmailCaptcha",
+        method: "POST",
+        data: json,
+        success: function success(res) {
+
+        } });
+
     } },
 
   onLaunch: function onLaunch() {

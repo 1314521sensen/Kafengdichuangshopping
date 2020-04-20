@@ -254,9 +254,11 @@ var app = getApp();var _default =
             var token = res.data.data.token;
             // console.log(token)
             //当用户登录成功以后 将token存到缓存当中 为以后方便使用
+
             uni.setStorage({
               key: "bindtokey",
               data: res.data.data.token });
+
 
             if (res.data.code == 0) {
               //当用户登录成功设置用户登录的状态码 1

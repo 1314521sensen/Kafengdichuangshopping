@@ -38,6 +38,11 @@
 				}, {
 					badge: 0,
 					name: '充值/提现'
+				},
+				{
+					badge: 0,
+					name: '设置',
+					url:"/components/setcenter/setcenter"
 				}
 				],
 				gridCol: 5,//这是格数

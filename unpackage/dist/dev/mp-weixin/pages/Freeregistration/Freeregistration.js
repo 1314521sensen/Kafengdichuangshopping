@@ -293,9 +293,11 @@ var app = getApp();var _default =
                       console.log(resquicklogin); //当用户注册和绑定成功了 把tokey值存一下 把状态存一下
                       if (resquicklogin.data.code == 0) {
                         //设置用户绑定的tokey
+
                         uni.setStorage({
                           key: "bindtokey",
                           data: resquicklogin.data.data.token });
+
 
                         //这里设置用户的登录状态码 为1
                         uni.setStorage({

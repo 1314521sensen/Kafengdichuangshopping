@@ -266,9 +266,11 @@ var app = getApp();var _default =
         data: data,
         success: function success(res) {
           console.log(res);
+
           uni.setStorage({ //这个是把tokey存起来
             key: "bindtokey",
             data: res.data.data.token });
+
 
           if (res.data.code == 0) {
 
