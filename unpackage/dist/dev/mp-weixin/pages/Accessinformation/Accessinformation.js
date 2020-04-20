@@ -185,58 +185,31 @@ var _default =
                   url: "https://api.weixin.qq.com/sns/jscode2session?appid=".concat(appid, "&secret=").concat(SECRET, "&js_code=").concat(loginRes.code, "&grant_type=authorization_code"),
                   success: function success(wxres) {
                     // console.log()//成功换取openid 和secet
-                    uni.request({
-                      url: "http://hbk.huiboke.com/api/login_and_register/userLogin",
-                      method: "POST",
-                      data: {
-                        login_type: 'weixin',
-                        opened: wxres.data.openid },
+                    //存储微信的openid
+                    uni.setStorage({
+                      key: "wxcodekey",
+                      data: wxres.data.openid });
 
-                      success: function success(bangres) {
-                        // console.log(bangres)
-                        // console.log(bangres.data.data.token)
-                        //这是存wxopenid
-                        uni.setStorage({
-                          key: "wxcodekey",
-                          data: wxres.data.openid });
+                    var i = 0;var
+                    times = null,r = 158,g = 52,b = 79;
+                    _this.disabled = true;
+                    times = setInterval(function () {
+                      i++;var _ref =
+                      [r++, g++, b++];r = _ref[0];g = _ref[1];b = _ref[2];
+                      _this.message = "正在拼命加载";
+                      // 57 181 74
+                      _this.i = i + "%";
+                      _this.bg = "rgb(".concat(r, ",").concat(g, ",").concat(b, ")");
+                      if (i == 100) {
+                        clearInterval(times);
+                        _this.disabled = false;
+                        uni.switchTab({
+                          url: "/pages/index/index" });
 
-                        uni.setStorage({
-                          key: "bindtokey",
-                          data: bangres.data.data.token });
-
-                        // console.log(bangres)
-                        if (bangres.data.code == 0) {
-                          uni.setStorage({ //保存binddingcode状态 
-                            key: "binddingcode",
-                            data: bangres.data.code });
-
-                        } else {
-                          uni.setStorage({
-                            key: "binddingcode",
-                            data: bangres.data.code });
-
-                        }
-                        var i = 0;var
-                        times = null,r = 158,g = 52,b = 79;
-                        _this.disabled = true;
-                        times = setInterval(function () {
-                          i++;var _ref =
-                          [r++, g++, b++];r = _ref[0];g = _ref[1];b = _ref[2];
-                          _this.message = "正在拼命加载";
-                          // 57 181 74
-                          _this.i = i + "%";
-                          _this.bg = "rgb(".concat(r, ",").concat(g, ",").concat(b, ")");
-                          if (i == 100) {
-                            clearInterval(times);
-                            _this.disabled = false;
-                            uni.switchTab({
-                              url: "/pages/index/index" });
-
-                          }
-                        }, 100);
-                      } });
-
+                      }
+                    }, 100);
                   } });
+
 
                 uni.getUserInfo({
                   provider: "weixin",

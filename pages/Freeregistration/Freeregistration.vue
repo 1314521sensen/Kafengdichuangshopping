@@ -115,6 +115,7 @@
 				let userpassword = /^\w{6,16}$/;
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
 				if(username.match(regname) && password.match(userpassword) && phone.match(userphone) && phonecode!==""){
+					console.log("验证通过")
 					//如果都通过了 发起请求 就可以跳转到登录页面
 					//这里是要传给后台的信息
 					//这是app端的数据
@@ -128,7 +129,8 @@
 					let bingjson = {
 						login_type:"weixin",
 						bind_type:"account",
-						username:username
+						username:username,
+						password:password
 					}
 					//这块来获取缓存中的微信的code码  拿code码去后端换取openid
 					// #ifdef MP-WEIXIN
@@ -136,24 +138,78 @@
 						uni.getStorage({
 							key:"wxcodekey",
 							success(res){
-								//成功了 就把code的码 给对象新增加了属性
+								console.log(res.data)
+								//成功了 就把openid的码 给对象新增加了属性
 								registeredjson.openid = res.data
-								bingjson.openid = res.data
+								bingjson.opened = res.data
+								console.log(bingjson)
+								uni.request({
+									url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
+									method:"POST",
+									data:registeredjson,
+									success(ress){//请求成功的时候
+										console.log(ress)
+										if(ress.data.code==0){
+												uni.request({
+													url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
+													method:"POST",
+													data:bingjson,
+													success(resquicklogin) {
+														console.log(resquicklogin)//当用户注册和绑定成功了 把tokey值存一下 把状态存一下
+														if(resquicklogin.data.code==0){
+															//设置用户绑定的tokey
+															uni.setStorage({
+																key:"bindtokey",
+																data:resquicklogin.data.data.token
+															})
+															//这里设置用户的登录状态码 为1
+															uni.setStorage({
+																key:"loginstate",
+																data:1
+															})
+															uni.setStorage({
+																key:"userbindstate",
+																data:1,
+																success() {
+																	uni.switchTab({
+																		url:"/pages/index/index"
+																	})
+																}
+															})
+														}else{
+															uni.setStorage({
+																key:"loginstate",
+																data:0
+															})
+														}
+													}
+												})
+										}else{
+											uni.showToast({
+												title:"该用户已经注册过了",
+												icon:"none"
+											})
+										}
+									},
+									fail(){//请求失败的时候
+										uni.showToast({
+											title:"注册失败",
+											icon:"none"
+										})
+									}
+								})
 							}
 						})
 					// #endif
 					//这里进行请求
+					// #ifdef APP-PLUS || H5
 					uni.request({
 						url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
 						method:"POST",
 						data:registeredjson,
 						success(res){//请求成功的时候
 							if(res.data.code==0){
-								// #ifdef MP-WEIXIN
-									console.log(bingjson)//明天这需要测试
-									app.globalData.userbinding(bingjson)
-								// #endif
-								// #ifdef APP-PLUS
+								// #ifdef APP-PLUS || H5
 									//app直接跳转不用绑定
 									uni.reLaunch({
 										url:"/pages/login/login"
@@ -173,6 +229,7 @@
 							})
 						}
 					})
+					// #endif
 				}else{
 					uni.showToast({
 						title:"您填写的信息不正确",

@@ -101,14 +101,15 @@
 					user_phone:phone,
 					code:sms
 				}
-					//获取缓存中的微信code码换取后台的openid
+					//获取缓存中的微信openid
+				// #ifdef MP-WEIXIN
 					uni.getStorage({
 						key:"wxcodekey",
 						success(res){
 							jsons.opened = res.data
-							bingjson.openid = res.data
 						}
 					})
+				// #endif
 				if(phone.match(userphone) && sms!==""){//验证通过 就进行请求登录
 					uni.request({
 						url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
@@ -119,10 +120,18 @@
 							// console.log(token)
 							//当用户登录成功以后 将token存到缓存当中 为以后方便使用
 							uni.setStorage({
-								key:"usertokey",
+								key:"bindtokey",
 								data:res.data.data.token
 							})
 							if(res.data.code==0){
+								//当用户登录成功设置用户登录的状态码 1
+								// #ifdef MP-WEIXIN
+									//如果登录成功了 就设置 用户登录状态码loginstate 为1
+									uni.setStorage({
+										key:"loginstate",
+										data:1
+									})
+								// #endif
 								uni.request({
 									url:`http://hbk.huiboke.com/api/user/getUserDetail`,
 									method:"POST",
@@ -130,14 +139,14 @@
 										token:token
 									},
 									success:(resinfo)=>{
-										// console.log(resinfo)
+										console.log(resinfo)
 										if(resinfo.data.code==0){
 											//不管微信还是app都要加入缓存
 											uni.setStorage({
 												key:"userinfokey",
 												data:resinfo.data.data
 											})
-											// #ifdef APP-PLUS || H5
+											// #ifdef APP-PLUS || H5 || MP-WEIXIN
 												uni.switchTab({
 													url:"/pages/index/index"
 												})
@@ -150,6 +159,13 @@
 								})
 								
 							}else{
+								// #ifdef MP-WEIXIN
+									//如果登录成功了 就设置 用户登录状态码loginstate 为 0
+									uni.setStorage({
+										key:"loginstate",
+										data:0
+									})
+								// #endif
 								uni.showToast({
 									title:"验证码错误",
 									icon:"none"

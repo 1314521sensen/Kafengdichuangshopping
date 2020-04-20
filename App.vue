@@ -12,30 +12,7 @@
 						console.log(res)
 					}
 				})
-			},
-			// #ifdef MP-WEIXIN
-				userbinding(bingjson){//2将用户微信账户与app平台账户绑定
-					uni.request({
-						url:"http://hbk.huiboke.com/api/login_and_register/bindUser",
-						method:"POST",
-						data:bingjson,
-						success(res){
-							if(res.data.code==0){
-								uni.showToast({
-									title:"绑定成功",
-									icon:"none",
-									success(){
-										console.log("绑定成功跳转")
-									}
-								})
-							}else{
-								console.log("绑定失败")
-								return 
-							}
-						}
-					})
-				}
-			// #endif
+			}
 		},
 		onLaunch: function() {
 			const _this = this

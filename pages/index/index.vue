@@ -130,62 +130,112 @@
 			//监控scroll-view 滚动标签是否滚动到底部
 			scrollbottom(){
 				console.log(22)
-			}
-		},
-		onLoad(){
-			//当用户点击了登录以后 进入首页 给用户来个弹窗 如果用户绑定了信息 就把用户状态(状态现在还没写)保存到缓存中 因为这个弹窗只能执行一次
-			// #ifdef MP-WEIXIN
-				uni.getStorage({
-					key:"binddingcode",
-					success(res){
-						if(res.data==0){//代表是咱平台的用户 就绑定选择手机号绑定还是微信绑定
-							console.log("0")
-							// components/indexcomponents/indexbindinfo
-							//根据用户的选择不同 传参 如果用户选择了  (1.又想绑定 2.手机号绑定)
-							uni.showModal({
-								title:"请绑定账户",
-								content:"如果没有可以进行手机号绑定",
-								showCancel:true,
-								cancelText:"邮箱绑定",
-								confirmText:"手机绑定",
-								cancelColor:"#ff0000",
-								confirmColor:"#00ff00",
-								success(res){
-									
-									if(res.confirm){//如果为true的话就是手机绑定
-										uni.navigateTo({
-											url:`/components/indexcomponents/indexbindinfo?bind=${0}`
-										})
-									}else{//否则就邮箱绑定
-										uni.navigateTo({
-											url:`/components/indexcomponents/indexbindinfo?bind=${1}`
-										})
-									}
-								}
+			},
+			//这是用户登录的提示框
+			showloginstate(){
+				uni.showModal({
+					title:"请进行登录",
+					content:"如果没有账号，请进行注册",
+					showCancel:true,
+					cancelText:"已有账号",
+					confirmText:"没有账号",
+					success(res){//当用户点击了确认以后
+						if(res.confirm){ //如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
+							uni.navigateTo({
+								url:"/pages/Freeregistration/Freeregistration"
 							})
-						}else{
-							console.log("1")
-							uni.showModal({
-								title:"请进行登录",
-								content:"如果没有账号，请进行注册",
-								showCancel:true,
-								cancelText:"已有账号",
-								confirmText:"没有账号",
-								success(res){//当用户点击了确认以后
-									if(res.confirm){ //如果为true的情况下 用户点击了确认以后 就让用户关闭所有页面跳转到// /pages/Personaldata/Personaldata
-										uni.navigateTo({
-											url:"/pages/Freeregistration/Freeregistration"
-										})
-									}else{ //如果为false的情况下  用户点击了取消
-										uni.navigateTo({
-											url:"/pages/login/login"
-										})
-									}
-								}
+						}else{ //如果为false的情况下  用户点击了取消
+							uni.navigateTo({
+								url:"/pages/login/login"
 							})
 						}
 					}
 				})
+			},
+			//这是用户绑定手机号邮箱的提示框
+			showphoneandemailstate(){
+						uni.showModal({
+							title:"请绑定账户",
+							content:"如果没有可以进行手机号绑定",
+							showCancel:true,
+							cancelText:"邮箱绑定",
+							confirmText:"手机绑定",
+							cancelColor:"#ff0000",
+							confirmColor:"#00ff00",
+							success(res){
+								
+								if(res.confirm){//如果为true的话就是手机绑定
+									uni.navigateTo({
+										url:`/components/indexcomponents/indexbindinfo?bind=${0}`
+									})
+								}else{//否则就邮箱绑定
+									uni.navigateTo({
+										url:`/components/indexcomponents/indexbindinfo?bind=${1}`
+									})
+								}
+							}
+						})
+					},
+			//这是封装的 用户是否绑定了登录 和是否绑定了手机号或者邮箱
+			booltanchuang(){
+				const _this = this
+				// #ifdef MP-WEIXIN
+					uni.getStorage({
+						key:"wxcodekey",
+						success(res){
+							// console.log(res.data) //这是openid的值
+							uni.request({
+								url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
+								method:"POST",
+								data:{
+									login_type:"weixin",
+									opened:res.data
+								},
+								success(reslogintokey) {
+									console.log(reslogintokey.data)
+									if(reslogintokey.data.code==0){//证明用户已经在数据里 在数据里面就弹出绑定的弹窗
+										//在这里取出用户时候进行微信绑定登录了
+										console.log()
+										uni.getStorage({
+											key:"loginstate",
+											success(resbindloginstate){//如果取出来证明用户已经登录了
+												if(resbindloginstate.data==1){//证明用户已经绑定登录了
+													uni.getStorage({
+														key:"userbindstate",
+														success:(resuserbindstate)=>{//如果取出了值  判断用户有没有绑定手机号邮箱
+															if(resuserbindstate.data==1){//如果 用户绑定手机号的状态码 为1的话 证明用户已经绑定了 不用再弹出来
+																
+															}else{//否则 就代表用户还未绑定 就弹出绑定的手机或邮箱的框
+																_this.showphoneandemailstate()
+															}
+														},
+														fail:()=>{//如果没取出来 证明用户还未绑定 就弹出用户绑定的框
+															_this.showphoneandemailstate()
+														}
+													})
+												}else{//就弹出用户登录的框
+													_this.showloginstate()
+												}
+											},
+											fail:()=>{
+												
+												_this.showloginstate()
+											}
+										})
+									}else{//证明用户没有在数据里面 没有在数据库里面 就弹出登录的弹窗
+										console.log(this)
+										this.showloginstate()
+									}
+								}
+							})
+						}
+					})
+				// #endif
+			},
+		},
+		onLoad(){
+			// #ifdef MP-WEIXIN
+				this.booltanchuang()
 			// #endif
 			// console.log(app.globalData)
 			this.statusBar = app.globalData.statusBar
@@ -200,11 +250,18 @@
 		},
 		onShow(){
 			this.inpblue()
-			
+			this.booltanchuang()
 		},
 		//页面滚动到底部的事件
 		onReachBottom(){
 			console.log(1)
+		},
+		// 封装一个是否要弹出弹窗的方法
+		
+		created(){
+			// #ifdef MP-WEIXIN
+				this.booltanchuang()
+			// #endif
 		}
 	}
 </script>

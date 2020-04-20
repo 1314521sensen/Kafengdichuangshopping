@@ -124,16 +124,25 @@
 			},
 			//封装一个app和微信端 不同的登录请求方法
 			Ordinarydifferentlogin(data,username,password,bingjson){
+				console.log("这块走过来了")
 				uni.request({
 					url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
 					method:"POST",
 					data,
 					success:(res)=>{
-						uni.setStorage({
-							key:"usertokey",
+						console.log(res)
+						uni.setStorage({//这个是把tokey存起来
+							key:"bindtokey",
 							data:res.data.data.token
 						})
 						if(res.data.code==0){
+							// #ifdef MP-WEIXIN
+								//如果登录成功了 就设置 用户登录状态码loginstate 为1
+								uni.setStorage({
+									key:"loginstate",
+									data:1
+								})
+							// #endif
 							console.log("已经走过来了")
 							uni.request({
 								url:"http://hbk.huiboke.com/api/user/getUserDetail",
@@ -145,7 +154,7 @@
 									if(resinfo.data.code==0){
 										// #ifdef APP-PLUS || H5
 											this.toast("登录成功")
-											uni.setStorage({
+											uni.setStorage({//这块存的用户的登录信息
 												key:"userinfokey",
 												data:resinfo.data.data
 											})
@@ -161,6 +170,11 @@
 							})
 						}else{
 							this.toast("验证码错误")
+							//否则就设置用户登录的状态的码 为0
+							uni.setStorage({
+								key:"loginstate",
+								data:0
+							})
 						}
 					},
 					fail:(err)=>{
