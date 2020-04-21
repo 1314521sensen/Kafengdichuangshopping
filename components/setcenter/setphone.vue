@@ -58,10 +58,6 @@
 			}
 		},
 		methods:{
-			bindingphone(){
-				
-				
-			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 				let arr = []
@@ -186,7 +182,7 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 	.orders{
 		background-color: #fff;
 		// padding-bottom:30rpx;
