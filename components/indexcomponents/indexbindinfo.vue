@@ -9,7 +9,7 @@
 					</view>
 					<view class="action">
 						<text>{{item.showtext}}</text>
-						<button class="cu-btn bg-green shadow" @tap="showModal" :data-target="item.indextarget">点击绑定</button>
+						<button class="cu-btn bg-green shadow" @tap="showModal" :data-target="item.indextarget">{{bindbtn}}</button>
 					</view>
 				</view>
 				<view class="cu-modal" :class="modalName==item.indextarget?'show':''">
@@ -22,13 +22,17 @@
 						</view>
 						<view class="padding-xl inp">
 							<!-- 第一个input是处理用户手机号的 -->
-							<input type="text" :placeholder="item.Modaltext1" v-model="item.value" name="account" v-if="xiabiao!==0"></input>
+							<input type="text" :placeholder="item.Modaltext1" v-model="item.value" name="account" v-if="xiabiao!==0" :disabled="inpvalue1bool"></input>
 							<input type="text" :placeholder="item.Modaltext2" name="sms"></input>
+							<view class="newsemail" :style="{'display':stylebool}">
+								<input type="text" :placeholder="item.Modaltext3" v-model="item.value2" name="newsaccount"></input>
+								<input type="text" :placeholder="item.Modaltext4" name="newssms"></input>
+							</view>
 						</view>
 						<view class="cu-bar bg-white justify-end">
 							<view class="action btn">
-								<button class="cu-btn line-green text-green" form-type="submit">确定</button>
-								<button class="cu-btn line-green text-red" @tap="smsreg(item.value,index)" :disabled="disabled">{{item.righttext}}</button>
+								<button class="cu-btn line-green text-green" form-type="submit">{{submmit}}</button>
+								<button class="cu-btn line-green text-red" @tap="smsreg(item.value,xiabiao)" :disabled="disabled" :style="{'display':styleregbool}">{{item.righttext}}</button>
 							</view>
 						</view>
 					</view>
@@ -49,6 +53,11 @@
 				id:"",
 				tokey:"",
 				disabled:false,
+				bindbtn:"点击绑定",
+				inpvalue1bool:false,
+				stylebool:'none',
+				styleregbool:'block',
+				submmit:"确定",
 				list:[
 						[
 							{
@@ -66,12 +75,15 @@
 							{
 								title:"更换邮箱绑定",
 								indextarget:"DialogModal2",
-								Modaltitle:"请绑定新邮箱",
-								Modaltext1:"请输入新邮箱号",
+								Modaltitle:"请验证原邮箱",
+								Modaltext1:"请输入原邮箱号",
+								Modaltext3:"请输入新邮箱",
 								showtext:"",
 								Modaltext2:"请输入验证码",
-								righttext:"获取新邮箱验证码",
-								value:""
+								Modaltext4:"请输入验证码",
+								righttext:"获取邮箱验证码",
+								value:"",
+								value2:""
 							}
 						]
 					
@@ -113,10 +125,12 @@
 						return 
 					}
 				}else{//下标等于2  验证新邮箱号
-					console.log("执行下标2")
+					// console.log("执行下标2")
 					if(smsregs!==""){
 						if(reg.test(smsregs)){
+							
 							this.regbool = true
+							
 						}else{
 							this.list[0][0].value = smsregs
 							this.hideModal()//然后进行关闭
@@ -127,12 +141,43 @@
 					}
 				}
 			},
+			//封装一个绑定邮箱和更换邮箱的功能
+			bindNewEmail(tokey,account,sms){
+				uni.request({
+					url:"http://hbk.huiboke.com/api/user/bindNewEmail",
+					method:"POST",
+					data:{
+						token:tokey,
+						email:account,
+						code:sms
+					},
+					success:(res)=> {
+						console.log(account,sms)
+						console.log(res)
+						if(res.data.code==0){//表示已经绑定成功了
+							//就把缓存中的值改了 下次进来的是用户更改邮箱
+							uni.setStorage({
+								key:"userbindstate",
+								data:1
+							})
+							this.hideModal()
+							uni.navigateTo({
+								url:"/components/setcenter/setcenter?title=设置"
+							})
+						}
+					},
+					fail(err){
+						console.log(err)
+					}
+				})
+			},
 			//这是验证码
-			smsreg(smsregs,index){
+			smsreg(smsregs){
 				this.regsms(smsregs)
 				this.disabled = true
 				if(this.regbool){//验证全部通过就向用户发送验证码 //http://hbk.huiboke.com/api/common/getEmailCaptcha
-				console.log(this.id)
+				// console.log(this.id)
+					//这里不管是下标0还是下1都要这行
 					let json = {
 							email:smsregs,
 							type:5,
@@ -143,37 +188,55 @@
 				}
 			},
 			bindlogin(e){
+				console.log(e)
 				let {account,sms} = e.detail.value
 				this.regsms(account)
 				this.disabled = false
+				// console.log(this.xiabiao)
 				if(sms!==""){//验证码不为空就发起请求绑定
 					//http://hbk.huiboke.com/api/user/bindNewEmail
 					// console.log(this.tokey )
-					
-					uni.request({
-						url:"http://hbk.huiboke.com/api/user/bindNewEmail",
-						method:"POST",
-						data:{
-							token:this.tokey,
-							email:account,
-							sms:sms
-						},
-						success(res) {
-							console.log(account,sms)
-							console.log(res)
-							if(res.data.code==0){//表示已经绑定成功了
-								//就把缓存中的值改了 下次进来的是用户更改邮箱
-								uni.setStorage({
-									key:"userbindstate",
-									data:1
-								})
-								this.hideModal()
+					if(this.xiabiao==1){
+						uni.request({
+							url:"http://hbk.huiboke.com/api/user/validateOldEmail",
+							method:"POST",
+							data:{
+								token:this.tokey,
+								email:account,
+								code:sms
+							},
+							success:(res)=> {
+								if(res.data.code==0){
+									this.stylebool = "block"
+									this.list[1][0].Modaltitle = "请绑定新邮箱"
+									this.submmit = "获取新邮箱验证码"
+									this.styleregbool = 'none'
+									let {newsaccount,newssms} = e.detail.value
+									var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+									if(reg.test(newsaccount)){
+										console.log(newsaccount,newssms)
+										this.disabled = false
+										this.smsreg(newsaccount)
+										this.submmit = "确定"
+										if(newssms!==""){
+											this.bindNewEmail(this.tokey,newsaccount,newssms)
+										}else{
+											this.showtext("验证码不能为空")
+										}
+										
+									}else{
+										this.showtext("邮箱不能为空")
+									}
+								}else{
+									this.styleregbool = 'block'
+									this.submmit = "确定"
+								}
 							}
-						},
-						fail(err){
-							console.log(err)
-						}
-					})
+						})
+					}else{
+						//在这里请求
+						this.bindNewEmail(this.tokey,account,sms)
+					}
 				}else{
 					this.showtext("验证码不能为空")
 					this.hideModal()
@@ -182,28 +245,37 @@
 		},
 		onLoad(option) {
 			this.xiabiao = option.bind
-			console.log(this.xiabiao)
+			// console.log(this.xiabiao)
 			//这个来控制高度的
 			this.statusBar = app.globalData.statusBar
 		},
 		created(){
 			//先取出tokey
 			const _this = this
+			//现获取tokey以后获取用户绑定的信息
 			uni.getStorage({
 				key:"bindtokey",
 				success(res){
 					_this.tokey = res.data
 					//开始加载的时候获取用户手机号或者邮箱
-						// uni.request({
-						// 	url:"http://hbk.huiboke.com/api/user/getUserBindInfo",
-						// 	method:"POST",
-						// 	data:{
-						// 		token:res.data
-						// 	},
-						// 	success(resinfo) {
-						// 		console.log(resinfo)
-						// 	}
-						// })
+						uni.request({
+							url:"http://hbk.huiboke.com/api/user/getUserBindInfo",
+							method:"POST",
+							data:{
+								token:res.data
+							},
+							success(resinfo) {
+								if(resinfo.data.data.user_email){
+									_this.bindbtn = "更换邮箱"
+									_this.list[1][0].value = resinfo.data.data.user_email
+									_this.inpvalue1bool = true
+								}else{
+									_this.bindbtn = "绑定邮箱"
+									_this.list[1][0].value = ""
+									_this.inpvalue1bool = false
+								}
+							}
+						})
 					}
 			})
 			//获取用户的信息先获取tokey
@@ -218,7 +290,7 @@
 							token:res.data
 						},
 						success(resid){
-							console.log(resid.data.data.user_id)
+							// console.log(resid.data.data.user_id)
 							//把id值设置在缓存中
 							uni.setStorage({
 								key:"useremailid",
@@ -247,5 +319,8 @@
 	.btn{
 		width: 100%;
 		justify-content: space-between;
+	}
+	.cu-btn{
+		line-height:2;
 	}
 </style>
