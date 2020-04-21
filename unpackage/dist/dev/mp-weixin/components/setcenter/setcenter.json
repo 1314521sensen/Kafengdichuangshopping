@@ -1,5 +1,7 @@
 {
   "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight"
+    "pageheight": "/components/pageheight/pageheight",
+    "setemail": "/components/setcenter/setemail",
+    "setphone": "/components/setcenter/setphone"
   }
 }

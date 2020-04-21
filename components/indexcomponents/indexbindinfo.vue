@@ -21,7 +21,6 @@
 							</view>
 						</view>
 						<view class="padding-xl inp">
-							<!-- 第一个input是处理用户手机号的 -->
 							<input type="text" :placeholder="item.Modaltext1" v-model="item.value" name="account" v-if="xiabiao!==0" :disabled="inpvalue1bool"></input>
 							<input type="text" :placeholder="item.Modaltext2" name="sms"></input>
 							<view class="newsemail" :style="{'display':stylebool}">

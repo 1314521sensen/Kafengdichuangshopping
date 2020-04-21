@@ -10,4 +10,7 @@
   -webkit-justify-content: space-between;
           justify-content: space-between;
 }
+.cu-btn.data-v-4eabb8fb {
+  line-height: 2;
+}
 
