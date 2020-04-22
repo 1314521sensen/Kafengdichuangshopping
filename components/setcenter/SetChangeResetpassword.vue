@@ -147,7 +147,6 @@
 					let {loginpassword,zhifupassword} = e.detail.value
 					if(loginpassword!=="" && zhifupassword!==""){
 						if(regnewspassword.test(zhifupassword)){
-							// console.log(this.tokey)
 							uni.request({
 								url:"http://hbk.huiboke.com/api/user/savePayPassword",
 								method:"POST",
@@ -158,7 +157,6 @@
 									isAllow:0
 								},
 								success:(res)=>{
-									console.log(res)
 									if(res.data.code==0){
 										app.globalData.showtoastsame("设置成功")
 										uni.navigateTo({

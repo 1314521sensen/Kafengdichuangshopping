@@ -74,7 +74,6 @@
 						},
 						success(resinfophoneAndemail){
 							_this.userphone = resinfophoneAndemail.data.data.user_phone
-							// console.log(resinfophoneAndemail)
 							_this.useremail = resinfophoneAndemail.data.data.user_email
 						}
 					})
@@ -86,7 +85,6 @@
 							token:_this.tokey
 						},
 						success(resRealname) {
-							console.log("时刻提示自己tokey为过期可以进行编写")
 							if(resRealname.data.code==0){
 								if(resRealname.data.data.idcard==null){//如果为null证明用户还未实名 
 									_this.Realnamebool = false

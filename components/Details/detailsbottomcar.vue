@@ -6,6 +6,10 @@
 						<!-- <view class="cu-tag badge"></view> -->
 					</view> 店铺
 				</button>
+				<view class="action text-orange" @tap="collectionwork">
+					<!-- cuIcon-favorfill这是已收藏图标 -->
+					<view :class="collectionbool?'cuIcon-favorfill':'cuIcon-favor'"></view>{{collection}}
+				</view>
 				<view class="action" @tap="shoppingcart">
 					<view class="cuIcon-cart">
 						<!-- cu-tag这个是角标 -->
@@ -28,7 +32,9 @@
 			return {
 				newscarobj:{},
 				newcararr:[],
-				len:""
+				len:"",
+				collectionbool:false,
+				collection:"未收藏"
 			}
 		},
 		methods:{
@@ -67,6 +73,9 @@
 						console.log(err)
 					}
 				});
+			},
+			collectionwork(){
+				
 			},
 			Skiporder(){
 				//跳转到购买页面

@@ -32,7 +32,8 @@
 		data() {
 			return {
 				addaddresslist:[],
-				statusBar:0
+				statusBar:0,
+				tokey:"",
 			}
 		},
 		methods: {
@@ -47,6 +48,17 @@
 		},
 		onShow(){
 			//当页面每次显示的时候去渲染数据库里面的数据
+		},
+		created() {
+			const _this = this
+			//获取缓存中的用户的tokey
+			// uni.getStorage({
+			// 	key:"bindtokey",
+			// 	success(res) {//获取到用户的tokey值
+			// 		_this.tokey = res.data
+			// 	}
+			// })
+			
 		}
 	}
 </script>

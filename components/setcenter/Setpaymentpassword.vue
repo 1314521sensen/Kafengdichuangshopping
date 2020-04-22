@@ -40,11 +40,9 @@
 				success(reszhifu){
 					if(reszhifu.data.code==0){//code等于0 代表密码存在
 						 _this.setzhifumimabool = reszhifu.data.data.flag //1
-						 console.log(_this.setzhifumimabool)
 						 _this.message = "修改支付密码"
 					}else{//code等于1代表密码不存在
 						_this.setzhifumimabool = reszhifu.data.data.flag //0
-						console.log(_this.setzhifumimabool)
 						_this.message = "设置支付密码"
 					}
 				}

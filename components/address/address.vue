@@ -42,7 +42,7 @@
 	const app = getApp();
 	export default{
 		data(){
-			return {
+			return {	
 				value1:"",
 				value2:"",
 				value3:"",
@@ -71,11 +71,22 @@
 				uni.navigateBack({
 				    delta: 1
 				});
-			}
+			},
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
-		}
+		},
+		// created() {
+		// 	uni.request({
+		// 		url:"http://hbk.huiboke.com/api/common/getAreas",
+		// 		data:{
+		// 			parent_id:0
+		// 		},
+		// 		success(res) {
+		// 			console.log(res)
+		// 		}
+		// 	})
+		// }
 	}
 </script>
 
