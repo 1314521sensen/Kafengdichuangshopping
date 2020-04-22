@@ -4,6 +4,7 @@
 		<setemail></setemail>
 		<setphone :userphone="userphone" :userid="userid" :tokey="tokey"></setphone>
 		<Realnameauthentication v-if="Realnamebool==false" :tokey="tokey"></Realnameauthentication>
+		<Resetloginpassword :userphone="userphone" :useremail="useremail" :tokey="tokey" :userid="userid"></Resetloginpassword>
 	</view>
 </template>
 
@@ -15,6 +16,8 @@
 	import setphone from "@/components/setcenter/setphone.vue"
 	//设置实名
 	import Realnameauthentication from "@/components/setcenter/Realnameauthentication.vue"
+	//修改登录密码
+	import Resetloginpassword from "@/components/setcenter/Resetloginpassword.vue"
 	export default{
 		data(){
 			return {
@@ -23,15 +26,18 @@
 				userphone:"",
 				userid:"",
 				Realnamebool:true,//判断用户实名的状态
+				useremail:""
 			}
 		},
 		components:{
 			setemail,
 			setphone,
-			Realnameauthentication
+			Realnameauthentication,
+			Resetloginpassword
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
+			
 		},
 		created(){
 			
@@ -63,6 +69,8 @@
 						},
 						success(resinfophoneAndemail){
 							_this.userphone = resinfophoneAndemail.data.data.user_phone
+							// console.log(resinfophoneAndemail)
+							_this.useremail = resinfophoneAndemail.data.data.user_email
 						}
 					})
 					//获取用户的实名认证
