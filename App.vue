@@ -22,6 +22,12 @@
 						
 					}
 				})
+			},
+			showtoastsame(message){//封装一个弹窗
+				uni.showToast({
+					title:message,
+					icon:'none'
+				})
 			}
 		},
 		onLaunch: function() {

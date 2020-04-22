@@ -104,6 +104,9 @@
 		},
 		{
 			"path":"components/setcenter/returnloginpasswordall"
+		},
+		{
+			"path":"components/setcenter/SetChangeResetpassword"
 		}
     ],
 	

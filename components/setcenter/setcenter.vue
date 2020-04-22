@@ -5,6 +5,7 @@
 		<setphone :userphone="userphone" :userid="userid" :tokey="tokey"></setphone>
 		<Realnameauthentication v-if="Realnamebool==false" :tokey="tokey"></Realnameauthentication>
 		<Resetloginpassword :userphone="userphone" :useremail="useremail" :tokey="tokey" :userid="userid"></Resetloginpassword>
+		<Setpaymentpassword :tokey="tokey" :userphone="userphone" :userid="userid"></Setpaymentpassword>
 	</view>
 </template>
 
@@ -18,6 +19,8 @@
 	import Realnameauthentication from "@/components/setcenter/Realnameauthentication.vue"
 	//修改登录密码
 	import Resetloginpassword from "@/components/setcenter/Resetloginpassword.vue"
+	//设置支付密码
+	import Setpaymentpassword from "@/components/setcenter/Setpaymentpassword.vue"
 	export default{
 		data(){
 			return {
@@ -26,14 +29,16 @@
 				userphone:"",
 				userid:"",
 				Realnamebool:true,//判断用户实名的状态
-				useremail:""
+				useremail:"",
+				setzhifumimabool:""
 			}
 		},
 		components:{
 			setemail,
 			setphone,
 			Realnameauthentication,
-			Resetloginpassword
+			Resetloginpassword,
+			Setpaymentpassword
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
