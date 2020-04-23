@@ -18,7 +18,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="cu-form-group">
+			<view class="cu-form-group" @tap="Addressselection">
 				<view class="title">收货地址</view>
 				<input v-model="value3" placeholder="收货地址" name="input"></input>
 			</view>
@@ -35,6 +35,7 @@
 				</view>
 			</view>
 		</view>
+		
 	</view>
 </template>
 
@@ -42,7 +43,8 @@
 	const app = getApp();
 	export default{
 		data(){
-			return {	
+			return {
+				show: false,
 				value1:"",
 				value2:"",
 				value3:"",
@@ -51,6 +53,10 @@
 			}
 		},
 		methods:{
+			
+			Addressselection(){
+				this.show = true
+			},
 			submits(){
 				// console.log(this.value1,this.value2,this.value3,this.value4)
 				if(this.value1 && this.value2 && this.value3 && this.value4){

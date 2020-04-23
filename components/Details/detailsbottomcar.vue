@@ -6,9 +6,27 @@
 						<!-- <view class="cu-tag badge"></view> -->
 					</view> 店铺
 				</button>
-				<view class="action text-orange" @tap="collectionwork">
+				<view class="action text-orange" @tap="showModal" data-target="DialogModal1">
 					<!-- cuIcon-favorfill这是已收藏图标 -->
 					<view :class="collectionbool?'cuIcon-favorfill':'cuIcon-favor'"></view>{{collection}}
+				</view>
+				<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
+					<view class="cu-dialog">
+						<view class="cu-bar bg-white justify-end">
+							<view class="content">备注信息</view>
+							<view class="action" @tap="hideModal">
+								<text class="cuIcon-close text-red"></text>
+							</view>
+						</view>
+						<view class="padding-xl">
+							<input type="text" v-model="Noteinformation" :placeholder="Noteplaceholder">
+						</view>
+						<view class="cu-bar bg-white justify-end">
+							<view class="action btn-que">
+								<button class="cu-btn bg-green" @tap="collectionwork">确定</button>
+							</view>
+						</view>
+					</view>
 				</view>
 				<view class="action" @tap="shoppingcart">
 					<view class="cuIcon-cart">
@@ -34,10 +52,21 @@
 				newcararr:[],
 				len:"",
 				collectionbool:false,
-				collection:"未收藏"
+				collection:"未收藏",
+				modalName: null,
+				Noteinformation:"",
+				Noteplaceholder:"请输入商品的备注信息"
 			}
 		},
 		methods:{
+			//这是弹窗的功能
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
+			//弹窗结束的功能
 			//进入店铺
 			Enterthestore(){
 				uni.navigateTo({
@@ -50,6 +79,7 @@
 				})
 			},
 			Addcart(obj,img){
+				
 				//当点击加入到购物车 就加入到缓存中 获取店铺名字 商品的图片 商品的标题 商品的参数(可有可无) 商品的价格
 				let {newscarobj,newcararr} = this.$data
 				
@@ -74,8 +104,23 @@
 					}
 				});
 			},
+			//这是点击弹窗的确定是否确定添加
 			collectionwork(){
-				
+				//this.Noteinformation收藏信息
+				if(this.collectionbool){
+					this.collectionbool = false
+					this.collection = "未收藏"
+				}else{
+					if(this.Noteinformation!==""){
+						//在这里添加数据
+						this.Noteplaceholder = "请输入商品的备注信息"
+						this.collectionbool = true
+						this.collection = "已收藏"
+						this.hideModal()
+					}else{
+						this.Noteplaceholder = "收藏备注不能为空"
+					}	
+				}
 			},
 			Skiporder(){
 				//跳转到购买页面
@@ -96,5 +141,11 @@
 		height: 100rpx;
 		left: 0;
 		z-index: 1;
+	}
+	.btn-que{
+		width: 100% !important;
+		button{
+			width: 100%;
+		}
 	}
 </style>

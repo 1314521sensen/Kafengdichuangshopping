@@ -56,6 +56,23 @@
 			// this.$nextTick(()=>{
 			// 	this.getHeightList();
 			// })
+			// uni.request({
+			// 	url:"http://hbk.huiboke.com/api/common/getCategoryList",
+			// 	success:(res)=>{
+			// 		if(res.data.code==0){
+			// 			let arr = []
+			// 			res.data.data.forEach((item,index)=>{
+			// 				console.log(item)
+			// 				// item.children.forEach((items,indexs)=>{
+			// 				// 	arr.push(items)
+			// 				// })
+			// 			})
+			// 			// console.log(arr)
+			// 		}else{
+			// 			app.globalData.showtoastsame("网络不佳")
+			// 		}
+			// 	}
+			// })
 		},
 		//设置高度
 		onLoad: function () {

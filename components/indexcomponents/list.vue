@@ -2,7 +2,7 @@
 	<view class="list">
 		<view class="cu-list menu-avatar">
 				<!-- 这是背景图片 -->
-				<view class="shopping-title">这里是背景图片 先用颜色替代</view>
+				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
 				
 				<view class="cu-item" v-for="(item,index) in list" :key="index" @click="linkDetails(url)">
 					<view class="cu-item-left">
