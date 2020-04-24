@@ -28,7 +28,6 @@
 		},
 		methods:{
 			horizontallydetails(id){
-				// console.log(id)
 				uni.navigateTo({
 					url:`/pages/Details/Details?id=${id}`
 				})

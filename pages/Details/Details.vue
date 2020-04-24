@@ -43,6 +43,7 @@
 		},
 		onLoad(opction){
 			const _this = this
+			//这是商品的id
 			this.id = opction.id
 			//先去请求详情页的轮播数据图片
 			uni.request({
@@ -66,6 +67,21 @@
 				success(res) {
 					if(res.data.code==0){
 						_this.pic = res.data.data
+						//这和下面没关系 这块处理用户足迹的
+						//从这
+						//当用户点击进来的时候代表已经游览了商品足迹
+						uni.request({
+							url:"http://hbk.huiboke.com/api/user/addTrackInfo",
+							method:"POST",
+							data:{
+								token:_this.tokey,
+								good_id:_this.id,
+								good_name:_this.pic.good_title,
+								good_image:_this.pic.good_pic,
+								track_price:_this.pic.good_price
+							}
+						})
+						//到这
 						//在这里请求店家的地址信息
 						let arr = []
 						let url = "http://hbk.huiboke.com/api/common/getAreas"

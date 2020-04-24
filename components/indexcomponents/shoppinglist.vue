@@ -25,7 +25,7 @@
 					limit:10
 				},
 				success(res) {
-					_this.list = res.data.data
+					_this.list = res.data.data.list
 				}
 			})
 		}
