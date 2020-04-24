@@ -2,7 +2,7 @@
 	<view class="horizontallylist">
 		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
 			<view class="horizontally">
-				<view class="list" v-for="(item,index) in horizontallylist" :key="index" @tap="horizontallydetails">
+				<view class="list" v-for="(item,index) in horizontallylist" :key="index" @tap="horizontallydetails(item.good_id)">
 					<image :src="'http://hbk.huiboke.com'+item.good_pic"></image>
 					<view class="list-titile">
 						<text>{{item.good_title}}</text>
@@ -27,9 +27,10 @@
 			}
 		},
 		methods:{
-			horizontallydetails(){
+			horizontallydetails(id){
+				// console.log(id)
 				uni.navigateTo({
-					url:"/pages/Details/Details"
+					url:`/pages/Details/Details?id=${id}`
 				})
 			},
 			//监控scroll-view 滚动标签是否滚动到底部
