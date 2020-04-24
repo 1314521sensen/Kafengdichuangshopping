@@ -45,6 +45,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		data(){
 			return {
@@ -55,13 +56,29 @@
 				collection:"未收藏",
 				modalName: null,
 				Noteinformation:"",
-				Noteplaceholder:"请输入商品的备注信息"
+				Noteplaceholder:"请输入商品的备注信息",
+				favid:"",
 			}
 		},
 		methods:{
 			//这是弹窗的功能
 			showModal(e) {
-				this.modalName = e.currentTarget.dataset.target
+				if(this.collectionbool){
+					uni.request({
+						url:"http://hbk.huiboke.com/api/user/deleteFavoriteInfo",
+						method:"POST",
+						data:{
+							token:this.tokey,
+							fav_id:this.favid
+						},
+						success:(res)=> {
+							this.collectionbool = false
+							this.collection = "未收藏"
+						}
+					})
+				}else{
+					this.modalName = e.currentTarget.dataset.target
+				}
 			},
 			hideModal(e) {
 				this.modalName = null
@@ -79,10 +96,8 @@
 				})
 			},
 			Addcart(obj,img){
-				
 				//当点击加入到购物车 就加入到缓存中 获取店铺名字 商品的图片 商品的标题 商品的参数(可有可无) 商品的价格
 				let {newscarobj,newcararr} = this.$data
-				
 				newscarobj = obj
 				newscarobj.img = img
 				this.newscarobj = newscarobj
@@ -107,20 +122,35 @@
 			//这是点击弹窗的确定是否确定添加
 			collectionwork(){
 				//this.Noteinformation收藏信息
-				if(this.collectionbool){
-					this.collectionbool = false
-					this.collection = "未收藏"
-				}else{
 					if(this.Noteinformation!==""){
 						//在这里添加数据
 						this.Noteplaceholder = "请输入商品的备注信息"
 						this.collectionbool = true
 						this.collection = "已收藏"
+						uni.request({//请求添加收藏信息的接口
+							url:"http://hbk.huiboke.com/api/user/addGoodFavoriteInfo",
+							method:"POST",
+							data:{
+								token:this.tokey,
+								good_id:this.pic.good_id,
+								good_name:this.pic.good_title,
+								good_image:this.pic.good_pic,
+								fav_price:this.pic.good_price,
+								fav_remark:this.Noteinformation
+							},
+							success:(res)=>{
+								if(res.data.code==0){
+									app.globalData.showtoastsame("收藏成功")
+									this.favid = parseInt(res.data.data.fav_id)
+								}else{
+									app.globalData.showtoastsame(res.data.msg)
+								}
+							}
+						})
 						this.hideModal()
 					}else{
 						this.Noteplaceholder = "收藏备注不能为空"
-					}	
-				}
+					}
 			},
 			Skiporder(){
 				//跳转到购买页面
@@ -129,7 +159,26 @@
 				})
 			}
 		},
-		props:["pic","imgs"]
+		props:["pic","imgs","tokey","id"],
+		created(){
+			const _this = this
+			uni.request({//请求一条商品来看一下 用户收藏没收藏
+				url:"http://hbk.huiboke.com/api/user/getGoodFavoriteInfo",
+				method:"POST",
+				data:{
+					token:this.tokey,
+					id:this.id
+				},
+				success:(res)=>{
+					if(res.data.code==0){
+						this.collectionbool = true
+						this.collection = "已收藏"
+						
+						_this.favid = res.data.data.fav_id
+					}
+				}
+			})
+		}
 	}
 </script>
 

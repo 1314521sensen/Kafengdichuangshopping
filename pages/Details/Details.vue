@@ -1,9 +1,9 @@
 <template>
 	<view class="Details">
 		<detailsbanner :swiperList="swiperList" height="720"></detailsbanner>
-		<pricetitle :pic="pic"></pricetitle>
+		<pricetitle :pic="pic" :region="region"></pricetitle>
 		<imgs :imglist="imgs"></imgs>
-		<bottomcar :pic="pic" imgs="/static/cart/01.webp"></bottomcar>
+		<bottomcar :pic="pic" imgs="/static/cart/01.webp" :tokey="tokey" :id="id"></bottomcar>
 	</view>
 </template>
 
@@ -19,45 +19,17 @@
 		data() {
 			return {
 				//这是轮播图的数据
-				swiperList:[
-					{
-						id: 1,
-						type: 'image',
-						url: '/static/Details/banner1.png',
-						url2:"/pages/bannerRouter/bannerRouter"
-					},
-					{
-						id: 2,
-						type: 'image',
-						url: '/static/Details/banner2.png',
-						url2:"/pages/bannerRouter/bannerRouter"
-					},
-					{
-						id: 3,
-						type: 'image',
-						url: '/static/Details/banner3.png',
-						url2:"/pages/bannerRouter/bannerRouter"
-					},
-					{
-						id: 4,
-						type: 'image',
-						url: '/static/Details/banner4.png',
-						url2:"/pages/bannerRouter/bannerRouter"
-					}
-				],
+				swiperList:[],
 				//这是详情页的图片的数据
 				imgs:[
 					"/static/Details/O1CN01UuLYnf1KPwpca0wIK_!!2399641157.jpg_640x0q80_.webp",
 					"/static/Details/dfb5cbd7-556a-43a1-9e7b-c485e7b550dc.jpg"
 				],
 				//这是标题和价格数据
-				pic:{
-					title:"coconordic意大利 SC(Square circle)同款茶几简约现代北欧小茶桌",
-					unitprice:"78.8",
-					ShopName:"小明时尚衣服店铺",
-					checked:false,
-					value1:1,
-				}
+				pic:{},
+				region:[],
+				tokey:"",
+				id:"",
 			}
 		},
 		methods: {
@@ -67,10 +39,58 @@
 			detailsbanner,
 			pricetitle,
 			imgs,
-			bottomcar
+			bottomcar,
 		},
-		onLoad(){
-			
+		onLoad(opction){
+			const _this = this
+			this.id = opction.id
+			//先去请求详情页的轮播数据图片
+			uni.request({
+				url	:`http://hbk.huiboke.com/api/good/getGoodImageList`,
+				data:{
+					gid:opction.id,
+					lt:5,
+				},
+				success(res) {
+					if(res.data.code==0){
+						_this.swiperList = res.data.data
+					}
+				}
+			})
+			//在去请求详情页的其他数据
+			uni.request({
+				url:"http://hbk.huiboke.com/api/good/getGoodInfo",
+				data:{
+					gid:opction.id
+				},
+				success(res) {
+					if(res.data.code==0){
+						_this.pic = res.data.data
+						//在这里请求店家的地址信息
+						let arr = []
+						let url = "http://hbk.huiboke.com/api/common/getAreas"
+						uni.request({//地址这块还是有些问题
+							url,
+							data:{
+								parent_id:res.data.data.area_id2
+							},
+							success(resprovince) {
+								arr.push(resprovince.data.data[0].area_name)
+								_this.region = arr
+							}
+						})
+					}
+				}
+			})
+		},
+		created() {
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res) {
+					_this.tokey = res.data
+				}
+			})
 		}
 	}
 </script>

@@ -3,16 +3,15 @@
 		<view class="cu-list menu-avatar">
 				<!-- 这是背景图片 -->
 				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
-				
-				<view class="cu-item" v-for="(item,index) in list" :key="index" @click="linkDetails(url)">
+				<view class="cu-item" v-for="(item,index) in list" :key="index" @click="linkDetails(item.good_id)">
 					<view class="cu-item-left">
-						<view class="cu-avatar round lg" :style="{'background-image':'url('+item.images+')'}"></view>
+						<view class="cu-avatar round lg" :style="{'background-image':'url('+'http://hbk.huiboke.com'+item.good_pic+')'}"></view>
 					</view>
 					<view class="cu-item-right">
 						<view class="content">
-							<view class="text-grey">{{item.describe}}</view>
+							<view class="text-grey">{{item.good_title}}</view>
 							<view class="price">
-								￥{{item.price}}
+								￥{{item.good_price}}
 							</view>
 						</view>
 					</view>
@@ -29,20 +28,15 @@
 			}
 		},
 		methods:{
-			linkDetails(url){
+			linkDetails(id){
 				//当点击的时候跳转到详情页
 				//根据index和我的组件中传过来的url 判断跳到哪里
-				if(url){
-					url = url
-				}else{
-					url = "/pages/Details/Details"
-				}
 				uni.navigateTo({
-					url
+					url:`/pages/Details/Details?id=${id}`
 				})
 			}
 		},
-		props:["list","url"],
+		props:["list"]
 		
 	}
 </script>

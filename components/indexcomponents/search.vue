@@ -31,9 +31,9 @@
 			}
 		},
 		mounted(){
-			let inp = document.getElementById("inp")
-			// console.log(inp)
-			this.$emit("inpblue",inp)
+			// let inp = document.getElementById("inp")
+			// // console.log(inp)
+			// this.$emit("inpblue",inp)
 		}
 	}
 </script>

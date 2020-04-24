@@ -5,9 +5,9 @@
 		 :autoplay="true" interval="3000" duration="500" :style="{height:height+'rpx'}">
 			<swiper-item v-for="(item,index) in swiperList" :key="index" @click="jump(item.url2)">
 				<!-- 如果type是image就显示图片 -->
-				<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
+				<image :src="'http://hbk.huiboke.com'+item.good_img_url" mode="aspectFill"></image>
 				<!-- 如果是视频就显示视频 -->
-				<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
+				<!-- <video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video> -->
 			</swiper-item>
 		</swiper>
 	</view>

@@ -11,52 +11,23 @@
 
 		data(){
 			return {
-				list:[
-					{
-						images:'/static/index/indexlist/1.jpg',
-						describe:"梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-						price:"50"
-					},
-					{
-						images:'/static/index/indexlist/2.jpg',
-						describe:"梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-						price:"60"
-					},
-					{
-						images:'/static/index/indexlist/3.jpg',
-						describe:"梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-						price:"100"
-					},
-					{
-						images:'/static/index/indexlist/4.jpg',
-						describe:"梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-						price:"120"
-					},
-					{
-						images:'/static/index/indexlist/1.jpg',
-						describe:"梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-						price:"50"
-					},
-					{
-						images:'/static/index/indexlist/2.jpg',
-						describe:"梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-						price:"60"
-					},
-					{
-						images:'/static/index/indexlist/3.jpg',
-						describe:"梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-						price:"100"
-					},
-					{
-						images:'/static/index/indexlist/4.jpg',
-						describe:"梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-						price:"120"
-					}
-				]
+				list:[],
 			}
 		},
 		components:{
 			list,
+		},
+		created(){
+			const _this = this
+			uni.request({
+				url:"http://hbk.huiboke.com/api/good/getRecommendGoodsList",
+				data:{
+					limit:10
+				},
+				success(res) {
+					_this.list = res.data.data
+				}
+			})
 		}
 	}
 </script>

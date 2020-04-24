@@ -1,14 +1,19 @@
 <template>
 	<view class="horizontallylist">
-		<view class="horizontally">
-			<view class="list" v-for="(item,index) in horizontallylist" :key="index" @click="horizontallydetails">
-				<image :src="item.imgs"></image>
-				<view class="list-titile">
-					<text>{{item.title}}</text>
-					<text class="horizontallyprice">¥{{item.price}}</text>
+		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
+			<view class="horizontally">
+				<view class="list" v-for="(item,index) in horizontallylist" :key="index" @tap="horizontallydetails">
+					<image :src="'http://hbk.huiboke.com'+item.good_pic"></image>
+					<view class="list-titile">
+						<text>{{item.good_title}}</text>
+						<text class="horizontallyprice">¥{{item.good_price}}</text>
+					</view>
 				</view>
 			</view>
-		</view>
+			<view class="bottomline">
+				<text>{{bottomlinetext}}</text>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -17,7 +22,8 @@
 	export default{
 		data(){
 			return{
-				
+				limit:10,
+				bottomlinetext:"我也是有底线的"
 			}
 		},
 		methods:{
@@ -25,7 +31,11 @@
 				uni.navigateTo({
 					url:"/pages/Details/Details"
 				})
-			}
+			},
+			//监控scroll-view 滚动标签是否滚动到底部
+			scrollbottom(){
+				
+			},
 		},
 		props:["horizontallylist"]
 	}
@@ -34,6 +44,10 @@
 <style lang="less" scoped>
 	.horizontallylist{
 		margin-top:20rpx;
+		.scroll-view{
+			overflow: hidden;
+			height:100vh;	
+		}
 		.horizontally{
 			display: flex;
 			justify-content: space-between;
@@ -70,6 +84,17 @@
 					}
 				}
 			}
+		}
+	}
+	.bottomline{
+		background-color: #f2f2f2;
+		display:flex;
+		justify-content: center;
+		text{
+			display:block;
+			color:#999;
+			font-size:16rpx;
+			line-height:50rpx;
 		}
 	}
 </style>

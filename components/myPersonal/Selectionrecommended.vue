@@ -14,46 +14,25 @@
 		data(){
 			return {
 				//这是横排的数据
-				horizontallylist:[
-					{
-						imgs:"/static/horizontally/2.jpeg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:88
-					},
-					{
-						imgs:"/static/horizontally/2.jpeg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:888
-					},
-					{
-						imgs:"/static/horizontally/2.jpeg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:66
-					},
-					{
-						imgs:"/static/horizontally/2.jpeg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:99
-					},
-					{
-						imgs:"/static/horizontally/2.jpeg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:108
-					},
-					{
-						imgs:"/static/horizontally/2.jpeg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:99
-					},
-					{
-						imgs:"/static/horizontally/2.jpeg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:66
-					}]
+				horizontallylist:[],
 			}
 		},
 		components:{
 			horizontallylist
+		},
+		created() {
+			const _this = this
+			uni.request({
+				url:"http://hbk.huiboke.com/api/good/getRandomRecommendGoodsList",
+				data:{
+					limit:20
+				},
+				success(res) {
+					if(res.data.code==0){
+						_this.horizontallylist = res.data.data
+					}
+				}
+			})
 		}
 	}
 </script>

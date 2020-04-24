@@ -3,16 +3,16 @@
 		<view class="PriceTitle-top">
 			<view class="price">
 				<!-- 商品的价格 -->
-				<text>¥{{pic.unitprice}}</text>
+				<text>¥{{pic.good_price}}</text>
 			</view>
 			<view class="CommodityTitle">
 				<!-- 商品的标题 -->
-				<text v-text="pic.title"></text>
+				<text v-text="pic.good_title"></text>
 			</view>
 			<view class="sales">
-				<text>快递:免运费</text>
-				<text>月销12</text>
-				<text>浙江温州</text>
+				<text>快递:{{pic.good_freight?pic.good_freight:'免运费'}}</text>
+				<text>月销{{pic.good_salenum?pic.good_price:0}}</text>
+				<text>{{region[0]}}</text>
 			</view>
 		</view>
 		
@@ -39,7 +39,7 @@
 			bottompopup,
 			evaluation
 		},
-		props:["pic"]
+		props:["pic","region"]
 	}
 </script>
 
