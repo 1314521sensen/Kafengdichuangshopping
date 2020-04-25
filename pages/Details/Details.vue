@@ -82,6 +82,19 @@
 							}
 						})
 						//到这
+						//商品规格开始
+						// console.log(_this.id) //这块等等
+							// uni.request({
+							// 	url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
+							// 	data:{
+							// 		gid:_this.id
+							// 	},
+							// 	success(resspecifications) {
+							// 		console.log(resspecifications)
+							// 	}
+							// })
+						//商品规格结束
+						
 						//在这里请求店家的地址信息
 						let arr = []
 						let url = "http://hbk.huiboke.com/api/common/getAreas"
