@@ -1,7 +1,7 @@
 <template>
 	<view class="shoppinglist">
 		<!-- 这里是组件定义出去 -->
-		<list :list="list"></list>
+		<list :list="list" display="none"></list>
 	</view>
 </template>
 

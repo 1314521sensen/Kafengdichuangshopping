@@ -3,7 +3,7 @@
 		<pageheight :statusBar="statusBar"></pageheight>
 		<actionbar url="/pages/PersonalMy/PersonalMy" :message="message"></actionbar>
 		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom" v-if="list.length!==0">
-			<list :list="list"></list>
+			<list :list="list" display="block" :deleteurl="deleteurl" :tokey="tokey" :deletelist="deletelist"></list>
 			<uniLoadMore :iconSize="20" :contentText="{contentdown:text}" v-if="list.length>=10"></uniLoadMore>
 		</scroll-view>
 		<Nopage v-if="list.length==0"></Nopage>
@@ -30,7 +30,9 @@
 				listnum:10,
 				list:[],
 				statusBar:0,
-				text:"正在加载..."
+				text:"正在加载...",
+				deleteurl:"",
+				deletelist:[]
 			}
 		},
 		components:{
@@ -51,7 +53,9 @@
 						pageSize:this.listnum
 					},
 					success:(reslist)=>{
-						console.log(reslist)
+						if(reslist.data.data!==undefined){
+							this.deletelist = reslist.data.data.list
+						}
 						if(reslist.data.code==1 && reslist.data.msg){
 							this.text = "我也是有底线的"
 							return
@@ -78,10 +82,12 @@
 			if(opctry.title=="我的收藏"){
 				//在这里请求渲染数据
 				this.mycollection("http://hbk.huiboke.com/api/user/getGoodFavoriteList")
+				this.deleteurl = 'http://hbk.huiboke.com/api/user/deleteFavoriteInfo'
 			}else{
 				if(opctry.title=="我的足迹"){
 					// 在这里请求渲染数据
 					this.mycollection("http://hbk.huiboke.com/api/user/getTrackList")
+					this.deleteurl = 'http://hbk.huiboke.com/api/user/deleteTrackInfo'
 				}
 			}
 			this.statusBar = app.globalData.statusBar
