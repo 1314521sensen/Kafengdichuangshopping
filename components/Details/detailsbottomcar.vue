@@ -87,7 +87,7 @@
 			//进入店铺
 			Enterthestore(){
 				uni.navigateTo({
-					url:"/pages/Store/store"
+					url:`/pages/Store/store?storeid=${this.storeid}`
 				})
 			},
 			shoppingcart(){
@@ -159,7 +159,7 @@
 				})
 			}
 		},
-		props:["pic","imgs","tokey","id"],
+		props:["pic","imgs","tokey","id","storeid"],
 		created(){
 			const _this = this
 			uni.request({//请求一条商品来看一下 用户收藏没收藏

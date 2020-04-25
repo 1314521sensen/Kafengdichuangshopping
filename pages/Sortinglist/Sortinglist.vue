@@ -20,42 +20,7 @@
 				value2:"",
 				statusBar:0,
 				//这是横排的显示数据
-				horizontallylist:[
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:88
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:888
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:66
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:99
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:108
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:99
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:66
-					}]
+				horizontallylist:[]
 			}
 		},
 		methods: {
@@ -68,6 +33,25 @@
 		onLoad(opctry){
 			this.value = opctry.value
 			this.statusBar = app.globalData.statusBar
+			// console.log(this.value)
+			uni.request({
+				url:"http://hbk.huiboke.com/api/good/getGoodList",
+				data:{
+					page:1,
+					pageSize:10,
+					g_name:this.value
+				},
+				success:(res)=>{
+					// console.log(res)
+					if(res.data.code==0){
+						// console.log("获取了")
+						this.horizontallylist = res.data.data.list
+						console.log(this.horizontallylist)
+					}else{
+						console.log("没获取到")
+					}
+				}
+			})
 		}
 	}
 </script>

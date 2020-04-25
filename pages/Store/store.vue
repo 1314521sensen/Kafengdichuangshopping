@@ -5,14 +5,14 @@
 			<view class="store-bg">
 				<view class="fuceng">
 					<view class="store-title">
-						<text>世洛希旗舰店</text>
+						<text>{{Shopname}}</text>
 					</view>
 					<view class="evaluation">
-						<view class="icon">天猫</view>
+						<view class="icon" v-if="Whetherproprietary">自营</view>
 						<!-- 综合评价 -->
 						<view class="comprehensiveevaluation">
 							<text>综合评价</text>
-							<!-- <uni-rate color="#fff" active-color="#f00" size="16" max=5 value="4"></uni-rate> -->
+							<uni-rate color="#fff" active-color="#ffca3e" size="12" max=5 :value="score" disabled="true"></uni-rate>
 							<text>粉丝数9999</text>
 						</view>
 						
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-	// import uniRate from '@/components/uni-rate/uni-rate.vue'
+	import uniRate from '@/components/uni-rate/uni-rate.vue'
 	//引入导航
 	import storenav from "@/components/store/storenav.vue"
 	//引入的热销组件
@@ -56,7 +56,11 @@
 				statusBar:0,
 				items:"推荐",
 				Month:0,
-				day:0
+				day:0,
+				storeid:"",
+				Shopname:"",
+				Whetherproprietary:false,//是否自营
+				score:0,//分数
 			}
 		},
 		methods: {
@@ -66,8 +70,10 @@
 				// console.log(this.items)
 			}
 		},
-		onLoad(){
+		onLoad(opction){
 			const _this = this
+			_this.storeid = opction.storeid
+			console.log(_this.storeid)
 			_this.statusBar = app.globalData.statusBar
 			let date = new Date()
 			let Month = date.getMonth()+1; 
@@ -76,6 +82,39 @@
 			_this.Month = Month
 			_this.day = day
 			// console.log(_this.Month,_this.day)
+			uni.request({
+				url:"http://hbk.huiboke.com/api/store/getStoreInfo",
+				data:{
+					sid:_this.storeid
+				},
+				success(res) {
+					if(res.data.code==0){
+						console.log(res.data.data)
+						let {store_name,is_platform_store,store_servicecredit} = res.data.data
+						_this.Shopname = store_name
+						console.log(store_servicecredit)
+						_this.score = store_servicecredit
+						//判断是否自营
+						if(is_platform_store){
+							_this.Whetherproprietary = true
+						}else{
+							_this.Whetherproprietary = false
+						}
+					}
+					
+				}
+			})
+			//获取商品的新品信息系
+			uni.request({
+				url:"http://hbk.huiboke.com/api/store/getNewStoreGoodList",
+				data:{
+					sid:_this.storeid,
+					limit:10
+				},
+				success(res) {
+					// console.log(res.data.data)
+				}
+			})
 		},
 		components:{
 			// uniRate,
@@ -135,6 +174,9 @@
 		}
 		.rolling{
 			padding:0 14rpx;
+		}
+		.uni-rate{
+			margin:18rpx 0 0 10rpx;
 		}
 	}
 </style>

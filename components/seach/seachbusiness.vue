@@ -13,7 +13,7 @@
 						</view>
 						<!-- #ifdef APP-PLUS || H5 -->
 							<view class="action">
-								<button class="cu-btn bg-green shadow-blur round" @click="seachshijian">搜索</button>
+								<button class="cu-btn bg-green shadow-blur round" @tap="seachshijian">搜索</button>
 							</view>
 						<!-- #endif -->
 					</view>
@@ -24,10 +24,10 @@
 		<view class="historicalrecord" v-if="list.length!=0">
 			<view class="historicalrecord-title">
 				<text>历史记录</text>
-				<text class="lg text-gray cuIcon-deletefill" @click="delectrecord"></text>
+				<text class="lg text-gray cuIcon-deletefill" @tap="delectrecord"></text>
 			</view>
 			<view class="historicalrecord-content">
-				<text v-for="(item,index) in list" :key="index" @click="assignment(item)">{{item}}</text>
+				<text v-for="(item,index) in list" :key="index" @tap="assignment(item)">{{item}}</text>
 			</view>
 		</view>
 		

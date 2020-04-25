@@ -3,7 +3,7 @@
 		<detailsbanner :swiperList="swiperList" height="720"></detailsbanner>
 		<pricetitle :pic="pic" :region="region"></pricetitle>
 		<imgs :imglist="imgs"></imgs>
-		<bottomcar :pic="pic" imgs="/static/cart/01.webp" :tokey="tokey" :id="id"></bottomcar>
+		<bottomcar :pic="pic" imgs="/static/cart/01.webp" :tokey="tokey" :id="id" :storeid="storeid"></bottomcar>
 	</view>
 </template>
 
@@ -30,6 +30,7 @@
 				region:[],
 				tokey:"",
 				id:"",
+				storeid:""
 			}
 		},
 		methods: {
@@ -45,6 +46,8 @@
 			const _this = this
 			//这是商品的id
 			this.id = opction.id
+			//店铺id
+			this.storeid = opction.storeid
 			//先去请求详情页的轮播数据图片
 			uni.request({
 				url	:`http://hbk.huiboke.com/api/good/getGoodImageList`,
