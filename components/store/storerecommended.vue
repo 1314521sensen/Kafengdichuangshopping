@@ -15,64 +15,13 @@
 	export default{
 		data(){
 			return {
-				//这是横排的显示数据
-				horizontallylist:[
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:88
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:888
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:88
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:888
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:88
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:888
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:88
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:888
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:88
-					},
-					{
-						imgs:"/static/horizontally/1.jpg",
-						title:"【德州市热卖】富贵鸟 2019春秋皮衣男 时尚修身保暖外套立领飞行员夹克机车衣服",
-						price:888
-					}
-				]
+				
 			}
 		},
 		components:{
 			horizontallylist
-		}
+		},
+		props:["horizontallylist"]
 	}
 </script>
 

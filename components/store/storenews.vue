@@ -1,10 +1,12 @@
 <template>
 	<view class="storenews">
 		<scroll-view scroll-y="true" class="scroll-view">
-			<view class="storerecommended-title">
-				<text>{{Month}}月{{day}}日</text>
+			<view>
+				<view class="storerecommended-title">
+					<text>{{Month}}月{{day}}日</text>
+				</view>
+				<horizontallylist :horizontallylist="horizontallylist"></horizontallylist>
 			</view>
-			<horizontallylist :horizontallylist="horizontallylist"></horizontallylist>
 		</scroll-view>
 	</view>
 </template>
@@ -51,7 +53,11 @@
 		components:{
 			horizontallylist
 		},
-		props:["Month","day"]
+		props:["Month","day","newslist"],
+		created() {
+			console.log(this.newslist)
+			this.horizontallylist = this.newslist
+		}
 	}
 </script>
 

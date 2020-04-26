@@ -13,7 +13,8 @@
 						<view class="comprehensiveevaluation">
 							<text>综合评价</text>
 							<uni-rate color="#fff" active-color="#ffca3e" size="12" max=5 :value="score" disabled="true"></uni-rate>
-							<text>粉丝数9999</text>
+							<text>店铺信用</text>
+							<uni-rate color="#fff" active-color="#ffca3e" size="12" max=5 :value="storecredit" disabled="true"></uni-rate>
 						</view>
 						
 					</view>
@@ -25,13 +26,13 @@
 		</view>
 		<view class="rolling">
 			<!-- 根锯判断到底那个组件显示 -->
-			<storerecommended v-if="items=='推荐'"></storerecommended>
+			<storerecommended v-if="items=='推荐'" :horizontallylist="horizontallylist"></storerecommended>
 			<!-- 这是宝贝的 -->
 			<storebady v-if="items=='宝贝'"></storebady>
 			<!-- 这是新品 -->
-			<storenews v-if="items=='新品'" :Month="Month" :day="day"></storenews>
+			<storenews v-if="items=='新品'" :Month="Month" :day="day" :newslist="newslist"></storenews>
 			<!-- 这是视频 -->
-			<storevideo v-if="items=='视频'"></storevideo>
+			<!-- <storevideo v-if="items=='视频'"></storevideo> -->
 		</view>
 	</view>
 </template>
@@ -47,7 +48,7 @@
 	//引入新品列表
 	import storenews from "@/components/store/storenews.vue"
 	//引入视频
-	import storevideo from "@/components/store/storevideo.vue"
+	// import storevideo from "@/components/store/storevideo.vue"
 	const app = getApp()
 	export default {
 		//这是店铺
@@ -61,6 +62,9 @@
 				Shopname:"",
 				Whetherproprietary:false,//是否自营
 				score:0,//分数
+				storecredit:"",
+				newslist:[],
+				horizontallylist:[]
 			}
 		},
 		methods: {
@@ -73,12 +77,10 @@
 		onLoad(opction){
 			const _this = this
 			_this.storeid = opction.storeid
-			console.log(_this.storeid)
 			_this.statusBar = app.globalData.statusBar
 			let date = new Date()
 			let Month = date.getMonth()+1; 
 			let day = date.getDate()
-			
 			_this.Month = Month
 			_this.day = day
 			// console.log(_this.Month,_this.day)
@@ -89,11 +91,10 @@
 				},
 				success(res) {
 					if(res.data.code==0){
-						console.log(res.data.data)
-						let {store_name,is_platform_store,store_servicecredit} = res.data.data
+						let {store_name,is_platform_store,store_servicecredit,store_credit} = res.data.data
 						_this.Shopname = store_name
-						console.log(store_servicecredit)
 						_this.score = store_servicecredit
+						_this.storecredit = store_credit
 						//判断是否自营
 						if(is_platform_store){
 							_this.Whetherproprietary = true
@@ -104,6 +105,29 @@
 					
 				}
 			})
+			//获取推荐
+			uni.request({
+				url:"http://hbk.huiboke.com/api/store/getStoreRecommendGoodList",
+				data:{
+					sid:_this.storeid,
+					page:1,
+					pageSize:10
+				},
+				success(res) {
+					_this.horizontallylist = res.data.data.list
+				}
+			})
+			//获取宝贝信息
+			uni.request({
+				url:"http://hbk.huiboke.com/api/store/getRandomStoreRecommendGoodList",
+				data:{
+					sid:58,
+					limit:2
+				},
+				success(res) {
+					console.log(res)
+				}
+			})
 			//获取商品的新品信息系
 			uni.request({
 				url:"http://hbk.huiboke.com/api/store/getNewStoreGoodList",
@@ -112,17 +136,17 @@
 					limit:10
 				},
 				success(res) {
-					// console.log(res.data.data)
+					_this.newslist = res.data.data
 				}
 			})
 		},
 		components:{
-			// uniRate,
+			uniRate,
 			storenav,
 			storerecommended,
 			storebady,
 			storenews,
-			storevideo
+			// storevideo
 		}
 	}
 </script>

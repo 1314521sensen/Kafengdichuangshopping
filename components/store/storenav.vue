@@ -17,7 +17,7 @@
 				items:"",
 				TabCur: 0,
 				scrollLeft: 0,
-				navlist:["推荐","宝贝","新品","视频"]
+				navlist:["推荐","宝贝","新品"]//"视频"
 			}
 		},
 		methods:{
