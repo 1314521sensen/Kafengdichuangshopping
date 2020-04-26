@@ -47,7 +47,9 @@
 				uni.request({
 					url:`http://hbk.huiboke.com/api/good/getGoodList?o_type=${kind}&o_rule=${way}`,
 					success:(res)=>{
-						this.$emit("sortingshoplist",res.data.data.list)
+						if(res.data.code==0){
+							this.$emit("sortingshoplist",res.data.data.list)
+						}
 					}
 				})
 			},

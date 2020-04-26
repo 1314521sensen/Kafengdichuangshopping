@@ -28,7 +28,7 @@
 			<!-- 根锯判断到底那个组件显示 -->
 			<storerecommended v-if="items=='推荐'" :horizontallylist="horizontallylist"></storerecommended>
 			<!-- 这是宝贝的 -->
-			<storebady v-if="items=='宝贝'"></storebady>
+			<storebady v-if="items=='宝贝'" :horizontallylist="bodylist"></storebady>
 			<!-- 这是新品 -->
 			<storenews v-if="items=='新品'" :Month="Month" :day="day" :newslist="newslist"></storenews>
 			<!-- 这是视频 -->
@@ -64,7 +64,8 @@
 				score:0,//分数
 				storecredit:"",
 				newslist:[],
-				horizontallylist:[]
+				horizontallylist:[],
+				bodylist:[]
 			}
 		},
 		methods: {
@@ -119,13 +120,14 @@
 			})
 			//获取宝贝信息
 			uni.request({
-				url:"http://hbk.huiboke.com/api/store/getRandomStoreRecommendGoodList",
+				url:"http://hbk.huiboke.com/api/store/getStoreGoodList",
 				data:{
-					sid:58,
-					limit:2
+					sid:_this.storeid,
+					page:1,
+					limit:10
 				},
 				success(res) {
-					console.log(res)
+					_this.bodylist = res.data.data.list
 				}
 			})
 			//获取商品的新品信息系

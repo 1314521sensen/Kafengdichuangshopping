@@ -55,7 +55,6 @@
 		},
 		props:["Month","day","newslist"],
 		created() {
-			console.log(this.newslist)
 			this.horizontallylist = this.newslist
 		}
 	}

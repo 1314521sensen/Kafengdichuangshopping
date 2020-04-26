@@ -37,14 +37,15 @@
 				</view>
 				<view class="btn-group">
 					<button class="cu-btn bg-orange round shadow-blur" @tap="Addcart(pic,imgs)">加入购物车</button>
-					<button class="cu-btn bg-red round shadow-blur" @tap="Skiporder">立即订购</button>
+					<button class="cu-btn bg-red round shadow-blur" @tap="Skiporder" data-target="bottomModal">立即订购</button>
 				</view>
 			</view>
+			<immediatelypopup :class="modalName=='bottomModal'?'show':''" :immediatelylist="immediatelylist"></immediatelypopup>
 		</view>
-	</view>
 </template>
 
 <script>
+	import immediatelypopup from "@/components/Details/immediatelypopup.vue"
 	const app = getApp()
 	export default{
 		data(){
@@ -58,7 +59,11 @@
 				Noteinformation:"",
 				Noteplaceholder:"请输入商品的备注信息",
 				favid:"",
+				immediatelylist:[]
 			}
+		},
+		components:{
+			immediatelypopup,
 		},
 		methods:{
 			//这是弹窗的功能
@@ -152,11 +157,12 @@
 						this.Noteplaceholder = "收藏备注不能为空"
 					}
 			},
-			Skiporder(){
+			Skiporder(e){
+				this.modalName = e.currentTarget.dataset.target
 				//跳转到购买页面
-				uni.navigateTo({
-					url:"/pages/Purchasepage/Purchasepage"
-				})
+				// uni.navigateTo({
+				// 	url:"/pages/Purchasepage/Purchasepage"
+				// })
 			}
 		},
 		props:["pic","imgs","tokey","id","storeid"],
@@ -175,6 +181,19 @@
 						this.collection = "已收藏"
 						
 						_this.favid = res.data.data.fav_id
+					}
+				}
+			})
+			//购物车弹窗数据
+			uni.request({
+				url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
+				data:{
+					gid:_this.id
+				},
+				success(res) {
+					if(res.data.code==0){
+						_this.immediatelylist = res.data.data
+						console.log(_this.immediatelylist)
 					}
 				}
 			})
@@ -197,4 +216,10 @@
 			width: 100%;
 		}
 	}
+	.btn-group{
+		.cu-btn{
+			padding:0 12rpx;
+		}
+	}
+	
 </style>
