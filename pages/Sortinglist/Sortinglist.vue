@@ -2,7 +2,8 @@
 	<view class="sortinglist">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<seachinput :value2="value2" :value="value"></seachinput>
-		<sorting></sorting>
+		<!--sorting这里传过去的value是用来排序的  -->
+		<sorting :value="value" @sortingshoplist="sortingshoplist"></sorting>
 		<horizontallylist :horizontallylist="horizontallylist"></horizontallylist>
 	</view>
 </template>
@@ -24,6 +25,9 @@
 			}
 		},
 		methods: {
+			sortingshoplist(e){
+				this.horizontallylist = e
+			}
 		},
 		components:{
 			sorting,
@@ -46,7 +50,6 @@
 					if(res.data.code==0){
 						// console.log("获取了")
 						this.horizontallylist = res.data.data.list
-						console.log(this.horizontallylist)
 					}else{
 						console.log("没获取到")
 					}

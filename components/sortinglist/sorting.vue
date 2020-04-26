@@ -42,11 +42,42 @@
 			}
 		},
 		methods: {
+			//封装个排序的函数方法
+			sortinglistshop(kind,way){
+				uni.request({
+					url:`http://hbk.huiboke.com/api/good/getGoodList?o_type=${kind}&o_rule=${way}`,
+					success:(res)=>{
+						this.$emit("sortingshoplist",res.data.data.list)
+					}
+				})
+			},
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+				// console.log(this.TabCur)
+				switch(parseInt(this.TabCur)){
+					case 0:
+						console.log("这是0")
+						break;
+
+					case 1:
+						//这是销量
+						this.sortinglistshop(0,0)
+						break;
+					
+					case 2:
+						//这是价格
+						this.sortinglistshop(1,0)
+						console.log("这是2")
+						break;
+					
+					case 3:
+						console.log("这是3")
+						break;
+				}
 			}
-		}
+		},
+		props:["value"]
 	}
 </script>
 
