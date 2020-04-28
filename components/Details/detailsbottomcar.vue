@@ -40,7 +40,7 @@
 					<button class="cu-btn bg-red round shadow-blur" @tap="Skiporder" data-target="bottomModal">立即订购</button>
 				</view>
 			</view>
-			<immediatelypopup :class="modalName=='bottomModal'?'show':''" :immediatelylist="immediatelylist"></immediatelypopup>
+			<immediatelypopup :class="modalName=='bottomModal'?'show':''" :immediatelylist="immediatelylist" @hiddends="hiddends" :bool="bool"></immediatelypopup>
 		</view>
 </template>
 
@@ -59,7 +59,8 @@
 				Noteinformation:"",
 				Noteplaceholder:"请输入商品的备注信息",
 				favid:"",
-				immediatelylist:[]
+				immediatelylist:[],
+				bool:false
 			}
 		},
 		components:{
@@ -101,28 +102,49 @@
 				})
 			},
 			Addcart(obj,img){
-				//当点击加入到购物车 就加入到缓存中 获取店铺名字 商品的图片 商品的标题 商品的参数(可有可无) 商品的价格
-				let {newscarobj,newcararr} = this.$data
-				newscarobj = obj
-				newscarobj.img = img
-				this.newscarobj = newscarobj
-				newcararr.unshift(newscarobj)
-				this.newcararr = newcararr
-				if(newcararr.length==0){
-					this.len=""
-				}else{
-					this.len = newcararr.length
-				}
-				uni.setStorage({
-				    key:"Addcart",
-				    data:this.newcararr,
-				    success:(res)=>{
-						console.log(res)
-				    },
-					fail(err){
-						console.log(err)
+				let {store_name,good_title,good_price,good_pic} = obj
+				uni.request({
+					url:"http://hbk.huiboke.com/api/shopping_cart/addShoppingCartInfo",
+					method:"POST",
+					data:{
+						token:this.tokey,//tokey值
+						sid:this.storeid,//店铺id
+						s_name:store_name,
+						gid:this.id,
+						g_name:good_title,
+						g_price:good_price,
+						g_pic:good_pic
+					},
+					success(res) {
+						if(res.data.code==0){
+							uni.switchTab({
+								url:"/pages/shoppingCart/shoppingCart"
+							})
+						}
 					}
-				});
+				})
+				//当点击加入到购物车 就加入到缓存中 获取店铺名字 商品的图片 商品的标题 商品的参数(可有可无) 商品的价格
+				// let {newscarobj,newcararr} = this.$data
+				// newscarobj = obj
+				// newscarobj.img = img
+				// this.newscarobj = newscarobj
+				// newcararr.unshift(newscarobj)
+				// this.newcararr = newcararr
+				// if(newcararr.length==0){
+				// 	this.len=""
+				// }else{
+				// 	this.len = newcararr.length
+				// }
+				// uni.setStorage({
+				//     key:"Addcart",
+				//     data:this.newcararr,
+				//     success:(res)=>{
+				// 		console.log(res)
+				//     },
+				// 	fail(err){
+				// 		console.log(err)
+				// 	}
+				// });
 			},
 			//这是点击弹窗的确定是否确定添加
 			collectionwork(){
@@ -159,10 +181,11 @@
 			},
 			Skiporder(e){
 				this.modalName = e.currentTarget.dataset.target
-				//跳转到购买页面
-				// uni.navigateTo({
-				// 	url:"/pages/Purchasepage/Purchasepage"
-				// })
+			
+			},
+			//当用户点击了 子组件里面的x
+			hiddends(e){
+				this.modalName = e
 			}
 		},
 		props:["pic","imgs","tokey","id","storeid"],
@@ -193,8 +216,17 @@
 				success(res) {
 					if(res.data.code==0){
 						_this.immediatelylist = res.data.data
-						console.log(_this.immediatelylist)
 					}
+				}
+			})
+			//去请求 获取规格详情的列表
+			uni.request({
+				url:"http://hbk.huiboke.com/api/good/getGoodSpecInfoList",
+				data:{
+					gid:_this.id
+				},
+				success(res) {
+					console.log(res)
 				}
 			})
 		}

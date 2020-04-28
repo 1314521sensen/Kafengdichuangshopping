@@ -10,7 +10,7 @@
 			</view>
 			<!-- 这是shoppingcartlist子组件 传过来的数据-->
 			<!-- :returnsindex="returnsindex" -->
-			<shoppingcatlist @getChild1="getChild1" @deteledatalist="deteledatalist" @deteledatasubscript="deteledatasubscript" :returnsindex="returnsindex"></shoppingcatlist>
+			<shoppingcatlist></shoppingcatlist>
 		</view>
 		<!-- 从bool值往后 是 shoppingcartlist子组件数据 传给父组件 再由这个组件传过去 -->
 		<!--  @deteindexdata="deteindexdata" -->

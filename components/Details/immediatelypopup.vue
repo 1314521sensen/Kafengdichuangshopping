@@ -6,53 +6,116 @@
 					<image src="/static/index/indexlist/3.jpg"></image>
 				</view>
 				<view class="immediately-top-describe">
-					<text>¥300</text>
-					<view class="describe">
-						挖机大家都破案啪嗒啪嗒破奥普达可大可搭配萨达是大卡卡哒的卡片地阿卡卡大萨达撒多撒所多撒啊大大大萨达
+					<view class="price">
+						<text>¥300</text>
+						<text class="lg text-gray cuIcon-close" @click="Shutdown"></text>
+					</view>
+					<view class="describe" v-html="text">
 					</view>
 				</view>
 			</view>
 			<view class="immediately-midden-scrollarea">
 				<scroll-view scroll-y="true" class="scrollarea">
-					<view class="scrollareaspecifications">
+					<!-- <view class="scrollareaspecifications">
 						<text>商品规格</text>
 						<view class="yispecifications">
-							<view class="specifications" v-for="(item,index) in immediatelylist" :key="index">
-								<!-- <view class="specifications-left">
+							<view class="specifications" v-for="(item,index) in immediatelylist[1]" :key="index">
+								<view class="specifications-left">
 									<image src="/static/cart/01.webp"></image>
 								</view> -->
-								<view class="specifications-right">
-									{{item.good_title}}
+								<!-- <view class="specifications-right">
+									
 								</view>
 							</view>
 						</view>
-					</view>
+					</view> -->
 					<view class="scrollareapagespecifications">
-						<view class="scrollareapagespecifications-item">
+						<view class="scrollareapagespecifications-item" v-for="(item,index) in immediatelylist" :key="index">
 							<view class="item-text">
-								套餐类型
+								{{item.spec_name}}
 							</view>
 							<view class="item-specifications">
-								<text>官方标配</text>
+								<text 
+									v-for="(items,indexs) in item.spec_value" 
+									:key="indexs" :style="{'color':color}"  
+									@tap="choose(items,index,indexs,item)"
+									class="test"
+								>{{items}}</text>
 							</view>
 						</view>
 					</view>
 				</scroll-view>
 			</view>
 			<!-- 这里购买数量没写 -->
-			<button class="cu-btn bg-red lg" :style="{'width':'100%','border-radius':'32rpx'}">立即购买</button>
+			<view class="numberof">
+				<view>购买数量</view>
+				<view class="adder">
+					<button @tap="shopingnum(false)">-</button>
+					<input type="text" v-model="num" disabled="true">
+					<button @tap="shopingnum(true)">+</button>
+				</view>
+			</view>
+			<button class="cu-btn bg-red lg" :style="{'width':'100%','border-radius':'32rpx'}" @tap="buy">立即购买</button>
 		</view>
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		data(){
 			return {
-				
+				color:"#000",
+				num:1,//这是购买数量的数据
+				selectedlist:[],
+				text:""
 			}
 		},
-		props:["immediatelylist"]
+		methods:{
+			//这是当用户点击规格
+			choose(items,index,indexs,item){
+				
+				this.selectedlist[index] = items
+				let str = ""
+				this.selectedlist.forEach((itemsitem,indexsindex)=>{
+					str += itemsitem+"&nbsp;&nbsp;&nbsp;"
+				})
+				this.text = str
+			},
+			//这是用户点击了数量+还是-
+			shopingnum(bool){
+				if(bool){//true就是+
+					this.num++
+				}else{//-
+					if(this.num<=1){
+						app.globalData.showtoastsame("数量不能小于1")
+						return 
+					}
+					this.num--
+				}
+			},
+			//这是当用户点击了立即购买的按钮
+			buy(){
+				if(this.selectedlist.length<this.immediatelylist.length){
+					app.globalData.showtoastsame("请选择完整规格")
+				}else{
+					if(this.bool){
+						
+					}else{
+						uni.navigateTo({
+							url:"/pages/Purchasepage/Purchasepage"
+						})
+					}
+					//跳转到购买页面
+					
+				}
+			},
+			//当用户点击了×
+			Shutdown(){
+				this.$emit("hiddends",null)
+			}
+		},
+		props:["immediatelylist","bool"]
 	}
 </script>
 
@@ -61,7 +124,7 @@
 		text-align:left;
 		// height:50vh;
 		.cu-dialog{
-			height:63vh;
+			height:70vh;
 			padding:0 20rpx;
 			.immediately-top{
 				display:flex;
@@ -79,12 +142,20 @@
 				.immediately-top-describe{
 					align-items: center;
 					flex:.95;
+					.price{
+						display:flex;
+						justify-content: space-between;
+					}
 					text{
 						display:block;
 						color:#f00;
 						font-weight: bold;
 						font-size: 34rpx;
 						margin:20rpx 0 15rpx;
+						&:last-child{
+							color:#999;
+							font-size: 28rpx;
+						}
 					}
 					.describe{
 						overflow:hidden;
@@ -108,36 +179,36 @@
 						color:#7f7f7f;
 						
 					}
-					.yispecifications{
-						display:flex;
-						flex-wrap: wrap;
-						margin-top:50rpx;
-						.specifications{
-							display: flex;
-							flex-wrap: wrap;
-							align-items: center;
-							margin:0 22rpx 10rpx 0;
-							// .specifications-left{
-							// 	width: 68rpx;
-							// 	height: 68rpx;
-							// 	background-color:red;
-							// 	image{
-							// 		width: 100%;
-							// 		height:100%;
-							// 	}
-							// }
-							.specifications-right{
-								// display:inline-block;
-								display: inline-block;
-								white-space: nowrap; 
-								overflow: hidden;
-								text-overflow:ellipsis;
-								background-color: #eee;
-								line-height:68rpx;
-								padding:0 10rpx;
-							}
-						}
-					}
+					// .yispecifications{
+					// 	display:flex;
+					// 	flex-wrap: wrap;
+					// 	margin-top:50rpx;
+					// 	.specifications{
+					// 		display: flex;
+					// 		flex-wrap: wrap;
+					// 		align-items: center;
+					// 		margin:0 22rpx 10rpx 0;
+					// 		// .specifications-left{
+					// 		// 	width: 68rpx;
+					// 		// 	height: 68rpx;
+					// 		// 	background-color:red;
+					// 		// 	image{
+					// 		// 		width: 100%;
+					// 		// 		height:100%;
+					// 		// 	}
+					// 		// }
+					// 		.specifications-right{
+					// 			// display:inline-block;
+					// 			display: inline-block;
+					// 			white-space: nowrap; 
+					// 			overflow: hidden;
+					// 			text-overflow:ellipsis;
+					// 			background-color: #eee;
+					// 			line-height:68rpx;
+					// 			padding:0 10rpx;
+					// 		}
+					// 	}
+					// }
 				}
 				//这是midden一些配置规格
 				.scrollareapagespecifications{
@@ -152,12 +223,31 @@
 							margin-top:20rpx;
 							text{
 								padding:12rpx;
-								border:1px solid #ccc;
+								border:2rpx solid #ccc;
 								border-radius:16rpx;
 								margin:0 22rpx 10rpx 0;
 							}
 						}
 					}
+				}
+			}
+		}
+		.numberof{
+			display:flex;
+			justify-content: space-between;
+			margin-bottom:36rpx;
+			.adder{
+				display:flex;
+				button{
+					width: 50rpx;
+					margin:0;
+					padding:0;
+					line-height:50rpx;
+				}
+				input{
+					width: 100rpx;
+					border:2rpx solid #ccc;
+					text-align:center;
 				}
 			}
 		}

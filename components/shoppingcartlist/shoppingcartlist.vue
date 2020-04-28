@@ -1,17 +1,15 @@
 <template>
 	<view class="cart-list">
 		<!-- 最后循环这个item -->
-		<view class="cart-item" v-for="(item,index) in checkbox" :key="index">
+		<view class="cart-item">
 			<view class="cart-item-top">
 				<text class="cart-item-title">小明店铺</text>
 				<text class="lg text-gray cuIcon-right"></text>
 			</view>
-			{{checkbox[index].checked}}
-			{{item.value}}
 			<view class="cart-item-bottom">
-				<checkbox-group class="block" @change="CheckboxChange">
+				<checkbox-group class="block">
 					<view class="cu-form-group">
-						<checkbox :class="checkbox[index].checked?'checked':''" :checked="checkbox[index].checked?true:false" :value="item.value"></checkbox>
+						<checkbox :checked="true" value="A"></checkbox>
 					</view>
 				</checkbox-group>
 				<view class="images">
@@ -25,12 +23,37 @@
 						<text>经典唐装款;坐高50cm全长60cm大萨达大大大萨达</text>
 					</view>
 					<view class="price-box">
-						<text>¥{{item.shoppic}}</text>
+						<text>¥69.9</text>
 						<view class="numbers">
-							{{item.inputvalue}}
-							<button @tap="Reduction(item.inputvalue,index)">-</button>
-							<input type="text" :value="item.inputvalue" placeholder-class="inp" disabled="true"></input>
-							<button @tap="add(item.inputvalue,index)">+</button>
+							<button >-</button>
+							<input type="text" value="1" placeholder-class="inp" disabled="true"></input>
+							<button >+</button>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="cart-item-bottom">
+				<checkbox-group class="block">
+					<view class="cu-form-group">
+						<checkbox :checked="true" value="A"></checkbox>
+					</view>
+				</checkbox-group>
+				<view class="images">
+					<image src="/static/cart/01.webp"></image>
+				</view>
+				<view class="describe">
+					<view class="shoping-title shopping-Title">
+						大老鼠
+					</view>
+					<view class="shoping-title ModelSize">
+						<text>经典唐装款;坐高50cm全长60cm大萨达大大大萨达</text>
+					</view>
+					<view class="price-box">
+						<text>¥69.9</text>
+						<view class="numbers">
+							<button >-</button>
+							<input type="text" value="1" placeholder-class="inp" disabled="true"></input>
+							<button >+</button>
 						</view>
 					</view>
 				</view>
@@ -40,100 +63,42 @@
 </template>
 
 <script>
+	
 	export default{
 		data(){
 			return {
-				checkbox: [{
-					value: 'A',
-					inputvalue:1,
-					shoppic:50,
-					checked: false
-				}, {
-					value: 'B',
-					inputvalue:2,
-					shoppic:90.8,
-					checked: false
-				}, {
-					value: 'C',
-					inputvalue:3,
-					shoppic:60,
-					checked: false
-				}],
-				total:0
+				total:0,
+				tokey:""
 			}
 		},
 		methods:{
-			//这是减
-			Reduction(value1,index){
-				// console.log(value1,"这是计算前")
-				if(value1>1){
-					--value1
-				}else{
-					value1 = 1
+			
+		},
+		created(){
+			const _this = this
+			//获取用户的tokey值
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					// console.log(res.data)
+					_this.tokey = res.data
 				}
-				this.checkbox[index].inputvalue = value1
-				// console.log(value1,"这是计算后")
-					if(this.checkbox[index].checked){
-						this.smallforehead(this.checkbox[index].inputvalue,this.checkbox[index].shoppic,index)
-					}
-			},
-			//这是加
-			add(value1,index){
-				// console.log(index)
-				// console.log(value1,"这是计算前")
-				this.checkbox[index].inputvalue = ++value1
-				// console.log(value1,"这是计算后")
-				if(this.checkbox[index].checked){
-					this.smallforehead(this.checkbox[index].inputvalue,this.checkbox[index].shoppic,index)
-				}
-			},
-			//计算商品的价格
-			smallforehead(Aftercalculation,unitprice,i){
-				// console.log(this.checkbox[i].checked)//i是每个商品的下标
-				//Aftercalculation数量 
-				//unitprice单价
-				let totalprice = 0
-				totalprice = unitprice*Aftercalculation
-				//和
-				this.total = totalprice
-				//将和的值 传给父组件渲染到页面上
-				this.$emit("getChild1",this.total);
-			},
-			CheckboxChange(e) {
-				// console.log(e)
-				var items = this.checkbox,//这里是数组里的三个对象
-					values = e.detail.value;
-					// console.log(values) //A
-					//这是colorui的
-					//lengI 是0 1 2 
-				for (var i = 0, lenI = items.length; i < lenI; ++i) {
-					items[i].checked = false;
-					for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
-						// console.log(lenJ) 111
-						if (items[i].value == values[j]) {
-							// console.log(items[i].value) //A
-							// console.log(values[j]) //A
-							items[i].checked = true;
-							// console.log(i) //每一个对象的下标
-							// console.log(items[i].inputvalue)
-							// console.log(items[i].shoppic)
-							// console.log(this.returnsindex)
-							// if(this.returnsindex!==null){
-							// 	items.splice(this.returnsindex[0],1)
-							// }else{
-							// 	console.log(2)
-							// }
-							//当用户选中时才能传递
-								//实现删除数据 把数据和下标传递过去
-								this.$emit("deteledatalist",items)//这是数据
-								this.$emit("deteledatasubscript",i)//这是下标
-							//第一个参数 数量 第二个参数 单价
-							this.smallforehead(items[i].inputvalue,items[i].shoppic,i)
-							break
-						}
-					}
-				}
-			},
+			})
+			// console.log(_this.tokey)
+			// http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList
+			//获取购物车的列表详情
+			// uni.request({
+			// 	url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+			// 	method:"POST",
+			// 	data:{
+			// 		token:_this.token,
+			// 		page:1,
+			// 		pageSize:2
+			// 	},
+			// 	success(res){
+			// 		console.log(res)
+			// 	}
+			// })
 		},
 		props:["returnsindex"], //这是传过来啊的下标
 		//在生命周期函数里面进行加工修改
@@ -174,7 +139,10 @@
 			.cart-item-bottom{//在是购物车列表的中间
 				display:flex;
 				justify-content: space-around;
-				margin-top:20rpx;
+				margin:20rpx 0 40rpx;
+				&:last-child{
+					margin-bottom:0;
+				}
 				.cu-form-group{
 					padding:0;
 				}
