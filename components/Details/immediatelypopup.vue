@@ -16,19 +16,6 @@
 			</view>
 			<view class="immediately-midden-scrollarea">
 				<scroll-view scroll-y="true" class="scrollarea">
-					<!-- <view class="scrollareaspecifications">
-						<text>商品规格</text>
-						<view class="yispecifications">
-							<view class="specifications" v-for="(item,index) in immediatelylist[1]" :key="index">
-								<view class="specifications-left">
-									<image src="/static/cart/01.webp"></image>
-								</view> -->
-								<!-- <view class="specifications-right">
-									
-								</view>
-							</view>
-						</view>
-					</view> -->
 					<view class="scrollareapagespecifications">
 						<view class="scrollareapagespecifications-item" v-for="(item,index) in immediatelylist" :key="index">
 							<view class="item-text">
@@ -47,7 +34,7 @@
 				</scroll-view>
 			</view>
 			<!-- 这里购买数量没写 -->
-			<view class="numberof">
+			<view class="numberof" v-if="bool==false">
 				<view>购买数量</view>
 				<view class="adder">
 					<button @tap="shopingnum(false)">-</button>
@@ -55,7 +42,10 @@
 					<button @tap="shopingnum(true)">+</button>
 				</view>
 			</view>
-			<button class="cu-btn bg-red lg" :style="{'width':'100%','border-radius':'32rpx'}" @tap="buy">立即购买</button>
+			<button 
+				class="cu-btn bg-red lg" 
+				:style="{'width':'100%','border-radius':'32rpx'}" 
+				@tap="buy">{{bool?'确定':'立即购买'}}</button>
 		</view>
 	</view>
 </template>
@@ -68,14 +58,17 @@
 				color:"#000",
 				num:1,//这是购买数量的数据
 				selectedlist:[],
+				selectedlistnamelist:[],
 				text:""
 			}
 		},
 		methods:{
 			//这是当用户点击规格
 			choose(items,index,indexs,item){
-				
+				//这是存储用户点击规格的值
 				this.selectedlist[index] = items
+				//这是用来存储用户的规格的名称
+				this.selectedlistnamelist[index]=item.spec_name
 				let str = ""
 				this.selectedlist.forEach((itemsitem,indexsindex)=>{
 					str += itemsitem+"&nbsp;&nbsp;&nbsp;"
@@ -101,13 +94,22 @@
 				}else{
 					if(this.bool){
 						
+						let arr = []
+						// console.log(this.selectedlist)
+						// console.log(this.selectedlistnamelist)
+						
+						for(let i=0;i<this.selectedlist.length;i++){
+							//将每个值进行字符串拼接 这样就可以传给后端了
+							arr.push({"spec_name":`${this.selectedlistnamelist[i]}`,"spec_value":`${this.selectedlist[i]}`})
+						}
+						this.$emit("guigedata",arr)
+						this.$emit("hiddends",null)
 					}else{
 						uni.navigateTo({
 							url:"/pages/Purchasepage/Purchasepage"
 						})
 					}
 					//跳转到购买页面
-					
 				}
 			},
 			//当用户点击了×

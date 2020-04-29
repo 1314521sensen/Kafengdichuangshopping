@@ -18,7 +18,9 @@
         }
         ,{
             "path" : "pages/shoppingCart/shoppingCart",
-            "style" : {}
+            "style" : {
+				"enablePullDownRefresh": true
+			}
         }
         ,{
             "path" : "pages/PersonalMy/PersonalMy",

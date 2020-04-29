@@ -10,7 +10,7 @@
 			</view>
 			<!-- 这是shoppingcartlist子组件 传过来的数据-->
 			<!-- :returnsindex="returnsindex" -->
-			<shoppingcatlist></shoppingcatlist>
+			<shoppingcatlist :tokey="tokey"></shoppingcatlist>
 		</view>
 		<!-- 从bool值往后 是 shoppingcartlist子组件数据 传给父组件 再由这个组件传过去 -->
 		<!--  @deteindexdata="deteindexdata" -->
@@ -30,7 +30,8 @@
 				bool:true,
 				zizujianlist:[],
 				xiabiao:null,
-				returnsindex:[]
+				returnsindex:[],
+				tokey:"",
 			}
 		},
 		methods: {
@@ -72,10 +73,18 @@
 			
 		},
 		created(){
+			const _this = this
 			//父组件事件接收子组件传过来的值
 			this.getChild1()
 			// this.deteledatalist()
 			// this.deteledatasubscript()
+			//在购物车刚加载的时候 获取用户的tokey值
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					_this.tokey = res.data
+				}
+			})
 		},
 		components:{
 			shoppingcatlist,

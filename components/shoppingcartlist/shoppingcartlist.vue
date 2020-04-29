@@ -1,116 +1,170 @@
 <template>
 	<view class="cart-list">
 		<!-- 最后循环这个item -->
-		<view class="cart-item">
+		<view class="cart-item" v-for="(item,index) in shopinglist" :key="index">
 			<view class="cart-item-top">
-				<text class="cart-item-title">小明店铺</text>
+				<text class="cart-item-title">{{item.store_name}}</text>
 				<text class="lg text-gray cuIcon-right"></text>
 			</view>
-			<view class="cart-item-bottom">
-				<checkbox-group class="block">
-					<view class="cu-form-group">
-						<checkbox :checked="true" value="A"></checkbox>
+			<view class="cart-item-bottom" v-for="(items,indexs) in item.sub" :key="indexs">
+				<checkbox-group @change="CheckboxChange">
+					<view>
+						<checkbox class="" checked="false" value="indexs"></checkbox>
 					</view>
 				</checkbox-group>
 				<view class="images">
-					<image src="/static/cart/01.webp"></image>
+					<image :src="'http://hbk.huiboke.com/'+items.good_pic"></image>
 				</view>
 				<view class="describe">
 					<view class="shoping-title shopping-Title">
-						大老鼠
+						{{items.good_name}}
 					</view>
 					<view class="shoping-title ModelSize">
-						<text>经典唐装款;坐高50cm全长60cm大萨达大大大萨达</text>
+						<!-- spec_name spec_value -->
+						<text 
+							v-for="(itemitem,indexss) in JSON.parse(items.spec)" 
+							:key="indexss" 
+							@tap="showModal" 
+							data-target="RadioModal"
+							:data-id="items.good_id"
+						>{{itemitem.spec_name+" "+itemitem.spec_value}}</text>
 					</view>
 					<view class="price-box">
-						<text>¥69.9</text>
+						<text>¥{{items.good_price}}</text>
 						<view class="numbers">
 							<button >-</button>
-							<input type="text" value="1" placeholder-class="inp" disabled="true"></input>
+							<input type="text" :value="items.good_num" placeholder-class="inp" disabled="true"></input>
 							<button >+</button>
 						</view>
 					</view>
 				</view>
 			</view>
-			<view class="cart-item-bottom">
-				<checkbox-group class="block">
-					<view class="cu-form-group">
-						<checkbox :checked="true" value="A"></checkbox>
-					</view>
-				</checkbox-group>
-				<view class="images">
-					<image src="/static/cart/01.webp"></image>
-				</view>
-				<view class="describe">
-					<view class="shoping-title shopping-Title">
-						大老鼠
-					</view>
-					<view class="shoping-title ModelSize">
-						<text>经典唐装款;坐高50cm全长60cm大萨达大大大萨达</text>
-					</view>
-					<view class="price-box">
-						<text>¥69.9</text>
-						<view class="numbers">
-							<button >-</button>
-							<input type="text" value="1" placeholder-class="inp" disabled="true"></input>
-							<button >+</button>
-						</view>
-					</view>
-				</view>
-			</view>
+			<!-- 这是cart-item-bottom小列表结束 -->
 		</view>
+		<!-- 弹窗商品规格列表 -->
+		<immediatelypopup
+			:class="modalName=='RadioModal'?'show':''" 
+			:immediatelylist="immediatelylist"
+			:bool="bool"
+			@hiddends="hiddends"
+			@guigedata="guigedata"
+		></immediatelypopup>
 	</view>
 </template>
 
 <script>
-	
+	import immediatelypopup from"@/components/Details/immediatelypopup.vue"
 	export default{
 		data(){
 			return {
 				total:0,
-				tokey:""
+				shopinglist:[],
+				checkedbool:true,
+				modalName:null,
+				radio: 'radio1',
+				id:"",
+				immediatelylist:[],
+				bool:true,
+				newslist:[],
+				str:"",
+				onloadbool:false,//设置开关
 			}
 		},
 		methods:{
-			
+			CheckboxChange(e){
+				console.log(e)
+			},
+			showModal(e) {
+				
+				//获取id值用来获取商品的规格
+				this.id = e.currentTarget.dataset.id
+				// http://hbk.huiboke.com/api/
+				uni.request({
+					url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
+					method:"GET",
+					data:{
+						gid:this.id
+					},
+					success:(res)=>{
+						if(res.data.code==0){
+							this.immediatelylist = res.data.data
+							this.modalName = e.currentTarget.dataset.target
+						}
+					}
+				})
+			},
+			hiddends(e) {
+				this.modalName = e
+			},
+			RadioChange(e) {
+				this.radio = e.detail.value
+			},
+			//这是子组件传给父组件的值
+			guigedata(e){
+				const _this = this
+				//当用户点击了规格这 就让下拉刷新的状态为true
+				this.onloadbool = true
+				// console.log(e)
+				uni.request({
+					url:"http://hbk.huiboke.com/api/shopping_cart/updateGoodSpec",
+					method:"POST",
+					data:{
+						token:this.tokey,
+						gid:this.id,
+						spec:e
+					},
+					success:(res)=>{
+						if(res.data.code==0){
+							if(_this.onloadbool){//如果为true的话就开启下拉刷新
+								uni.startPullDownRefresh()//开启下拉刷新
+								_this.UpdateShoppingCart(_this)
+								_this.onloadbool = false
+							}
+						}else{
+							console.log(_this.onloadbool)
+							console.log("修改失败")
+						}
+					}
+				})
+			},
+			//更新购物车
+			UpdateShoppingCart(_this){
+				uni.request({
+					url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+					method:"POST",
+					data:{
+						token:_this.tokey,
+						page:1,
+						pageSize:10
+					},
+					success(res){
+						if(res.data.code==0){//代表获取成功
+							if(_this.onloadbool==false){
+								_this.shopinglist = res.data.data
+								uni.stopPullDownRefresh();//关闭下拉刷新
+							}
+						}
+					}
+				})
+			}
+		},
+		components:{
+			immediatelypopup,
 		},
 		created(){
 			const _this = this
-			//获取用户的tokey值
-			uni.getStorage({
-				key:"bindtokey",
-				success(res){
-					// console.log(res.data)
-					_this.tokey = res.data
-				}
-			})
-			// console.log(_this.tokey)
-			// http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList
-			//获取购物车的列表详情
-			// uni.request({
-			// 	url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
-			// 	method:"POST",
-			// 	data:{
-			// 		token:_this.token,
-			// 		page:1,
-			// 		pageSize:2
-			// 	},
-			// 	success(res){
-			// 		console.log(res)
-			// 	}
-			// })
+			_this.UpdateShoppingCart(_this)
 		},
-		props:["returnsindex"], //这是传过来啊的下标
+		props:["returnsindex","tokey"], //这是传过来啊的下标
 		//在生命周期函数里面进行加工修改
-		beforeUpdate() {
-			if(this.returnsindex.length==''){
-				return 
-			}else{
-				console.log(this.returnsindex)
-				this.checkbox = this.returnsindex
-			}
-			
-		}
+		// beforeUpdate() {
+		// 	if(this.returnsindex.length==''){
+		// 		return 
+		// 	}else{
+		// 		console.log(this.returnsindex)
+		// 		this.checkbox = this.returnsindex
+		// 	}
+		// }
 	}
 </script>
 
@@ -236,5 +290,8 @@
 				}
 			}
 		}
+	}
+	.cu-modal{
+		background: rgba(0, 0, 0, 0.2)
 	}
 </style>

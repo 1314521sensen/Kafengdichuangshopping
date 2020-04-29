@@ -116,6 +116,7 @@
 						g_pic:good_pic
 					},
 					success(res) {
+						console.log(res)
 						if(res.data.code==0){
 							uni.switchTab({
 								url:"/pages/shoppingCart/shoppingCart"
@@ -220,15 +221,15 @@
 				}
 			})
 			//去请求 获取规格详情的列表
-			uni.request({
-				url:"http://hbk.huiboke.com/api/good/getGoodSpecInfoList",
-				data:{
-					gid:_this.id
-				},
-				success(res) {
-					console.log(res)
-				}
-			})
+			// uni.request({
+			// 	url:"http://hbk.huiboke.com/api/good/getGoodSpecInfoList",
+			// 	data:{
+			// 		gid:_this.id
+			// 	},
+			// 	success(res) {
+			// 		console.log(res)
+			// 	}
+			// })
 		}
 	}
 </script>
