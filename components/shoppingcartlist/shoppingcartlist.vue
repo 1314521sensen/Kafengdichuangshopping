@@ -32,9 +32,9 @@
 					<view class="price-box">
 						<text>¥{{items.good_price}}</text>
 						<view class="numbers">
-							<button >-</button>
-							<input type="text" :value="items.good_num" placeholder-class="inp" disabled="true"></input>
-							<button >+</button>
+							<button @tap="Adddeletepublic(items.good_id,index,indexs,false)" :data-id="items.good_id">-</button>
+							<input type="text" :value="numlistxiabiao[index][indexs].good_num" placeholder-class="inp" disabled="true"></input>
+							<button @tap="Adddeletepublic(items.good_id,index,indexs,true)">+</button>
 						</view>
 					</view>
 				</view>
@@ -54,6 +54,7 @@
 
 <script>
 	import immediatelypopup from"@/components/Details/immediatelypopup.vue"
+	const app = getApp()
 	export default{
 		data(){
 			return {
@@ -68,14 +69,26 @@
 				newslist:[],
 				str:"",
 				onloadbool:false,//设置开关
+				numlistxiabiao:[]//获取用户商品的数量
 			}
 		},
 		methods:{
+			//封装一个数量增加 减少功能
+			Adddeletepublic(getid,index,indexs,adddeletebool){
+				if(adddeletebool){
+					++this.numlistxiabiao[index][indexs].good_num
+				}else{
+					if(this.numlistxiabiao[index][indexs].good_num<=1){
+						app.globalData.showtoastsame("数量不能小于1")
+					}else{
+						--this.numlistxiabiao[index][indexs].good_num
+					}
+				}
+			},
 			CheckboxChange(e){
 				console.log(e)
 			},
 			showModal(e) {
-				
 				//获取id值用来获取商品的规格
 				this.id = e.currentTarget.dataset.id
 				// http://hbk.huiboke.com/api/
@@ -144,6 +157,10 @@
 								uni.stopPullDownRefresh();//关闭下拉刷新
 							}
 						}
+						//这个遍历为了拿到购物车的数量
+						res.data.data.forEach((item,index)=>{
+							_this.numlistxiabiao[index] = item.sub
+						})
 					}
 				})
 			}
@@ -155,16 +172,7 @@
 			const _this = this
 			_this.UpdateShoppingCart(_this)
 		},
-		props:["returnsindex","tokey"], //这是传过来啊的下标
-		//在生命周期函数里面进行加工修改
-		// beforeUpdate() {
-		// 	if(this.returnsindex.length==''){
-		// 		return 
-		// 	}else{
-		// 		console.log(this.returnsindex)
-		// 		this.checkbox = this.returnsindex
-		// 	}
-		// }
+		props:["returnsindex","tokey"] //这是传过来啊的下标
 	}
 </script>
 

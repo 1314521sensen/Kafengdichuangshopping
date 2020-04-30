@@ -39,4 +39,7 @@
 .store .rolling.data-v-ef031f4c {
   padding: 0 14rpx;
 }
+.store .uni-rate.data-v-ef031f4c {
+  margin: 18rpx 0 0 10rpx;
+}
 

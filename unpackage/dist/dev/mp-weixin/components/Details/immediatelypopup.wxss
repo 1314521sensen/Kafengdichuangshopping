@@ -1,0 +1,113 @@
+.immediately.data-v-0f59ef26 {
+  text-align: left;
+}
+.immediately .cu-dialog.data-v-0f59ef26 {
+  height: 70vh;
+  padding: 0 20rpx;
+}
+.immediately .cu-dialog .immediately-top.data-v-0f59ef26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  margin-top: 30rpx;
+  padding: 0 20rpx;
+}
+.immediately .cu-dialog .immediately-top .immediately-top-image.data-v-0f59ef26 {
+  width: 27%;
+  height: 176rpx;
+}
+.immediately .cu-dialog .immediately-top .immediately-top-image image.data-v-0f59ef26 {
+  width: 100%;
+  height: 100%;
+}
+.immediately .cu-dialog .immediately-top .immediately-top-describe.data-v-0f59ef26 {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-flex: 0.95;
+  -webkit-flex: 0.95;
+          flex: 0.95;
+}
+.immediately .cu-dialog .immediately-top .immediately-top-describe .price.data-v-0f59ef26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.immediately .cu-dialog .immediately-top .immediately-top-describe text.data-v-0f59ef26 {
+  display: block;
+  color: #f00;
+  font-weight: bold;
+  font-size: 34rpx;
+  margin: 20rpx 0 15rpx;
+}
+.immediately .cu-dialog .immediately-top .immediately-top-describe text.data-v-0f59ef26:last-child {
+  color: #999;
+  font-size: 28rpx;
+}
+.immediately .cu-dialog .immediately-top .immediately-top-describe .describe.data-v-0f59ef26 {
+  overflow: hidden;
+  width: 100%;
+  height: 68rpx;
+  font-size: 22rpx;
+}
+.immediately .immediately-midden-scrollarea.data-v-0f59ef26 {
+  font-size: 30rpx;
+  font-weight: bold;
+  margin: 44rpx 0;
+  padding: 0 20rpx;
+}
+.immediately .immediately-midden-scrollarea .scrollarea.data-v-0f59ef26 {
+  height: 34vh;
+}
+.immediately .immediately-midden-scrollarea .scrollarea .scrollareaspecifications text.data-v-0f59ef26 {
+  color: #7f7f7f;
+}
+.immediately .immediately-midden-scrollarea .scrollarea .scrollareapagespecifications .scrollareapagespecifications-item.data-v-0f59ef26 {
+  margin-top: 20px;
+}
+.immediately .immediately-midden-scrollarea .scrollarea .scrollareapagespecifications .scrollareapagespecifications-item .item-specifications.data-v-0f59ef26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+  margin-top: 20rpx;
+}
+.immediately .immediately-midden-scrollarea .scrollarea .scrollareapagespecifications .scrollareapagespecifications-item .item-specifications text.data-v-0f59ef26 {
+  padding: 12rpx;
+  border: 2rpx solid #ccc;
+  border-radius: 16rpx;
+  margin: 0 22rpx 10rpx 0;
+}
+.immediately .numberof.data-v-0f59ef26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  margin-bottom: 36rpx;
+}
+.immediately .numberof .adder.data-v-0f59ef26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.immediately .numberof .adder button.data-v-0f59ef26 {
+  width: 50rpx;
+  margin: 0;
+  padding: 0;
+  line-height: 50rpx;
+}
+.immediately .numberof .adder input.data-v-0f59ef26 {
+  width: 100rpx;
+  border: 2rpx solid #ccc;
+  text-align: center;
+}
+

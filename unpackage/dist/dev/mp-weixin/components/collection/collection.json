@@ -2,6 +2,8 @@
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight",
     "actionbar": "/components/actionbar/actionbar",
-    "list": "/components/indexcomponents/list"
+    "list": "/components/indexcomponents/list",
+    "nopage": "/components/Nopage",
+    "uni-load-more": "/components/uni-load-more/uni-load-more"
   }
 }

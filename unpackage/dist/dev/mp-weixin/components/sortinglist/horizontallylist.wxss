@@ -1,6 +1,10 @@
 .horizontallylist.data-v-56c4e987 {
   margin-top: 20rpx;
 }
+.horizontallylist .scroll-view.data-v-56c4e987 {
+  overflow: hidden;
+  height: 100vh;
+}
 .horizontallylist .horizontally.data-v-56c4e987 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -41,5 +45,20 @@
 }
 .horizontallylist .horizontally .list .list-titile .horizontallyprice.data-v-56c4e987 {
   color: red;
+}
+.bottomline.data-v-56c4e987 {
+  background-color: #f2f2f2;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.bottomline text.data-v-56c4e987 {
+  display: block;
+  color: #999;
+  font-size: 16rpx;
+  line-height: 50rpx;
 }
 

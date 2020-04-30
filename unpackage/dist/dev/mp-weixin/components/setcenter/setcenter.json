@@ -2,6 +2,9 @@
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight",
     "setemail": "/components/setcenter/setemail",
-    "setphone": "/components/setcenter/setphone"
+    "setphone": "/components/setcenter/setphone",
+    "realnameauthentication": "/components/setcenter/Realnameauthentication",
+    "resetloginpassword": "/components/setcenter/Resetloginpassword",
+    "setpaymentpassword": "/components/setcenter/Setpaymentpassword"
   }
 }

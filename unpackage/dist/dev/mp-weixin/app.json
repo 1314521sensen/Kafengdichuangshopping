@@ -24,7 +24,9 @@
     "pages/Paysuccess/Paysuccess",
     "pages/Allevaluation/Allevaluation",
     "components/setcenter/setcenter",
-    "components/indexcomponents/indexbindinfo"
+    "components/indexcomponents/indexbindinfo",
+    "components/setcenter/returnloginpasswordall",
+    "components/setcenter/SetChangeResetpassword"
   ],
   "subPackages": [],
   "window": {
@@ -69,5 +71,5 @@
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight"
   },
-  "sitemapLocation": "sitemap88.json"
+  "sitemapLocation": "sitemap75.json"
 }

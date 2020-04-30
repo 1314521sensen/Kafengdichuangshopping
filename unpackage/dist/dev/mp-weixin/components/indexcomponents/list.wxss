@@ -37,14 +37,24 @@
   font-size: 28rpx;
 }
 .list .cu-list.menu-avatar > .cu-item .cu-item-right .content .price.data-v-c1810460 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
   color: red;
   font-weight: bold;
   font-size: 30rpx;
   margin-top: 60rpx;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
 }
 .list .cu-avatar.lg.data-v-c1810460 {
   width: 200rpx;
   height: 190rpx;
   border-radius: 8rpx;
+}
+.list .cu-btn.lg.data-v-c1810460 {
+  line-height: 80rpx;
 }
 
