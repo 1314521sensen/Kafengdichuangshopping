@@ -172,6 +172,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
 var app = getApp();var _default =
 {
   data: function data() {
@@ -187,26 +197,63 @@ var app = getApp();var _default =
       newslist: [],
       str: "",
       onloadbool: false, //设置开关
-      numlistxiabiao: [] //获取用户商品的数量
-    };
+      numlistxiabiao: [], //获取用户商品的数量
+      checkbool: false,
+      idbool: "",
+      toals: 0 };
+
   },
   methods: {
     //封装一个数量增加 减少功能
-    Adddeletepublic: function Adddeletepublic(getid, index, indexs, adddeletebool) {
+    Adddeletepublic: function Adddeletepublic(getid, index, indexs, adddeletebool, unitprice) {
       if (adddeletebool) {
         ++this.numlistxiabiao[index][indexs].good_num;
+        //当用户选中时 点击的+号的时候 用来计算价格
+        this.totals(unitprice, this.numlistxiabiao[index][indexs].good_num);
       } else {
         if (this.numlistxiabiao[index][indexs].good_num <= 1) {
           app.globalData.showtoastsame("数量不能小于1");
         } else {
           --this.numlistxiabiao[index][indexs].good_num;
+          //当用户选中是时 点击-号时 用来减
+          this.totals(unitprice, this.numlistxiabiao[index][indexs].good_num);
         }
       }
     },
-    CheckboxChange: function CheckboxChange(e) {
-      console.log(e);
+    //封装个总价
+    totals: function totals(unitprice, num) {//unitprice单价  num数量
+      // 单价*数量
+      this.toals = unitprice * num;
+      this.$emit("price", this.toals);
     },
-    showModal: function showModal(e) {var _this2 = this;
+    CheckboxChange: function CheckboxChange(e) {var _this2 = this;var _e$currentTarget$data =
+      e.currentTarget.dataset,index = _e$currentTarget$data.index,indexs = _e$currentTarget$data.indexs,id = _e$currentTarget$data.id,unitprice = _e$currentTarget$data.unitprice,num = _e$currentTarget$data.num,carid = _e$currentTarget$data.carid;
+      this.idbool = id;
+      // //开始先让他们都为false
+      this.numlistxiabiao.forEach(function (item, itemindex) {
+        item.forEach(function (itemitem, itemsindexs) {
+          _this2.numlistxiabiao[itemindex][itemsindexs].checked = false;
+          _this2.checkbool = false;
+        });
+      });
+      if (this.idbool == id) {
+        //如果当前的没有为true 在点击其他的 就让他为false
+        if (this.checkbool) {
+          this.numlistxiabiao[index][indexs].checked = false;
+          this.checkbool = false;
+        } else {//否则都为true
+          this.numlistxiabiao[index][indexs].checked = true;
+          this.checkbool = true;
+          //把选中的数组发送过去
+          this.$emit("datalist", this.numlistxiabiao[index]);
+          this.$emit("dataindex", indexs);
+          this.$emit("datacarid", carid);
+          this.totals(unitprice, num);
+        }
+      }
+
+    },
+    showModal: function showModal(e) {var _this3 = this;
       //获取id值用来获取商品的规格
       this.id = e.currentTarget.dataset.id;
       // http://hbk.huiboke.com/api/
@@ -218,8 +265,8 @@ var app = getApp();var _default =
 
         success: function success(res) {
           if (res.data.code == 0) {
-            _this2.immediatelylist = res.data.data;
-            _this2.modalName = e.currentTarget.dataset.target;
+            _this3.immediatelylist = res.data.data;
+            _this3.modalName = e.currentTarget.dataset.target;
           }
         } });
 
@@ -259,12 +306,17 @@ var app = getApp();var _default =
 
     },
     //更新购物车
-    UpdateShoppingCart: function UpdateShoppingCart(_this) {
+    UpdateShoppingCart: function UpdateShoppingCart(_this, wxtokey) {
       uni.request({
         url: "http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
         method: "POST",
         data: {
-          token: _this.tokey,
+
+
+
+
+          token: wxtokey,
+
           page: 1,
           pageSize: 10 },
 
@@ -274,6 +326,8 @@ var app = getApp();var _default =
               _this.shopinglist = res.data.data;
               uni.stopPullDownRefresh(); //关闭下拉刷新
             }
+          } else {
+            console.log("重新登录");
           }
           //这个遍历为了拿到购物车的数量
           res.data.data.forEach(function (item, index) {
@@ -286,12 +340,24 @@ var app = getApp();var _default =
   components: {
     immediatelypopup: immediatelypopup },
 
+  props: ["tokey"], //这是传过来啊的下标
   created: function created() {
     var _this = this;
-    _this.UpdateShoppingCart(_this);
-  },
-  props: ["returnsindex", "tokey"] //这是传过来啊的下标
-};exports.default = _default;
+    var wxtokey = "";
+
+    //微信端tokey获取不到重新获取
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        wxtokey = res.data;
+        _this.UpdateShoppingCart(_this, wxtokey);
+      } });
+
+
+
+
+
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

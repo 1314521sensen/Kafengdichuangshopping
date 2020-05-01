@@ -12,7 +12,8 @@
 							<text>合计:</text>
 							<!-- 如果传过来的数组里面的checked为false的时候就为0否则就用本身的值 -->
 							<!-- 这里报错的原因是因为 父组件给子组件传值的时候异步传 开始的时候 传过来的是[](一个空数组) 导致的里面没有checked -->
-							<text>¥{{zizujianlist.length<=0?0:(zizujianlist[xiabiao].checked?totalpic:0)}}</text>
+							<!-- <text>¥{{zizujianlist.length<=0?0:(zizujianlist[xiabiao].checked?totalpic:0)}}</text> -->
+							<text>¥{{totalpic}}</text>
 						</view>
 					<button class="cu-btn round bg-orange" @tap="settlement">结算</button>
 				</view>
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		data(){
 			return {
@@ -41,11 +43,12 @@
 		methods:{
 			//这是结算
 			settlement(){
+				console.log(this.xiabiao)
 				if(this.xiabiao!==null){
 					try{
 						if(this.zizujianlist[this.xiabiao].checked){
 							//点击购买现在还没通知
-							
+							console.log(1)
 						}
 					}
 					catch(err){
@@ -79,43 +82,45 @@
 				if(this.xiabiao!==null){
 					try{
 						if(this.zizujianlist[this.xiabiao].checked){
-							//在这里删除	
-							this.zizujianlist.splice(this.xiabiao,1)
-							//将改变后的数组通过事件车发送个shoppingcarlist组件
-									let newsuupdatearr = this.zizujianlist
-									//这里发送个数据 是异步 所以要变成同步的 用promise
-									this.$emit("deteindexdata",newsuupdatearr)
-						}else{
-							uni.showToast({
-								title:"请选择你要删除的商品",
-								icon:"none"
+							console.log(this.tokey)
+							console.log(this.carid)
+							//调用删除的功能接口
+							uni.request({
+								url:"http://hbk.huiboke.com/api/shopping_cart/deleteShoppingCartInfo",
+								method:"POST",
+								data:{
+									token:this.tokey,
+									cid:this.carid
+								},
+								success(res) {
+									if(res.data.code==0){
+										console.log("删除成功")
+										//实时刷新 
+										
+									}else{
+										app.globalData.showtoastsame("删除失败")
+									}
+								}
 							})
+							//在这里删除	
+							// this.zizujianlist.splice(this.xiabiao,1)
+							// //将改变后的数组通过事件车发送个shoppingcarlist组件
+							// 		let newsuupdatearr = this.zizujianlist
+							// 		//这里发送个数据 是异步 所以要变成同步的 用promise
+							// 		this.$emit("deteindexdata",newsuupdatearr)
+						}else{
+							app.globalData.showtoastsame("请选择你要删除的商品")
 						}
 					}
 					catch(err){
 						throw err
 					}
 				}else{
-					uni.showToast({
-						title:"请选择你要删除的商品",
-						icon:"none"
-					})
+					app.globalData.showtoastsame("请选择你要删除的商品")
 				}
-				
-				// if(this.xiabiao!==null){
-				// 		let deteleindex = this.zizujianlist.splice(this.xiabiao,1)
-				// 		console.log(deteleindex)
-				// 		//再将下标返回去
-				// 		// this.$emit("deteindexdata",deteleindex)
-				// }else{
-				// 		uni.showToast({
-				// 			title:"请选择你要删除的商品",
-				// 			icon:"none"
-				// 		})
-				// }
 			}
 		},
-		props:["totalpic","bool","zizujianlist","xiabiao"],
+		props:["totalpic","bool","zizujianlist","xiabiao","tokey","carid"],
 		
 	}
 </script>

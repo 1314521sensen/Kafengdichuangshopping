@@ -169,31 +169,32 @@ var app = getApp();var _default =
       zizujianlist: [],
       xiabiao: null,
       returnsindex: [],
-      tokey: "" };
+      tokey: "",
+      carid: "" };
 
   },
   methods: {
-    getChild1: function getChild1(e) {
-      // console.log(e)
-      if (e) {
+    //这是传过来的价格
+    price: function price(e) {
+      if (e) {//判断传过来的价格有没有 有的话 就采用 没有的话就赋值0
         this.totalpic = e;
       } else {
         this.totalpic = 0;
       }
+
     },
     //这是传过来的数组
-    deteledatalist: function deteledatalist(e) {
+    datalist: function datalist(e) {
       this.zizujianlist = e;
     },
     //这是传过来的下标
-    deteledatasubscript: function deteledatasubscript(e) {
+    dataindex: function dataindex(e) {
       this.xiabiao = e;
     },
-    //这是shopingbottompay组件传过来的删除后的数组  在将下标返回去删除
-    deteindexdata: function deteindexdata(e) {
-      this.returnsindex = e;
-      // console.log(e) 这是删除后的数组
+    datacarid: function datacarid(e) {
+      this.carid = e;
     },
+    //这是shopingbottompay组件传过来的删除后的数组  在将下标返回去删除
     // console.log(this.totalpic)
     //这是管理
     showmanagement: function showmanagement() {
@@ -213,7 +214,7 @@ var app = getApp();var _default =
   created: function created() {
     var _this = this;
     //父组件事件接收子组件传过来的值
-    this.getChild1();
+    // this.price()
     // this.deteledatalist()
     // this.deteledatasubscript()
     //在购物车刚加载的时候 获取用户的tokey值

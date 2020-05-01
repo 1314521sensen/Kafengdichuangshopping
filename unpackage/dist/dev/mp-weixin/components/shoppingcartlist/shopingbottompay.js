@@ -150,7 +150,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _default =
+//
+
+var app = getApp();var _default =
 {
   data: function data() {
     return {};
@@ -159,11 +161,12 @@ var _default =
   methods: {
     //这是结算
     settlement: function settlement() {
+      console.log(this.xiabiao);
       if (this.xiabiao !== null) {
         try {
           if (this.zizujianlist[this.xiabiao].checked) {
             //点击购买现在还没通知
-
+            console.log(1);
           }
         }
         catch (err) {
@@ -197,43 +200,45 @@ var _default =
       if (this.xiabiao !== null) {
         try {
           if (this.zizujianlist[this.xiabiao].checked) {
-            //在这里删除	
-            this.zizujianlist.splice(this.xiabiao, 1);
-            //将改变后的数组通过事件车发送个shoppingcarlist组件
-            var newsuupdatearr = this.zizujianlist;
-            //这里发送个数据 是异步 所以要变成同步的 用promise
-            this.$emit("deteindexdata", newsuupdatearr);
-          } else {
-            uni.showToast({
-              title: "请选择你要删除的商品",
-              icon: "none" });
+            console.log(this.tokey);
+            console.log(this.carid);
+            //调用删除的功能接口
+            uni.request({
+              url: "http://hbk.huiboke.com/api/shopping_cart/deleteShoppingCartInfo",
+              method: "POST",
+              data: {
+                token: this.tokey,
+                cid: this.carid },
 
+              success: function success(res) {
+                if (res.data.code == 0) {
+                  console.log("删除成功");
+                  //实时刷新 
+
+                } else {
+                  app.globalData.showtoastsame("删除失败");
+                }
+              } });
+
+            //在这里删除	
+            // this.zizujianlist.splice(this.xiabiao,1)
+            // //将改变后的数组通过事件车发送个shoppingcarlist组件
+            // 		let newsuupdatearr = this.zizujianlist
+            // 		//这里发送个数据 是异步 所以要变成同步的 用promise
+            // 		this.$emit("deteindexdata",newsuupdatearr)
+          } else {
+            app.globalData.showtoastsame("请选择你要删除的商品");
           }
         }
         catch (err) {
           throw err;
         }
       } else {
-        uni.showToast({
-          title: "请选择你要删除的商品",
-          icon: "none" });
-
+        app.globalData.showtoastsame("请选择你要删除的商品");
       }
-
-      // if(this.xiabiao!==null){
-      // 		let deteleindex = this.zizujianlist.splice(this.xiabiao,1)
-      // 		console.log(deteleindex)
-      // 		//再将下标返回去
-      // 		// this.$emit("deteindexdata",deteleindex)
-      // }else{
-      // 		uni.showToast({
-      // 			title:"请选择你要删除的商品",
-      // 			icon:"none"
-      // 		})
-      // }
     } },
 
-  props: ["totalpic", "bool", "zizujianlist", "xiabiao"] };exports.default = _default;
+  props: ["totalpic", "bool", "zizujianlist", "xiabiao", "tokey", "carid"] };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

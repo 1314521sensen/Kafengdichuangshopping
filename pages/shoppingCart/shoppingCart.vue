@@ -10,11 +10,11 @@
 			</view>
 			<!-- 这是shoppingcartlist子组件 传过来的数据-->
 			<!-- :returnsindex="returnsindex" -->
-			<shoppingcatlist :tokey="tokey"></shoppingcatlist>
+			<shoppingcatlist :tokey="tokey" @price="price" @datalist="datalist" @dataindex="dataindex" @datacarid="datacarid"></shoppingcatlist>
 		</view>
 		<!-- 从bool值往后 是 shoppingcartlist子组件数据 传给父组件 再由这个组件传过去 -->
 		<!--  @deteindexdata="deteindexdata" -->
-		<shopingbottompay :totalpic="totalpic" :bool="bool" :zizujianlist="zizujianlist" :xiabiao="xiabiao" @deteindexdata="deteindexdata"></shopingbottompay>
+		<shopingbottompay :totalpic="totalpic" :bool="bool" :zizujianlist="zizujianlist" :xiabiao="xiabiao" :tokey="tokey" :carid="carid"></shopingbottompay>
 	</view>
 </template>
 
@@ -32,30 +32,31 @@
 				xiabiao:null,
 				returnsindex:[],
 				tokey:"",
+				carid:""
 			}
 		},
 		methods: {
-			getChild1(e){
-				// console.log(e)
-				if(e){
+			//这是传过来的价格
+			price(e){
+				if(e){//判断传过来的价格有没有 有的话 就采用 没有的话就赋值0
 					this.totalpic = e
 				}else{
 					this.totalpic = 0
 				}
+				
 			},
 			//这是传过来的数组
-			deteledatalist(e){
+			datalist(e){
 				this.zizujianlist = e
 			},
 			//这是传过来的下标
-			deteledatasubscript(e){
+			dataindex(e){
 				this.xiabiao = e
 			},
-			//这是shopingbottompay组件传过来的删除后的数组  在将下标返回去删除
-			deteindexdata(e){
-				this.returnsindex = e
-				// console.log(e) 这是删除后的数组
+			datacarid(e){
+				this.carid = e
 			},
+			//这是shopingbottompay组件传过来的删除后的数组  在将下标返回去删除
 				// console.log(this.totalpic)
 			//这是管理
 			showmanagement(){
@@ -75,7 +76,7 @@
 		created(){
 			const _this = this
 			//父组件事件接收子组件传过来的值
-			this.getChild1()
+			// this.price()
 			// this.deteledatalist()
 			// this.deteledatasubscript()
 			//在购物车刚加载的时候 获取用户的tokey值

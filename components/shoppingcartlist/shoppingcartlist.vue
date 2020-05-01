@@ -7,9 +7,19 @@
 				<text class="lg text-gray cuIcon-right"></text>
 			</view>
 			<view class="cart-item-bottom" v-for="(items,indexs) in item.sub" :key="indexs">
-				<checkbox-group @change="CheckboxChange">
+				<checkbox-group 
+					@change="CheckboxChange"
+					:data-index="index"
+					:data-indexs="indexs"
+					:data-id="items.good_id"
+					:data-unitprice="items.good_price"
+					:data-num="numlistxiabiao[index][indexs].good_num"
+					:data-carid="items.cart_id"
+				>
+					{{numlistxiabiao[index][indexs].checked}}
+					{{items.good_id}}
 					<view>
-						<checkbox class="" checked="false" value="indexs"></checkbox>
+						<checkbox :class="items.good_id==idbool &&checkbool?'checked':''" :checked="numlistxiabiao[index][indexs].checked" value="index"></checkbox>
 					</view>
 				</checkbox-group>
 				<view class="images">
@@ -32,9 +42,9 @@
 					<view class="price-box">
 						<text>¥{{items.good_price}}</text>
 						<view class="numbers">
-							<button @tap="Adddeletepublic(items.good_id,index,indexs,false)" :data-id="items.good_id">-</button>
+							<button @tap="Adddeletepublic(items.good_id,index,indexs,false,items.good_price)" :data-id="items.good_id">-</button>
 							<input type="text" :value="numlistxiabiao[index][indexs].good_num" placeholder-class="inp" disabled="true"></input>
-							<button @tap="Adddeletepublic(items.good_id,index,indexs,true)">+</button>
+							<button @tap="Adddeletepublic(items.good_id,index,indexs,true,items.good_price)">+</button>
 						</view>
 					</view>
 				</view>
@@ -69,24 +79,61 @@
 				newslist:[],
 				str:"",
 				onloadbool:false,//设置开关
-				numlistxiabiao:[]//获取用户商品的数量
+				numlistxiabiao:[],//获取用户商品的数量
+				checkbool:false,
+				idbool:"",
+				toals:0
 			}
 		},
 		methods:{
 			//封装一个数量增加 减少功能
-			Adddeletepublic(getid,index,indexs,adddeletebool){
+			Adddeletepublic(getid,index,indexs,adddeletebool,unitprice){
 				if(adddeletebool){
 					++this.numlistxiabiao[index][indexs].good_num
+					//当用户选中时 点击的+号的时候 用来计算价格
+					this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
 				}else{
 					if(this.numlistxiabiao[index][indexs].good_num<=1){
 						app.globalData.showtoastsame("数量不能小于1")
 					}else{
 						--this.numlistxiabiao[index][indexs].good_num
+						//当用户选中是时 点击-号时 用来减
+						this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
 					}
 				}
 			},
+			//封装个总价
+			totals(unitprice,num){//unitprice单价  num数量
+				// 单价*数量
+				this.toals = unitprice*num
+				this.$emit("price",this.toals)
+			},
 			CheckboxChange(e){
-				console.log(e)
+				let {index,indexs,id,unitprice,num,carid} = e.currentTarget.dataset
+				this.idbool = id
+				// //开始先让他们都为false
+				this.numlistxiabiao.forEach((item,itemindex)=>{
+					item.forEach((itemitem,itemsindexs)=>{
+						this.numlistxiabiao[itemindex][itemsindexs].checked = false
+						this.checkbool = false
+					})
+				})
+				if(this.idbool==id){
+					//如果当前的没有为true 在点击其他的 就让他为false
+					if(this.checkbool){
+						this.numlistxiabiao[index][indexs].checked = false
+						this.checkbool = false
+					}else{//否则都为true
+						this.numlistxiabiao[index][indexs].checked = true
+						this.checkbool = true
+						//把选中的数组发送过去
+						this.$emit("datalist",this.numlistxiabiao[index])
+						this.$emit("dataindex",indexs)
+						this.$emit("datacarid",carid)
+						this.totals(unitprice,num)
+					}
+				}
+				
 			},
 			showModal(e) {
 				//获取id值用来获取商品的规格
@@ -141,12 +188,17 @@
 				})
 			},
 			//更新购物车
-			UpdateShoppingCart(_this){
+			UpdateShoppingCart(_this,wxtokey){
 				uni.request({
 					url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
 					method:"POST",
 					data:{
-						token:_this.tokey,
+						// #ifdef APP-PLUS || H5
+							token:_this.tokey,
+						// #endif
+						// #ifdef MP-WEIXIN
+							token:wxtokey,
+						// #endif
 						page:1,
 						pageSize:10
 					},
@@ -156,6 +208,8 @@
 								_this.shopinglist = res.data.data
 								uni.stopPullDownRefresh();//关闭下拉刷新
 							}
+						}else{
+							console.log("重新登录")
 						}
 						//这个遍历为了拿到购物车的数量
 						res.data.data.forEach((item,index)=>{
@@ -168,11 +222,24 @@
 		components:{
 			immediatelypopup,
 		},
+		props:["tokey"], //这是传过来啊的下标
 		created(){
 			const _this = this
-			_this.UpdateShoppingCart(_this)
-		},
-		props:["returnsindex","tokey"] //这是传过来啊的下标
+			let wxtokey = ""
+			// #ifdef MP-WEIXIN
+				//微信端tokey获取不到重新获取
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						wxtokey = res.data
+						_this.UpdateShoppingCart(_this,wxtokey)
+					}
+				})
+			// #endif
+			// #ifdef APP-PLUS || H5
+				_this.UpdateShoppingCart(_this)
+			// #endif
+		}
 	}
 </script>
 
