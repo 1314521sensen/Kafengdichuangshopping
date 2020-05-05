@@ -103,6 +103,7 @@
 			},
 			Addcart(obj,img){
 				let {store_name,good_title,good_price,good_pic} = obj
+				console.log(this.tokey,this.storeid,this.gid,store_name,good_title,good_price,good_pic)
 				uni.request({
 					url:"http://hbk.huiboke.com/api/shopping_cart/addShoppingCartInfo",
 					method:"POST",
@@ -110,7 +111,7 @@
 						token:this.tokey,//tokey值
 						sid:this.storeid,//店铺id
 						s_name:store_name,
-						gid:this.id,
+						gid:this.gid,
 						g_name:good_title,
 						g_price:good_price,
 						g_pic:good_pic
@@ -181,15 +182,16 @@
 					}
 			},
 			Skiporder(e){
+				console.log(e.currentTarget.dataset.target)
 				this.modalName = e.currentTarget.dataset.target
-			
+				
 			},
 			//当用户点击了 子组件里面的x
 			hiddends(e){
 				this.modalName = e
 			}
 		},
-		props:["pic","imgs","tokey","id","storeid"],
+		props:["pic","imgs","tokey","gid","storeid"],
 		created(){
 			const _this = this
 			uni.request({//请求一条商品来看一下 用户收藏没收藏
@@ -197,13 +199,12 @@
 				method:"POST",
 				data:{
 					token:this.tokey,
-					id:this.id
+					id:this.gid
 				},
 				success:(res)=>{
 					if(res.data.code==0){
 						this.collectionbool = true
 						this.collection = "已收藏"
-						
 						_this.favid = res.data.data.fav_id
 					}
 				}
@@ -212,7 +213,7 @@
 			uni.request({
 				url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
 				data:{
-					gid:_this.id
+					gid:_this.gid
 				},
 				success(res) {
 					if(res.data.code==0){
@@ -221,15 +222,6 @@
 				}
 			})
 			//去请求 获取规格详情的列表
-			// uni.request({
-			// 	url:"http://hbk.huiboke.com/api/good/getGoodSpecInfoList",
-			// 	data:{
-			// 		gid:_this.id
-			// 	},
-			// 	success(res) {
-			// 		console.log(res)
-			// 	}
-			// })
 		}
 	}
 </script>

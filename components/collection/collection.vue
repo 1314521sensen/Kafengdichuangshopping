@@ -44,26 +44,56 @@
 		methods:{
 			//封装一个请求获取用户收藏的信息
 			mycollection(url){
-				uni.request({
-					url,
-					method:"POST",
-					data:{
-						token:this.tokey,
-						page:this.listindex,
-						pageSize:this.listnum
-					},
-					success:(reslist)=>{
-						if(reslist.data.data!==undefined){
-							this.deletelist = reslist.data.data.list
+				// #ifdef MP-WEIXIN
+					uni.getStorage({
+						key:"bindtokey",
+						success:(res)=>{
+							this.tokey = res.data
+							uni.request({
+								url,
+								method:"POST",
+								data:{
+									token:this.tokey,
+									page:this.listindex,
+									pageSize:this.listnum
+								},
+								success:(reslist)=>{
+									if(reslist.data.data!==undefined){
+										this.deletelist = reslist.data.data.list
+									}
+									if(reslist.data.code==1 && reslist.data.msg){
+										this.text = "我也是有底线的"
+										return
+									}
+									this.listindex++
+									this.list = this.list.concat(reslist.data.data.list)
+								}
+							})
 						}
-						if(reslist.data.code==1 && reslist.data.msg){
-							this.text = "我也是有底线的"
-							return
+					})
+				// #endif
+				// #ifdef H5 || APP-PLUS
+					uni.request({
+						url,
+						method:"POST",
+						data:{
+							token:this.tokey,
+							page:this.listindex,
+							pageSize:this.listnum
+						},
+						success:(reslist)=>{
+							if(reslist.data.data!==undefined){
+								this.deletelist = reslist.data.data.list
+							}
+							if(reslist.data.code==1 && reslist.data.msg){
+								this.text = "我也是有底线的"
+								return
+							}
+							this.listindex++
+							this.list = this.list.concat(reslist.data.data.list)
 						}
-						this.listindex++
-						this.list = this.list.concat(reslist.data.data.list)
-					}
-				})
+					})
+				// #endif
 			},
 			//监控scroll-view 滚动标签是否滚动到底部
 			scrollbottom(){

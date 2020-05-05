@@ -6,15 +6,34 @@
 		<view class="cart">
 			<view class="cart-title">
 				<text>购物车</text>
-				<text @click="showmanagement">管理</text>
+				<text @tap="showmanagement">管理</text>
 			</view>
 			<!-- 这是shoppingcartlist子组件 传过来的数据-->
 			<!-- :returnsindex="returnsindex" -->
-			<shoppingcatlist :tokey="tokey" @price="price" @datalist="datalist" @dataindex="dataindex" @datacarid="datacarid"></shoppingcatlist>
+			<!-- 这是购物车列表的组件 -->
+			<shoppingcatlist 
+				:tokey="tokey" 
+				@price="price" 
+				@datalist="datalist" 
+				@dataindex="dataindex" 
+				@datacarid="datacarid" 
+				:shopinglist="shopinglist"
+				:delatestaticbool="delatestaticbool"
+			></shoppingcatlist>
 		</view>
 		<!-- 从bool值往后 是 shoppingcartlist子组件数据 传给父组件 再由这个组件传过去 -->
 		<!--  @deteindexdata="deteindexdata" -->
-		<shopingbottompay :totalpic="totalpic" :bool="bool" :zizujianlist="zizujianlist" :xiabiao="xiabiao" :tokey="tokey" :carid="carid"></shopingbottompay>
+		<!-- 这是购物车底部的底部的组件 -->
+		<shopingbottompay 
+			:totalpic="totalpic" 
+			:bool="bool" 
+			:zizujianlist="zizujianlist" 
+			:xiabiao="xiabiao" 
+			:tokey="tokey" 
+			:carid="carid" 
+			@deleteData="deleteData"
+			@deletestatic="deletestatic"
+		></shopingbottompay>
 	</view>
 </template>
 
@@ -32,7 +51,9 @@
 				xiabiao:null,
 				returnsindex:[],
 				tokey:"",
-				carid:""
+				carid:"",
+				shopinglist:[],
+				delatestaticbool:false
 			}
 		},
 		methods: {
@@ -65,27 +86,56 @@
 				}else{
 					this.bool = true
 				}
+			},
+			//封装个请求列表的函数
+			UpdateShoppingCartlist(){
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						_this.tokey = res.data
+						console.log(_this.tokey)
+						uni.request({
+							url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+							method:"POST",
+							data:{
+								token:_this.tokey,
+								page:1,
+								pageSize:10
+							},
+							success(res){
+								if(res.data.code==0){//代表获取成功
+										_this.shopinglist = res.data.data
+										uni.stopPullDownRefresh();//关闭下拉刷新
+								}else{
+									console.log("重新登录")
+								}
+							}
+						})
+					}
+				})
+				
+			},
+			//这是删除购物车的时候传过来的数据
+			deleteData(e){
+				this.shopinglist = e
+			},
+			//当用户点击了删除子组件传一个状态过来，父组件用来接收
+			deletestatic(e){
+				this.delatestaticbool = e
 			}
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
 		},
 		onShow(){
-			
+			//在购物车每次显示的时候 获取用户的tokey值
+			const _this = this
+			_this.UpdateShoppingCartlist()
 		},
 		created(){
 			const _this = this
-			//父组件事件接收子组件传过来的值
-			// this.price()
-			// this.deteledatalist()
-			// this.deteledatasubscript()
-			//在购物车刚加载的时候 获取用户的tokey值
-			uni.getStorage({
-				key:"bindtokey",
-				success(res){
-					_this.tokey = res.data
-				}
-			})
+			
 		},
 		components:{
 			shoppingcatlist,

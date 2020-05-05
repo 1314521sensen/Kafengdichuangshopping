@@ -182,12 +182,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
 var app = getApp();var _default =
 {
   data: function data() {
     return {
       total: 0,
-      shopinglist: [],
       checkedbool: true,
       modalName: null,
       radio: 'radio1',
@@ -200,7 +203,9 @@ var app = getApp();var _default =
       numlistxiabiao: [], //获取用户商品的数量
       checkbool: false,
       idbool: "",
-      toals: 0 };
+      toals: 0,
+      shopcheckboxindex: 0,
+      shopcheckboxindexs: 0 };
 
   },
   methods: {
@@ -208,15 +213,23 @@ var app = getApp();var _default =
     Adddeletepublic: function Adddeletepublic(getid, index, indexs, adddeletebool, unitprice) {
       if (adddeletebool) {
         ++this.numlistxiabiao[index][indexs].good_num;
-        //当用户选中时 点击的+号的时候 用来计算价格
-        this.totals(unitprice, this.numlistxiabiao[index][indexs].good_num);
+        if (this.numlistxiabiao[index][indexs].checked) {
+          //当用户选中时 点击的+号的时候 用来计算价格
+          this.totals(unitprice, this.numlistxiabiao[index][indexs].good_num);
+        } else {
+          this.toals = 0;
+        }
       } else {
         if (this.numlistxiabiao[index][indexs].good_num <= 1) {
           app.globalData.showtoastsame("数量不能小于1");
         } else {
           --this.numlistxiabiao[index][indexs].good_num;
           //当用户选中是时 点击-号时 用来减
-          this.totals(unitprice, this.numlistxiabiao[index][indexs].good_num);
+          if (this.numlistxiabiao[index][indexs].checked) {
+            this.totals(unitprice, this.numlistxiabiao[index][indexs].good_num);
+          } else {
+            this.toals = 0;
+          }
         }
       }
     },
@@ -306,57 +319,56 @@ var app = getApp();var _default =
 
     },
     //更新购物车
-    UpdateShoppingCart: function UpdateShoppingCart(_this, wxtokey) {
-      uni.request({
-        url: "http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
-        method: "POST",
-        data: {
+    UpdateShoppingCart: function UpdateShoppingCart(_this) {
+      console.log(_this.tokey);
+      if (_this.shopinglist.length <= 0) {
+        uni.request({
+          url: "http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+          method: "POST",
+          data: {
+            token: _this.tokey,
+            page: 1,
+            pageSize: 10 },
 
-
-
-
-          token: wxtokey,
-
-          page: 1,
-          pageSize: 10 },
-
-        success: function success(res) {
-          if (res.data.code == 0) {//代表获取成功
-            if (_this.onloadbool == false) {
-              _this.shopinglist = res.data.data;
-              uni.stopPullDownRefresh(); //关闭下拉刷新
+          success: function success(res) {
+            console.log(res);
+            if (res.data.code == 0) {//代表获取成功
+              if (_this.onloadbool == false) {
+                _this.shopinglist = res.data.data;
+                uni.stopPullDownRefresh(); //关闭下拉刷新
+              }
+            } else {
+              console.log("重新登录");
             }
-          } else {
-            console.log("重新登录");
-          }
-          //这个遍历为了拿到购物车的数量
-          res.data.data.forEach(function (item, index) {
-            _this.numlistxiabiao[index] = item.sub;
-          });
-        } });
+            //这个遍历为了拿到购物车的数量
+            _this.shopinglist.forEach(function (item, index) {
+              _this.numlistxiabiao[index] = item.sub;
+            });
+          } });
 
+      } else {
+        console.log("数组里面有值");
+        _this.shopinglist = _this.shopinglist;
+      }
     } },
+
 
   components: {
     immediatelypopup: immediatelypopup },
 
-  props: ["tokey"], //这是传过来啊的下标
+  props: ["tokey", "shopinglist", "delatestaticbool"], //这是传过来啊的下标
   created: function created() {
     var _this = this;
-    var wxtokey = "";
+    if (_this.tokey == "") {
+      uni.getStorage({
+        key: "bindtokey",
+        success: function success(res) {
+          _this.tokey = res.data;
+          console.log(_this.tokey);
+          _this.UpdateShoppingCart(_this);
+        } });
 
-    //微信端tokey获取不到重新获取
-    uni.getStorage({
-      key: "bindtokey",
-      success: function success(res) {
-        wxtokey = res.data;
-        _this.UpdateShoppingCart(_this, wxtokey);
-      } });
-
-
-
-
-
+    }
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

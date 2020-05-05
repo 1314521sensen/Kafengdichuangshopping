@@ -43,7 +43,11 @@
 						<text>¥{{items.good_price}}</text>
 						<view class="numbers">
 							<button @tap="Adddeletepublic(items.good_id,index,indexs,false,items.good_price)" :data-id="items.good_id">-</button>
-							<input type="text" :value="numlistxiabiao[index][indexs].good_num" placeholder-class="inp" disabled="true"></input>
+							<input type="text" 
+								:value="numlistxiabiao[index][indexs].good_num?numlistxiabiao[index][indexs].good_num:'1'" 
+								placeholder-class="inp" 
+								disabled="true"
+							></input>
 							<button @tap="Adddeletepublic(items.good_id,index,indexs,true,items.good_price)">+</button>
 						</view>
 					</view>
@@ -69,7 +73,6 @@
 		data(){
 			return {
 				total:0,
-				shopinglist:[],
 				checkedbool:true,
 				modalName:null,
 				radio: 'radio1',
@@ -82,7 +85,9 @@
 				numlistxiabiao:[],//获取用户商品的数量
 				checkbool:false,
 				idbool:"",
-				toals:0
+				toals:0,
+				shopcheckboxindex:0,
+				shopcheckboxindexs:0,
 			}
 		},
 		methods:{
@@ -90,15 +95,23 @@
 			Adddeletepublic(getid,index,indexs,adddeletebool,unitprice){
 				if(adddeletebool){
 					++this.numlistxiabiao[index][indexs].good_num
-					//当用户选中时 点击的+号的时候 用来计算价格
-					this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
+					if(this.numlistxiabiao[index][indexs].checked){
+						//当用户选中时 点击的+号的时候 用来计算价格
+						this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
+					}else{
+						this.toals = 0
+					}
 				}else{
 					if(this.numlistxiabiao[index][indexs].good_num<=1){
 						app.globalData.showtoastsame("数量不能小于1")
 					}else{
 						--this.numlistxiabiao[index][indexs].good_num
 						//当用户选中是时 点击-号时 用来减
-						this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
+						if(this.numlistxiabiao[index][indexs].checked){
+							this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
+						}else{
+							this.toals = 0
+						}
 					}
 				}
 			},
@@ -188,57 +201,56 @@
 				})
 			},
 			//更新购物车
-			UpdateShoppingCart(_this,wxtokey){
-				uni.request({
-					url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
-					method:"POST",
-					data:{
-						// #ifdef APP-PLUS || H5
-							token:_this.tokey,
-						// #endif
-						// #ifdef MP-WEIXIN
-							token:wxtokey,
-						// #endif
-						page:1,
-						pageSize:10
-					},
-					success(res){
-						if(res.data.code==0){//代表获取成功
-							if(_this.onloadbool==false){
-								_this.shopinglist = res.data.data
-								uni.stopPullDownRefresh();//关闭下拉刷新
+			UpdateShoppingCart(_this){
+				console.log(_this.tokey)
+				if(_this.shopinglist.length<=0){
+					uni.request({
+							url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+							method:"POST",
+							data:{
+								token:_this.tokey,
+								page:1,
+								pageSize:10
+							},
+							success(res){
+								console.log(res)
+								if(res.data.code==0){//代表获取成功
+									if(_this.onloadbool==false){
+										_this.shopinglist = res.data.data
+										uni.stopPullDownRefresh();//关闭下拉刷新
+								}
+								}else{
+									console.log("重新登录")
+								}
+								//这个遍历为了拿到购物车的数量
+								_this.shopinglist.forEach((item,index)=>{
+									_this.numlistxiabiao[index] = item.sub
+								})
 							}
-						}else{
-							console.log("重新登录")
-						}
-						//这个遍历为了拿到购物车的数量
-						res.data.data.forEach((item,index)=>{
-							_this.numlistxiabiao[index] = item.sub
 						})
-					}
-				})
+				}else{
+					console.log("数组里面有值")
+					_this.shopinglist = _this.shopinglist
+				}
 			}
 		},
+		
 		components:{
 			immediatelypopup,
 		},
-		props:["tokey"], //这是传过来啊的下标
+		props:["tokey","shopinglist","delatestaticbool"], //这是传过来啊的下标
 		created(){
 			const _this = this
-			let wxtokey = ""
-			// #ifdef MP-WEIXIN
-				//微信端tokey获取不到重新获取
+			if(_this.tokey==""){
 				uni.getStorage({
 					key:"bindtokey",
 					success(res){
-						wxtokey = res.data
-						_this.UpdateShoppingCart(_this,wxtokey)
+						_this.tokey = res.data
+						console.log(_this.tokey)
+						_this.UpdateShoppingCart(_this)
 					}
 				})
-			// #endif
-			// #ifdef APP-PLUS || H5
-				_this.UpdateShoppingCart(_this)
-			// #endif
+			}			
 		}
 	}
 </script>

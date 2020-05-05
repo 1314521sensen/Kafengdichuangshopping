@@ -24,7 +24,6 @@
 				</view>
 				<view class="cu-bar bg-red">
 					<view class="action text-green determine" @tap="hideModal">确定</view>
-					
 				</view>
 			</view>
 		</view>

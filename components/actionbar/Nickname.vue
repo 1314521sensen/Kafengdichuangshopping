@@ -40,6 +40,7 @@
 				</view>
 			</view>
 			<!-- 地区选择 -->
+			<selection></selection>
 			<button data-v-287a241a="" class="cu-btn block bg-green margin-tb-sm lg" form-type="submit" :disabled="bool">{{text}}</button>
 		</form>
 	</view>
@@ -47,6 +48,7 @@
 </template>
 
 <script>
+	import selection from "@/components/actionbar/areaselection.vue"
 	export default{ //注:这里的name 每个input 还位绑定
 	
 		data(){
@@ -276,7 +278,7 @@
 			// }
 		},
 		components:{
-			
+			selection
 		},
 		props:["bool","text","json"],
 		created() {

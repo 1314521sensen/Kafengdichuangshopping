@@ -195,25 +195,55 @@ var _default = {
   methods: {
     //封装一个请求获取用户收藏的信息
     mycollection: function mycollection(url) {var _this = this;
-      uni.request({
-        url: url,
-        method: "POST",
-        data: {
-          token: this.tokey,
-          page: this.listindex,
-          pageSize: this.listnum },
 
-        success: function success(reslist) {
-          if (reslist.data.data !== undefined) {
-            _this.deletelist = reslist.data.data.list;
-          }
-          if (reslist.data.code == 1 && reslist.data.msg) {
-            _this.text = "我也是有底线的";
-            return;
-          }
-          _this.listindex++;
-          _this.list = _this.list.concat(reslist.data.data.list);
+      uni.getStorage({
+        key: "bindtokey",
+        success: function success(res) {
+          _this.tokey = res.data;
+          uni.request({
+            url: url,
+            method: "POST",
+            data: {
+              token: _this.tokey,
+              page: _this.listindex,
+              pageSize: _this.listnum },
+
+            success: function success(reslist) {
+              if (reslist.data.data !== undefined) {
+                _this.deletelist = reslist.data.data.list;
+              }
+              if (reslist.data.code == 1 && reslist.data.msg) {
+                _this.text = "我也是有底线的";
+                return;
+              }
+              _this.listindex++;
+              _this.list = _this.list.concat(reslist.data.data.list);
+            } });
+
         } });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     },
     //监控scroll-view 滚动标签是否滚动到底部

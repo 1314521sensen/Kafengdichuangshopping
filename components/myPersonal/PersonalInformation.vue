@@ -16,14 +16,14 @@
 						<view class="login">
 							<view class="margin-tb-sm text-center">
 								<!-- 到时候判断用户有没有登录 有的话就改成退出 -->
-								<button class="cu-btn round bg-green" @click="login">登录</button>
+								<button class="cu-btn round bg-green" @tap="login">登录</button>
 							</view>
 						</view>
 					<!-- #endif -->
 				</view>
 				
 				<view class="Personal-list">
-					<view class="money-list" v-for="(item,index) in moneylist" :key="index" @click="jumpcenter(item.url)">
+					<view class="money-list" v-for="(item,index) in moneylist" :key="index" @tap="jumpcenter(item.url)">
 						<text>{{item.num}}</text>
 						<text>{{item.miao}}</text>
 					</view>
@@ -75,20 +75,20 @@
 					url
 				})
 			},
-			getcouponslistdata(){
-				// console.log(this.couponslistdata)
-				if(this.couponslistdata.length<=0){
-					console.log(1)
-				}else{
-					this.moneylist[2].num = this.couponslistdata.length
-				}
-			}
+			// getcouponslistdata(){
+			// 	// console.log(this.couponslistdata)
+			// 	if(this.couponslistdata.length<=0){
+			// 		console.log(1)
+			// 	}else{
+			// 		this.moneylist[2].num = this.couponslistdata.length
+			// 	}
+			// }
 		},
-		props:["couponslistdata"],
-		created(){
-			//当数据发生改变的时候 执行从父组件传过来的值的方法
-			this.getcouponslistdata()
-		}
+		// props:["couponslistdata"],
+		// created(){
+		// 	//当数据发生改变的时候 执行从父组件传过来的值的方法
+		// 	this.getcouponslistdata()
+		// }
 	}
 </script>
 

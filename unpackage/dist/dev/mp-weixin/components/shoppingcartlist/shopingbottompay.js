@@ -195,7 +195,7 @@ var app = getApp();var _default =
       // 	})
       // }
       // console.log(this.xiabiao)
-
+      var _this = this;
       //这里一定要注意 虽然null是假值 传过来的下标0也是
       if (this.xiabiao !== null) {
         try {
@@ -203,6 +203,7 @@ var app = getApp();var _default =
             console.log(this.tokey);
             console.log(this.carid);
             //调用删除的功能接口
+            uni.startPullDownRefresh();
             uni.request({
               url: "http://hbk.huiboke.com/api/shopping_cart/deleteShoppingCartInfo",
               method: "POST",
@@ -212,8 +213,29 @@ var app = getApp();var _default =
 
               success: function success(res) {
                 if (res.data.code == 0) {
-                  console.log("删除成功");
+
+                  // console.log(_this.tokey)
                   //实时刷新 
+                  //请求数据
+                  uni.request({
+                    url: "http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+                    method: "POST",
+                    data: {
+                      token: _this.tokey,
+                      page: 1,
+                      pageSize: 10 },
+
+                    success: function success(res) {
+                      if (res.data.code == 0) {
+                        console.log("删除成功");
+                        uni.stopPullDownRefresh();
+                        console.log(res.data.data);
+                        //将请求的数据传到父组件
+                        _this.$emit("deleteData", res.data.data);
+                        //当用户删除成功了，将状态改成false 为了修复bug
+                        _this.$emit("deletestatic", false);
+                      }
+                    } });
 
                 } else {
                   app.globalData.showtoastsame("删除失败");

@@ -221,6 +221,7 @@ var app = getApp();var _default =
     },
     Addcart: function Addcart(obj, img) {var
       store_name = obj.store_name,good_title = obj.good_title,good_price = obj.good_price,good_pic = obj.good_pic;
+      console.log(this.tokey, this.storeid, this.gid, store_name, good_title, good_price, good_pic);
       uni.request({
         url: "http://hbk.huiboke.com/api/shopping_cart/addShoppingCartInfo",
         method: "POST",
@@ -228,7 +229,7 @@ var app = getApp();var _default =
           token: this.tokey, //tokey值
           sid: this.storeid, //店铺id
           s_name: store_name,
-          gid: this.id,
+          gid: this.gid,
           g_name: good_title,
           g_price: good_price,
           g_pic: good_pic },
@@ -299,6 +300,7 @@ var app = getApp();var _default =
       }
     },
     Skiporder: function Skiporder(e) {
+      console.log(e.currentTarget.dataset.target);
       this.modalName = e.currentTarget.dataset.target;
 
     },
@@ -307,7 +309,7 @@ var app = getApp();var _default =
       this.modalName = e;
     } },
 
-  props: ["pic", "imgs", "tokey", "id", "storeid"],
+  props: ["pic", "imgs", "tokey", "gid", "storeid"],
   created: function created() {var _this4 = this;
     var _this = this;
     uni.request({ //请求一条商品来看一下 用户收藏没收藏
@@ -315,13 +317,12 @@ var app = getApp();var _default =
       method: "POST",
       data: {
         token: this.tokey,
-        id: this.id },
+        id: this.gid },
 
       success: function success(res) {
         if (res.data.code == 0) {
           _this4.collectionbool = true;
           _this4.collection = "已收藏";
-
           _this.favid = res.data.data.fav_id;
         }
       } });
@@ -330,7 +331,7 @@ var app = getApp();var _default =
     uni.request({
       url: "http://hbk.huiboke.com/api/good/getGoodSpecList",
       data: {
-        gid: _this.id },
+        gid: _this.gid },
 
       success: function success(res) {
         if (res.data.code == 0) {
@@ -339,15 +340,6 @@ var app = getApp();var _default =
       } });
 
     //去请求 获取规格详情的列表
-    // uni.request({
-    // 	url:"http://hbk.huiboke.com/api/good/getGoodSpecInfoList",
-    // 	data:{
-    // 		gid:_this.id
-    // 	},
-    // 	success(res) {
-    // 		console.log(res)
-    // 	}
-    // })
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

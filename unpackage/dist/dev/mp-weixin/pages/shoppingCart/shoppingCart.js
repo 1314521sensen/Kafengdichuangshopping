@@ -159,6 +159,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var app = getApp();var _default =
 {
 
@@ -170,7 +189,9 @@ var app = getApp();var _default =
       xiabiao: null,
       returnsindex: [],
       tokey: "",
-      carid: "" };
+      carid: "",
+      shopinglist: [],
+      delatestaticbool: false };
 
   },
   methods: {
@@ -203,26 +224,55 @@ var app = getApp();var _default =
       } else {
         this.bool = true;
       }
+    },
+    //封装个请求列表的函数
+    UpdateShoppingCartlist: function UpdateShoppingCartlist() {
+      var _this = this;
+      uni.getStorage({
+        key: "bindtokey",
+        success: function success(res) {
+          _this.tokey = res.data;
+          console.log(_this.tokey);
+          uni.request({
+            url: "http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+            method: "POST",
+            data: {
+              token: _this.tokey,
+              page: 1,
+              pageSize: 10 },
+
+            success: function success(res) {
+              if (res.data.code == 0) {//代表获取成功
+                _this.shopinglist = res.data.data;
+                uni.stopPullDownRefresh(); //关闭下拉刷新
+              } else {
+                console.log("重新登录");
+              }
+            } });
+
+        } });
+
+
+    },
+    //这是删除购物车的时候传过来的数据
+    deleteData: function deleteData(e) {
+      this.shopinglist = e;
+    },
+    //当用户点击了删除子组件传一个状态过来，父组件用来接收
+    deletestatic: function deletestatic(e) {
+      this.delatestaticbool = e;
     } },
 
   onLoad: function onLoad() {
     this.statusBar = app.globalData.statusBar;
   },
   onShow: function onShow() {
-
+    //在购物车每次显示的时候 获取用户的tokey值
+    var _this = this;
+    _this.UpdateShoppingCartlist();
   },
   created: function created() {
     var _this = this;
-    //父组件事件接收子组件传过来的值
-    // this.price()
-    // this.deteledatalist()
-    // this.deteledatasubscript()
-    //在购物车刚加载的时候 获取用户的tokey值
-    uni.getStorage({
-      key: "bindtokey",
-      success: function success(res) {
-        _this.tokey = res.data;
-      } });
 
   },
   components: {

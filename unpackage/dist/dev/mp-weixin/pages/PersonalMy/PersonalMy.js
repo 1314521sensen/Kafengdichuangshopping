@@ -134,7 +134,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var orders = function orders() {return __webpack_require__.e(/*! import() | components/myPersonal/orders */ "components/myPersonal/orders").then(__webpack_require__.bind(null, /*! @/components/myPersonal/orders.vue */ 278));};var myScratchableLatex = function myScratchableLatex() {return __webpack_require__.e(/*! import() | components/myPersonal/myScratchableLatex */ "components/myPersonal/myScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/myPersonal/myScratchableLatex.vue */ 285));};var information = function information() {return __webpack_require__.e(/*! import() | components/myPersonal/PersonalInformation */ "components/myPersonal/PersonalInformation").then(__webpack_require__.bind(null, /*! @/components/myPersonal/PersonalInformation.vue */ 292));};var mycoupons = function mycoupons() {return __webpack_require__.e(/*! import() | components/myPersonal/coupons */ "components/myPersonal/coupons").then(__webpack_require__.bind(null, /*! @/components/myPersonal/coupons.vue */ 299));};var Selectionrecommended = function Selectionrecommended() {return __webpack_require__.e(/*! import() | components/myPersonal/Selectionrecommended */ "components/myPersonal/Selectionrecommended").then(__webpack_require__.bind(null, /*! @/components/myPersonal/Selectionrecommended.vue */ 306));};
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var orders = function orders() {return __webpack_require__.e(/*! import() | components/myPersonal/orders */ "components/myPersonal/orders").then(__webpack_require__.bind(null, /*! @/components/myPersonal/orders.vue */ 278));};var myScratchableLatex = function myScratchableLatex() {return __webpack_require__.e(/*! import() | components/myPersonal/myScratchableLatex */ "components/myPersonal/myScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/myPersonal/myScratchableLatex.vue */ 285));};var information = function information() {return __webpack_require__.e(/*! import() | components/myPersonal/PersonalInformation */ "components/myPersonal/PersonalInformation").then(__webpack_require__.bind(null, /*! @/components/myPersonal/PersonalInformation.vue */ 292));};var mycoupons = function mycoupons() {return __webpack_require__.e(/*! import() | components/myPersonal/coupons */ "components/myPersonal/coupons").then(__webpack_require__.bind(null, /*! @/components/myPersonal/coupons.vue */ 299));};var Selectionrecommended = function Selectionrecommended() {return __webpack_require__.e(/*! import() | components/myPersonal/Selectionrecommended */ "components/myPersonal/Selectionrecommended").then(__webpack_require__.bind(null, /*! @/components/myPersonal/Selectionrecommended.vue */ 306));};
 
 
 
@@ -177,20 +177,19 @@ var app = getApp();var _default =
   methods: {},
 
 
-  onShow: function onShow() {var _this = this;
+  onShow: function onShow() {
     //当数据发生改变得时候 就获取缓存中的值
-    uni.getStorage({
-      key: "couponsData",
-      success: function success(res) {
-        // console.log(res)
-        _this.couponslistdata = res.data;
-      },
-      fail: function fail(err) {
-        this.couponslistdata = null;
-      } });
-
+    // uni.getStorage({
+    // 	key:"couponsData",
+    // 	success:(res)=>{
+    // 		// console.log(res)
+    // 		this.couponslistdata = res.data
+    // 	},
+    // 	fail(err){
+    // 		this.couponslistdata = null
+    // 	}
+    // })
   } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })
 

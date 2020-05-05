@@ -164,7 +164,7 @@ __webpack_require__.r(__webpack_exports__);
       pic: {},
       region: [],
       tokey: "",
-      id: "",
+      gid: "",
       storeid: "" };
 
   },
@@ -180,7 +180,7 @@ __webpack_require__.r(__webpack_exports__);
   onLoad: function onLoad(opction) {
     var _this = this;
     //这是商品的id
-    this.id = opction.id;
+    this.gid = opction.id;
     //店铺id
     this.storeid = opction.storeid;
     //先去请求详情页的轮播数据图片
