@@ -40,7 +40,14 @@
 					<button class="cu-btn bg-red round shadow-blur" @tap="Skiporder" data-target="bottomModal">立即订购</button>
 				</view>
 			</view>
-			<immediatelypopup :class="modalName=='bottomModal'?'show':''" :immediatelylist="immediatelylist" @hiddends="hiddends" :bool="bool"></immediatelypopup>
+			<immediatelypopup 
+				:class="modalName=='bottomModal'?'show':''" 
+				:immediatelylist="immediatelylist" 
+				@hiddends="hiddends" 
+				:bool="bool" 
+				:gid="gid"
+				:pic="pic"
+			></immediatelypopup>
 		</view>
 </template>
 
@@ -103,7 +110,6 @@
 			},
 			Addcart(obj,img){
 				let {store_name,good_title,good_price,good_pic} = obj
-				console.log(this.tokey,this.storeid,this.gid,store_name,good_title,good_price,good_pic)
 				uni.request({
 					url:"http://hbk.huiboke.com/api/shopping_cart/addShoppingCartInfo",
 					method:"POST",
@@ -117,7 +123,6 @@
 						g_pic:good_pic
 					},
 					success(res) {
-						console.log(res)
 						if(res.data.code==0){
 							uni.switchTab({
 								url:"/pages/shoppingCart/shoppingCart"
@@ -182,9 +187,7 @@
 					}
 			},
 			Skiporder(e){
-				console.log(e.currentTarget.dataset.target)
 				this.modalName = e.currentTarget.dataset.target
-				
 			},
 			//当用户点击了 子组件里面的x
 			hiddends(e){

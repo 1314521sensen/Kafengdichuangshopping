@@ -27,19 +27,19 @@
 			<!-- 到时候循环这个order就可以 -->
 			<view class="order">
 				<view class="order-title">
-					丽江雅韵茶行
+					{{storename}}
 				</view>
 				<view class="shopgoosorder">
 					<view class="shopgoosorder-left">
-						<image src="/static/horizontally/1.jpg"></image>
+						<image :src="'http://hbk.huiboke.com'+img"></image>
 					</view>
 					<view class="shopgoosorder-right">
 						<view class="shopgoosorder-title">
-							丽江雪茶云南白雪毫雪山古茶雪山白露苦甘露古藤茶丽江雪茶云南白雪毫雪山古茶雪山白露苦甘露古藤茶
+							{{goodtitle}}
 						</view>
 						<view class="shopgoosorder-pic">
-							<text>¥70.00</text>
-							<text>×1</text>
+							<text>¥{{price}}</text>
+							<text>×{{nums}}</text>
 						</view>
 					</view>
 				</view>
@@ -60,18 +60,18 @@
 						</view>
 					</view>
 					<view class="Payprice">
-						<text>共1件</text>
+						<text>共{{nums}}件</text>
 						<text>小计:</text>
-						<text class="text-yellow">¥70.00</text>
+						<text class="text-yellow">¥{{price*nums}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="detailscar">
 			<view class="detailscar-pic">
-				<text>共1件,</text>
+				<text>共{{nums}}件,</text>
 				<text>合计</text>
-				<text>¥70.00</text>
+				<text>¥{{price*nums}}</text>
 				<button class="cu-btn round bg-orange">提交订单</button>
 			</view>
 		</view>
@@ -88,15 +88,54 @@
 			return {
 				//这是首页的高度
 				statusBar:0,
+				img:"",
+				nums:0,
+				storename:"",
+				price:0,
+				goodtitle:""
 			}
 		},
 		methods: {
 			
 		},
-		onLoad(){
-			// console.log(app.globalData)
+		onLoad(opction){
+			// console.log(opction)
+			let {gid,num,way,img,storename,price,goodtitle} = opction
+			this.img = JSON.parse(img)
+			this.nums = num
+			this.storename = storename
+			this.price = price
+			this.goodtitle = goodtitle
+			//使用eval方法 将字符串数组 转换为 真数组
+			let data = eval(opction.specname)
+			//为了小程序考虑只能这样写了
+			// uni.getStorage({
+			// 	key:"bindtokey",
+			// 	success(res){
+			// 		if(way==0){
+			// 			console.log("从商品详情过来的")
+			// 			uni.request({
+			// 				url:"http://hbk.huiboke.com/api/order/createUnPayOrderInfo",
+			// 				data:{
+			// 					token:res.data,
+			// 					gid:gid,
+			// 					spec:data,
+			// 					quantity:num,
+			// 					// #ifdef APP-PLUS
+			// 					o_from:2,
+			// 					// #endif
+			// 					// #ifdef MP-WEIXIN
+			// 					o_from:3,
+			// 					// #endif
+								
+			// 				}
+			// 			})
+			// 		}else{
+			// 			console.log("从购物车过来的")
+			// 		}
+			// 	}
+			// })
 			this.statusBar = app.globalData.statusBar
-			
 		},
 		components:{
 			actionbar,
@@ -196,7 +235,7 @@
 						.shopgoosorder-title{
 							overflow: hidden;
 							width: 70%;
-							height:80rpx;
+							height:76rpx;
 							font-size: 28rpx;
 						}
 						.shopgoosorder-pic{

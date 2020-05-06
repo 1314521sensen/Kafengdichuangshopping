@@ -33,17 +33,34 @@
 					multiArray: this.multiArray,
 					multiIndex: this.multiIndex
 				};
-				console.log(e.detail.column)//这个是 滑动的第几个栏
+				// console.log(e.detail.column)//这个是 滑动的第几个栏
+				// console.log(e.detail.value)//这个是 滑动的下标
 				data.multiIndex[e.detail.column] = e.detail.value;
+				// console.log()
+				//当用户滑动的时候请求数据
+				uni.request({
+					url:"http://hbk.huiboke.com/api/common/getAreasMinusOne",
+					data:{
+						parent_id:data.multiIndex[e.detail.column]
+					},
+					success:(res)=>{
+						console.log(res)
+						let arr = []
+						res.data.data.forEach((item,index)=>{
+							arr.push(item.area_name)
+						})
+						data.multiArray[1] = arr
+					}
+				})
 				switch (e.detail.column) {
 					case 0:
 						switch (data.multiIndex[0]) {
 							case 0:
-								data.multiArray[1] = ['扁性动物', '线形动物', '环节动物', '软体动物', '节肢动物'];
+								data.multiArray[1] = data.multiArray[1];
 								data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
 								break;
 							case 1:
-								data.multiArray[1] = ['鱼', '两栖动物', '爬行动物'];
+								data.multiArray[1] = data.multiArray[1];
 								data.multiArray[2] = ['鲫鱼', '带鱼'];
 								break;
 						}
@@ -100,6 +117,7 @@
 					parent_id:-1
 				},
 				success(res) {
+					console.log(res)
 					if(res.data.code==0){
 						res.data.data.forEach((item,index)=>{
 							_this.multiArray[0].push(item.area_name)
