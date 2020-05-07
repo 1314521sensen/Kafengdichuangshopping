@@ -67,7 +67,7 @@
 </template>
 
 <script>
-	import immediatelypopup from"@/components/Details/immediatelypopup.vue"
+	import immediatelypopup from "@/components/Details/immediatelypopup.vue"
 	const app = getApp()
 	export default{
 		data(){
@@ -96,6 +96,8 @@
 				if(adddeletebool){
 					++this.numlistxiabiao[index][indexs].good_num
 					if(this.numlistxiabiao[index][indexs].checked){
+						// console.log(this.numlistxiabiao[index][indexs].good_num) //这里把用户购买的数量 传给父级
+						this.$emit("Purchasequantity",this.numlistxiabiao[index][indexs].good_num)
 						//当用户选中时 点击的+号的时候 用来计算价格
 						this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
 					}else{
@@ -108,6 +110,7 @@
 						--this.numlistxiabiao[index][indexs].good_num
 						//当用户选中是时 点击-号时 用来减
 						if(this.numlistxiabiao[index][indexs].checked){
+							this.$emit("Purchasequantity",this.numlistxiabiao[index][indexs].good_num)
 							this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
 						}else{
 							this.toals = 0
@@ -140,6 +143,17 @@
 						this.numlistxiabiao[index][indexs].checked = true
 						this.checkbool = true
 						//把选中的数组发送过去
+						// console.log(this.numlistxiabiao[index][indexs])
+						let {good_id,store_name,good_name,good_pic,good_price} = this.numlistxiabiao[index][indexs]
+						// console.log(good_pic)
+						//向父组件传递 用于结算用---开始  这么写后期改小程序用
+						this.$emit("datagoodid",good_id)//商品的id
+						this.$emit("datastorename",store_name)//店铺名称
+						this.$emit("datagoodname",good_name)//商品的标题
+						this.$emit("datagoodimg",good_pic)//商品的图片
+						this.$emit("datagoodprice",good_price)//商品的单价
+						this.$emit("Purchasequantity",this.numlistxiabiao[index][indexs].good_num)//商品的数量
+						//向父组件传递 用于结算用---结束
 						this.$emit("datalist",this.numlistxiabiao[index])
 						this.$emit("dataindex",indexs)
 						this.$emit("datacarid",carid)
@@ -154,7 +168,6 @@
 				// http://hbk.huiboke.com/api/
 				uni.request({
 					url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
-					method:"GET",
 					data:{
 						gid:this.id
 					},
@@ -162,6 +175,7 @@
 						if(res.data.code==0){
 							this.immediatelylist = res.data.data
 							this.modalName = e.currentTarget.dataset.target
+							console.log(this.modalName)
 						}
 					}
 				})
@@ -203,6 +217,7 @@
 			//更新购物车
 			UpdateShoppingCart(_this){
 				console.log(_this.tokey)
+				console.log(_this.shopinglist)
 				if(_this.shopinglist.length<=0){
 					uni.request({
 							url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
@@ -240,17 +255,22 @@
 		},
 		props:["tokey","shopinglist","delatestaticbool"], //这是传过来啊的下标
 		created(){
+			// console.log(111)
+			// console.log(this.shopinglist)
 			const _this = this
 			if(_this.tokey==""){
 				uni.getStorage({
 					key:"bindtokey",
 					success(res){
+						console.log(res)
 						_this.tokey = res.data
-						console.log(_this.tokey)
+						// console.log(_this.tokey)
 						_this.UpdateShoppingCart(_this)
 					}
 				})
-			}			
+			}else{
+				_this.UpdateShoppingCart(_this)
+			}		
 		}
 	}
 </script>

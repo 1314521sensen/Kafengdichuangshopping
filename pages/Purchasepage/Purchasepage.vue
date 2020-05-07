@@ -56,7 +56,7 @@
 					<view class="distribution note">
 						<view class="cu-form-group">
 							<view class="title">订单备注</view>
-							<input placeholder="选填,请先和商家协商一致" name="input"></input>
+							<input placeholder="选填,请先和商家协商一致" name="input" v-model="value"></input>
 						</view>
 					</view>
 					<view class="Payprice">
@@ -72,7 +72,30 @@
 				<text>共{{nums}}件,</text>
 				<text>合计</text>
 				<text>¥{{price*nums}}</text>
-				<button class="cu-btn round bg-orange">提交订单</button>
+				<!-- @tap="priceorder" -->
+				<button class="cu-btn round bg-orange" @tap="showModal" data-target="bottomModal">提交订单</button>
+			</view>
+		</view>
+		<!-- 底部弹出框 框里面嵌套单选-->
+		<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white">
+					<view class="action text-green" @tap="Determinepayment">确定支付</view>
+					<view class="action text-blue" @tap="hideModal">取消支付</view>
+				</view>
+				<view class="padding-xl">
+					<radio-group class="block" @change="RadioChange">
+						<view class="cu-list menu text-left">
+							<view class="cu-item" v-for="(item,index) in list" :key="index">
+								<label class="flex justify-between align-center flex-sub">
+									<view class="flex-sub">{{item}}</view>
+									<radio class="round" :class="radio=='radio' + index?'checked':''" :checked="radio=='radio' + index?true:false"
+									 :value="'radio' + index"></radio>
+								</label>
+							</view>
+						</view>
+					</radio-group>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -88,53 +111,100 @@
 			return {
 				//这是首页的高度
 				statusBar:0,
+				modalName: null,
+				radio: 'radio0',
+				gid:"",
 				img:"",
 				nums:0,
 				storename:"",
 				price:0,
-				goodtitle:""
+				goodtitle:"",
+				data:[],
+				way:0,
+				o_from:0,
+				value:"",
+				list:[
+					"微信",
+					"支付宝",
+					"余额"
+				]
 			}
 		},
 		methods: {
-			
+			priceorder(){
+				//为了小程序考虑只能这样写了
+				uni.getStorage({
+					key:"bindtokey",
+					success:(res)=>{
+						 // console.log(res.data,this.gid,this.nums,this.data,this.o_from,this.value)
+						if(this.way==1){
+							console.log("从pc")
+							uni.request({
+								url:"http://hbk.huiboke.com/api/order/createUnPayOrderInfo",
+								method:"POST",
+								data:{
+									token:res.data,
+									gid:this.gid,
+									spec:this.data,
+									quantity:this.nums,
+									o_from:this.o_from,
+									address_id:52,
+									p_msg:this.value
+								},
+								success(reslove) {
+									// console.log(reslove.data.code)
+									if(reslove.data.code==0){
+										console.log(reslove)
+									}else{//如果成功以后弹出提示框
+										console.log(111)
+									}
+								}
+							})
+						}else if(this.way==2){
+							console.log("从手机过来的过来的")
+						}else{
+							console.log("从小程序过来的")
+						}
+					}
+				})
+			},
+			RadioChange(e) {
+				this.radio = e.detail.value
+				// console.log(e.detail.value)
+				// console.log(this.radio)
+			},
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null
+			},
+			Determinepayment(){
+				console.log(this.radio)
+				
+			}
 		},
 		onLoad(opction){
 			// console.log(opction)
 			let {gid,num,way,img,storename,price,goodtitle} = opction
+			this.gid = gid
+			this.way = way
 			this.img = JSON.parse(img)
 			this.nums = num
 			this.storename = storename
 			this.price = price
 			this.goodtitle = goodtitle
 			//使用eval方法 将字符串数组 转换为 真数组
-			let data = eval(opction.specname)
-			//为了小程序考虑只能这样写了
-			// uni.getStorage({
-			// 	key:"bindtokey",
-			// 	success(res){
-			// 		if(way==0){
-			// 			console.log("从商品详情过来的")
-			// 			uni.request({
-			// 				url:"http://hbk.huiboke.com/api/order/createUnPayOrderInfo",
-			// 				data:{
-			// 					token:res.data,
-			// 					gid:gid,
-			// 					spec:data,
-			// 					quantity:num,
-			// 					// #ifdef APP-PLUS
-			// 					o_from:2,
-			// 					// #endif
-			// 					// #ifdef MP-WEIXIN
-			// 					o_from:3,
-			// 					// #endif
-								
-			// 				}
-			// 			})
-			// 		}else{
-			// 			console.log("从购物车过来的")
-			// 		}
-			// 	}
-			// })
+			this.data = eval(opction.specname)
+			// #ifdef H5
+				this.o_from = 1,
+			// #endif
+			// #ifdef APP-PLUS
+				this.o_from = 2
+			// #endif
+			// #ifdef MP-WEIXIN
+				this.o_from = 3
+			// #endif
 			this.statusBar = app.globalData.statusBar
 		},
 		components:{

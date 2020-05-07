@@ -17,6 +17,11 @@
 				@datalist="datalist" 
 				@dataindex="dataindex" 
 				@datacarid="datacarid" 
+				@datastorename="datastorename"
+				@datagoodname="datagoodname"
+				@Purchasequantity="Purchasequantity"
+				@datagoodimg="datagoodimg"
+				@datagoodprice="datagoodprice"
 				:shopinglist="shopinglist"
 				:delatestaticbool="delatestaticbool"
 			></shoppingcatlist>
@@ -33,6 +38,12 @@
 			:carid="carid" 
 			@deleteData="deleteData"
 			@deletestatic="deletestatic"
+			:num="num"
+			:goodid="goodid"
+			:storename="storename"
+			:goodname="goodname"
+			:goodimg="goodimg"
+			:goodprice="goodprice"
 		></shopingbottompay>
 	</view>
 </template>
@@ -42,7 +53,6 @@
 	import shopingbottompay from "@/components/shoppingcartlist/shopingbottompay.vue"
 	const app = getApp();
 	export default {
-		
 		data() {
 			return {
 				totalpic:0,
@@ -53,7 +63,13 @@
 				tokey:"",
 				carid:"",
 				shopinglist:[],
-				delatestaticbool:false
+				delatestaticbool:false,
+				num:0,
+				goodid:0,
+				storename:"",
+				goodname:"",
+				goodimg:"",
+				goodprice:""
 			}
 		},
 		methods: {
@@ -64,7 +80,6 @@
 				}else{
 					this.totalpic = 0
 				}
-				
 			},
 			//这是传过来的数组
 			datalist(e){
@@ -104,6 +119,7 @@
 								pageSize:10
 							},
 							success(res){
+								// console.log(res)
 								if(res.data.code==0){//代表获取成功
 										_this.shopinglist = res.data.data
 										uni.stopPullDownRefresh();//关闭下拉刷新
@@ -123,7 +139,30 @@
 			//当用户点击了删除子组件传一个状态过来，父组件用来接收
 			deletestatic(e){
 				this.delatestaticbool = e
+			},
+			//用户子组件发送过来  父组件进行接收 用于结算---开始
+			Purchasequantity(e){//购买的数量
+				console.log(e)
+				this.num  = e
+			},
+			datagoodid(e){//商品id
+				this.goodid = e
+			},
+			datastorename(e){//店铺名称
+				this.storename = e
+			},
+			datagoodname(e){//商品的标题
+				this.goodname = e
+			},
+			datagoodimg(e){
+				// console.log(e)
+				this.goodimg = e
+			},
+			datagoodprice(e){
+				// console.log(e)
+				this.goodprice = e
 			}
+			//用户点击购买的数量发送过来  父组件进行接收 用于结算---结束
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
@@ -135,7 +174,6 @@
 		},
 		created(){
 			const _this = this
-			
 		},
 		components:{
 			shoppingcatlist,
