@@ -164,6 +164,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
 var app = getApp();var _default =
 {
   data: function data() {
@@ -221,7 +228,6 @@ var app = getApp();var _default =
     },
     Addcart: function Addcart(obj, img) {var
       store_name = obj.store_name,good_title = obj.good_title,good_price = obj.good_price,good_pic = obj.good_pic;
-      console.log(this.tokey, this.storeid, this.gid, store_name, good_title, good_price, good_pic);
       uni.request({
         url: "http://hbk.huiboke.com/api/shopping_cart/addShoppingCartInfo",
         method: "POST",
@@ -235,11 +241,13 @@ var app = getApp();var _default =
           g_pic: good_pic },
 
         success: function success(res) {
-          console.log(res);
           if (res.data.code == 0) {
             uni.switchTab({
               url: "/pages/shoppingCart/shoppingCart" });
 
+          } else {
+            //这个函数 如果用户的tokey过期了 那么就跳转到登录页
+            app.globalData.Logback(res.data.msg);
           }
         } });
 
@@ -266,7 +274,7 @@ var app = getApp();var _default =
       // 	}
       // });
     },
-    //这是点击弹窗的确定是否确定添加
+    //这是点击弹窗的确定是否确定添加收藏
     collectionwork: function collectionwork() {var _this3 = this;
       //this.Noteinformation收藏信息
       if (this.Noteinformation !== "") {
@@ -290,7 +298,8 @@ var app = getApp();var _default =
               app.globalData.showtoastsame("收藏成功");
               _this3.favid = parseInt(res.data.data.fav_id);
             } else {
-              app.globalData.showtoastsame(res.data.msg);
+              //这个函数 如果用户的tokey过期了 那么就跳转到登录页
+              app.globalData.Logback(res.data.msg);
             }
           } });
 
@@ -300,9 +309,7 @@ var app = getApp();var _default =
       }
     },
     Skiporder: function Skiporder(e) {
-      console.log(e.currentTarget.dataset.target);
       this.modalName = e.currentTarget.dataset.target;
-
     },
     //当用户点击了 子组件里面的x
     hiddends: function hiddends(e) {

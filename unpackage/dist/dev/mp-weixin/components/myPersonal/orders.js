@@ -146,11 +146,11 @@ __webpack_require__.r(__webpack_exports__);
 
       {
         images: "/static/my/Forgoods.png",
-        textname: "待收货" },
+        textname: "已发货" },
 
       {
         images: "/static/my/beenshipped.png",
-        textname: "已发货" },
+        textname: "评价" },
 
       {
         images: "/static/my/Returngoods.png",

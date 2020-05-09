@@ -177,21 +177,42 @@ var app = getApp();var _default =
       num: 1, //这是购买数量的数据
       selectedlist: [],
       selectedlistnamelist: [],
-      text: "" };
+      text: "",
+      datalist: [],
+      price: "" };
 
   },
   methods: {
     //这是当用户点击规格
-    choose: function choose(items, index, indexs, item) {
+    choose: function choose(items, index, indexs, item) {var _this = this;
       //这是存储用户点击规格的值
       this.selectedlist[index] = items;
       //这是用来存储用户的规格的名称
       this.selectedlistnamelist[index] = item.spec_name;
-      var str = "";
+      //用来保存用户选择的规格方便传给后台----开始
+      this.datalist[index] = { spec_name: item.spec_name, spec_value: items
+        // this.selectedlistindex.push({"spec_name":`${this.selectedlistnamelist[index]}`,"spec_value":`${this.selectedlist[index]}`})
+        //用来保存用户选择的规格方便传给后台----结束
+        // console.log(items)
+      };var str = "";
       this.selectedlist.forEach(function (itemsitem, indexsindex) {
         str += itemsitem + "&nbsp;&nbsp;&nbsp;";
       });
       this.text = str;
+      //去请求每个商品规格的对应的数据
+      uni.request({
+        url: "http://hbk.huiboke.com/api/good/getSelectedGoodSpecInfo",
+        method: "POST",
+        data: {
+          gid: this.gid,
+          spec: this.datalist },
+
+        success: function success(res) {
+          if (res.data.code == 0) {
+            _this.price = res.data.data.price;
+          }
+        } });
+
     },
     //这是用户点击了数量+还是-
     shopingnum: function shopingnum(bool) {
@@ -211,11 +232,7 @@ var app = getApp();var _default =
         app.globalData.showtoastsame("请选择完整规格");
       } else {
         if (this.bool) {
-
           var arr = [];
-          // console.log(this.selectedlist)
-          // console.log(this.selectedlistnamelist)
-
           for (var i = 0; i < this.selectedlist.length; i++) {
             //将每个值进行字符串拼接 这样就可以传给后端了
             arr.push({ "spec_name": "".concat(this.selectedlistnamelist[i]), "spec_value": "".concat(this.selectedlist[i]) });
@@ -223,11 +240,11 @@ var app = getApp();var _default =
           this.$emit("guigedata", arr);
           this.$emit("hiddends", null);
         } else {
+          //跳转到购买页面
           uni.navigateTo({
-            url: "/pages/Purchasepage/Purchasepage" });
+            url: "/pages/Purchasepage/Purchasepage?gid=".concat(this.gid, "&specname=").concat(JSON.stringify(this.datalist), "&num=").concat(this.num, "&way=1&img=").concat(JSON.stringify(this.pic.good_pic), "&storename=").concat(this.pic.store_name, "&price=").concat(this.price, "&goodtitle=").concat(this.pic.good_title) });
 
         }
-        //跳转到购买页面
       }
     },
     //当用户点击了×
@@ -235,7 +252,7 @@ var app = getApp();var _default =
       this.$emit("hiddends", null);
     } },
 
-  props: ["immediatelylist", "bool"] };exports.default = _default;
+  props: ["immediatelylist", "bool", "gid", "pic"] };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

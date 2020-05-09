@@ -178,9 +178,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 var app = getApp();var _default =
 {
-
   data: function data() {
     return {
       totalpic: 0,
@@ -191,7 +201,13 @@ var app = getApp();var _default =
       tokey: "",
       carid: "",
       shopinglist: [],
-      delatestaticbool: false };
+      delatestaticbool: false,
+      num: 0,
+      goodid: 0,
+      storename: "",
+      goodname: "",
+      goodimg: "",
+      goodprice: "" };
 
   },
   methods: {
@@ -202,7 +218,6 @@ var app = getApp();var _default =
       } else {
         this.totalpic = 0;
       }
-
     },
     //这是传过来的数组
     datalist: function datalist(e) {
@@ -242,6 +257,7 @@ var app = getApp();var _default =
               pageSize: 10 },
 
             success: function success(res) {
+              // console.log(res)
               if (res.data.code == 0) {//代表获取成功
                 _this.shopinglist = res.data.data;
                 uni.stopPullDownRefresh(); //关闭下拉刷新
@@ -261,8 +277,31 @@ var app = getApp();var _default =
     //当用户点击了删除子组件传一个状态过来，父组件用来接收
     deletestatic: function deletestatic(e) {
       this.delatestaticbool = e;
-    } },
-
+    },
+    //用户子组件发送过来  父组件进行接收 用于结算---开始
+    Purchasequantity: function Purchasequantity(e) {//购买的数量
+      console.log(e);
+      this.num = e;
+    },
+    datagoodid: function datagoodid(e) {//商品id
+      this.goodid = e;
+    },
+    datastorename: function datastorename(e) {//店铺名称
+      this.storename = e;
+    },
+    datagoodname: function datagoodname(e) {//商品的标题
+      this.goodname = e;
+    },
+    datagoodimg: function datagoodimg(e) {
+      // console.log(e)
+      this.goodimg = e;
+    },
+    datagoodprice: function datagoodprice(e) {
+      // console.log(e)
+      this.goodprice = e;
+    }
+    //用户点击购买的数量发送过来  父组件进行接收 用于结算---结束
+  },
   onLoad: function onLoad() {
     this.statusBar = app.globalData.statusBar;
   },
@@ -273,7 +312,6 @@ var app = getApp();var _default =
   },
   created: function created() {
     var _this = this;
-
   },
   components: {
     shoppingcatlist: shoppingcatlist,

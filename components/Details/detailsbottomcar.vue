@@ -127,6 +127,9 @@
 							uni.switchTab({
 								url:"/pages/shoppingCart/shoppingCart"
 							})
+						}else{
+							//这个函数 如果用户的tokey过期了 那么就跳转到登录页
+							app.globalData.Logback(res.data.msg)
 						}
 					}
 				})
@@ -153,7 +156,7 @@
 				// 	}
 				// });
 			},
-			//这是点击弹窗的确定是否确定添加
+			//这是点击弹窗的确定是否确定添加收藏
 			collectionwork(){
 				//this.Noteinformation收藏信息
 					if(this.Noteinformation!==""){
@@ -177,7 +180,8 @@
 									app.globalData.showtoastsame("收藏成功")
 									this.favid = parseInt(res.data.data.fav_id)
 								}else{
-									app.globalData.showtoastsame(res.data.msg)
+									//这个函数 如果用户的tokey过期了 那么就跳转到登录页
+									app.globalData.Logback(res.data.msg)
 								}
 							}
 						})

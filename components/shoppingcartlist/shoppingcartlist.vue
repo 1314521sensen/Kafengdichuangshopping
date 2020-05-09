@@ -35,7 +35,7 @@
 							v-for="(itemitem,indexss) in JSON.parse(items.spec)" 
 							:key="indexss" 
 							@tap="showModal" 
-							data-target="RadioModal"
+							data-target="bottomModal"
 							:data-id="items.good_id"
 						>{{itemitem.spec_name+" "+itemitem.spec_value}}</text>
 					</view>
@@ -53,22 +53,23 @@
 					</view>
 				</view>
 			</view>
+			111
+			<!-- 弹窗商品规格列表 -->
+			<immediatelypopup :class="modalName=='bottomModal'?'show':''"  
+				:immediatelylist="immediatelylist"
+				:bool="bool"
+				@hiddends="hiddends"
+				@guigedata="guigedata"
+			></immediatelypopup>
 			<!-- 这是cart-item-bottom小列表结束 -->
 		</view>
-		<!-- 弹窗商品规格列表 -->
-		<immediatelypopup
-			:class="modalName=='RadioModal'?'show':''" 
-			:immediatelylist="immediatelylist"
-			:bool="bool"
-			@hiddends="hiddends"
-			@guigedata="guigedata"
-		></immediatelypopup>
 	</view>
 </template>
 
 <script>
-	import immediatelypopup from "@/components/Details/immediatelypopup.vue"
 	const app = getApp()
+	import immediatelypopup from "@/components/Details/immediatelypopup.vue"
+	// import tanchuang from "@/components/Details/immediatelypopup.vue"
 	export default{
 		data(){
 			return {
@@ -165,20 +166,23 @@
 			showModal(e) {
 				//获取id值用来获取商品的规格
 				this.id = e.currentTarget.dataset.id
+				
+				this.modalName = e.currentTarget.dataset.target
+				console.log(e.currentTarget.dataset.target)
 				// http://hbk.huiboke.com/api/
-				uni.request({
-					url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
-					data:{
-						gid:this.id
-					},
-					success:(res)=>{
-						if(res.data.code==0){
-							this.immediatelylist = res.data.data
-							this.modalName = e.currentTarget.dataset.target
-							console.log(this.modalName)
-						}
-					}
-				})
+				// uni.request({
+				// 	url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
+				// 	data:{
+				// 		gid:this.id
+				// 	},
+				// 	success:(res)=>{
+				// 		if(res.data.code==0){
+				// 			this.immediatelylist = res.data.data
+				// 			// this.modalName = e.currentTarget.dataset.target
+				// 			// console.log(this.modalName)
+				// 		}
+				// 	}
+				// })
 			},
 			hiddends(e) {
 				this.modalName = e
@@ -249,9 +253,9 @@
 				}
 			}
 		},
-		
 		components:{
-			immediatelypopup,
+			immediatelypopup
+			// tanchuang
 		},
 		props:["tokey","shopinglist","delatestaticbool"], //这是传过来啊的下标
 		created(){

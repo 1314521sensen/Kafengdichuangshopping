@@ -109,7 +109,8 @@
 					key:"bindtokey",
 					success(res){
 						_this.tokey = res.data
-						console.log(_this.tokey)
+						// console.log(_this.tokey)
+						app.globalData.Detectionupdatetokey(res.data)
 						uni.request({
 							url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
 							method:"POST",

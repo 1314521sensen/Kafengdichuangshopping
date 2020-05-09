@@ -15,6 +15,7 @@
 	//这是详情图
 	import imgs from "@/components/Details/detailsimgs.vue"
 	import bottomcar from "@/components/Details/detailsbottomcar.vue"
+	const app = getApp()
 	export default {
 		data() {
 			return {
@@ -115,12 +116,21 @@
 				}
 			})
 		},
+		onShow(){
+			uni.getStorage({
+				key:"bindtokey",
+				success(res) {
+					app.globalData.Detectionupdatetokey(res.data)
+				}
+			})
+		},
 		created() {
 			const _this = this
 			uni.getStorage({
 				key:"bindtokey",
 				success(res) {
 					_this.tokey = res.data
+					app.globalData.Detectionupdatetokey(res.data)
 				}
 			})
 		}

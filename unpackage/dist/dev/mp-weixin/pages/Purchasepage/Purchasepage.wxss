@@ -106,7 +106,7 @@
 .Purchasepage .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-title.data-v-433371b6 {
   overflow: hidden;
   width: 70%;
-  height: 80rpx;
+  height: 76rpx;
   font-size: 28rpx;
 }
 .Purchasepage .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic.data-v-433371b6 {

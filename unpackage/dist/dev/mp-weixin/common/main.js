@@ -11,9 +11,6 @@
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
 var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ 9));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
-//引入uview组件库
-
-
 _vue.default.config.productionTip = false;var pageheight = function pageheight() {return __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 226));};
 
 _vue.default.component('pageheight', pageheight);
@@ -128,6 +125,13 @@ __webpack_require__.r(__webpack_exports__);
         title: message,
         icon: 'none' });
 
+    },
+    Logback: function Logback(messagelogin) {//封装个函数 用于重新登录
+      if (messagelogin == '令牌错误') {
+        uni.reLaunch({
+          url: "/pages/login/login" });
+
+      }
     } },
 
   onLaunch: function onLaunch() {

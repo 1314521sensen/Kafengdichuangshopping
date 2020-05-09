@@ -161,12 +161,19 @@ var app = getApp();var _default =
   methods: {
     //这是结算
     settlement: function settlement() {
-      console.log(this.xiabiao);
       if (this.xiabiao !== null) {
         try {
           if (this.zizujianlist[this.xiabiao].checked) {
-            //点击购买现在还没通知
-            console.log(1);
+            console.log(this.num);
+            console.log(this.goodid);
+            console.log(this.storename);
+            console.log(this.goodname);
+            console.log(this.goodimg);
+            console.log(this.goodprice);
+            //点击购买现在进行跳转
+            // uni.navigateTo({
+            // 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=1&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}`
+            // })
           }
         }
         catch (err) {
@@ -260,7 +267,7 @@ var app = getApp();var _default =
       }
     } },
 
-  props: ["totalpic", "bool", "zizujianlist", "xiabiao", "tokey", "carid"] };exports.default = _default;
+  props: ["totalpic", "bool", "zizujianlist", "xiabiao", "tokey", "carid", "num", "goodid", "storename", "goodname", "goodimg", "goodprice"] };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

@@ -10,6 +10,7 @@
 <script>
 	//引入横排组件
 	import horizontallylist from "@/components/sortinglist/horizontallylist.vue"
+	const app = getApp()
 	export default{
 		data(){
 			return {
@@ -23,7 +24,7 @@
 		created() {
 			const _this = this
 			uni.request({
-				url:"http://hbk.huiboke.com/api/good/getRandomRecommendGoodsList",
+				url:`${app.globalData.Requestpath}good/getRandomRecommendGoodsList`,
 				data:{
 					limit:20
 				},

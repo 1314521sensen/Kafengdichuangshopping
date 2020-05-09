@@ -6,7 +6,7 @@
 				</view> -->
 				<!-- 把这变成image -->
 				<view class="icon" :style="{width:width,height:height+'rpx'}">
-					<image src="/static/my/beenshipped.png" alt="">
+					<image src="/static/1.png" alt="">
 				</view>
 				<text>{{item.name}}</text>
 			</view>

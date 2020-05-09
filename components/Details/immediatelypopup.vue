@@ -110,6 +110,13 @@
 			},
 			//这是当用户点击了立即购买的按钮
 			buy(){
+				//获取tokey值 为了小程序考虑
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						app.globalData.Detectionupdatetokey(res.data)
+					}
+				})
 				if(this.selectedlist.length<this.immediatelylist.length){
 					app.globalData.showtoastsame("请选择完整规格")
 				}else{

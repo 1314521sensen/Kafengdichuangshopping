@@ -138,7 +138,30 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var actionbar = function actionbar() {return __webpack_require__.e(/*! import() | components/actionbar/actionbar */ "components/actionbar/actionbar").then(__webpack_require__.bind(null, /*! @/components/actionbar/actionbar.vue */ 135));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var actionbar = function actionbar() {return __webpack_require__.e(/*! import() | components/actionbar/actionbar */ "components/actionbar/actionbar").then(__webpack_require__.bind(null, /*! @/components/actionbar/actionbar.vue */ 135));};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -227,19 +250,106 @@ var app = getApp();var _default =
   data: function data() {
     return {
       //这是首页的高度
-      statusBar: 0 };
+      statusBar: 0,
+      modalName: null,
+      radio: 'radio0',
+      gid: "",
+      img: "",
+      nums: 0,
+      storename: "",
+      price: 0,
+      goodtitle: "",
+      data: [],
+      way: 0,
+      o_from: 0,
+      value: "",
+      list: [
+      "微信",
+      "支付宝",
+      "余额"] };
+
 
   },
-  methods: {},
+  methods: {
+    priceorder: function priceorder() {var _this = this;
+      //为了小程序考虑只能这样写了
+      uni.getStorage({
+        key: "bindtokey",
+        success: function success(res) {
+          // console.log(res.data,this.gid,this.nums,this.data,this.o_from,this.value)
+          if (_this.way == 1) {
+            console.log("从pc");
+            uni.request({
+              url: "http://hbk.huiboke.com/api/order/createUnPayOrderInfo",
+              method: "POST",
+              data: {
+                token: res.data,
+                gid: _this.gid,
+                spec: _this.data,
+                quantity: _this.nums,
+                o_from: _this.o_from,
+                address_id: 52,
+                p_msg: _this.value },
+
+              success: function success(reslove) {
+                // console.log(reslove.data.code)
+                if (reslove.data.code == 0) {
+                  console.log(reslove);
+                } else {//如果成功以后弹出提示框
+                  console.log(111);
+                }
+              } });
+
+          } else if (_this.way == 2) {
+            console.log("从手机过来的过来的");
+          } else {
+            console.log("从小程序过来的");
+          }
+        } });
+
+    },
+    RadioChange: function RadioChange(e) {
+      this.radio = e.detail.value;
+      // console.log(e.detail.value)
+      // console.log(this.radio)
+    },
+    showModal: function showModal(e) {
+      this.modalName = e.currentTarget.dataset.target;
+    },
+    hideModal: function hideModal(e) {
+      this.modalName = null;
+    },
+    Determinepayment: function Determinepayment() {
+      console.log(this.radio);
+
+    } },
+
+  onLoad: function onLoad(opction) {
+    // console.log(opction)
+    var gid = opction.gid,num = opction.num,way = opction.way,img = opction.img,storename = opction.storename,price = opction.price,goodtitle = opction.goodtitle;
+    this.gid = gid;
+    this.way = way;
+    this.img = JSON.parse(img);
+    this.nums = num;
+    this.storename = storename;
+    this.price = price;
+    this.goodtitle = goodtitle;
+    //使用eval方法 将字符串数组 转换为 真数组
+    this.data = eval(opction.specname);
 
 
-  onLoad: function onLoad() {
-    // console.log(app.globalData)
+
+
+
+
+
+    this.o_from = 3;
+
     this.statusBar = app.globalData.statusBar;
-
   },
   components: {
     actionbar: actionbar } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

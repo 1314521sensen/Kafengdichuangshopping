@@ -136,7 +136,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var list = function list() {return __webpack_require__.e(/*! import() | components/indexcomponents/list */ "components/indexcomponents/list").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/list.vue */ 369));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var list = function list() {return __webpack_require__.e(/*! import() | components/indexcomponents/list */ "components/indexcomponents/list").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/list.vue */ 369));};
 
 
 
@@ -164,47 +164,88 @@ var app = getApp();var _default =
       TabCur: 0,
       scrollLeft: 0,
       Myorder: [
-      "全部",
-      "待付款",
-      "待发货",
-      "待收货",
-      "已发货",
-      "退款售后"],
-
-      list: [
       {
-        images: '/static/index/indexlist/1.jpg',
-        describe: "梓画 床 实木床 单双人床新中式床1.8米1.5m高箱储物床婚床卧室精品家具",
-        price: "50" }] };
+        title: "全部",
+        url: "order/getAllOrderList" },
+
+      {
+        title: "待付款",
+        url: "order/getUnPayOrderList" },
+
+      {
+        title: "待发货",
+        url: "order/getPayOrderList" },
+
+      {
+        title: "已发货",
+        url: "order/getSendOrderList" },
+
+      {
+        title: "待评价",
+        url: "order/getConfirmPayOrderList" }],
 
 
+
+      list: [],
+      tokey: 0 };
 
   },
   methods: {
-    tabSelect: function tabSelect(e) {
-      // console.log(e.currentTarget.dataset)
-      var _e$currentTarget$data = e.currentTarget.dataset,id = _e$currentTarget$data.id,items = _e$currentTarget$data.items;
+    tabSelect: function tabSelect(e) {var _e$currentTarget$data =
+      e.currentTarget.dataset,id = _e$currentTarget$data.id,items = _e$currentTarget$data.items,url = _e$currentTarget$data.url;
       this.items = items;
       this.TabCur = id;
       this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
+      this.Allorders(url);
+    },
+    //封装一个获取订单的方法
+    Allorders: function Allorders(url) {var _this = this;
+      uni.request({
+        url: "http://hbk.huiboke.com/api/".concat(url),
+        method: "POST",
+        data: {
+          token: this.tokey,
+          page: 1,
+          pageSize: 10 },
+
+        success: function success(res) {
+          if (res.data.code == 0) {
+            console.log(res);
+            _this.list = res.data.data.list;
+          }
+        } });
+
     } },
 
   components: {
     list: list },
 
-  onLoad: function onLoad(option) {
+  onLoad: function onLoad(option) {var _this2 = this;
+    //当组件初始化的时候 获取用户tokey值
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        _this2.tokey = res.data;
+      } });
+
     // console.log(option.index)
     var orderindex = option.index;
+    // console.log(orderindex)//如果全部的话 就undefined
+    var url = null;
     if (orderindex) {
       this.TabCur = orderindex;
-      // console.log(this.Myorder[orderindex])
-      this.items = this.Myorder[orderindex];
+      this.items = this.Myorder[orderindex].title;
+      url = this.Myorder[orderindex].url;
+      this.Allorders(url);
     } else {
       this.TabCur = 0;
-      this.items = this.Myorder[0];
+      this.items = this.Myorder[0].title;
+      url = this.Myorder[0].url;
+      this.Allorders(url);
     }
     this.statusBar = app.globalData.statusBar;
   } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
