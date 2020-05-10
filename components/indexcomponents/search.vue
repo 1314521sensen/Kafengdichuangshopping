@@ -1,12 +1,21 @@
 <template>
 	<view class="search">
-		<view class="cu-bar search bg-gradual-blue">
-			<view class="search-form round">
+		<view class="search-inp">
+			<view class="search-form">
 				<text class="cuIcon-search"></text>
-				<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索你想要的商品" confirm-type="search" id="inp"></input>
+				<input 
+				@focus="InputFocus" 
+				@blur="InputBlur" 
+				:adjust-position="false" 
+				type="text" 
+				placeholder="搜索你想要的商品"
+				placeholder-class="seachplaceholder"
+				placeholder-style="color:#fff"
+				confirm-type="search" id="inp"
+				 ></input>
 			</view>
 			<view class="action">
-				<button class="cu-btn bg-green shadow-blur round">搜索</button>
+				<button class="cu-btn shadow-blur">搜索</button>
 			</view>
 		</view>
 	</view>
@@ -39,24 +48,44 @@
 </script>
 
 <style lang="less" scoped>
-	.search{
-		// display:flex;
-		// justify-content: space-between;
-		.input{
-			width:100%;
-			height:70rpx;
-			// background-color:red;
-			border-radius:26rpx;
-			input{
-				// border:1px solid #000;
-				width: 100%;
-				height:100%;
-				border-radius:26rpx;
-				padding-left:30rpx;
-				.placeholderName{
-					font-size: 24rpx;
-					line-height:60rpx;
-					color:#fff;
+	.search {
+		// width: 100%;
+		height: 364rpx;
+		padding-top: 22rpx;
+		background-color: #e62d28;
+		.seachplaceholder{
+			font-size: 26rpx;
+		}
+		.search-inp {
+			margin: 0 auto;
+			display: flex;
+			background-color: #ddd;
+			width: 720rpx;
+			height: 66rpx;
+			border-radius: 30rpx;
+			.search-form {
+				display: flex;
+				align-items: center;
+				width: 600rpx;
+				background-color: #f0817e;
+				border-top-left-radius: 30rpx;
+				border-bottom-left-radius: 30rpx;
+				text {
+					color: #fff;
+					font-size: 40rpx;
+					margin: 0 34rpx 0 28rpx;
+				}
+			}
+			.action {
+				border-top-right-radius: 30rpx;
+				border-bottom-right-radius: 30rpx;
+				background-color: #fee03c;
+				width: 120rpx;
+				.cu-btn {
+					background-color: #fee03c;
+					border-top-right-radius: 30rpx;
+					border-bottom-right-radius: 30rpx;
+					border: none;
 				}
 			}
 		}

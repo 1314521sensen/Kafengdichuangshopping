@@ -87,7 +87,6 @@
 			selectedaoto(item,area_id,index){
 				if(this.TabCur==0){
 					this.Haschosen[0] = [item]
-					console.log(this.Haschosen)
 					uni.request({
 						url:`${app.globalData.Requestpath}common/getAreasMinusOne`,
 						data:{

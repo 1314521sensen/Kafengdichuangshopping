@@ -175,28 +175,11 @@
 									},
 									success:(res)=>{
 										// console.log(res,"已经请求用户信息成功")
-			// 							if(res.data.code==0){
-			// 								console.log("信息已经修改")
-			// 								//在把新值存进缓存
-			// 								uni.setStorage({
-			// 									key:"userinfokey",
-			// 									data:{
-			// 										user_nick:usernick,
-			// 										real_name:username,
-			// 										user_sex:usersex,
-			// 										province:this.selectiondatalist[0][0].area_id,
-			// 										city:this.selectiondatalist[1][0].area_id,
-			// 										area:this.selectiondatalist[2][0].area_id,
-			// 										user_pic:src
-			// 									},
-			// 									success:()=> {
-			// 										console.log("已经存进缓存中")
-			// 										this.toast("信息修改成功")
-			// 										this.$emit("changebool",true)
-			// 										this.$emit("changetext","保存")
-			// 									}
-			// 								})
-			// 							}
+										if(res.data.code==0){
+											uni.switchTab({
+												url:"/pages/PersonalMy/PersonalMy"
+											})
+										}
 									},
 									fail(err){
 										// console.log("请求失败")

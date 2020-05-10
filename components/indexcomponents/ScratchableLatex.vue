@@ -35,10 +35,10 @@
 
 <style lang="less" scoped>
 	.ScratchableLatex{
-		margin-top:30rpx;
+		margin-top:68rpx;
 		.icon{
-			width: 40%;
-			height:60rpx;
+			width: 50%;
+			height:80rpx;
 			// background-color:pink;
 			margin:auto;
 			image{
@@ -47,7 +47,8 @@
 			}	
 		}
 		text{
-			font-size: 24rpx;
+			font-size: 26rpx !important;
+			margin-top:0 !important;
 		}
 	}
 </style>

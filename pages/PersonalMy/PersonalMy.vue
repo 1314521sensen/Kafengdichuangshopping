@@ -1,7 +1,8 @@
 <template>
 	<view>
 		<pageheight :statusBar="statusBar"></pageheight>
-		<information :couponslistdata="couponslistdata"></information>
+		<!-- :amount="amount" :integral="integral" -->
+		<information :couponslistdata="couponslistdata" :tokey="tokey" :nickname="nickname" :images="images" :moneylist="moneylist" :logintokeytext="logintokeytext"></information>
 		<mycoupons></mycoupons>
 		<orders></orders>
 		<myScratchableLatex></myScratchableLatex>
@@ -25,6 +26,28 @@
 			return {
 				statusBar:0,
 				couponslistdata:[],
+				tokey:"",
+				nickname:"",
+				images:"",
+				amount:0,
+				integral:0,
+				logintokeytext:"",//根据tokey值有没有 来判断用户有没有登录
+				//这是账户的数据
+				moneylist:[
+					{
+						num:0,
+						miao:"账户余额"
+					},
+					{
+						num:0,
+						miao:"我的积分"
+					},
+					{
+						num:0,
+						miao:"优惠券",
+						url:"/pages/Allcoupons/allcoupons"
+					}
+				]
 			}
 		},
 		components:{
@@ -42,21 +65,43 @@
 			
 		},
 		onShow(){
+			const _this = this
 			//当数据发生改变得时候 就获取缓存中的值
-			uni.getStorage({
-				key:"couponsData",
-				success:(res)=>{
-					console.log(res)
-					this.couponslistdata = res.data
-				},
-				fail(err){
-					this.couponslistdata = null
-				}
-			})
+			// uni.getStorage({
+			// 	key:"couponsData",
+			// 	success:(res)=>{
+			// 		this.couponslistdata = res.data
+			// 		console.log(res,data)
+			// 	},
+			// 	fail(err){
+			// 		this.couponslistdata = null
+			// 	}
+			// })
 			uni.getStorage({
 				key:"bindtokey",
 				success(res){
+					_this.tokey = res.data
 					app.globalData.Detectionupdatetokey(res.data)
+					uni.request({
+						url:`${app.globalData.Requestpath}user/getUserDetail`,
+						method:"POST",
+						data:{
+							token:_this.tokey
+						},
+						success(resinfo) {
+							if(app.globalData.logintokeybool){
+								_this.logintokeytext = "退出"
+							}else{
+								_this.logintokeytext = "登录"
+							}
+							let {user_nick,user_pic,user_amount,user_integral} = resinfo.data.data
+							// console.log(user_nick,user_pic)
+							_this.nickname = user_nick
+							_this.images = `http://hbk.huiboke.com${user_pic}`
+							_this.moneylist[0].num = user_amount
+							_this.moneylist[1].num = user_integral
+						}
+					})
 				}
 			})
 		}

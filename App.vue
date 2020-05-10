@@ -3,6 +3,7 @@
 		globalData:{
 			statusBar:0,
 			Requestpath:"http://hbk.huiboke.com/api/",
+			logintokeybool:false,
 			VerificationCode(json){//封装一个方法来获取验证码
 				console.log(json)
 				uni.request({
@@ -46,11 +47,13 @@
 						token:tokey
 					},
 					success(res) {
-						console.log(res)
 						if(res.data.code==1){
 							uni.reLaunch({
 								url:"/pages/login/login"
 							})
+							getApp().globalData.logintokeybool = false
+						}else{
+							getApp().globalData.logintokeybool = true
 						}
 					}
 				})

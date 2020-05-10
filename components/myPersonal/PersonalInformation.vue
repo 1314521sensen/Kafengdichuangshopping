@@ -8,15 +8,15 @@
 							<image :src="images"></image>
 						</view>
 						<view class="head-information">
-							<text>明天的我又努力了</text>
+							<text>{{nickname}}</text>
 						</view>
 					</view>
 					<!-- 新增加的登录退出 -->
-					<!-- #ifdef APP-PLUS -->
+					<!-- #ifdef APP-PLUS || H5 -->
 						<view class="login">
 							<view class="margin-tb-sm text-center">
 								<!-- 到时候判断用户有没有登录 有的话就改成退出 -->
-								<button class="cu-btn round bg-green" @tap="login">登录</button>
+								<button class="cu-btn round bg-green" @tap="login">{{logintokeytext}}</button>
 							</view>
 						</view>
 					<!-- #endif -->
@@ -36,26 +36,11 @@
 
 <script>
 	//这是个人中心的头像 个人信息
+	const app  = getApp()
 	export default{
 		data(){
 			return {
-				images:"/static/my/touxiang.jpg",
-				//这是账户的数据
-				moneylist:[
-					{
-						num:0,
-						miao:"账户余额"
-					},
-					{
-						num:0,
-						miao:"我的积分"
-					},
-					{
-						num:0,
-						miao:"优惠券",
-						url:"/pages/Allcoupons/allcoupons"
-					}
-				]
+				logintext:"",
 			}
 		},
 		methods:{
@@ -85,10 +70,10 @@
 			// }
 		},
 		// props:["couponslistdata"],
-		// created(){
-		// 	//当数据发生改变的时候 执行从父组件传过来的值的方法
-		// 	this.getcouponslistdata()
-		// }
+		created(){
+			const _this = this
+		},
+		props:["tokey","images","nickname","moneylist","logintokeytext"]
 	}
 </script>
 

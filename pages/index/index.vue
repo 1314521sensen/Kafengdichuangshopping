@@ -2,20 +2,22 @@
 	<view class="content">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<search  @inpblue="inpblue"></search>
+		<banner :swiperList="swiperList" height="260"></banner>
 		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
-			<banner :swiperList="swiperList" height="300"></banner>
 			<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol"></ScratchableLatex>
 			<coupons></coupons>
-			<shoppinglist></shoppinglist>
+			<Recommend title="热门推荐"></Recommend>
+			<shoppinglist class="setmarginTop"></shoppinglist>
 		</scroll-view>
 	</view>
 </template>
 
 <script>
 	import search from "@/components/indexcomponents/search.vue"
-	import banner from "@/components/indexcomponents/banner.vue"
+	import banner from "@/components/indexcomponents/indexbanner.vue"
 	import ScratchableLatex from "@/components/indexcomponents/ScratchableLatex.vue"
 	import coupons from "@/components/indexcomponents/coupons.vue"
+	import Recommend from '@/components/indexcomponents/Recommend.vue'
 	import shoppinglist from "@/components/indexcomponents/shoppinglist.vue"
 	const app = getApp();
 	export default {
@@ -209,6 +211,7 @@
 			ScratchableLatex,
 			coupons,
 			shoppinglist,
+			Recommend
 			// pageheight
 		},
 		onShow(){
@@ -253,7 +256,12 @@
 <style lang="less" scoped>
 	.scroll-view{
 		overflow: hidden;
-		height:100vh;	
+		height: 100vh;
+		margin-top: 100rpx;
+		background-color: #fff;
+		border-top-left-radius: 40rpx;
+		border-top-right-radius: 40rpx;
+		margin-top:-60rpx;
 	}
 	.Popup-tanchuang{
 		.action{
@@ -264,5 +272,8 @@
 				width: 49%;
 			}
 		}
+	}
+	.setmarginTop{
+		margin-top:100rpx;
 	}
 </style>
