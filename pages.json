@@ -52,7 +52,9 @@
         }
         ,{
             "path" : "pages/addressTo/addressTo",
-            "style" : {}
+            "style" : {
+				"enablePullDownRefresh": true
+			}
         },
 		{
 		    "path" : "components/address/address",

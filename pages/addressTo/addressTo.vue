@@ -18,7 +18,7 @@
 						</view> </view>
 				</view>
 				<view class="action">
-					<text class="lg text-gray text-red cuIcon-delete" @tap="Deleteaddress"></text>
+					<text class="lg text-gray text-red cuIcon-delete" @tap="Deleteaddress(index,item.address_id)"></text>
 				</view>
 			</view>
 		</view>
@@ -42,8 +42,37 @@
 					url:"/components/address/address"
 				})
 			},
-			Deleteaddress(){
-				
+			Deleteaddress(index,address_id){
+				const _this = this
+				uni.startPullDownRefresh()
+				uni.request({
+					url:`${app.globalData.Requestpath}user/deleteShippingAddress`,
+					method:"POST",
+					data:{
+						token:this.tokey,
+						address_id:address_id
+					},
+					success(res){
+						console.log(res)
+						_this.getShippingAddressList(_this.tokey,1,10,_this)
+					}
+				})
+			},
+			//封装一个获取用户收货地址的功能
+			getShippingAddressList(tokey,page,pages,_this){
+				uni.request({
+					url:`${app.globalData.Requestpath}user/getShippingAddressList`,
+					method:"POST",
+					data:{
+						token:tokey,
+						page:page,
+						pageSize:pages
+					},
+					success(res) {
+						_this.addaddresslist = res.data.data
+						uni.stopPullDownRefresh()
+					}
+				})
 			}
 		},
 		components:{
@@ -59,18 +88,7 @@
 				key:"bindtokey",
 				success(res) {//获取到用户的tokey值
 					_this.tokey = res.data
-					uni.request({
-						url:`${app.globalData.Requestpath}user/getShippingAddressList`,
-						method:"POST",
-						data:{
-							token:res.data,
-							page:1,
-							pageSize:10
-						},
-						success(res) {
-							_this.addaddresslist = res.data.data
-						}
-					})
+					_this.getShippingAddressList(res.data,1,10,_this)
 				}
 			})
 		}
