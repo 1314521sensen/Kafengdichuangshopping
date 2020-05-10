@@ -80,13 +80,11 @@
 			},
 			//是弹出以后上面的nav导航
 			tabSelect(e){
-				console.log(e)
 				this.TabCur = e.currentTarget.dataset.id;
 				this.selectionindexbg = e.currentTarget.dataset.id
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
 			selectedaoto(item,area_id,index){
-				console.log(area_id)
 				if(this.TabCur==0){
 					this.Haschosen[0] = [item]
 					console.log(this.Haschosen)

@@ -158,7 +158,7 @@
 								let {src} = this.json.data
 								// console.log(usernick,username,num,src)
 								// console.log(this.selectiondatalist[0][0].area_id,this.selectiondatalist[1][0].area_id,this.selectiondatalist[2][0].area_id)
-								console.log(this.tokey)
+								// console.log(this.tokey)
 			// 					//当全部的验证成功了  就发起请求
 								uni.request({
 									url:`${app.globalData.Requestpath}user/updateUserDetail`,
@@ -174,7 +174,7 @@
 										user_pic:src
 									},
 									success:(res)=>{
-										console.log(res,"已经请求用户信息成功")
+										// console.log(res,"已经请求用户信息成功")
 			// 							if(res.data.code==0){
 			// 								console.log("信息已经修改")
 			// 								//在把新值存进缓存
@@ -199,8 +199,8 @@
 			// 							}
 									},
 									fail(err){
-										console.log("请求失败")
-										console.log(err)
+										// console.log("请求失败")
+										// console.log(err)
 									}
 								})
 								

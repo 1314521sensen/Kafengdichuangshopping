@@ -99,7 +99,6 @@
 			Confirmupload(){
 				this.bool = false
 				this.text = "确认修改"
-				console.log()
 				//设置缓存 将这个图片存到缓存里
 				uni.setStorage({
 					key:"dandutouxiang",

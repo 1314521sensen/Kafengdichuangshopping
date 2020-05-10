@@ -10,7 +10,7 @@
 		<view class="cu-list menu-avatar">
 			<view class="cu-item" v-for="(item,index) in addaddresslist" :key="index">
 				<view class="cu-avatar">{{item.consignee_name}}</view>
-				<view class="content">
+				<view class="content" @tap="setaddress(item.address_id)">
 					<view class="text-grey">{{item.consignee_phone}}</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
@@ -39,7 +39,7 @@
 		methods: {
 			tonews(){
 				uni.navigateTo({
-					url:"/components/address/address"
+					url:"/components/address/address?title=newaddress"
 				})
 			},
 			Deleteaddress(index,address_id){
@@ -53,9 +53,13 @@
 						address_id:address_id
 					},
 					success(res){
-						console.log(res)
 						_this.getShippingAddressList(_this.tokey,1,10,_this)
 					}
+				})
+			},
+			setaddress(address_id){
+				uni.navigateTo({
+					url:`/components/address/address?title=setaddress&address=${address_id}`
 				})
 			},
 			//封装一个获取用户收货地址的功能

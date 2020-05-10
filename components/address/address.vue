@@ -52,6 +52,8 @@
 				statusBar:0,
 				selectiondatalist:[],
 				tokey:0,
+				Addressoption:"",
+				address:""
 			}
 		},
 		methods:{
@@ -66,29 +68,57 @@
 				if(this.value1 && this.value2.match(userphone)!==null && this.value4 && this.selectiondatalist.length>=3){
 					//这是跳转上页
 					// console.log(this.tokey)
-					uni.request({
-						url:`${app.globalData.Requestpath}user/addShippingAddress`,
-						method:"POST",
-						data:{
-							token:this.tokey,
-							province:this.selectiondatalist[0][0].area_id,
-							city:this.selectiondatalist[1][0].area_id,
-							area:this.selectiondatalist[2][0].area_id,
-							street_number:this.value4,
-							postal_code:253000,//这到明天需要改
-							consignee_name:this.value1,
-							consignee_phone:this.value2,
-							is_default:0
-						},
-						success(res) {
-							if(res.data.code==0){
-								//pages/addressTo/addressTo?title=收货地址
-								uni.redirectTo({
-									url:"/pages/addressTo/addressTo?title=收货地址"
-								})
+					if(this.Addressoption=="newaddress"){
+							uni.request({
+							url:`${app.globalData.Requestpath}user/addShippingAddress`,
+							method:"POST",
+							data:{
+								token:this.tokey,
+								province:this.selectiondatalist[0][0].area_id,
+								city:this.selectiondatalist[1][0].area_id,
+								area:this.selectiondatalist[2][0].area_id,
+								street_number:this.value4,
+								postal_code:"",//这到明天需要改
+								consignee_name:this.value1,
+								consignee_phone:this.value2,
+								is_default:0
+							},
+							success(res) {
+								if(res.data.code==0){
+									//pages/addressTo/addressTo?title=收货地址
+									uni.redirectTo({
+										url:"/pages/addressTo/addressTo?title=收货地址"
+									})
+								}
 							}
-						}
-					})
+						})
+					}else{
+						uni.request({
+							url:`${app.globalData.Requestpath}user/editShippingAddress`,
+							method:"POST",
+							data:{
+								token:this.tokey,
+								address_id:this.address,
+								province:this.selectiondatalist[0][0].area_id,
+								city:this.selectiondatalist[1][0].area_id,
+								area:this.selectiondatalist[2][0].area_id,
+								street_number:this.value4,
+								postal_code:"",//这到明天需要改
+								consignee_name:this.value1,
+								consignee_phone:this.value2,
+								is_default:0
+							},
+							success(res) {
+								if(res.data.code==0){
+									uni.redirectTo({
+										url:"/pages/addressTo/addressTo?title=收货地址"
+									})
+								}else{
+									app.globalData.showtoastsame("修改失败")
+								}
+							}
+						})
+					}
 					//当点击的时候把值加入到把数据提交到数据库当中 在另一个页面进行数据的请求 渲染
 				}else{
 					uni.showToast({
@@ -114,7 +144,10 @@
 		components:{
 			areaselection,
 		},
-		onLoad(){
+		onLoad(opction){
+			// console.log(opction.address)
+			this.Addressoption = opction.title
+			this.address = opction.address
 			this.statusBar = app.globalData.statusBar
 		},
 		
