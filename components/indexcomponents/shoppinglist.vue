@@ -7,6 +7,7 @@
 
 <script>
 	import list from "@/components/indexcomponents/list.vue"
+	const app = getApp()
 	export default{
 
 		data(){
@@ -20,12 +21,17 @@
 		created(){
 			const _this = this
 			uni.request({
-				url:"http://hbk.huiboke.com/api/good/getRecommendGoodsList",
+				url:`${app.globalData.Requestpath}good/getRecommendGoodsList`,
 				data:{
 					limit:10
 				},
 				success(res) {
-					_this.list = res.data.data.list
+					console.log(res)
+					if(res.data.code==0){
+						_this.list = res.data.data.list
+					}else{
+						app.globalData.showtoastsame("数据暂无")
+					}
 				}
 			})
 		}

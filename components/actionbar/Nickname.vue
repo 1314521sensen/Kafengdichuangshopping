@@ -40,7 +40,7 @@
 				</view>
 			</view>
 			<!-- 地区选择 -->
-			<selection></selection>
+			<selection @selectiondata="selectiondata" message="地址"></selection>
 			<button data-v-287a241a="" class="cu-btn block bg-green margin-tb-sm lg" form-type="submit" :disabled="bool">{{text}}</button>
 		</form>
 	</view>
@@ -49,8 +49,8 @@
 
 <script>
 	import selection from "@/components/actionbar/areaselection.vue"
+	const app = getApp()
 	export default{ //注:这里的name 每个input 还位绑定
-	
 		data(){
 			return {
 				modalName: null,
@@ -71,9 +71,19 @@
 						zhi:"",
 						showname:"2",
 						dialogtitle:"您要修改的真实姓名",
-						placeholdertext:"真实姓名一但修改无法编辑",
+						placeholdertext:"请输入你的真实姓名",
 						value3:"",
 						name:"username",
+						disabled:false
+					},
+					{
+						title:"性别",
+						zhi:"",
+						showname:"3",
+						dialogtitle:"您要修改的性别",
+						placeholdertext:"请输入你的性别",
+						value3:"",
+						name:"usersex",
 						disabled:false
 					}
 				],
@@ -82,6 +92,8 @@
 				wait:60,
 				disabled:true,
 				tokey:"",
+				selectiondatalist:[],
+				// defaultselectiondatalist:[[],[],[]]
 			}
 		},
 		
@@ -109,54 +121,60 @@
 					icon:"none"
 				})
 			},
+			selectiondata(e){
+				this.selectiondatalist = e
+			},
 			//当用户点击了保存了以后
-			// btnsave(e){ //e是表单中的信息
-			// 	let {usernick,username,usersex,province,city,area} = e.mp.detail.value
-			// 	console.log()
-			// 	// console.log(e.mp.detail.value.usernick)
+			btnsave(e){ //e是表单中的信息
+				let {usernick,username,usersex,province,city,area} = e.mp.detail.value
+				// console.log(usernick,username)
+				// console.log(usersex)
 			// 	// console.log(usernick,username,usersex,province,city,area)
-			// 	if(this.text=="确认修改"){
-			// 		console.log("点击确认走过来了")
-			// 		if(usernick && username && usersex && province && city && area){
-			// 			console.log("验证账号")
+				if(this.text=="确认修改"){
+					// console.log("点击确认走过来了")
+					if(usernick && username && usersex){
+						// console.log("验证账号")
 			// 			//这是验证账号
-			// 			let regusernick = /^[\W|\w]{5,100}$/;
-			// 			//验证账号
-			// 			let regusername = /^\W{2,5}$/;
+						let regusernick = /^[\W|\w]{5,100}$/;
+			// 			//验证真实姓名
+						let regusername = /^\W{2,5}$/;
 			// 			//验证性别
-			// 			let regsex = /^[男|女]{1,1}$/
-			// 			let num = ""
-			// 			if(usersex=="男"){
-			// 				num = 0
-			// 			}else{
-			// 				num = 1
-			// 			}
-			// 			if(regusernick.test(usernick) && regusername.test(username) && regsex.test(usersex)){
-			// 				console.log(this.tokey,"已经获取到tokey")//获取到tokey
+						let regsex = /^[男|女]{1,1}$/
+						let num = ""
+						if(usersex=="男"){
+							num = 0
+						}else{
+							num = 1
+						}
+						// console.log(num)
+						if(regusernick.test(usernick) && regusername.test(username) && regsex.test(usersex)){
+							// console.log(this.tokey,"已经获取到tokey")//获取到tokey
 			// 				this.$emit("jsons",this.json)
-			// 				console.log(this.json,"已经接收到父组件修改子组件的值")//就拿到了父组件里面的值
-			// 				let {code} = this.json
-			// 				console.log(code,"已经获取到code码")
+							// console.log(this.json)//就拿到了父组件里面的值
+							let {code} = this.json
+							// console.log(code,"已经获取到code码")
 			// 				//如果code==0的时候代表tokey没过期 
-			// 				if(code==0){
-			// 					let {src} = this.json.data
-			// 					console.log(src)
+							if(code==0){
+								let {src} = this.json.data
+								// console.log(usernick,username,num,src)
+								// console.log(this.selectiondatalist[0][0].area_id,this.selectiondatalist[1][0].area_id,this.selectiondatalist[2][0].area_id)
+								console.log(this.tokey)
 			// 					//当全部的验证成功了  就发起请求
-			// 					uni.request({
-			// 						url:"http://hbk.huiboke.com/api/user/updateUserDetail",
-			// 						method:"POST",
-			// 						data:{
-			// 							token:this.tokey,
-			// 							user_nick:usernick,
-			// 							real_name:username,
-			// 							user_sex:usersex,
-			// 							province:province,
-			// 							city:city,
-			// 							area:area,
-			// 							user_pic:src
-			// 						},
-			// 						success:(res)=>{
-			// 							console.log(res,"已经请求用户信息成功")
+								uni.request({
+									url:`${app.globalData.Requestpath}user/updateUserDetail`,
+									method:"POST",
+									data:{
+										token:this.tokey,
+										user_nick:usernick,
+										real_name:username,
+										user_sex:num,
+										province:this.selectiondatalist[0][0].area_id,
+										city:this.selectiondatalist[1][0].area_id,
+										area:this.selectiondatalist[2][0].area_id,
+										user_pic:src
+									},
+									success:(res)=>{
+										console.log(res,"已经请求用户信息成功")
 			// 							if(res.data.code==0){
 			// 								console.log("信息已经修改")
 			// 								//在把新值存进缓存
@@ -166,9 +184,9 @@
 			// 										user_nick:usernick,
 			// 										real_name:username,
 			// 										user_sex:usersex,
-			// 										province:province,
-			// 										city:city,
-			// 										area:area,
+			// 										province:this.selectiondatalist[0][0].area_id,
+			// 										city:this.selectiondatalist[1][0].area_id,
+			// 										area:this.selectiondatalist[2][0].area_id,
 			// 										user_pic:src
 			// 									},
 			// 									success:()=> {
@@ -179,24 +197,24 @@
 			// 									}
 			// 								})
 			// 							}
-			// 						},
-			// 						fail(err){
-			// 							console.log("请求失败")
-			// 							console.log(err)
-			// 						}
-			// 					})
+									},
+									fail(err){
+										console.log("请求失败")
+										console.log(err)
+									}
+								})
 								
-			// 				}else{
-			// 					this.toast("请重新登录")
-			// 				}
-			// 			}else{
-			// 				this.toast("请正确填写信息")
-			// 			}
-			// 		}else{
-			// 			this.toast("请填写完整的信息")
-			// 		}
-			// 	}
-				
+							}else{
+								this.toast("请修改全部您的信息")
+							}
+						}else{
+							this.toast("请正确填写信息")
+						}
+					}else{
+						this.toast("请填写完整的信息")
+					}
+				}
+				// console.log(e.mp.detail.value)
 			// 	// let arr = []
 			// 	// arr.push(e.mp.detail.value)
 			// 	// arr.forEach((item,index)=>{
@@ -207,7 +225,7 @@
 			// 	// uni.switchTab({
 			// 	// 	url:"/pages/index/index"
 			// 	// })
-			// },
+			}
 			
 			//这后期或许用
 			// //这时候输入手机号的表单事件
@@ -283,18 +301,79 @@
 		props:["bool","text","json"],
 		created() {
 			const _this = this
-			//页面初始的时候去请求实现 去满足一级联动
 			
 			//当页面初始化的时候取出tokey
-			
 			uni.getStorage({
-				key:"usertokey",
-				success:(res)=>{
-					this.tokey = res.data
-					console.log(this.tokey)
+				key:"bindtokey",
+				success(res){
+					_this.tokey = res.data
+					//获取到用户的tokey值以后去请求获取用户的信息 做到初始化
+					uni.request({
+						url:`${app.globalData.Requestpath}user/getUserDetail`,
+						method:"POST",
+						data:{
+							token:_this.tokey
+						},
+						success(res) {
+							if(res.data.code==0){
+								// console.log(res.data.data)
+								let {user_nick,real_name,user_sex,user_pic,province,city,area} = res.data.data
+								//    用户昵称   姓名      性别    头像      省市县
+								_this.$emit("srcurl",user_pic)
+								let sex = user_sex
+								if(sex==0){
+									sex = "男"
+								}else{
+									sex = "女"
+								}
+								_this.Personalinformationlist[0].zhi = user_nick
+								_this.Personalinformationlist[1].zhi = real_name
+								_this.Personalinformationlist[2].zhi = sex
+								_this.Personalinformationlist[0].value3 = user_nick
+								_this.Personalinformationlist[1].value3 = real_name
+								_this.Personalinformationlist[2].value3 = sex
+								//defaultselectiondatalist
+								//获取用户的默认的省市县
+								// uni.request({
+								// 	url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
+								// 	data:{
+								// 		aid:province
+								// 	},
+								// 	success(resprovince) {
+								// 		if(resprovince.data.code==0){
+								// 			// console.log(resprovince.data.data)
+								// 			_this.defaultselectiondatalist[0] = [resprovince.data.data]
+								// 			uni.request({
+								// 				url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
+								// 				data:{
+								// 					aid:city
+								// 				},
+								// 				success(rescity) {
+								// 					// console.log(rescity)
+								// 					_this.defaultselectiondatalist[1] = [rescity.data.data]
+								// 					uni.request({
+								// 						url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
+								// 						data:{
+								// 							aid:area
+								// 						},
+								// 						success(resarea) {
+								// 							// console.log(resarea)
+								// 							_this.defaultselectiondatalist[2] = [resarea.data.data]
+															
+								// 						}
+								// 					})
+								// 				}
+								// 			})
+								// 		}
+								// 	}
+								// })
+								
+							}
+						}
+					})
 				}
 			})
-			// _this.userupdata()
+			// console.log(_this.defaultselectiondatalist)
 		},
 		beforeUpdate() {
 			const _this = this

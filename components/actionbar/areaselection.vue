@@ -1,133 +1,162 @@
 <template>
-	<view class="areaselection">
-		<view class="cu-form-group">
-			<view class="title">多列选择</view>
-			<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray">
-				<view class="picker">
-					{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}，{{multiArray[2][multiIndex[2]]}}
+	<view class="areaselection margin-top">
+		<view class="cu-form-group" @tap="showModal" data-target="selection">
+			<view class="title">{{message}}</view>
+			<text v-if="Haschosen.length==3">{{Haschosen[0][0].area_name}},{{Haschosen[1][0].area_name}},{{Haschosen[2][0].area_name}}</text>
+			<text class='lg text-gray cuIcon-right'></text>
+		</view>
+		<view class="cu-modal bottom-modal" :class="modalName=='selection'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white">
+					<view class="action text-green" @tap="hideModal" :data-bool="false">取消</view>
+					<view class="action text-blue" @tap="hideModal" :data-bool="true">确定</view>
 				</view>
-			</picker>
+				<view class="">
+					<scroll-view scroll-x class="bg-white nav">
+						<view class="flex text-center">
+							<view class="cu-item flex-sub" :class="index==TabCur?'text-red cur':''" v-for="(item,index) in selectionlist" :key="index" @tap="tabSelect" :data-id="index" v-if="index==TabCur">
+								{{item}}
+							</view>
+						</view>
+					</scroll-view>
+					<scroll-view scroll-y class="horizontalaxissliding">
+						<!-- area_id: 0 area_name -->
+						<view class="Selectareashi" 
+							v-for="(item,index) in selectionlistareindex[TabCur]" 
+							:key="index"
+							@tap="selectedaoto(item,item.area_id,index)"
+						>
+							{{item.area_name}}
+						</view>
+					</scroll-view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		data(){
 			return {
-				multiArray: [
-					[],
-					[],
-					[]
+				modalName:null,
+				selectionindexbg:0,
+				TabCur: 0,
+				scrollLeft: 0,
+				selectionlist:[
+					"选择省",
+					"选择市",
+					"选择县"
 				],
-				multiIndex: [0, 0, 0]
+				//当用户选择完以后添加到数组中
+				Haschosen:[],
+				selectionlistareindex:[[],[],[]]
 			}
 		},
 		methods:{
-			//当用户点击确定以后
-			MultiChange(e) {
-				this.multiIndex = e.detail.value
+			//这个是显示
+			showModal(e) {
+				this.modalName = e.currentTarget.dataset.target
 			},
-			MultiColumnChange(e) {
-				let data = {
-					multiArray: this.multiArray,
-					multiIndex: this.multiIndex
-				};
-				// console.log(e.detail.column)//这个是 滑动的第几个栏
-				// console.log(e.detail.value)//这个是 滑动的下标
-				data.multiIndex[e.detail.column] = e.detail.value;
-				// console.log()
-				//当用户滑动的时候请求数据
-				uni.request({
-					url:"http://hbk.huiboke.com/api/common/getAreasMinusOne",
-					data:{
-						parent_id:data.multiIndex[e.detail.column]
-					},
-					success:(res)=>{
-						console.log(res)
-						let arr = []
-						res.data.data.forEach((item,index)=>{
-							arr.push(item.area_name)
-						})
-						data.multiArray[1] = arr
+			//这个是隐藏
+			hideModal(e) {
+				let bool = e.currentTarget.dataset.bool
+				//判断bool有没有值 没值 点击了取消 有值点击确定
+				if(bool){//有值的时候判断Haschosen数组中的长度 长度<3代表用户还没选择完 有值代表用户已经选择完
+					if(this.Haschosen.length==3){
+						this.modalName = null
+						this.$emit("selectiondata",this.Haschosen)
+					}else{
+						app.globalData.showtoastsame("请选择完整地址")
 					}
-				})
-				switch (e.detail.column) {
-					case 0:
-						switch (data.multiIndex[0]) {
-							case 0:
-								data.multiArray[1] = data.multiArray[1];
-								data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
-								break;
-							case 1:
-								data.multiArray[1] = data.multiArray[1];
-								data.multiArray[2] = ['鲫鱼', '带鱼'];
-								break;
-						}
-						data.multiIndex[1] = 0;
-						data.multiIndex[2] = 0;
-						break;
-					case 1:
-						switch (data.multiIndex[0]) {
-							case 0:
-								switch (data.multiIndex[1]) {
-									case 0:
-										data.multiArray[2] = ['猪肉绦虫', '吸血虫'];
-										break;
-									case 1:
-										data.multiArray[2] = ['蛔虫'];
-										break;
-									case 2:
-										data.multiArray[2] = ['蚂蚁', '蚂蟥'];
-										break;
-									case 3:
-										data.multiArray[2] = ['河蚌', '蜗牛', '蛞蝓'];
-										break;
-									case 4:
-										data.multiArray[2] = ['昆虫', '甲壳动物', '蛛形动物', '多足动物'];
-										break;
-								}
-								break;
-							case 1:
-								switch (data.multiIndex[1]) {
-									case 0:
-										data.multiArray[2] = ['鲫鱼', '带鱼'];
-										break;
-									case 1:
-										data.multiArray[2] = ['青蛙', '娃娃鱼'];
-										break;
-									case 2:
-										data.multiArray[2] = ['蜥蜴', '龟', '壁虎'];
-										break;
-								}
-								break;
-						}
-						data.multiIndex[2] = 0;
-						break;
+				}else{//当用户点击了取消 恢复成默认值
+					this.TabCur = 0
+					this.selectionlistareindex[1] = [];
+					this.selectionlistareindex[2] = [];
+					this.modalName = null
 				}
-				this.multiArray = data.multiArray;
-				this.multiIndex = data.multiIndex;
+				// this.modalName = null
 			},
+			//是弹出以后上面的nav导航
+			tabSelect(e){
+				console.log(e)
+				this.TabCur = e.currentTarget.dataset.id;
+				this.selectionindexbg = e.currentTarget.dataset.id
+				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			},
+			selectedaoto(item,area_id,index){
+				console.log(area_id)
+				if(this.TabCur==0){
+					this.Haschosen[0] = [item]
+					console.log(this.Haschosen)
+					uni.request({
+						url:`${app.globalData.Requestpath}common/getAreasMinusOne`,
+						data:{
+							parent_id:item.area_id,
+						},
+						success:(res)=>{
+							if(res.data.code==0){
+								this.selectionlistareindex[1] = res.data.data
+								this.TabCur = 1
+							}
+						}
+					})
+				}else if(this.TabCur==1){
+					this.Haschosen[1] = [this.selectionlistareindex[1][index]]
+					uni.request({
+						url:`${app.globalData.Requestpath}common/getAreasMinusOne`,
+						data:{
+							parent_id:area_id,
+						},
+						success:(res)=>{
+							this.selectionlistareindex[2] = res.data.data
+							this.TabCur = 2
+							
+						}
+					})
+				}else if(this.TabCur==2){
+					this.Haschosen[2] = [this.selectionlistareindex[2][index]]
+				}
+			}
 		},
-		created(){
+		created() {
 			const _this = this
+			//"请求市"
 			uni.request({
-				url:"http://hbk.huiboke.com/api/common/getAreasMinusOne",
+				url:`${app.globalData.Requestpath}common/getAreasMinusOne`,
 				data:{
-					parent_id:-1
+					parent_id:-1,
 				},
-				success(res) {
-					console.log(res)
+				success(res){
+					// console.log(res)
 					if(res.data.code==0){
-						res.data.data.forEach((item,index)=>{
-							_this.multiArray[0].push(item.area_name)
-						})
+						_this.selectionlistareindex[0] = res.data.data
+						// console.log(_this.selectionlistareindex[0])
 					}
 				}
 			})
-		}
+			
+			// _this.Haschosen = _this.defaultselectiondatalist
+		},
+		// mounted(){"defaultselectiondatalist"
+		// 	// console.log(this.defaultselectiondatalist[0])
+		// },
+		props:["message"]
 	}
 </script>
 
-<style>
+<style lang="less" scoped>
+	.areaselection{
+		.cu-dialog{
+			height:600rpx;
+			.horizontalaxissliding{
+				height:30vh;
+				.Selectareashi{
+					line-height:66rpx;
+				}
+			}
+		}
+	}
+	
 </style>

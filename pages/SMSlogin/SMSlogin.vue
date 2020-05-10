@@ -116,6 +116,7 @@
 						method:"POST",
 						data:jsons,
 						success(res){
+							console.log(res)
 							let token =  res.data.data.token
 							// console.log(token)
 							//当用户登录成功以后 将token存到缓存当中 为以后方便使用

@@ -39,12 +39,13 @@
 		</view>
 		<!-- 这是昵称 -->
 		
-		<Nickname :bool="bool" :text="text" @changebool="changebool" @changetext="changetext" :json="json" @jsons="jsons"></Nickname>
+		<Nickname :bool="bool" :text="text" @changebool="changebool" @changetext="changetext" :json="json" @jsons="jsons" @srcurl="srcurl"></Nickname>
 	</view>
 </template>
 
 <script>
 	import Nickname from "@/components/actionbar/Nickname.vue"
+	const app = getApp()
 	export default{
 		data(){
 			return {
@@ -143,7 +144,11 @@
 				// console.log(e)
 				// e = jsonsrc
 				this.json = e
-				console.log(this.json)
+				// console.log(this.json)
+			},
+			srcurl(e){
+				// console.log(e)
+				this.pathurl = `http://hbk.huiboke.com${e}`
 			}
 		},
 		// created() {

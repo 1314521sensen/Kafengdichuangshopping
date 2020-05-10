@@ -18,13 +18,12 @@
 					</view>
 				</view>
 			</view>
-			<view class="cu-form-group" @tap="Addressselection">
-				<view class="title">收货地址</view>
-				<input v-model="value3" placeholder="收货地址" name="input"></input>
-			</view>
+			<!-- <view class="cu-form-group" @tap="Addressselection"> -->
+				<areaselection @selectiondata="selectiondata" message="收货地址"></areaselection>
+			<!-- </view> -->
 			<view class="cu-form-group">
 				<view class="title">详细地址</view>
-				<input v-model="value4" placeholder="收货地址" name="input"></input>
+				<input v-model="value4" placeholder="请输入详细地址" name="input"></input>
 			</view>
 		</view>
 		<view class="confirm-box">
@@ -40,6 +39,7 @@
 </template>
 
 <script>
+	import areaselection from "@/components/actionbar/areaselection.vue"
 	const app = getApp();
 	export default{
 		data(){
@@ -49,19 +49,46 @@
 				value2:"",
 				value3:"",
 				value4:"",
-				statusBar:0
+				statusBar:0,
+				selectiondatalist:[],
+				tokey:0,
 			}
 		},
 		methods:{
 			
-			Addressselection(){
-				this.show = true
-			},
+			// Addressselection(){
+			// 	this.show = true
+			// },
 			submits(){
+				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				// console.log(this.value2.match(userphone))
 				// console.log(this.value1,this.value2,this.value3,this.value4)
-				if(this.value1 && this.value2 && this.value3 && this.value4){
-					// console.log(1)
+				if(this.value1 && this.value2.match(userphone)!==null && this.value4 && this.selectiondatalist.length>=3){
 					//这是跳转上页
+					// console.log(this.tokey)
+					uni.request({
+						url:`${app.globalData.Requestpath}user/addShippingAddress`,
+						method:"POST",
+						data:{
+							token:this.tokey,
+							province:this.selectiondatalist[0][0].area_id,
+							city:this.selectiondatalist[1][0].area_id,
+							area:this.selectiondatalist[2][0].area_id,
+							street_number:this.value4,
+							postal_code:253000,//这到明天需要改
+							consignee_name:this.value1,
+							consignee_phone:this.value2,
+							is_default:0
+						},
+						success(res) {
+							if(res.data.code==0){
+								//pages/addressTo/addressTo?title=收货地址
+								uni.redirectTo({
+									url:"/pages/addressTo/addressTo?title=收货地址"
+								})
+							}
+						}
+					})
 					//当点击的时候把值加入到把数据提交到数据库当中 在另一个页面进行数据的请求 渲染
 				}else{
 					uni.showToast({
@@ -78,21 +105,29 @@
 				    delta: 1
 				});
 			},
+			//这是用来接受子组件传过来的值---弹出地址的组件
+			selectiondata(e){
+				// console.log(e)
+				this.selectiondatalist = e
+			}
+		},
+		components:{
+			areaselection,
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
 		},
-		// created() {
-		// 	uni.request({
-		// 		url:"http://hbk.huiboke.com/api/common/getAreas",
-		// 		data:{
-		// 			parent_id:0
-		// 		},
-		// 		success(res) {
-		// 			console.log(res)
-		// 		}
-		// 	})
-		// }
+		
+		created() {
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					// console.log(res.data)
+					_this.tokey = res.data
+				}
+			})
+		}
 	}
 </script>
 

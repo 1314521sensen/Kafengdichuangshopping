@@ -160,7 +160,7 @@
 						success(res){
 							// console.log(res.data) //这是openid的值
 							uni.request({
-								url:`${app.globalData.Requestpath}login_and_register/userLogin`,
+								url:`http://hbk.huiboke.com/api/login_and_register/userLogin`,
 								method:"POST",
 								data:{
 									login_type:"weixin",
@@ -215,26 +215,26 @@
 			this.inpblue()
 			this.booltanchuang()
 			//获取tokey值 为了小程序考虑
-			uni.getStorage({
-				key:"bindtokey",
-				success(res){
-					uni.request({
-						url:`${app.globalData.Requestpath}common/refreshToken`,
-						method:"POST",
-						data:{
-							token:res.data,
-							v_minute:30
-						},
-						success(res) {
-							if(res.data.code==1){
-								uni.reLaunch({
-									url:"/pages/login/login"
-								})
-							}
-						}
-					})
-				}
-			})
+			// uni.getStorage({
+			// 	key:"bindtokey",
+			// 	success(res){
+			// 		uni.request({
+			// 			url:`${app.globalData.Requestpath}common/refreshToken`,
+			// 			method:"POST",
+			// 			data:{
+			// 				token:res.data,
+			// 				v_minute:30
+			// 			},
+			// 			success(res) {
+			// 				if(res.data.code==1){
+			// 					uni.reLaunch({
+			// 						url:"/pages/login/login"
+			// 					})
+			// 				}
+			// 			}
+			// 		})
+			// 	}
+			// })
 		},
 		//页面滚动到底部的事件
 		onReachBottom(){

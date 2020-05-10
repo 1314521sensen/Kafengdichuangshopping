@@ -43,16 +43,22 @@
 		},
 		onShow(){
 			//当数据发生改变得时候 就获取缓存中的值
-			// uni.getStorage({
-			// 	key:"couponsData",
-			// 	success:(res)=>{
-			// 		// console.log(res)
-			// 		this.couponslistdata = res.data
-			// 	},
-			// 	fail(err){
-			// 		this.couponslistdata = null
-			// 	}
-			// })
+			uni.getStorage({
+				key:"couponsData",
+				success:(res)=>{
+					console.log(res)
+					this.couponslistdata = res.data
+				},
+				fail(err){
+					this.couponslistdata = null
+				}
+			})
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					app.globalData.Detectionupdatetokey(res.data)
+				}
+			})
 		}
 	}
 </script>

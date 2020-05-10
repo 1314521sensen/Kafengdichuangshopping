@@ -8,17 +8,17 @@
 			</view>
 		</view>
 		<view class="cu-list menu-avatar">
-			<view class="cu-item" v-for="(item,index) in addaddresslist" :key="index" v-if="item.value1">
-				<view class="cu-avatar">{{item.value1}}</view>
+			<view class="cu-item" v-for="(item,index) in addaddresslist" :key="index">
+				<view class="cu-avatar">{{item.consignee_name}}</view>
 				<view class="content">
-					<view class="text-grey">{{item.value2}}</view>
+					<view class="text-grey">{{item.consignee_phone}}</view>
 					<view class="text-gray text-sm flex">
 						<view class="text-cut">
-							{{item.value4}}
+							{{item.street_number}}
 						</view> </view>
 				</view>
 				<view class="action">
-					<text class="lg text-gray text-red cuIcon-delete"></text>
+					<text class="lg text-gray text-red cuIcon-delete" @tap="Deleteaddress"></text>
 				</view>
 			</view>
 		</view>
@@ -41,6 +41,9 @@
 				uni.navigateTo({
 					url:"/components/address/address"
 				})
+			},
+			Deleteaddress(){
+				
 			}
 		},
 		components:{
@@ -52,13 +55,24 @@
 		created() {
 			const _this = this
 			//获取缓存中的用户的tokey
-			// uni.getStorage({
-			// 	key:"bindtokey",
-			// 	success(res) {//获取到用户的tokey值
-			// 		_this.tokey = res.data
-			// 	}
-			// })
-			
+			uni.getStorage({
+				key:"bindtokey",
+				success(res) {//获取到用户的tokey值
+					_this.tokey = res.data
+					uni.request({
+						url:`${app.globalData.Requestpath}user/getShippingAddressList`,
+						method:"POST",
+						data:{
+							token:res.data,
+							page:1,
+							pageSize:10
+						},
+						success(res) {
+							_this.addaddresslist = res.data.data
+						}
+					})
+				}
+			})
 		}
 	}
 </script>
