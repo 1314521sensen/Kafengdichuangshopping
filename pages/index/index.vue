@@ -33,53 +33,51 @@
 					cuIcon: 'cardboardfill',
 					color: 'red',
 					badge: 120,
-					name: 'VR'
+					name: '拼团',
+					imgs:"/static/index/Scratchablelatexicon/Spellgroup.png"
 				},
 				{
 					cuIcon: 'recordfill',
 					color: 'orange',
 					badge: 1,
-					name: '录像'
+					name: '团购',
+					imgs:"/static/index/Scratchablelatexicon/bulk.png"
 				}, {
 					cuIcon: 'picfill',
 					color: 'yellow',
 					badge: 0,
-					name: '图像'
+					name: '折扣',
+					imgs:"/static/index/Scratchablelatexicon/discount.png"
 				}, {
 					cuIcon: 'noticefill',
 					color: 'olive',
 					badge: 22,
-					name: '通知'
+					name: '领劵',
+					imgs:"/static/index/Scratchablelatexicon/Ledsecurities.png"
 				}, {
 					cuIcon: 'upstagefill',
 					color: 'cyan',
 					badge: 0,
-					name: '排行榜'
+					name: '积分',
+					imgs:"/static/index/Scratchablelatexicon/integral.png"
 				}, {
 					cuIcon: 'clothesfill',
 					color: 'blue',
 					badge: 0,
-					name: '皮肤'
+					name: '专题',
+					imgs:"/static/index/Scratchablelatexicon/project.png"
 				}, {
 					cuIcon: 'discoverfill',
 					color: 'purple',
 					badge: 0,
-					name: '发现'
+					name: '品牌',
+					imgs:"/static/index/Scratchablelatexicon/brand.png"
 				}, {
 					cuIcon: 'questionfill',
 					color: 'mauve',
 					badge: 0,
-					name: '帮助'
-				}, {
-					cuIcon: 'commandfill',
-					color: 'purple',
-					badge: 0,
-					name: '问答'
-				}, {
-					cuIcon: 'brandfill',
-					color: 'mauve',
-					badge: 0,
-					name: '版权'
+					name: '帮助',
+					imgs:"/static/index/Scratchablelatexicon/help.png"
 				}],
 				gridCol: 4,//这是格数
 				// 这是banner的数据

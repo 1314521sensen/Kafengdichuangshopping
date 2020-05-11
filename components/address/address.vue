@@ -53,7 +53,8 @@
 				selectiondatalist:[],
 				tokey:0,
 				Addressoption:"",
-				address:""
+				address:"",
+				returntitleparameter:"",
 			}
 		},
 		methods:{
@@ -62,6 +63,7 @@
 			// 	this.show = true
 			// },
 			submits(){
+				const _this = this
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
 				// console.log(this.value2.match(userphone))
 				// console.log(this.value1,this.value2,this.value3,this.value4)
@@ -87,7 +89,7 @@
 								if(res.data.code==0){
 									//pages/addressTo/addressTo?title=收货地址
 									uni.redirectTo({
-										url:"/pages/addressTo/addressTo?title=收货地址"
+										url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}`
 									})
 								}
 							}
@@ -111,7 +113,7 @@
 							success(res) {
 								if(res.data.code==0){
 									uni.redirectTo({
-										url:"/pages/addressTo/addressTo?title=收货地址"
+										url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}`
 									})
 								}else{
 									app.globalData.showtoastsame("修改失败")
@@ -145,7 +147,7 @@
 			areaselection,
 		},
 		onLoad(opction){
-			// console.log(opction.address)
+			this.returntitleparameter = opction.titleparameter
 			this.Addressoption = opction.title
 			this.address = opction.address
 			this.statusBar = app.globalData.statusBar

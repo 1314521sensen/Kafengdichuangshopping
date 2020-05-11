@@ -3,7 +3,7 @@
 		<pageheight :statusBar="statusBar"></pageheight>
 		<actionbar url="/pages/PersonalMy/PersonalMy" message="确认订单"></actionbar>
 		<view class="Buycontent">
-			<view class="Shippingaddress">
+			<view class="Shippingaddress" @tap="Addressmodification">
 				<view class="Shippingaddress-left">
 					<view class="imgs">
 						<image src="/static/dingwei/dingwei.png"></image>
@@ -11,12 +11,12 @@
 				</view>
 				<view class="Shippingaddress-right">
 					<view class="Shippingaddress-right-title">
-						<text>刘伟森</text>
-						<text>18769490209</text>
+						<text>{{Username}}</text>
+						<text>{{Userphone}}</text>
 					</view>
 					<view class="Receivingaddress">
 						<view class="address">
-							山东省德州市武城县广运街道德州市武城县广运街道齐鲁学院三楼学生处
+							{{Userselect}}
 						</view>
 						<text class="lg text-gray cuIcon-right"></text>
 					</view>
@@ -127,7 +127,10 @@
 					"微信",
 					"支付宝",
 					"余额"
-				]
+				],
+				Username:"",
+				Userphone:0,
+				Userselect:""
 			}
 		},
 		methods: {
@@ -173,6 +176,11 @@
 				// console.log(e.detail.value)
 				// console.log(this.radio)
 			},
+			Addressmodification(){
+				uni.navigateTo({
+					url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=1&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}`
+				})
+			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 			},
@@ -185,7 +193,38 @@
 			}
 		},
 		onLoad(opction){
-			// console.log(opction)
+			if(opction.selectitem){
+				let {consignee_name,consignee_phone,street_number} = JSON.parse(opction.selectitem)
+				this.Username = consignee_name
+				this.Userphone = consignee_phone
+				this.Userselect = street_number
+			}else{
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(res) {
+						// console.log(res.data)
+						uni.request({
+							url:`${app.globalData.Requestpath}user/getShippingAddressList`,
+							method:"POST",
+							data:{
+								token:res.data,
+								page:1,
+								pageSize:1,
+							},
+							success(reslove) {
+								// console.log(reslove.data.data[0])
+								// consignee_name consignee_phone street_number
+								if(reslove.data.code==0){
+									_this.Username = reslove.data.data[0].consignee_name
+									_this.Userphone = reslove.data.data[0].consignee_phone
+									_this.Userselect = reslove.data.data[0].street_number
+								}
+							}
+						})
+					}
+				})
+			}
 			let {gid,num,way,img,storename,price,goodtitle} = opction
 			this.gid = gid
 			this.way = way
@@ -209,7 +248,7 @@
 		},
 		components:{
 			actionbar,
-		}
+		},
 	}
 </script>
 

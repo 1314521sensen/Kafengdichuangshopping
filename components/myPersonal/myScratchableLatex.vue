@@ -12,32 +12,40 @@
 				cuIconList: [
 					{
 					badge: 120,
-					name: '推广/分销'
+					name: '推广/分销',
+					imgs:"/static/Settheicon/Promotedistribution.png"
 				},
 				{
 					badge: 1,
-					name: '签到'
+					name: '签到',
+					imgs:"/static/Settheicon/Signin.png"
 				}, {
 					badge: 22,
 					name: '收货地址',
-					url:"/pages/addressTo/addressTo"
+					url:"/pages/addressTo/addressTo",
+					imgs:"/static/Settheicon/Shippingaddress.png"
 				},  {
 					badge: 0,
-					name: '我的拼单'
+					name: '我的拼单',
+					imgs:"/static/Settheicon/Myspelllist.png"
 				}, {
 					badge: 0,
 					name: '我的收藏',
-					url:"/components/collection/collection"
+					url:"/components/collection/collection",
+					imgs:"/static/Settheicon/Mycollection.png"
 				}, {
 					badge: 0,
 					name: '我的足迹',
-					url:"/components/collection/collection"
+					url:"/components/collection/collection",
+					imgs:"/static/Settheicon/Myfootprint.png"
 				}, {
 					badge: 0,
-					name: '我的咨询'
+					name: '我的咨询',
+					imgs:"/static/Settheicon/Myadvice.png"
 				}, {
 					badge: 0,
-					name: '充值/提现'
+					name: '充值/提现',
+					imgs:"/static/Settheicon/withdrawal.png"
 				},
 				{
 					badge: 0,

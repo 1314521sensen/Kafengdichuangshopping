@@ -19,7 +19,7 @@
 			return {
 				iconList:[
 					{
-						images:"/static/my/payment.png",
+						images:"/static/my/Forpayment.png",
 						textname:"待付款"
 					},
 					{
@@ -27,15 +27,15 @@
 						textname:"待发货"
 					},
 					{
-						images:"/static/my/Forgoods.png",
+						images:"/static/my/beenshipped.png",
 						textname:"已发货"
 					},
 					{
-						images:"/static/my/beenshipped.png",
+						images:"/static/my/evaluation.png",
 						textname:"评价"
 					},
 					{
-						images:"/static/my/Returngoods.png",
+						images:"/static/my/refundafter.png",
 						textname:"退款售后"
 					}
 				]
