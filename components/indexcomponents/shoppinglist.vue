@@ -26,7 +26,6 @@
 					limit:10
 				},
 				success(res) {
-					console.log(res)
 					if(res.data.code==0){
 						_this.list = res.data.data.list
 					}else{

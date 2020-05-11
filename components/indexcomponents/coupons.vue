@@ -1,22 +1,23 @@
 <template>
-	<view class="coupons">
+	<view class="coupons" v-if="couponsbool==true">
 		<!-- 这是优惠卷的信息 -->
 		<scroll-view scroll-x="true">
 			<view class="rows">
-				<view class="coupons-for" v-for="(item,index) in list" :key="index">
+				<!-- v-for="(item,index) in list" :key="index" -->
+				<view class="coupons-for">
 
-					<view class="coupons-list" v-for="(citem,cindex) in item" :key="cindex">
+					<view class="coupons-list" v-for="(citem,cindex) in list" :key="cindex">
 						<view class="coupons-top">
 							<text>￥</text>
-							<text class="price">{{citem.price}}</text>
+							<text class="price">{{citem.money}}</text>
 							<text class="quan">券</text>
 						</view>
 						<!-- 优惠券左右白色圆点 -->
 						<view class="dot left"></view>
 						<view class="dot right"></view>
 						<view class="coupons-bottom">
-							<text>满{{ citem.preferential }}可用</text>
-							<view class="at-once">
+							<text>{{ citem.at_full?'满'+citem.at_full:'无门槛'}}使用</text>
+							<view class="at-once" @tap="Platformreceive(citem.platform_coupon_id)">
 								立即抢券
 							</view>
 						</view>
@@ -29,12 +30,14 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		//这是优惠卷的组件
 		data() {
 			return {
+				tokey:"",
 				list: [
-					[{
+						{
 							price: 3,
 							preferential: 58
 						},
@@ -46,8 +49,8 @@
 							price: 10,
 							preferential: 168
 						}
-					],
-					[{
+					,
+					{
 							price: 18,
 							preferential: 68
 						},
@@ -58,9 +61,9 @@
 						{
 							price: 10,
 							preferential: 168
-						}
-					],
-					[{
+						},
+					
+					{
 							price: 30,
 							preferential: 98
 						},
@@ -72,9 +75,58 @@
 							price: 13,
 							preferential: 208
 						}
-					]
-				]
+					
+				],
+				couponsbool:true
 			}
+		},
+		methods:{
+			Platformreceive(cid){
+				// console.log(cid)
+				uni.request({
+					url:`${app.globalData.Requestpath}activity/userGetPlatformCoupon`,
+					method:"POST",
+					data:{
+						token:this.tokey,
+						cid:cid
+					},
+					success(res) {
+						if(res.data.code==0){
+							app.globalData.showtoastsame(res.data.msg)
+						}else{
+							app.globalData.showtoastsame(res.data.msg)
+						}
+					}
+				})
+			}
+		},
+		created() {
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					_this.tokey = res.data
+					// console.log(res.data)
+					uni.request({
+						url:`${app.globalData.Requestpath}activity/getPlatformCouponTypeList`,
+						method:"POST",
+						data:{
+							token:res.data,
+							page:1,
+							pageSize:3,
+						},
+						success(rescoupons) {
+							if(rescoupons.data.code==0){
+								console.log(rescoupons.data.data.list)
+								_this.list = rescoupons.data.data.list
+								_this.couponsbool = true
+							}else{
+								_this.couponsbool = false
+							}
+						}
+					})
+				}
+			})
 		}
 	}
 </script>
@@ -82,8 +134,8 @@
 <style lang="less" scoped>
 	.coupons {
 		width: 100%;
-		height: 112rpx;
-
+		height: 152rpx;
+		padding-left:20rpx;
 		.rows {
 			width: 300%;
 			display: flex;
@@ -91,20 +143,22 @@
 			.coupons-for {
 				width: 100%;
 				display: flex;
-				justify-content: space-around;
+				// justify-content: space-around;
 				width: 95%;
-				height: 120rpx;
+				height: 148rpx;
 				background-color: #fff;
 
 				.coupons-list {
 					position: relative;
 					align-items: center;
-					width: 204rpx;
-					height: 100rpx;
+					width: 240rpx;
+					height: 120rpx;
 					background-image: linear-gradient(to right, #e60578, #e62d28);
 					box-shadow: 5rpx 20rpx 20rpx #ccc;
 					color: #fff;
 					border: 1px solid #fee03c;
+					margin-right:20rpx;
+					border-radius:16rpx;
 					.coupons-top {
 						// border: 2px solid blue;
 						border-bottom: 4rpx dashed #fff;
