@@ -13,6 +13,7 @@
   background-color: #fff;
   font-size: 26rpx;
   font-weight: bold;
+  width: 80rpx;
 }
 .addressTo .cu-list .cu-item .content .text-grey.data-v-5c105b54 {
   color: #000;
@@ -22,5 +23,9 @@
   text-overflow: clip;
   white-space: normal;
   overflow: visible;
+}
+.addressTo .cu-list .bg-itemcolor.data-v-5c105b54 {
+  background-color: #e82930 !important;
+  color: #fff !important;
 }
 

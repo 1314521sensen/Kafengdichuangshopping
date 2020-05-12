@@ -133,7 +133,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var logobg = function logobg() {return __webpack_require__.e(/*! import() | components/login/loginbg */ "components/login/loginbg").then(__webpack_require__.bind(null, /*! @/components/login/loginbg.vue */ 390));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var logobg = function logobg() {return __webpack_require__.e(/*! import() | components/login/loginbg */ "components/login/loginbg").then(__webpack_require__.bind(null, /*! @/components/login/loginbg.vue */ 411));};
 
 
 

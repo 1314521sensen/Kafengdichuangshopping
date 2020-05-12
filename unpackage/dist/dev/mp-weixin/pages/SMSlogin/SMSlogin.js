@@ -133,7 +133,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var logobg = function logobg() {return __webpack_require__.e(/*! import() | components/login/loginbg */ "components/login/loginbg").then(__webpack_require__.bind(null, /*! @/components/login/loginbg.vue */ 390));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var logobg = function logobg() {return __webpack_require__.e(/*! import() | components/login/loginbg */ "components/login/loginbg").then(__webpack_require__.bind(null, /*! @/components/login/loginbg.vue */ 411));};
 
 
 
@@ -251,6 +251,7 @@ var app = getApp();var _default =
           method: "POST",
           data: jsons,
           success: function success(res) {
+            console.log(res);
             var token = res.data.data.token;
             // console.log(token)
             //当用户登录成功以后 将token存到缓存当中 为以后方便使用

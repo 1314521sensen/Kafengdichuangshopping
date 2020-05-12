@@ -138,7 +138,10 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var actionbar = function actionbar() {return __webpack_require__.e(/*! import() | components/actionbar/actionbar */ "components/actionbar/actionbar").then(__webpack_require__.bind(null, /*! @/components/actionbar/actionbar.vue */ 135));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var actionbar = function actionbar() {return __webpack_require__.e(/*! import() | components/actionbar/actionbar */ "components/actionbar/actionbar").then(__webpack_require__.bind(null, /*! @/components/actionbar/actionbar.vue */ 135));};var storecoupon = function storecoupon() {return __webpack_require__.e(/*! import() | components/Details/storecoupon */ "components/Details/storecoupon").then(__webpack_require__.bind(null, /*! @/components/Details/storecoupon.vue */ 460));};
+
+
+
 
 
 
@@ -266,52 +269,52 @@ var app = getApp();var _default =
       list: [
       "微信",
       "支付宝",
-      "余额"] };
+      "余额"],
 
+      Username: "",
+      Userphone: 0,
+      Userselect: "",
+      tokey: 0 };
 
   },
   methods: {
-    priceorder: function priceorder() {var _this = this;
-      //为了小程序考虑只能这样写了
-      uni.getStorage({
-        key: "bindtokey",
-        success: function success(res) {
-          // console.log(res.data,this.gid,this.nums,this.data,this.o_from,this.value)
-          if (_this.way == 1) {
-            console.log("从pc");
-            uni.request({
-              url: "http://hbk.huiboke.com/api/order/createUnPayOrderInfo",
-              method: "POST",
-              data: {
-                token: res.data,
-                gid: _this.gid,
-                spec: _this.data,
-                quantity: _this.nums,
-                o_from: _this.o_from,
-                address_id: 52,
-                p_msg: _this.value },
+    priceorder: function priceorder() {
+      if (this.way == 1) {
+        console.log("从pc");
+        uni.request({
+          url: "http://hbk.huiboke.com/api/order/createUnPayOrderInfo",
+          method: "POST",
+          data: {
+            token: _this.tokey,
+            gid: this.gid,
+            spec: this.data,
+            quantity: this.nums,
+            o_from: this.o_from,
+            address_id: 52,
+            p_msg: this.value },
 
-              success: function success(reslove) {
-                // console.log(reslove.data.code)
-                if (reslove.data.code == 0) {
-                  console.log(reslove);
-                } else {//如果成功以后弹出提示框
-                  console.log(111);
-                }
-              } });
+          success: function success(reslove) {
+            // console.log(reslove.data.code)
+            if (reslove.data.code == 0) {
+              console.log(reslove);
+            } else {//如果成功以后弹出提示框
+              console.log(111);
+            }
+          } });
 
-          } else if (_this.way == 2) {
-            console.log("从手机过来的过来的");
-          } else {
-            console.log("从小程序过来的");
-          }
-        } });
-
+      } else if (this.way == 2) {
+        console.log("从手机过来的过来的");
+      } else {
+        console.log("从小程序过来的");
+      }
     },
     RadioChange: function RadioChange(e) {
       this.radio = e.detail.value;
-      // console.log(e.detail.value)
-      // console.log(this.radio)
+    },
+    Addressmodification: function Addressmodification() {
+      uni.navigateTo({
+        url: "/pages/addressTo/addressTo?title=orderaddress&gid=".concat(this.gid, "&specname=").concat(JSON.stringify(this.data), "&num=").concat(this.nums, "&way=1&img=").concat(JSON.stringify(this.img), "&storename=").concat(this.storename, "&goodtitle=").concat(this.goodtitle, "&price=").concat(this.price) });
+
     },
     showModal: function showModal(e) {
       this.modalName = e.currentTarget.dataset.target;
@@ -325,8 +328,33 @@ var app = getApp();var _default =
     } },
 
   onLoad: function onLoad(opction) {
-    // console.log(opction)
-    var gid = opction.gid,num = opction.num,way = opction.way,img = opction.img,storename = opction.storename,price = opction.price,goodtitle = opction.goodtitle;
+    if (opction.selectitem) {var _JSON$parse =
+      JSON.parse(opction.selectitem),consignee_name = _JSON$parse.consignee_name,consignee_phone = _JSON$parse.consignee_phone,street_number = _JSON$parse.street_number;
+      this.Username = consignee_name;
+      this.Userphone = consignee_phone;
+      this.Userselect = street_number;
+    } else {
+      var _this2 = this;
+      uni.request({
+        url: "".concat(app.globalData.Requestpath, "user/getShippingAddressList"),
+        method: "POST",
+        data: {
+          token: _this2.tokey,
+          page: 1,
+          pageSize: 1 },
+
+        success: function success(reslove) {
+          // console.log(reslove.data.data[0])
+          // consignee_name consignee_phone street_number
+          if (reslove.data.code == 0) {
+            _this2.Username = reslove.data.data[0].consignee_name;
+            _this2.Userphone = reslove.data.data[0].consignee_phone;
+            _this2.Userselect = reslove.data.data[0].street_number;
+          }
+        } });
+
+    }var
+    gid = opction.gid,num = opction.num,way = opction.way,img = opction.img,storename = opction.storename,price = opction.price,goodtitle = opction.goodtitle;
     this.gid = gid;
     this.way = way;
     this.img = JSON.parse(img);
@@ -348,7 +376,18 @@ var app = getApp();var _default =
     this.statusBar = app.globalData.statusBar;
   },
   components: {
-    actionbar: actionbar } };exports.default = _default;
+    actionbar: actionbar,
+    storecoupon: storecoupon },
+
+  created: function created() {
+    var _this = this;
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        _this.tokey = res.data;
+      } });
+
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

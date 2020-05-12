@@ -754,7 +754,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -7205,7 +7205,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7226,14 +7226,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7309,7 +7309,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -8633,7 +8633,7 @@ main();
 
 /***/ }),
 
-/***/ 526:
+/***/ 554:
 /*!***************************************************************!*\
   !*** E:/Kafengdichuangshopping/components/uni-icons/icons.js ***!
   \***************************************************************/
@@ -8758,7 +8758,7 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/Accessinformation/Accessinformation": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/index/index": { "navigationBarTitleText": "uni-app", "usingComponents": { "search": "/components/indexcomponents/search", "banner": "/components/indexcomponents/banner", "scratchable-latex": "/components/indexcomponents/ScratchableLatex", "coupons": "/components/indexcomponents/coupons", "shoppinglist": "/components/indexcomponents/shoppinglist" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "pages/classification/classification": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/shoppingCart/shoppingCart": { "enablePullDownRefresh": true, "usingComponents": { "shoppingcatlist": "/components/shoppingcartlist/shoppingcartlist", "shopingbottompay": "/components/shoppingcartlist/shopingbottompay" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "pages/PersonalMy/PersonalMy": { "usingComponents": { "orders": "/components/myPersonal/orders", "my-scratchable-latex": "/components/myPersonal/myScratchableLatex", "information": "/components/myPersonal/PersonalInformation", "mycoupons": "/components/myPersonal/coupons", "selectionrecommended": "/components/myPersonal/Selectionrecommended" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "pages/bannerRouter/bannerRouter": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/Details/Details": { "usingComponents": { "detailsbanner": "/components/indexcomponents/banner", "pricetitle": "/components/Details/PriceTitle", "imgs": "/components/Details/detailsimgs", "bottomcar": "/components/Details/detailsbottomcar" }, "usingAutoImportComponents": {} }, "pages/SearchTo/SearchTo": { "usingComponents": { "searchbusiness": "/components/seach/seachbusiness" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "pages/Sortinglist/Sortinglist": { "usingComponents": { "sorting": "/components/sortinglist/sorting", "horizontallylist": "/components/sortinglist/horizontallylist", "seachinput": "/components/sortinglist/seachinput" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "pages/Personaldata/Personaldata": { "usingComponents": { "actionbar": "/components/actionbar/actionbar", "modelkuang": "/components/personaldata/modelkuang" }, "usingAutoImportComponents": { "actionbar": "/components/actionbar/actionbar" } }, "pages/orderpageRouter/orderpageRouter": { "usingComponents": { "list": "/components/indexcomponents/list" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "pages/addressTo/addressTo": { "usingComponents": { "actionbar": "/components/actionbar/actionbar" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight", "actionbar": "/components/actionbar/actionbar" } }, "components/address/address": { "usingComponents": {}, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "components/collection/collection": { "usingComponents": { "actionbar": "/components/actionbar/actionbar", "list": "/components/indexcomponents/list", "nopage": "/components/Nopage", "uni-load-more": "/components/uni-load-more/uni-load-more" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight", "actionbar": "/components/actionbar/actionbar" } }, "pages/login/login": { "usingComponents": { "logobg": "/components/login/loginbg" }, "usingAutoImportComponents": {} }, "pages/Allcoupons/allcoupons": { "usingComponents": { "securitiesbottom": "/components/allcoupons/securitiesbottom" }, "usingAutoImportComponents": { "actionbar": "/components/actionbar/actionbar" } }, "pages/Store/store": { "usingComponents": { "uni-rate": "/components/uni-rate/uni-rate", "storenav": "/components/store/storenav", "storerecommended": "/components/store/storerecommended", "storebady": "/components/store/storebady", "storenews": "/components/store/storenews" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight", "uni-rate": "/components/uni-rate/uni-rate" } }, "pages/SMSlogin/SMSlogin": { "usingComponents": { "logobg": "/components/login/loginbg" }, "usingAutoImportComponents": {} }, "pages/Freeregistration/Freeregistration": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/Purchasepage/Purchasepage": { "usingComponents": { "actionbar": "/components/actionbar/actionbar" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight", "actionbar": "/components/actionbar/actionbar" } }, "pages/Temporarynonpayment/Temporarynonpayment": { "usingComponents": { "actionbar": "/components/actionbar/actionbar", "shopoder": "/components/Temporarynonpayment/shoporder", "shopoderbottom": "/components/Temporarynonpayment/shoporderbottom" }, "usingAutoImportComponents": { "actionbar": "/components/actionbar/actionbar" } }, "pages/Paysuccess/Paysuccess": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/Allevaluation/Allevaluation": { "usingComponents": { "pageheight": "/components/pageheight/pageheight", "seachinput": "/components/sortinglist/seachinput" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "components/setcenter/setcenter": { "usingComponents": { "setemail": "/components/setcenter/setemail", "setphone": "/components/setcenter/setphone", "realnameauthentication": "/components/setcenter/Realnameauthentication", "resetloginpassword": "/components/setcenter/Resetloginpassword", "setpaymentpassword": "/components/setcenter/Setpaymentpassword" }, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "components/indexcomponents/indexbindinfo": { "usingComponents": {}, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "components/setcenter/returnloginpasswordall": { "usingComponents": {}, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } }, "components/setcenter/SetChangeResetpassword": { "usingComponents": {}, "usingAutoImportComponents": { "pageheight": "/components/pageheight/pageheight" } } }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "uni-app", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2", "navigationStyle": "custom" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/Accessinformation/Accessinformation": {}, "pages/index/index": { "navigationBarTitleText": "uni-app" }, "pages/classification/classification": {}, "pages/shoppingCart/shoppingCart": { "enablePullDownRefresh": true }, "pages/PersonalMy/PersonalMy": {}, "pages/bannerRouter/bannerRouter": {}, "pages/Details/Details": {}, "pages/SearchTo/SearchTo": {}, "pages/Sortinglist/Sortinglist": {}, "pages/Personaldata/Personaldata": {}, "pages/orderpageRouter/orderpageRouter": {}, "pages/addressTo/addressTo": { "enablePullDownRefresh": true }, "components/address/address": {}, "components/collection/collection": {}, "pages/login/login": {}, "pages/Allcoupons/allcoupons": {}, "pages/Store/store": {}, "pages/SMSlogin/SMSlogin": {}, "pages/Freeregistration/Freeregistration": {}, "pages/Purchasepage/Purchasepage": {}, "pages/Temporarynonpayment/Temporarynonpayment": {}, "pages/Paysuccess/Paysuccess": {}, "pages/Allevaluation/Allevaluation": {}, "components/setcenter/setcenter": {}, "components/indexcomponents/indexbindinfo": {}, "components/setcenter/returnloginpasswordall": {}, "components/setcenter/SetChangeResetpassword": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "uni-app", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2", "navigationStyle": "custom" } };exports.default = _default;
 
 /***/ }),
 

@@ -89,15 +89,72 @@ var app = getApp();var _default =
 {
   data: function data() {
     return {
+      addressselectedindex: 0,
       addaddresslist: [],
       statusBar: 0,
-      tokey: "" };
+      tokey: "",
+      titleparameter: "",
+      gid: "",
+      img: "",
+      num: 0,
+      storename: "",
+      price: 0,
+      goodtitle: "",
+      data: [],
+      way: 0,
+      specname: "" };
 
   },
   methods: {
+    selecteditem: function selecteditem(index, itemitem) {
+      // console.log(itemitem)selectname=${itemitem.consignee_name}&selectphone=${itemitem.consignee_phone}&selectstreet=${itemitem.street_number}
+      this.addressselectedindex = index;
+      if (this.titleparameter == 'orderaddress') {
+        uni.reLaunch({
+          url: "/pages/Purchasepage/Purchasepage?gid=".concat(this.gid, "&specname=").concat(this.specname, "&num=").concat(this.num, "&way=1&img=").concat(this.img, "&storename=").concat(this.storename, "&price=").concat(this.price, "&goodtitle=").concat(this.goodtitle, "&selectitem=").concat(encodeURI(JSON.stringify(itemitem))) });
+
+      }
+    },
     tonews: function tonews() {
       uni.navigateTo({
-        url: "/components/address/address" });
+        url: "/components/address/address?title=newaddress&titleparameter=".concat(this.titleparameter) });
+
+    },
+    Deleteaddress: function Deleteaddress(index, address_id) {
+      var _this = this;
+      uni.startPullDownRefresh();
+      uni.request({
+        url: "".concat(app.globalData.Requestpath, "user/deleteShippingAddress"),
+        method: "POST",
+        data: {
+          token: this.tokey,
+          address_id: address_id },
+
+        success: function success(res) {
+          _this.getShippingAddressList(_this.tokey, 1, 10, _this);
+        } });
+
+    },
+    //点击跳到修改地址
+    setaddress: function setaddress(address_id) {
+      uni.navigateTo({
+        url: "/components/address/address?title=setaddress&address=".concat(address_id, "&titleparameter=").concat(this.titleparameter) });
+
+    },
+    //封装一个获取用户收货地址的功能
+    getShippingAddressList: function getShippingAddressList(tokey, page, pages, _this) {
+      uni.request({
+        url: "".concat(app.globalData.Requestpath, "user/getShippingAddressList"),
+        method: "POST",
+        data: {
+          token: tokey,
+          page: page,
+          pageSize: pages },
+
+        success: function success(res) {
+          _this.addaddresslist = res.data.data;
+          uni.stopPullDownRefresh();
+        } });
 
     } },
 
@@ -110,13 +167,29 @@ var app = getApp();var _default =
   created: function created() {
     var _this = this;
     //获取缓存中的用户的tokey
-    // uni.getStorage({
-    // 	key:"bindtokey",
-    // 	success(res) {//获取到用户的tokey值
-    // 		_this.tokey = res.data
-    // 	}
-    // })
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {//获取到用户的tokey值
+        _this.tokey = res.data;
+        _this.getShippingAddressList(res.data, 1, 10, _this);
+      } });
 
+  },
+  onLoad: function onLoad(opction) {
+    // console.log(opction)
+    this.titleparameter = opction.title;
+    // console.log(this.titleparameter)
+    if (this.titleparameter == 'orderaddress') {var
+      gid = opction.gid,way = opction.way,img = opction.img,num = opction.num,storename = opction.storename,price = opction.price,goodtitle = opction.goodtitle,specname = opction.specname;
+      this.gid = gid;
+      this.num = num;
+      this.way = way;
+      this.img = img;
+      this.storename = storename;
+      this.price = price;
+      this.goodtitle = goodtitle;
+      this.specname = specname;
+    }
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

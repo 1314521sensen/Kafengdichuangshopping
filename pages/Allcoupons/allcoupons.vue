@@ -3,7 +3,7 @@
 		<actionbar url="/pages/PersonalMy/PersonalMy" message="优惠券"></actionbar>
 		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
 			<view class="nav-text">
-				<view class="cu-item" :class="index==TabCur?'text-red cur':''" v-for="(item,index) in coupons" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
+				<view class="cu-item" :class="index==TabCur?'nav-bg text-red cur':''" v-for="(item,index) in coupons" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
 					{{item}}
 				</view>
 			</view>
@@ -14,7 +14,7 @@
 		<!-- {{coupons[TabCur]}}
 		{{items}} -->
 		<!-- @getchildlist 用来接收子组件传过来的值 -->
-		<securitiesbottom v-if="items==coupons[TabCur]" @getchildlist="getchildlist"></securitiesbottom>
+		<securitiesbottom v-if="items==coupons[TabCur]" :couponslist="couponslist"></securitiesbottom>
 	</view>
 </template>
 
@@ -36,6 +36,17 @@
 					"已过期"
 				],
 				getchildlistdata:[],
+				couponslist:[
+					{
+						couponstitle:"店铺优惠券",
+						list:[]
+					},
+					{
+						couponstitle:"平台优惠券",
+						list:[]
+					}
+				],
+				tokey:0
 			}
 		},
 		methods:{
@@ -46,16 +57,85 @@
 				this.items = items
 				this.TabCur = id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+				this.platformcouponsdata(this)
+				this.storecouponsdata(this)
 			},
 			//子组件的数据 在methods定义接收  在生命周期的函数中 负责执行该函数
-			getchildlist(e){
-				this.getchildlistdata = e;
-				//再将新的数组加入到缓存中
-				uni.setStorage({
-					key:"couponsData",
-					data:this.getchildlistdata,
-					success:(res)=>{
+			// getchildlist(e){
+			// 	this.getchildlistdata = e;
+			// 	//再将新的数组加入到缓存中
+			// 	uni.setStorage({
+			// 		key:"couponsData",
+			// 		data:this.getchildlistdata,
+			// 		success:(res)=>{
 						
+			// 		}
+			// 	})
+			// }
+			//封装个函数用于请求优惠券的数据
+			platformcouponsdata(_this){
+				//这个是获取平台优惠券的接口
+				uni.request({
+					url:`${app.globalData.Requestpath}activity/getUserPlatformCouponList`,
+					method:"POST",
+					data:{
+						token:this.tokey,
+						page:1,
+						pageSize:2
+					},
+					success(Storecoupon){
+						if(Storecoupon.data.code==0){
+							Storecoupon.data.data.list .forEach((item,index)=>{
+								item.coupon_img = app.globalData.imgyuming+item.coupon_img
+								if(item.status==1){//未使用
+									if(_this.TabCur==0){
+										_this.couponslist[1].list = Storecoupon.data.data.list
+									}
+								}else if(item.status==2){//已使用
+									if(_this.TabCur==1){
+										_this.couponslist[1].list = Storecoupon.data.data.list
+									}
+								}else{//已过期
+									if(_this.TabCur==2){
+										_this.couponslist[1].list = Storecoupon.data.data.list
+									}
+								}
+							})
+						}
+					}
+				})
+			},
+			storecouponsdata(_this){
+				//获取店铺优惠券
+				uni.request({
+					url:`${app.globalData.Requestpath}activity/getUserStoreCouponList`,
+					method:"POST",
+					data:{
+						token:this.tokey,
+						page:1,
+						pageSize:2
+					},
+					success(resDiscountstores) {
+						if(resDiscountstores.data.code==0){
+							// console.log(resDiscountstores.data.data.list)
+							// _this.couponslist[0].list = resDiscountstores.data.data.lists
+							resDiscountstores.data.data.list .forEach((item,index)=>{
+								item.coupon_img = app.globalData.imgyuming+item.coupon_img
+								if(item.status==1){//未使用
+									if(_this.TabCur==0){
+										_this.couponslist[0].list = resDiscountstores.data.data.list
+									}
+								}else if(item.status==2){//已使用
+									if(_this.TabCur==1){
+										_this.couponslist[0].list = resDiscountstores.data.data.list
+									}
+								}else{//已过期
+									if(_this.TabCur==2){
+										_this.couponslist[0].list = resDiscountstores.data.data.list
+									}
+								}
+							})
+						}
 					}
 				})
 			}
@@ -67,9 +147,16 @@
 		components:{
 			securitiesbottom
 		},
-		updated(){//在数据发生改变的时候接受
-			const _this = this;
-			this.getchildlist()
+		created(){
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					_this.tokey = res.data
+					_this.platformcouponsdata(_this)
+					_this.storecouponsdata(_this)
+				}
+			})
 		}
 	}
 </script>
@@ -81,5 +168,9 @@
 	}
 	.nav .cu-item{
 			height:74rpx;
+	}
+	.nav-bg{
+		background-color: #eb9078;
+		color:#fff;
 	}
 </style>

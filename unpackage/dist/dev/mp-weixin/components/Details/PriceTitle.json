@@ -2,6 +2,7 @@
   "component": true,
   "usingComponents": {
     "bottompopup": "/components/Details/BottomPopup",
-    "evaluation": "/components/Details/evaluation"
+    "evaluation": "/components/Details/evaluation",
+    "storecoupon": "/components/Details/storecoupon"
   }
 }

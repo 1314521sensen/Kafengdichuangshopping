@@ -99,6 +99,9 @@ __webpack_require__.r(__webpack_exports__);
 {
   globalData: {
     statusBar: 0,
+    Requestpath: "http://hbk.huiboke.com/api/",
+    imgyuming: "http://hbk.huiboke.com",
+    logintokeybool: false,
     VerificationCode: function VerificationCode(json) {//封装一个方法来获取验证码
       console.log(json);
       uni.request({
@@ -132,6 +135,26 @@ __webpack_require__.r(__webpack_exports__);
           url: "/pages/login/login" });
 
       }
+    },
+    //封装一个检测tokey值更新tokey值
+    Detectionupdatetokey: function Detectionupdatetokey(tokey) {
+      uni.request({
+        url: "http://hbk.huiboke.com/api/common/refreshToken",
+        method: "POST",
+        data: {
+          token: tokey },
+
+        success: function success(res) {
+          if (res.data.code == 1) {
+            uni.reLaunch({
+              url: "/pages/login/login" });
+
+            getApp().globalData.logintokeybool = false;
+          } else {
+            getApp().globalData.logintokeybool = true;
+          }
+        } });
+
     } },
 
   onLaunch: function onLaunch() {

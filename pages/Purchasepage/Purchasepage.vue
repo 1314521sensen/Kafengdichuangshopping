@@ -53,6 +53,16 @@
 							<text>快递免邮</text>
 						</view>
 					</view>
+					<!-- 这是优惠券的组件 -->
+					<storecoupon 
+						msg="使用" 
+						titlemsg="使用优惠券" 
+						:tokey="tokey" 
+						:storeid="storeid" 
+						Whatcoupon="1" 
+						:Orderpaymentamount="this.price*this.nums"
+						@dingdancoupon="dingdancoupon"
+					></storecoupon>
 					<view class="distribution note">
 						<view class="cu-form-group">
 							<view class="title">订单备注</view>
@@ -104,6 +114,8 @@
 <script>
 	//引入顶部导航
 	import actionbar from "@/components/actionbar/actionbar.vue"
+	//引入优惠券
+	import storecoupon from "@/components/Details/storecoupon.vue"
 	//这是购买订单页面
 	const app = getApp();
 	export default {
@@ -123,6 +135,7 @@
 				way:0,
 				o_from:0,
 				value:"",
+				storeid:"",
 				list:[
 					"微信",
 					"支付宝",
@@ -130,7 +143,9 @@
 				],
 				Username:"",
 				Userphone:0,
-				Userselect:""
+				Userselect:"",
+				tokey:0,
+				coupondetails:[]
 			}
 		},
 		methods: {
@@ -178,7 +193,7 @@
 			},
 			Addressmodification(){
 				uni.navigateTo({
-					url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=1&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}`
+					url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=1&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}`
 				})
 			},
 			showModal(e) {
@@ -190,6 +205,9 @@
 			Determinepayment(){
 				console.log(this.radio)
 				
+			},
+			dingdancoupon(e){
+				console.log(e)
 			}
 		},
 		onLoad(opction){
@@ -203,7 +221,6 @@
 				uni.getStorage({
 					key:"bindtokey",
 					success(res) {
-						// console.log(res.data)
 						uni.request({
 							url:`${app.globalData.Requestpath}user/getShippingAddressList`,
 							method:"POST",
@@ -225,7 +242,8 @@
 					}
 				})
 			}
-			let {gid,num,way,img,storename,price,goodtitle} = opction
+			let {gid,num,way,img,storename,price,goodtitle,storeid} = opction
+			// console.log(storeid)
 			this.gid = gid
 			this.way = way
 			this.img = JSON.parse(img)
@@ -233,6 +251,7 @@
 			this.storename = storename
 			this.price = price
 			this.goodtitle = goodtitle
+			this.storeid = storeid
 			//使用eval方法 将字符串数组 转换为 真数组
 			this.data = eval(opction.specname)
 			// #ifdef H5
@@ -248,7 +267,17 @@
 		},
 		components:{
 			actionbar,
+			storecoupon
 		},
+		onShow() {
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					_this.tokey = res.data
+				}
+			})
+		}
 	}
 </script>
 

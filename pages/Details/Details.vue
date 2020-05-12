@@ -1,7 +1,7 @@
 <template>
 	<view class="Details">
 		<detailsbanner :swiperList="swiperList" height="720"></detailsbanner>
-		<pricetitle :pic="pic" :region="region"></pricetitle>
+		<pricetitle :pic="pic" :region="region" :storeid="storeid" :tokey="tokey"></pricetitle>
 		<imgs :imglist="imgs"></imgs>
 		<bottomcar :pic="pic" imgs="/static/cart/01.webp" :tokey="tokey" :gid="gid" :storeid="storeid"></bottomcar>
 	</view>

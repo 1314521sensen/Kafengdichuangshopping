@@ -1,9 +1,9 @@
 .ScratchableLatex.data-v-4b2975f0 {
-  margin-top: 30rpx;
+  margin-top: 68rpx;
 }
 .ScratchableLatex .icon.data-v-4b2975f0 {
-  width: 40%;
-  height: 60rpx;
+  width: 50%;
+  height: 80rpx;
   margin: auto;
 }
 .ScratchableLatex .icon image.data-v-4b2975f0 {
@@ -11,6 +11,7 @@
   height: 100%;
 }
 .ScratchableLatex text.data-v-4b2975f0 {
-  font-size: 24rpx;
+  font-size: 26rpx !important;
+  margin-top: 0 !important;
 }
 

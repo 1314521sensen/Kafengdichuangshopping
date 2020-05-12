@@ -136,7 +136,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var shoppingcatlist = function shoppingcatlist() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shoppingcartlist */ "components/shoppingcartlist/shoppingcartlist").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shoppingcartlist.vue */ 264));};var shopingbottompay = function shopingbottompay() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shopingbottompay */ "components/shoppingcartlist/shopingbottompay").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shopingbottompay.vue */ 271));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var shoppingcatlist = function shoppingcatlist() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shoppingcartlist */ "components/shoppingcartlist/shoppingcartlist").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shoppingcartlist.vue */ 271));};var shopingbottompay = function shopingbottompay() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shopingbottompay */ "components/shoppingcartlist/shopingbottompay").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shopingbottompay.vue */ 278));};
 
 
 
@@ -247,7 +247,8 @@ var app = getApp();var _default =
         key: "bindtokey",
         success: function success(res) {
           _this.tokey = res.data;
-          console.log(_this.tokey);
+          // console.log(_this.tokey)
+          app.globalData.Detectionupdatetokey(res.data);
           uni.request({
             url: "http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
             method: "POST",

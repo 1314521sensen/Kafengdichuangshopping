@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight",
-    "actionbar": "/components/actionbar/actionbar"
+    "actionbar": "/components/actionbar/actionbar",
+    "storecoupon": "/components/Details/storecoupon"
   }
 }

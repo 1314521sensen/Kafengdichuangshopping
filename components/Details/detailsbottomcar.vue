@@ -47,6 +47,7 @@
 				:bool="bool" 
 				:gid="gid"
 				:pic="pic"
+				:storeid="storeid"
 			></immediatelypopup>
 		</view>
 </template>

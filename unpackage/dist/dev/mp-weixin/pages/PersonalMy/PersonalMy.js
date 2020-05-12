@@ -134,7 +134,8 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var orders = function orders() {return __webpack_require__.e(/*! import() | components/myPersonal/orders */ "components/myPersonal/orders").then(__webpack_require__.bind(null, /*! @/components/myPersonal/orders.vue */ 278));};var myScratchableLatex = function myScratchableLatex() {return __webpack_require__.e(/*! import() | components/myPersonal/myScratchableLatex */ "components/myPersonal/myScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/myPersonal/myScratchableLatex.vue */ 285));};var information = function information() {return __webpack_require__.e(/*! import() | components/myPersonal/PersonalInformation */ "components/myPersonal/PersonalInformation").then(__webpack_require__.bind(null, /*! @/components/myPersonal/PersonalInformation.vue */ 292));};var mycoupons = function mycoupons() {return __webpack_require__.e(/*! import() | components/myPersonal/coupons */ "components/myPersonal/coupons").then(__webpack_require__.bind(null, /*! @/components/myPersonal/coupons.vue */ 299));};var Selectionrecommended = function Selectionrecommended() {return __webpack_require__.e(/*! import() | components/myPersonal/Selectionrecommended */ "components/myPersonal/Selectionrecommended").then(__webpack_require__.bind(null, /*! @/components/myPersonal/Selectionrecommended.vue */ 306));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var orders = function orders() {return __webpack_require__.e(/*! import() | components/myPersonal/orders */ "components/myPersonal/orders").then(__webpack_require__.bind(null, /*! @/components/myPersonal/orders.vue */ 285));};var myScratchableLatex = function myScratchableLatex() {return __webpack_require__.e(/*! import() | components/myPersonal/myScratchableLatex */ "components/myPersonal/myScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/myPersonal/myScratchableLatex.vue */ 292));};var information = function information() {return __webpack_require__.e(/*! import() | components/myPersonal/PersonalInformation */ "components/myPersonal/PersonalInformation").then(__webpack_require__.bind(null, /*! @/components/myPersonal/PersonalInformation.vue */ 299));};var mycoupons = function mycoupons() {return __webpack_require__.e(/*! import() | components/myPersonal/coupons */ "components/myPersonal/coupons").then(__webpack_require__.bind(null, /*! @/components/myPersonal/coupons.vue */ 306));};var Selectionrecommended = function Selectionrecommended() {return __webpack_require__.e(/*! import() | components/myPersonal/Selectionrecommended */ "components/myPersonal/Selectionrecommended").then(__webpack_require__.bind(null, /*! @/components/myPersonal/Selectionrecommended.vue */ 313));};
+
 
 
 
@@ -160,7 +161,29 @@ var app = getApp();var _default =
   data: function data() {
     return {
       statusBar: 0,
-      couponslistdata: [] };
+      couponslistdata: [],
+      tokey: "",
+      nickname: "",
+      images: "",
+      amount: 0,
+      integral: 0,
+      logintokeytext: "", //根据tokey值有没有 来判断用户有没有登录
+      //这是账户的数据
+      moneylist: [
+      {
+        num: 0,
+        miao: "账户余额" },
+
+      {
+        num: 0,
+        miao: "我的积分" },
+
+      {
+        num: 0,
+        miao: "优惠券",
+        url: "/pages/Allcoupons/allcoupons" }] };
+
+
 
   },
   components: {
@@ -178,18 +201,36 @@ var app = getApp();var _default =
 
 
   onShow: function onShow() {
-    //当数据发生改变得时候 就获取缓存中的值
-    // uni.getStorage({
-    // 	key:"couponsData",
-    // 	success:(res)=>{
-    // 		// console.log(res)
-    // 		this.couponslistdata = res.data
-    // 	},
-    // 	fail(err){
-    // 		this.couponslistdata = null
-    // 	}
-    // })
+    var _this = this;
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        _this.tokey = res.data;
+        app.globalData.Detectionupdatetokey(res.data);
+        uni.request({
+          url: "".concat(app.globalData.Requestpath, "user/getUserDetail"),
+          method: "POST",
+          data: {
+            token: _this.tokey },
+
+          success: function success(resinfo) {
+            if (app.globalData.logintokeybool) {
+              _this.logintokeytext = "退出";
+            } else {
+              _this.logintokeytext = "登录";
+            }var _resinfo$data$data =
+            resinfo.data.data,user_nick = _resinfo$data$data.user_nick,user_pic = _resinfo$data$data.user_pic,user_amount = _resinfo$data$data.user_amount,user_integral = _resinfo$data$data.user_integral;
+            // console.log(user_nick,user_pic)
+            _this.nickname = user_nick;
+            _this.images = "http://hbk.huiboke.com".concat(user_pic);
+            _this.moneylist[0].num = user_amount;
+            _this.moneylist[1].num = user_integral;
+          } });
+
+      } });
+
   } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })
 

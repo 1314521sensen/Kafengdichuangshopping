@@ -1,0 +1,10 @@
+.areaselection .cu-dialog.data-v-738b9592 {
+  height: 600rpx;
+}
+.areaselection .cu-dialog .horizontalaxissliding.data-v-738b9592 {
+  height: 30vh;
+}
+.areaselection .cu-dialog .horizontalaxissliding .Selectareashi.data-v-738b9592 {
+  line-height: 66rpx;
+}
+

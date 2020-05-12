@@ -1,0 +1,29 @@
+.banner.data-v-47ffcb3c {
+  position: absolute;
+  z-index: 10;
+  width: 720rpx;
+  height: 260rpx;
+  left: calc(50% - 360rpx);
+  top: 105rpx;
+  border-radius: 40rpx;
+  box-shadow: 0 12rpx 4rpx #cfcfcf;
+}
+.banner .set-height.data-v-47ffcb3c {
+  min-height: 212rpx;
+}
+.banner .screen-swiper.data-v-47ffcb3c {
+  position: absolute;
+  z-index: 20;
+  width: 100%;
+  border-radius: 40rpx;
+}
+.banner .screen-swiper .swiper-item.data-v-47ffcb3c {
+  height: 260rpx !important;
+  border-radius: 40rpx;
+}
+.banner .screen-swiper .swiper-item .img.data-v-47ffcb3c {
+  width: 100%;
+  height: 100%;
+  border-radius: 40rpx;
+}
+

@@ -136,7 +136,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var search = function search() {return __webpack_require__.e(/*! import() | components/indexcomponents/search */ "components/indexcomponents/search").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/search.vue */ 231));};var banner = function banner() {return __webpack_require__.e(/*! import() | components/indexcomponents/banner */ "components/indexcomponents/banner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/banner.vue */ 238));};var ScratchableLatex = function ScratchableLatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 245));};var coupons = function coupons() {return __webpack_require__.e(/*! import() | components/indexcomponents/coupons */ "components/indexcomponents/coupons").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/coupons.vue */ 252));};var shoppinglist = function shoppinglist() {return __webpack_require__.e(/*! import() | components/indexcomponents/shoppinglist */ "components/indexcomponents/shoppinglist").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/shoppinglist.vue */ 259));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var search = function search() {return __webpack_require__.e(/*! import() | components/indexcomponents/search */ "components/indexcomponents/search").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/search.vue */ 231));};var banner = function banner() {return __webpack_require__.e(/*! import() | components/indexcomponents/indexbanner */ "components/indexcomponents/indexbanner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/indexbanner.vue */ 238));};var ScratchableLatex = function ScratchableLatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 245));};var coupons = function coupons() {return __webpack_require__.e(/*! import() | components/indexcomponents/coupons */ "components/indexcomponents/coupons").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/coupons.vue */ 252));};var Recommend = function Recommend() {return __webpack_require__.e(/*! import() | components/indexcomponents/Recommend */ "components/indexcomponents/Recommend").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/Recommend.vue */ 259));};var shoppinglist = function shoppinglist() {return __webpack_require__.e(/*! import() | components/indexcomponents/shoppinglist */ "components/indexcomponents/shoppinglist").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/shoppinglist.vue */ 266));};
+
+
 
 
 
@@ -169,53 +171,51 @@ var app = getApp();var _default =
         cuIcon: 'cardboardfill',
         color: 'red',
         badge: 120,
-        name: 'VR' },
+        name: '拼团',
+        imgs: "/static/index/Scratchablelatexicon/Spellgroup.png" },
 
       {
         cuIcon: 'recordfill',
         color: 'orange',
         badge: 1,
-        name: '录像' },
+        name: '团购',
+        imgs: "/static/index/Scratchablelatexicon/bulk.png" },
       {
         cuIcon: 'picfill',
         color: 'yellow',
         badge: 0,
-        name: '图像' },
+        name: '折扣',
+        imgs: "/static/index/Scratchablelatexicon/discount.png" },
       {
         cuIcon: 'noticefill',
         color: 'olive',
         badge: 22,
-        name: '通知' },
+        name: '领劵',
+        imgs: "/static/index/Scratchablelatexicon/Ledsecurities.png" },
       {
         cuIcon: 'upstagefill',
         color: 'cyan',
         badge: 0,
-        name: '排行榜' },
+        name: '积分',
+        imgs: "/static/index/Scratchablelatexicon/integral.png" },
       {
         cuIcon: 'clothesfill',
         color: 'blue',
         badge: 0,
-        name: '皮肤' },
+        name: '专题',
+        imgs: "/static/index/Scratchablelatexicon/project.png" },
       {
         cuIcon: 'discoverfill',
         color: 'purple',
         badge: 0,
-        name: '发现' },
+        name: '品牌',
+        imgs: "/static/index/Scratchablelatexicon/brand.png" },
       {
         cuIcon: 'questionfill',
         color: 'mauve',
         badge: 0,
-        name: '帮助' },
-      {
-        cuIcon: 'commandfill',
-        color: 'purple',
-        badge: 0,
-        name: '问答' },
-      {
-        cuIcon: 'brandfill',
-        color: 'mauve',
-        badge: 0,
-        name: '版权' }],
+        name: '帮助',
+        imgs: "/static/index/Scratchablelatexicon/help.png" }],
 
       gridCol: 4, //这是格数
       // 这是banner的数据
@@ -346,12 +346,34 @@ var app = getApp();var _default =
     banner: banner,
     ScratchableLatex: ScratchableLatex,
     coupons: coupons,
-    shoppinglist: shoppinglist
+    shoppinglist: shoppinglist,
+    Recommend: Recommend
     // pageheight
   },
   onShow: function onShow() {
     this.inpblue();
     this.booltanchuang();
+    //获取tokey值 为了小程序考虑
+    // uni.getStorage({
+    // 	key:"bindtokey",
+    // 	success(res){
+    // 		uni.request({
+    // 			url:`${app.globalData.Requestpath}common/refreshToken`,
+    // 			method:"POST",
+    // 			data:{
+    // 				token:res.data,
+    // 				v_minute:30
+    // 			},
+    // 			success(res) {
+    // 				if(res.data.code==1){
+    // 					uni.reLaunch({
+    // 						url:"/pages/login/login"
+    // 					})
+    // 				}
+    // 			}
+    // 		})
+    // 	}
+    // })
   },
   //页面滚动到底部的事件
   onReachBottom: function onReachBottom() {

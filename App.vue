@@ -3,6 +3,7 @@
 		globalData:{
 			statusBar:0,
 			Requestpath:"http://hbk.huiboke.com/api/",
+			imgyuming:"http://hbk.huiboke.com",
 			logintokeybool:false,
 			VerificationCode(json){//封装一个方法来获取验证码
 				console.log(json)

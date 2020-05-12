@@ -3,9 +3,10 @@
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight",
     "search": "/components/indexcomponents/search",
-    "banner": "/components/indexcomponents/banner",
+    "banner": "/components/indexcomponents/indexbanner",
     "scratchable-latex": "/components/indexcomponents/ScratchableLatex",
     "coupons": "/components/indexcomponents/coupons",
-    "shoppinglist": "/components/indexcomponents/shoppinglist"
+    "shoppinglist": "/components/indexcomponents/shoppinglist",
+    "recommend": "/components/indexcomponents/Recommend"
   }
 }

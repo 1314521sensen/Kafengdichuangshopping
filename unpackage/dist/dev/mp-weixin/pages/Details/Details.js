@@ -133,7 +133,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var detailsbanner = function detailsbanner() {return __webpack_require__.e(/*! import() | components/indexcomponents/banner */ "components/indexcomponents/banner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/banner.vue */ 238));};var pricetitle = function pricetitle() {return __webpack_require__.e(/*! import() | components/Details/PriceTitle */ "components/Details/PriceTitle").then(__webpack_require__.bind(null, /*! @/components/Details/PriceTitle */ 313));};var imgs = function imgs() {return __webpack_require__.e(/*! import() | components/Details/detailsimgs */ "components/Details/detailsimgs").then(__webpack_require__.bind(null, /*! @/components/Details/detailsimgs.vue */ 320));};var bottomcar = function bottomcar() {return __webpack_require__.e(/*! import() | components/Details/detailsbottomcar */ "components/Details/detailsbottomcar").then(__webpack_require__.bind(null, /*! @/components/Details/detailsbottomcar.vue */ 327));};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var detailsbanner = function detailsbanner() {return __webpack_require__.e(/*! import() | components/indexcomponents/banner */ "components/indexcomponents/banner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/banner.vue */ 320));};var pricetitle = function pricetitle() {return __webpack_require__.e(/*! import() | components/Details/PriceTitle */ "components/Details/PriceTitle").then(__webpack_require__.bind(null, /*! @/components/Details/PriceTitle */ 327));};var imgs = function imgs() {return __webpack_require__.e(/*! import() | components/Details/detailsimgs */ "components/Details/detailsimgs").then(__webpack_require__.bind(null, /*! @/components/Details/detailsimgs.vue */ 334));};var bottomcar = function bottomcar() {return __webpack_require__.e(/*! import() | components/Details/detailsbottomcar */ "components/Details/detailsbottomcar").then(__webpack_require__.bind(null, /*! @/components/Details/detailsbottomcar.vue */ 341));};
 
 
 
@@ -150,6 +150,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var app = getApp();var _default =
 {
   data: function data() {
     return {
@@ -250,12 +251,21 @@ __webpack_require__.r(__webpack_exports__);
       } });
 
   },
+  onShow: function onShow() {
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        app.globalData.Detectionupdatetokey(res.data);
+      } });
+
+  },
   created: function created() {
     var _this = this;
     uni.getStorage({
       key: "bindtokey",
       success: function success(res) {
         _this.tokey = res.data;
+        app.globalData.Detectionupdatetokey(res.data);
       } });
 
   } };exports.default = _default;

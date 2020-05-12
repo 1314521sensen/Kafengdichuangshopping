@@ -15,7 +15,7 @@
 				<text>{{region[0]}}</text>
 			</view>
 		</view>
-		
+		<storecoupon :tokey="tokey" :storeid="storeid" msg="领卷" Whatcoupon="0" titlemsg="领劵"></storecoupon>
 		<bottompopup parameter="参数"></bottompopup>
 		<evaluation></evaluation>
 	</view>
@@ -23,6 +23,7 @@
 
 <script>
 	import bottompopup from "@/components/Details/BottomPopup.vue";
+	import storecoupon from "@/components/Details/storecoupon.vue"
 	import evaluation from "@/components/Details/evaluation.vue"
 	export default{
 		// 这是详情页面参数
@@ -37,9 +38,10 @@
 		},
 		components:{
 			bottompopup,
-			evaluation
+			evaluation,
+			storecoupon
 		},
-		props:["pic","region"]
+		props:["pic","region","tokey","storeid"],
 	}
 </script>
 

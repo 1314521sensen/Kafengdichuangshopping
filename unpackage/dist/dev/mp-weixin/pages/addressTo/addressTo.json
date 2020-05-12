@@ -1,4 +1,5 @@
 {
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "pageheight": "/components/pageheight/pageheight",
     "actionbar": "/components/actionbar/actionbar"

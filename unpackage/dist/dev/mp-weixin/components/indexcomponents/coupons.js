@@ -116,7 +116,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
 //
 //
 //
@@ -137,13 +137,24 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 //
 //
 //
-var _default =
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var app = getApp();var _default =
 {
   //这是优惠卷的组件
   data: function data() {
     return {
+      tokey: "",
       list: [
-      [
       {
         price: 3,
         preferential: 58 },
@@ -154,10 +165,9 @@ var _default =
 
       {
         price: 10,
-        preferential: 168 }],
+        preferential: 168 },
 
 
-      [
       {
         price: 18,
         preferential: 68 },
@@ -168,10 +178,9 @@ var _default =
 
       {
         price: 10,
-        preferential: 168 }],
+        preferential: 168 },
 
 
-      [
       {
         price: 30,
         preferential: 98 },
@@ -182,12 +191,61 @@ var _default =
 
       {
         price: 13,
-        preferential: 208 }]] };
+        preferential: 208 }],
 
 
 
+      couponsbool: true };
+
+  },
+  methods: {
+    Platformreceive: function Platformreceive(cid) {
+      // console.log(cid)
+      uni.request({
+        url: "".concat(app.globalData.Requestpath, "activity/userGetPlatformCoupon"),
+        method: "POST",
+        data: {
+          token: this.tokey,
+          cid: cid },
+
+        success: function success(res) {
+          if (res.data.code == 0) {
+            app.globalData.showtoastsame(res.data.msg);
+          } else {
+            app.globalData.showtoastsame(res.data.msg);
+          }
+        } });
+
+    } },
+
+  created: function created() {
+    var _this = this;
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        _this.tokey = res.data;
+        // console.log(res.data)
+        uni.request({
+          url: "".concat(app.globalData.Requestpath, "activity/getPlatformCouponTypeList"),
+          method: "POST",
+          data: {
+            token: res.data,
+            page: 1,
+            pageSize: 3 },
+
+          success: function success(rescoupons) {
+            if (rescoupons.data.code == 0) {
+              _this.list = rescoupons.data.data.list;
+              _this.couponsbool = true;
+            } else {
+              _this.couponsbool = false;
+            }
+          } });
+
+      } });
 
   } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

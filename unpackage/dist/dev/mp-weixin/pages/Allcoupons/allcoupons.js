@@ -177,23 +177,103 @@ var _actionbar = _interopRequireDefault(__webpack_require__(/*! @/components/act
 //
 //
 //
-var securitiesbottom = function securitiesbottom() {return __webpack_require__.e(/*! import() | components/allcoupons/securitiesbottom */ "components/allcoupons/securitiesbottom").then(__webpack_require__.bind(null, /*! @/components/allcoupons/securitiesbottom.vue */ 397));};var app = getApp(); //这是全部优惠卷路由
-var _default = { data: function data() {return { statusBar: 0, items: "未使用", TabCur: 0, scrollLeft: 0, coupons: ["未使用", "已使用", "已过期"], getchildlistdata: [] };}, methods: { tabSelect: function tabSelect(e) {// console.log(e.currentTarget.dataset)
+var securitiesbottom = function securitiesbottom() {return __webpack_require__.e(/*! import() | components/allcoupons/securitiesbottom */ "components/allcoupons/securitiesbottom").then(__webpack_require__.bind(null, /*! @/components/allcoupons/securitiesbottom.vue */ 418));};var app = getApp(); //这是全部优惠卷路由
+var _default = { data: function data() {return { statusBar: 0, items: "未使用", TabCur: 0, scrollLeft: 0, coupons: ["未使用", "已使用", "已过期"], getchildlistdata: [], couponslist: [{ couponstitle: "店铺优惠券", list: [] },
+      {
+        couponstitle: "平台优惠券",
+        list: [] }],
+
+
+      tokey: 0 };
+
+  },
+  methods: {
+    tabSelect: function tabSelect(e) {
+      // console.log(e.currentTarget.dataset)
       // console.log(this.coupons[this.TabCur+1])
       var _e$currentTarget$data = e.currentTarget.dataset,id = _e$currentTarget$data.id,items = _e$currentTarget$data.items;
       this.items = items;
       this.TabCur = id;
       this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
+      this.platformcouponsdata(this);
+      this.storecouponsdata(this);
     },
     //子组件的数据 在methods定义接收  在生命周期的函数中 负责执行该函数
-    getchildlist: function getchildlist(e) {
-      this.getchildlistdata = e;
-      //再将新的数组加入到缓存中
-      uni.setStorage({
-        key: "couponsData",
-        data: this.getchildlistdata,
-        success: function success(res) {
+    // getchildlist(e){
+    // 	this.getchildlistdata = e;
+    // 	//再将新的数组加入到缓存中
+    // 	uni.setStorage({
+    // 		key:"couponsData",
+    // 		data:this.getchildlistdata,
+    // 		success:(res)=>{
 
+    // 		}
+    // 	})
+    // }
+    //封装个函数用于请求优惠券的数据
+    platformcouponsdata: function platformcouponsdata(_this) {
+      //这个是获取平台优惠券的接口
+      uni.request({
+        url: "".concat(app.globalData.Requestpath, "activity/getUserPlatformCouponList"),
+        method: "POST",
+        data: {
+          token: this.tokey,
+          page: 1,
+          pageSize: 2 },
+
+        success: function success(Storecoupon) {
+          if (Storecoupon.data.code == 0) {
+            Storecoupon.data.data.list.forEach(function (item, index) {
+              item.coupon_img = app.globalData.imgyuming + item.coupon_img;
+              if (item.status == 1) {//未使用
+                if (_this.TabCur == 0) {
+                  _this.couponslist[1].list = Storecoupon.data.data.list;
+                }
+              } else if (item.status == 2) {//已使用
+                if (_this.TabCur == 1) {
+                  _this.couponslist[1].list = Storecoupon.data.data.list;
+                }
+              } else {//已过期
+                if (_this.TabCur == 2) {
+                  _this.couponslist[1].list = Storecoupon.data.data.list;
+                }
+              }
+            });
+          }
+        } });
+
+    },
+    storecouponsdata: function storecouponsdata(_this) {
+      //获取店铺优惠券
+      uni.request({
+        url: "".concat(app.globalData.Requestpath, "activity/getUserStoreCouponList"),
+        method: "POST",
+        data: {
+          token: this.tokey,
+          page: 1,
+          pageSize: 2 },
+
+        success: function success(resDiscountstores) {
+          if (resDiscountstores.data.code == 0) {
+            // console.log(resDiscountstores.data.data.list)
+            // _this.couponslist[0].list = resDiscountstores.data.data.lists
+            resDiscountstores.data.data.list.forEach(function (item, index) {
+              item.coupon_img = app.globalData.imgyuming + item.coupon_img;
+              if (item.status == 1) {//未使用
+                if (_this.TabCur == 0) {
+                  _this.couponslist[0].list = resDiscountstores.data.data.list;
+                }
+              } else if (item.status == 2) {//已使用
+                if (_this.TabCur == 1) {
+                  _this.couponslist[0].list = resDiscountstores.data.data.list;
+                }
+              } else {//已过期
+                if (_this.TabCur == 2) {
+                  _this.couponslist[0].list = resDiscountstores.data.data.list;
+                }
+              }
+            });
+          }
         } });
 
     } },
@@ -205,9 +285,16 @@ var _default = { data: function data() {return { statusBar: 0, items: "未使用
   components: {
     securitiesbottom: securitiesbottom },
 
-  updated: function updated() {//在数据发生改变的时候接受
+  created: function created() {
     var _this = this;
-    this.getchildlist();
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        _this.tokey = res.data;
+        _this.platformcouponsdata(_this);
+        _this.storecouponsdata(_this);
+      } });
+
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

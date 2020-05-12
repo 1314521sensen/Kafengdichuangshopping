@@ -44,7 +44,8 @@
 				goodtitle:"",
 				data:[],
 				way:0,
-				specname:""
+				specname:"",
+				storeid:""
 			}
 		},
 		methods: {
@@ -53,7 +54,7 @@
 				this.addressselectedindex = index
 				if(this.titleparameter=='orderaddress'){
 					uni.reLaunch({
-						url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=1&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}`
+						url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=1&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}`
 					})
 				}
 			},
@@ -122,7 +123,7 @@
 			this.titleparameter = opction.title
 			// console.log(this.titleparameter)
 			if(this.titleparameter=='orderaddress'){
-				let {gid,way,img,num,storename,price,goodtitle,specname} = opction
+				let {gid,way,img,num,storename,price,goodtitle,specname,storeid} = opction
 				this.gid = gid
 				this.num = num
 				this.way = way
@@ -131,6 +132,7 @@
 				this.price = price
 				this.goodtitle = goodtitle
 				this.specname = specname
+				this.storeid = storeid
 			}
 		}
 	}

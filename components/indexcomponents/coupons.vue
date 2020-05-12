@@ -117,7 +117,6 @@
 						},
 						success(rescoupons) {
 							if(rescoupons.data.code==0){
-								console.log(rescoupons.data.data.list)
 								_this.list = rescoupons.data.data.list
 								_this.couponsbool = true
 							}else{

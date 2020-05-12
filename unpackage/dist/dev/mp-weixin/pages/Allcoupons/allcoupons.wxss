@@ -14,4 +14,8 @@
 .nav .cu-item.data-v-415d0b56 {
   height: 74rpx;
 }
+.nav-bg.data-v-415d0b56 {
+  background-color: #eb9078;
+  color: #fff;
+}
 

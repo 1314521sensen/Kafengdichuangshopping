@@ -136,47 +136,47 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var areaselection = function areaselection() {return __webpack_require__.e(/*! import() | components/actionbar/areaselection */ "components/actionbar/areaselection").then(__webpack_require__.bind(null, /*! @/components/actionbar/areaselection.vue */ 390));};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var app = getApp();var _default =
 {
@@ -187,19 +187,78 @@ var app = getApp();var _default =
       value2: "",
       value3: "",
       value4: "",
-      statusBar: 0 };
+      statusBar: 0,
+      selectiondatalist: [],
+      tokey: 0,
+      Addressoption: "",
+      address: "",
+      returntitleparameter: "" };
 
   },
   methods: {
 
-    Addressselection: function Addressselection() {
-      this.show = true;
-    },
+    // Addressselection(){
+    // 	this.show = true
+    // },
     submits: function submits() {
+      var _this = this;
+      var userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+      // console.log(this.value2.match(userphone))
       // console.log(this.value1,this.value2,this.value3,this.value4)
-      if (this.value1 && this.value2 && this.value3 && this.value4) {
-        // console.log(1)
+      if (this.value1 && this.value2.match(userphone) !== null && this.value4 && this.selectiondatalist.length >= 3) {
         //这是跳转上页
+        // console.log(this.tokey)
+        if (this.Addressoption == "newaddress") {
+          uni.request({
+            url: "".concat(app.globalData.Requestpath, "user/addShippingAddress"),
+            method: "POST",
+            data: {
+              token: this.tokey,
+              province: this.selectiondatalist[0][0].area_id,
+              city: this.selectiondatalist[1][0].area_id,
+              area: this.selectiondatalist[2][0].area_id,
+              street_number: this.value4,
+              postal_code: "", //这到明天需要改
+              consignee_name: this.value1,
+              consignee_phone: this.value2,
+              is_default: 0 },
+
+            success: function success(res) {
+              if (res.data.code == 0) {
+                //pages/addressTo/addressTo?title=收货地址
+                uni.redirectTo({
+                  url: "/pages/addressTo/addressTo?title=".concat(_this.returntitleparameter) });
+
+              }
+            } });
+
+        } else {
+          uni.request({
+            url: "".concat(app.globalData.Requestpath, "user/editShippingAddress"),
+            method: "POST",
+            data: {
+              token: this.tokey,
+              address_id: this.address,
+              province: this.selectiondatalist[0][0].area_id,
+              city: this.selectiondatalist[1][0].area_id,
+              area: this.selectiondatalist[2][0].area_id,
+              street_number: this.value4,
+              postal_code: "", //这到明天需要改
+              consignee_name: this.value1,
+              consignee_phone: this.value2,
+              is_default: 0 },
+
+            success: function success(res) {
+              if (res.data.code == 0) {
+                uni.redirectTo({
+                  url: "/pages/addressTo/addressTo?title=".concat(_this.returntitleparameter) });
+
+              } else {
+                app.globalData.showtoastsame("修改失败");
+              }
+            } });
+
+        }
         //当点击的时候把值加入到把数据提交到数据库当中 在另一个页面进行数据的请求 渲染
       } else {
         uni.showToast({
@@ -215,10 +274,32 @@ var app = getApp();var _default =
       uni.navigateBack({
         delta: 1 });
 
+    },
+    //这是用来接受子组件传过来的值---弹出地址的组件
+    selectiondata: function selectiondata(e) {
+      // console.log(e)
+      this.selectiondatalist = e;
     } },
 
-  onLoad: function onLoad() {
+  components: {
+    areaselection: areaselection },
+
+  onLoad: function onLoad(opction) {
+    this.returntitleparameter = opction.titleparameter;
+    this.Addressoption = opction.title;
+    this.address = opction.address;
     this.statusBar = app.globalData.statusBar;
+  },
+
+  created: function created() {
+    var _this = this;
+    uni.getStorage({
+      key: "bindtokey",
+      success: function success(res) {
+        // console.log(res.data)
+        _this.tokey = res.data;
+      } });
+
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
