@@ -1,6 +1,6 @@
 {
-    "name" : "CardElectricity",
-    "appid" : "__UNI__1EABF77",
+    "name" : "com.huiboke",
+    "appid" : "__UNI__F002EB6",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -68,7 +68,8 @@
                 "push" : {
                     "unipush" : {}
                 },
-                "payment" : {}
+                "payment" : {},
+                "ad" : {}
             },
             "splashscreen" : {
                 "android" : {
