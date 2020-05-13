@@ -131,7 +131,7 @@
 					}else{
 						//跳转到购买页面
 						uni.navigateTo({
-							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=1&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}`
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}`
 						})
 					}
 				}

@@ -91,8 +91,8 @@
 		<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white">
-					<view class="action text-green" @tap="Determinepayment">确定支付</view>
 					<view class="action text-blue" @tap="hideModal">取消支付</view>
+					<view class="action text-green" @tap="Determinepayment">确定支付</view>
 				</view>
 				<view class="padding-xl">
 					<radio-group class="block" @change="RadioChange">
@@ -147,7 +147,9 @@
 				Userselect:"",
 				tokey:0,
 				coupondetails:[],
-				Favorablebalance:""
+				Favorablebalance:"",
+				cids:"",
+				address_id:0,//地址选中的id
 			}
 		},
 		methods: {
@@ -157,7 +159,8 @@
 					key:"bindtokey",
 					success:(res)=>{
 						 // console.log(res.data,this.gid,this.nums,this.data,this.o_from,this.value)
-						if(this.way==1){
+						 console.log(this.o_from)
+						if(this.o_from==1){
 							console.log("从pc")
 							uni.request({
 								url:"http://hbk.huiboke.com/api/order/createUnPayOrderInfo",
@@ -180,7 +183,7 @@
 									}
 								}
 							})
-						}else if(this.way==2){
+						}else if(this.o_from==2){
 							console.log("从手机过来的过来的")
 						}else{
 							console.log("从小程序过来的")
@@ -194,9 +197,18 @@
 				// console.log(this.radio)
 			},
 			Addressmodification(){
-				uni.navigateTo({
-					url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=1&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}`
-				})
+				console.log(this.way)
+				//1是购物车过来的
+				//2是详情过来的
+				if(this.way==1){
+					uni.navigateTo({
+						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&cids=${this.cids}&storeid=${this.storeid}`
+					})
+				}else{
+					uni.navigateTo({
+						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}`
+					})
+				}
 			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
@@ -205,7 +217,13 @@
 				this.modalName = null
 			},
 			Determinepayment(){
-				console.log(this.radio)
+				if(this.radio=='radio0'){//微信支付
+					console.log("微信支付")
+				}else if(this.radio=='radio1'){//支付宝支付
+					console.log("支付宝支付")
+				}else{
+					
+				}
 				
 			},
 			//这是用来接收子组件传过来的订单数据
@@ -216,17 +234,21 @@
 			}
 		},
 		onLoad(opction){
+			let {way} = opction
+			this.way = way//判断是从购物车来的 还是详情来的
 			if(opction.selectitem){
-				let {consignee_name,consignee_phone,street_number} = JSON.parse(opction.selectitem)
+				// console.log(opction.selectitem)
+				let {consignee_name,consignee_phone,street_number,address_id} = JSON.parse(opction.selectitem)
 				this.Username = consignee_name
 				this.Userphone = consignee_phone
 				this.Userselect = street_number
+				this.address_id = address_id
 			}else{
 				const _this = this
 				uni.getStorage({
 					key:"bindtokey",
 					success(res) {
-						uni.request({
+						uni.request({//这个是获取一条收货地址的详情
 							url:`${app.globalData.Requestpath}user/getShippingAddressList`,
 							method:"POST",
 							data:{
@@ -241,24 +263,36 @@
 									_this.Username = reslove.data.data[0].consignee_name
 									_this.Userphone = reslove.data.data[0].consignee_phone
 									_this.Userselect = reslove.data.data[0].street_number
+									_this.address_id = reslove.data.data[0].address_id
 								}
 							}
 						})
 					}
 				})
 			}
-			let {gid,num,way,img,storename,price,goodtitle,storeid} = opction
-			// console.log(storeid)
+			// console.log(way)
+			//1是购物车过来的
+			//2是详情过来的
+			//把公共的提出来
+			let {gid,num,img,storename,price,goodtitle,storeid} = opction
+			if(way=="1"){
+				// console.log("购物车过来的")
+				let {cids} = opction
+				this.cids = cids
+			}else{
+				// console.log("详情过来的")
+				//使用eval方法 将字符串数组 转换为 真数组
+				this.data = eval(opction.specname)
+			}
+			//把公共的提出来
 			this.gid = gid
-			this.way = way
 			this.img = JSON.parse(img)
 			this.nums = num
 			this.storename = storename
 			this.price = price
 			this.goodtitle = goodtitle
 			this.storeid = storeid
-			//使用eval方法 将字符串数组 转换为 真数组
-			this.data = eval(opction.specname)
+			// console.log(storeid)
 			// #ifdef H5
 				this.o_from = 1,
 			// #endif

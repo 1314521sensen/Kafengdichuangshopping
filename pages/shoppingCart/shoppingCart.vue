@@ -22,6 +22,8 @@
 				@Purchasequantity="Purchasequantity"
 				@datagoodimg="datagoodimg"
 				@datagoodprice="datagoodprice"
+				@datagoodid="datagoodid"
+				@datastoreid="datastoreid"
 				:shopinglist="shopinglist"
 				:delatestaticbool="delatestaticbool"
 			></shoppingcatlist>
@@ -44,6 +46,7 @@
 			:goodname="goodname"
 			:goodimg="goodimg"
 			:goodprice="goodprice"
+			:storeid="storeid"
 		></shopingbottompay>
 	</view>
 </template>
@@ -69,7 +72,8 @@
 				storename:"",
 				goodname:"",
 				goodimg:"",
-				goodprice:""
+				goodprice:"",
+				storeid:""
 			}
 		},
 		methods: {
@@ -89,8 +93,12 @@
 			dataindex(e){
 				this.xiabiao = e
 			},
-			datacarid(e){
+			datacarid(e){//这是购物车选中id
 				this.carid = e
+			},
+			//这是店铺id
+			datastoreid(e){
+				this.storeid = e
 			},
 			//这是shopingbottompay组件传过来的删除后的数组  在将下标返回去删除
 				// console.log(this.totalpic)
@@ -143,7 +151,7 @@
 			},
 			//用户子组件发送过来  父组件进行接收 用于结算---开始
 			Purchasequantity(e){//购买的数量
-				console.log(e)
+				// console.log(e)
 				this.num  = e
 			},
 			datagoodid(e){//商品id

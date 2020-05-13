@@ -45,17 +45,28 @@
 				data:[],
 				way:0,
 				specname:"",
-				storeid:""
+				storeid:"",
+				cids:""
 			}
 		},
 		methods: {
 			selecteditem(index,itemitem){
 				// console.log(itemitem)selectname=${itemitem.consignee_name}&selectphone=${itemitem.consignee_phone}&selectstreet=${itemitem.street_number}
+				
 				this.addressselectedindex = index
 				if(this.titleparameter=='orderaddress'){
-					uni.reLaunch({
-						url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=1&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}`
-					})
+					console.log(this.cids)
+					//1是购物车过来的
+					//2是详情过来的
+					if(this.way==1){
+						uni.reLaunch({
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&cids=${this.cids}&storeid=${this.storeid}`
+						})
+					}else{
+						uni.reLaunch({
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}`
+						})
+					}
 				}
 			},
 			tonews(){
@@ -119,19 +130,25 @@
 			})
 		},
 		onLoad(opction){
-			// console.log(opction)
 			this.titleparameter = opction.title
-			// console.log(this.titleparameter)
+			//1是购物车过来的
+			//2是详情过来的
 			if(this.titleparameter=='orderaddress'){
-				let {gid,way,img,num,storename,price,goodtitle,specname,storeid} = opction
+				let {way,gid,img,num,storename,price,goodtitle,storeid} = opction
+				this.way = way
+				if(this.way==1){//这是购物车过来的
+					let {cids} = opction
+					this.cids = cids
+				}else{//这是详情过来的
+					let {specname} = opction
+					this.specname = specname
+				}
 				this.gid = gid
 				this.num = num
-				this.way = way
 				this.img = img
 				this.storename = storename
 				this.price = price
 				this.goodtitle = goodtitle
-				this.specname = specname
 				this.storeid = storeid
 			}
 		}

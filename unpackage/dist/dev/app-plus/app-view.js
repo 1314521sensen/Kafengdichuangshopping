@@ -5467,7 +5467,7 @@ var render = function() {
               }
             },
             [
-              _c("v-uni-text", { attrs: { _i: 4 } }, [_vm._v("立即使用惠券")]),
+              _c("v-uni-text", { attrs: { _i: 4 } }, [_vm._v("使用惠券")]),
               _c("v-uni-text", {
                 staticClass: _vm._$g(5, "sc"),
                 attrs: { _i: 5 }

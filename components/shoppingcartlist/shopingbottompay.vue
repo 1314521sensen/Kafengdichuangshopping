@@ -46,16 +46,16 @@
 				if(this.xiabiao!==null){
 					try{
 						if(this.zizujianlist[this.xiabiao].checked){
-							console.log(this.num)
-							console.log(this.goodid)
-							console.log(this.storename)
-							console.log(this.goodname)
-							console.log(this.goodimg)
-							console.log(this.goodprice)
+							// console.log(this.num)//数量
+							// console.log(this.goodid)
+							// console.log(this.storename)//店铺的名字
+							// console.log(this.goodname)//商品的标题
+							// console.log(this.goodimg)//商品的图片
+							// console.log(this.goodprice)//商品的单价
 							//点击购买现在进行跳转
-							// uni.navigateTo({
-							// 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=1&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}`
-							// })
+							uni.navigateTo({
+								url:`/pages/Purchasepage/Purchasepage?gid=${this.goodid}&num=${this.num}&way=1&img=${JSON.stringify(this.goodimg)}&storename=${this.storename}&price=${this.goodprice}&goodtitle=${this.goodname}&cids=${this.carid}&storeid=${this.storeid}`
+							})
 						}
 					}
 					catch(err){
@@ -149,7 +149,7 @@
 				}
 			}
 		},
-		props:["totalpic","bool","zizujianlist","xiabiao","tokey","carid","num","goodid","storename","goodname","goodimg","goodprice"],
+		props:["totalpic","bool","zizujianlist","xiabiao","tokey","carid","num","goodid","storename","goodname","goodimg","goodprice","storeid"],
 		
 	}
 </script>

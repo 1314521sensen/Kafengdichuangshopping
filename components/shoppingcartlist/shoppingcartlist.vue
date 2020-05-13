@@ -15,6 +15,7 @@
 					:data-unitprice="items.good_price"
 					:data-num="numlistxiabiao[index][indexs].good_num"
 					:data-carid="items.cart_id"
+					:data-storeid="item.store_id"
 				>
 					{{numlistxiabiao[index][indexs].checked}}
 					{{items.good_id}}
@@ -126,7 +127,7 @@
 				this.$emit("price",this.toals)
 			},
 			CheckboxChange(e){
-				let {index,indexs,id,unitprice,num,carid} = e.currentTarget.dataset
+				let {index,indexs,id,unitprice,num,carid,storeid} = e.currentTarget.dataset
 				this.idbool = id
 				// //开始先让他们都为false
 				this.numlistxiabiao.forEach((item,itemindex)=>{
@@ -158,6 +159,7 @@
 						this.$emit("datalist",this.numlistxiabiao[index])
 						this.$emit("dataindex",indexs)
 						this.$emit("datacarid",carid)
+						this.$emit("datastoreid",storeid)
 						this.totals(unitprice,num)
 					}
 				}
@@ -235,6 +237,7 @@
 								console.log(res)
 								if(res.data.code==0){//代表获取成功
 									if(_this.onloadbool==false){
+										// console.log(res.data.data)
 										_this.shopinglist = res.data.data
 										uni.stopPullDownRefresh();//关闭下拉刷新
 								}
