@@ -72,7 +72,8 @@
 					<view class="Payprice">
 						<text>共{{nums}}件</text>
 						<text>小计:</text>
-						<text class="text-yellow">¥{{price*nums}}</text>
+						<!-- Favorablebalance优惠卷的面额 有值的时候采用有值 没值的时候采用0 -->
+						<text class="text-yellow" v-text="'¥'+((price*nums)-(Favorablebalance?Favorablebalance:0))"></text>
 					</view>
 				</view>
 			</view>
@@ -81,7 +82,7 @@
 			<view class="detailscar-pic">
 				<text>共{{nums}}件,</text>
 				<text>合计</text>
-				<text>¥{{price*nums}}</text>
+				<text v-text="'¥'+((price*nums)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"></text>
 				<!-- @tap="priceorder" -->
 				<button class="cu-btn round bg-orange" @tap="showModal" data-target="bottomModal">提交订单</button>
 			</view>
@@ -145,7 +146,8 @@
 				Userphone:0,
 				Userselect:"",
 				tokey:0,
-				coupondetails:[]
+				coupondetails:[],
+				Favorablebalance:""
 			}
 		},
 		methods: {
@@ -206,8 +208,11 @@
 				console.log(this.radio)
 				
 			},
+			//这是用来接收子组件传过来的订单数据
 			dingdancoupon(e){
-				console.log(e)
+				// console.log(e)
+				this.Favorablebalance = e.money
+				this.coupondetails[0] = e
 			}
 		},
 		onLoad(opction){

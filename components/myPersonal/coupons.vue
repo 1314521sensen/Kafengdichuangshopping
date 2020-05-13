@@ -3,7 +3,7 @@
 		<view class="coupons-midden">
 			<text>省钱优惠券</text>
 			<view class="coupons-icon" @click="Ledsecurities">
-				<text>立即领优惠券</text>
+				<text>使用惠券</text>
 				<text class="lg text-gray cuIcon-right" ></text>
 			</view>
 		</view>

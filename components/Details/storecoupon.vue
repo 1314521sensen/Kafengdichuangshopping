@@ -2,7 +2,8 @@
 	<view v-if="list.length!==0">
 		<view class="cu-bar bg-white" @tap="showModal" data-target="couponstore">
 			<view class="action">
-				<text>{{titlemsg}}</text>
+				<!-- 如果changetitlemsgtext有值就采用本身的 如果没值就采用传过来的 -->
+				<text>{{changetitlemsgtext?changetitlemsgtext:titlemsg}}</text>
 			</view>
 			<view class="action">
 				<!-- <button class="cu-btn bg-green shadow"  >Bottom</button> -->
@@ -44,7 +45,8 @@
 		data(){
 			return {
 				modalName:null,
-				list:[]
+				list:[],
+				changetitlemsgtext:""
 			}
 		},
 		methods:{
@@ -56,7 +58,8 @@
 			},
 			Getstorecoupons(coupontypeid,dingdanitem){//dingdanitem--->订单详情上面的item
 				const _this = this
-				if(_this.Orderpaymentamount=='0'){//显示商品详情里面的优惠卷 领取
+				if(_this.Orderpaymentamount=='0' || _this.Orderpaymentamount==undefined){//显示商品详情里面的优惠卷 领取
+				// console.log("这是优惠券过来的")
 					uni.request({
 						url:`${app.globalData.Requestpath}activity/userGetStoreCoupon`,
 						method:"POST",
@@ -68,16 +71,21 @@
 						success(res){
 							// console.log(res)
 							if(res.data.code==0){
-								_this.modalName = null
+								
 								app.globalData.showtoastsame("领取成功...")
 							}else{
 								app.globalData.showtoastsame(res.data.msg)
-								_this.modalName = null
 							}
+							//不管成功或不成功都会执行这里
+							_this.modalName = null
+							_this.changetitlemsgtext = ""
 						}
 					})
 				}else{//否则就是订单详情里面的使用优惠卷
 					//传给订单那个组件
+					// console.log("这是订单详情过来的")
+					_this.modalName = null
+					_this.changetitlemsgtext = dingdanitem.coupon_name
 					this.$emit("dingdancoupon",dingdanitem)
 				}
 			}

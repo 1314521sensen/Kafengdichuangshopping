@@ -71,6 +71,7 @@
 				success(res){
 					_this.tokey = res.data
 					app.globalData.Detectionupdatetokey(res.data)
+					//这是检测用户是否登录退出
 					uni.request({
 						url:`${app.globalData.Requestpath}user/getUserDetail`,
 						method:"POST",
@@ -89,6 +90,31 @@
 							_this.images = `http://hbk.huiboke.com${user_pic}`
 							_this.moneylist[0].num = user_amount
 							_this.moneylist[1].num = user_integral
+						}
+					})
+					//这获取用户的优惠券的数量
+					uni.request({
+						url:`${app.globalData.Requestpath}activity/getUserStoreCouponList`,
+						method:"POST",
+						data:{
+							token:res.data
+						},
+						success(Storecoupon) {//这是获取到店铺的优惠券
+							if(Storecoupon.data.code==0){
+							// console.log(Storecoupon.data.data.list,"这是店铺的优惠券")
+								uni.request({
+									url:`${app.globalData.Requestpath}activity/getUserPlatformCouponList`,
+									method:"POST",
+									data:{
+										token:res.data
+									},
+									success(Platformcoupon) {//这是获取了平台的优惠券
+										if(Platformcoupon.data.code==0){
+											_this.moneylist[2].num = Storecoupon.data.data.list.length+Platformcoupon.data.data.list.length
+										}
+									}
+								})
+							}
 						}
 					})
 				}
