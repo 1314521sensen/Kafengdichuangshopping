@@ -161,7 +161,7 @@
 							})
 							this.hideModal()
 							uni.navigateTo({
-								url:"/components/setcenter/setcenter?title=设置"
+								url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 							})
 						}
 					},

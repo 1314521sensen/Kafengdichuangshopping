@@ -108,13 +108,13 @@
 					this.tokey = res.data
 				}
 			})
-			this.message=opctry.title
-			if(opctry.title=="我的收藏"){
+			this.message=opctry.titlename
+			if(opctry.title=="userMycollection"){
 				//在这里请求渲染数据
 				this.mycollection("http://hbk.huiboke.com/api/user/getGoodFavoriteList")
 				this.deleteurl = 'http://hbk.huiboke.com/api/user/deleteFavoriteInfo'
 			}else{
-				if(opctry.title=="我的足迹"){
+				if(opctry.title=="userMyfootprint"){
 					// 在这里请求渲染数据
 					this.mycollection("http://hbk.huiboke.com/api/user/getTrackList")
 					this.deleteurl = 'http://hbk.huiboke.com/api/user/deleteTrackInfo'

@@ -1,7 +1,7 @@
 <template>
 	<view class="ScratchableLatex">
 		<view class="cu-list grid" :class="['col-' + gridCol,gridBorder?'':'no-border']">
-			<view class="cu-item" v-for="(item,index) in cuIconList" :key="index" v-if="index<gridCol*2" @click="collection(item.url,item.name)">
+			<view class="cu-item" v-for="(item,index) in cuIconList" :key="index" v-if="index<gridCol*2" @click="collection(item.url,item.Routinghopname,item.name)">
 				<!-- <view :class="['cuIcon-' + item.cuIcon,'text-' + item.color]">
 				</view> -->
 				<!-- 把这变成image -->
@@ -23,10 +23,10 @@
 		},
 		props:["cuIconList","gridCol","width","height"],
 		methods:{
-			collection(url,name){
+			collection(url,name,titlename){
 				// console.log(url,name,list)
 				uni.navigateTo({
-					url:`${url}?title=${name}`
+					url:`${url}?title=${name}&titlename=${titlename}`
 				})
 			}
 		}

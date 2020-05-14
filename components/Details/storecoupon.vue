@@ -86,7 +86,17 @@
 					// console.log("这是订单详情过来的")
 					_this.modalName = null
 					_this.changetitlemsgtext = dingdanitem.coupon_name
-					this.$emit("dingdancoupon",dingdanitem)
+					let obj = {}
+					let arr = []
+					// console.log(dingdanitem)
+					obj.sid = dingdanitem.store_id
+					obj.c_id = dingdanitem.id
+					obj.c_type = dingdanitem.coupon_type
+					obj.money = dingdanitem.money
+					// console.log([obj])
+					arr[0] = obj
+					// console.log(arr)
+					this.$emit("dingdancoupon",arr)
 				}
 			}
 		},

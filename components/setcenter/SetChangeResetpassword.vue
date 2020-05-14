@@ -130,7 +130,7 @@
 									if(res.data.code==0){
 										app.globalData.showtoastsame("修改成功")
 										uni.navigateTo({
-											url:"/components/setcenter/setcenter?title=设置"
+											url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 										})
 									}else{
 										app.globalData.showtoastsame(res.data.msg)
@@ -160,7 +160,7 @@
 									if(res.data.code==0){
 										app.globalData.showtoastsame("设置成功")
 										uni.navigateTo({
-											url:"/components/setcenter/setcenter?title=设置"
+											url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 										})
 									}else{
 										app.globalData.showtoastsame("登录密码错误")
@@ -230,7 +230,7 @@
 									app.globalData.showtoastsame("重置成功")
 									this.hideModal()
 									uni.navigateTo({
-										url:"/components/setcenter/setcenter?title=设置"
+										url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 									})
 								}else{
 									app.globalData.showtoastsame(res.data.msg)

@@ -13,44 +13,53 @@
 					{
 					badge: 120,
 					name: '推广/分销',
-					imgs:"/static/Settheicon/Promotedistribution.png"
+					imgs:"/static/Settheicon/Promotedistribution.png",
+					Routinghopname:"Promotedistribution"
 				},
 				{
 					badge: 1,
 					name: '签到',
-					imgs:"/static/Settheicon/Signin.png"
+					imgs:"/static/Settheicon/Signin.png",
+					Routinghopname:"Signin"
 				}, {
 					badge: 22,
 					name: '收货地址',
 					url:"/pages/addressTo/addressTo",
-					imgs:"/static/Settheicon/Shippingaddress.png"
+					imgs:"/static/Settheicon/Shippingaddress.png",
+					Routinghopname:"userShippingaddress"
 				},  {
 					badge: 0,
 					name: '我的拼单',
-					imgs:"/static/Settheicon/Myspelllist.png"
+					imgs:"/static/Settheicon/Myspelllist.png",
+					Routinghopname:"userMyspelllist"
 				}, {
 					badge: 0,
 					name: '我的收藏',
 					url:"/components/collection/collection",
-					imgs:"/static/Settheicon/Mycollection.png"
+					imgs:"/static/Settheicon/Mycollection.png",
+					Routinghopname:"userMycollection"
 				}, {
 					badge: 0,
 					name: '我的足迹',
 					url:"/components/collection/collection",
-					imgs:"/static/Settheicon/Myfootprint.png"
+					imgs:"/static/Settheicon/Myfootprint.png",
+					Routinghopname:"userMyfootprint"
 				}, {
 					badge: 0,
 					name: '我的咨询',
-					imgs:"/static/Settheicon/Myadvice.png"
+					imgs:"/static/Settheicon/Myadvice.png",
+					Routinghopname:"userMyinquiry"
 				}, {
 					badge: 0,
 					name: '充值/提现',
-					imgs:"/static/Settheicon/withdrawal.png"
+					imgs:"/static/Settheicon/withdrawal.png",
+					Routinghopname:"userTopupwithdrawal"
 				},
 				{
 					badge: 0,
 					name: '设置',
-					url:"/components/setcenter/setcenter"
+					url:"/components/setcenter/setcenter",
+					Routinghopname:"userset"
 				}
 				],
 				gridCol: 5,//这是格数

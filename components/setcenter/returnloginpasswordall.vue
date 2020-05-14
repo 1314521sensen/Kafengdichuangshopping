@@ -146,7 +146,7 @@
 								if(res.data.code==0){
 									this.showToastkuang("密码修改成功")
 									uni.navigateTo({
-										url:"/components/setcenter/setcenter?title=设置"
+										url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 									})
 								}else{
 									this.showToastkuang("原密码错误")
@@ -174,7 +174,7 @@
 								if(res.data.code==0){
 									this.showToastkuang("密码修改成功")
 									uni.navigateTo({
-										url:"/components/setcenter/setcenter?title=设置"
+										url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 									})
 								}
 							}
@@ -200,7 +200,7 @@
 								if(res.data.code==0){
 									this.showToastkuang("密码修改成功")
 									uni.navigateTo({
-										url:"/components/setcenter/setcenter?title=设置"
+										url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 									})
 								}
 							}

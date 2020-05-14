@@ -83,7 +83,7 @@
 				<text>共{{nums}}件,</text>
 				<text>合计</text>
 				<text v-text="'¥'+((price*nums)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"></text>
-				<!-- @tap="priceorder" -->
+				<!-- @tap="priceorder showModal" -->
 				<button class="cu-btn round bg-orange" @tap="showModal" data-target="bottomModal">提交订单</button>
 			</view>
 		</view>
@@ -150,6 +150,8 @@
 				Favorablebalance:"",
 				cids:"",
 				address_id:0,//地址选中的id
+				ctype:"",//优惠券的类型 平台的还是店铺的
+				cid:""
 			}
 		},
 		methods: {
@@ -171,7 +173,7 @@
 									spec:this.data,
 									quantity:this.nums,
 									o_from:this.o_from,
-									address_id:52,
+									address_id:this.address_id,
 									p_msg:this.value
 								},
 								success(reslove) {
@@ -217,20 +219,83 @@
 				this.modalName = null
 			},
 			Determinepayment(){
+				
+				
 				if(this.radio=='radio0'){//微信支付
 					console.log("微信支付")
 				}else if(this.radio=='radio1'){//支付宝支付
 					console.log("支付宝支付")
 				}else{
-					
+					// console.log(this.tokey)					
+					this.GetorderdetailsData()
 				}
 				
 			},
+			//封装个根据购物车进来的还是订单进来的请求数据
+			GetorderdetailsData(){
+				//当用户选择支付时处理买家留言
+				let Leavemessage = {}
+				let Leavearr = []
+				Leavemessage.sid = this.storeid
+				Leavemessage.msg = this.value
+				Leavearr[0] = Leavemessage
+				//1是购物车过来的
+				//2是详情过来的
+				// console.log(this.way)
+				if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
+					uni.request({
+						url:`${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
+						method:"POST",
+						data:{
+							token:this.tokey,
+							c_ids:this.cids,//购物车选中的购物商品的id
+							o_from:this.o_from,//根据用户哪一端进来的
+							address_id:this.address_id,//地址对应的id
+							coupon_ids:this.coupondetails,//这是返回用户选择的那张优惠券
+							p_msg:Leavearr//用户的留言
+						},
+						success(res) {
+							console.log(res)
+						}
+					})
+				}else{//订单详情过来的
+					if(this.coupondetails.length<=0){
+						this.cid = ""
+						this.ctype = ""
+					}else{
+						this.cid = this.coupondetails[0].c_id
+						this.ctype = this.coupondetails[0].c_type
+					}
+					// console.log(this.tokey,this.gid,this.data,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
+					uni.request({
+						url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
+						method:"POST",
+						data:{
+							token:this.tokey,
+							gid:this.gid,//商品的id
+							spec:this.data,
+							quantity:this.nums,
+							o_from:this.o_from,//根据用户哪一端进来的
+							address_id:this.address_id,//地址对应的id
+							p_msg:this.value,//用户的留言
+							c_id:this.cid,//这是返回用户选择的那张优惠券
+							c_type:this.ctype
+						},
+						success(res) {
+							//orderSnArray订单的编组 支付的时候用到
+							if(res.data.code==0){//获取到支付前的数据
+								
+							}
+						}
+					})
+				}
+			},
 			//这是用来接收子组件传过来的订单数据
 			dingdancoupon(e){
-				// console.log(e)
-				this.Favorablebalance = e.money
-				this.coupondetails[0] = e
+				//这是用户选择优惠券后 原价减去优惠卷的价格
+				this.Favorablebalance = e[0].money
+				this.coupondetails = e
+				// console.log(this.coupondetails[0].c_type)
 			}
 		},
 		onLoad(opction){
@@ -244,6 +309,7 @@
 				this.Userselect = street_number
 				this.address_id = address_id
 			}else{
+				// console.log(opction.selectitem)
 				const _this = this
 				uni.getStorage({
 					key:"bindtokey",
