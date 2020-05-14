@@ -137,6 +137,9 @@
 								}
 							}
 						})
+					},
+					fail(err){
+						app.globalData.Detectionupdatetokey(err.data)
 					}
 				})
 				

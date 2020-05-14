@@ -117,23 +117,24 @@
 			})
 		},
 		onShow(){
-			uni.getStorage({
-				key:"bindtokey",
-				success(res) {
-					app.globalData.Detectionupdatetokey(res.data)
-				}
-			})
-		},
-		created() {
 			const _this = this
 			uni.getStorage({
 				key:"bindtokey",
 				success(res) {
 					_this.tokey = res.data
-					app.globalData.Detectionupdatetokey(res.data)
-				}
+				},
 			})
-		}
+		},
+		// created() {
+		// 	const _this = this
+		// 	uni.getStorage({
+		// 		key:"bindtokey",
+		// 		success(res) {
+		// 			_this.tokey = res.data
+		// 			app.globalData.Detectionupdatetokey(res.data)
+		// 		}
+		// 	})
+		// }
 	}
 </script>
 

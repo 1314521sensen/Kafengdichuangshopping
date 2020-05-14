@@ -124,13 +124,11 @@
 			},
 			//封装一个app和微信端 不同的登录请求方法
 			Ordinarydifferentlogin(data,username,password,bingjson){
-				console.log("这块走过来了")
 				uni.request({
 					url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
 					method:"POST",
 					data,
 					success:(res)=>{
-						console.log(res)
 					// #ifdef APP-PLUS || H5 || MP-WEIXIN
 						uni.setStorage({//这个是把tokey存起来
 							key:"bindtokey",
@@ -145,31 +143,12 @@
 									data:1
 								})
 							// #endif
-							console.log("已经走过来了")
-							uni.request({
-								url:"http://hbk.huiboke.com/api/user/getUserDetail",
-								method:"POST",
-								data:{
-									token:res.data.data.token
-								},
-								success:(resinfo)=>{
-									if(resinfo.data.code==0){
-										// #ifdef APP-PLUS || H5
-											this.toast("登录成功")
-											uni.setStorage({//这块存的用户的登录信息
-												key:"userinfokey",
-												data:resinfo.data.data
-											})
-											uni.switchTab({
-												url:"/pages/index/index"
-											})
-										//#endif
-									}
-								},
-								fail:(err)=>{
-									this.toast("登录失败")
-								}
-							})
+							// #ifdef APP-PLUS || H5
+								this.toast("登录成功")
+								uni.switchTab({
+									url:"/pages/index/index"
+								})
+							// #endif
 						}else{
 							this.toast("验证码错误")
 							//否则就设置用户登录的状态的码 为0

@@ -105,11 +105,13 @@
 				})
 			},
 			shoppingcart(){
+				app.globalData.Detectionupdatetokey(this.tokey)
 				uni.switchTab({
 					url:"/pages/shoppingCart/shoppingCart"
 				})
 			},
 			Addcart(obj,img){
+				app.globalData.Detectionupdatetokey(this.tokey)
 				let {store_name,good_title,good_price,good_pic} = obj
 				uni.request({
 					url:"http://hbk.huiboke.com/api/shopping_cart/addShoppingCartInfo",
@@ -159,6 +161,7 @@
 			},
 			//这是点击弹窗的确定是否确定添加收藏
 			collectionwork(){
+				app.globalData.Detectionupdatetokey(this.tokey)
 				//this.Noteinformation收藏信息
 					if(this.Noteinformation!==""){
 						//在这里添加数据
@@ -192,6 +195,7 @@
 					}
 			},
 			Skiporder(e){
+				app.globalData.Detectionupdatetokey(this.tokey)
 				this.modalName = e.currentTarget.dataset.target
 			},
 			//当用户点击了 子组件里面的x

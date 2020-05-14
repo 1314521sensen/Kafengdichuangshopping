@@ -23,9 +23,15 @@
 		methods:{
 			shezhipasswrd(){
 				//跳转
-				uni.navigateTo({
-					url:`/components/setcenter/SetChangeResetpassword?index=${this.setzhifumimabool}&tokey=${this.tokey}&phone=${this.userphone}&id=${this.userid}`
-				})
+				if(this.business=="pay"){//如果等于pay的话 就是订单页面跳转过来的
+					uni.navigateTo({
+						url:`/components/setcenter/SetChangeResetpassword?index=${this.setzhifumimabool}&tokey=${this.tokey}&phone=${this.userphone}&id=${this.userid}&business=${this.business}`
+					})
+				}else{
+					uni.navigateTo({
+						url:`/components/setcenter/SetChangeResetpassword?index=${this.setzhifumimabool}&tokey=${this.tokey}&phone=${this.userphone}&id=${this.userid}`
+					})
+				}
 			}
 		},
 		created(){
@@ -48,7 +54,7 @@
 				}
 			})
 		},
-		props:["tokey","userphone","userid"]
+		props:["tokey","userphone","userid","business"]
 	}
 </script>
 

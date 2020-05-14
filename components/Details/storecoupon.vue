@@ -25,7 +25,8 @@
 						</view>
 						<view class="coupons-time text-line-center">
 							<view>
-								<text>仅限该店铺使用</text>
+								<!-- {{item.at_full}} -->
+								<text>{{item.at_full=='0.00'?'无门槛使用':'满'+item.at_full+'使用'}}</text>
 								<text>{{item.start_time}}---{{item.stop_time}}</text>
 							</view>
 						</view>
@@ -114,6 +115,7 @@
 					},
 					success(res) {
 						if(res.data.code==0){
+							console.log(res.data.data)
 							_this.list = res.data.data.list
 							_this.list.forEach((item,index)=>{
 								item.start_time = item.start_time.trim().split(" ")[0]
@@ -136,6 +138,7 @@
 						// console.log(res)
 						if(res.data.code==0){
 							_this.list = res.data.data
+							// console.log(res)
 							_this.list.forEach((item,index)=>{
 								item.start_time = item.start_time.trim().split(" ")[0]
 								item.stop_time = item.stop_time.trim().split(" ")[0]

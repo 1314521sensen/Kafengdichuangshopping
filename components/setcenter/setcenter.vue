@@ -5,7 +5,7 @@
 		<setphone :userphone="userphone" :userid="userid" :tokey="tokey"></setphone>
 		<Realnameauthentication v-if="Realnamebool==false" :tokey="tokey"></Realnameauthentication>
 		<Resetloginpassword :userphone="userphone" :useremail="useremail" :tokey="tokey" :userid="userid"></Resetloginpassword>
-		<Setpaymentpassword :tokey="tokey" :userphone="userphone" :userid="userid"></Setpaymentpassword>
+		<Setpaymentpassword :tokey="tokey" :userphone="userphone" :userid="userid" :business="business"></Setpaymentpassword>
 	</view>
 </template>
 
@@ -30,7 +30,8 @@
 				userid:"",
 				Realnamebool:true,//判断用户实名的状态
 				useremail:"",
-				setzhifumimabool:""
+				setzhifumimabool:"",
+				business:""
 			}
 		},
 		components:{
@@ -40,7 +41,9 @@
 			Resetloginpassword,
 			Setpaymentpassword
 		},
-		onLoad(){
+		onLoad(opction){
+			//用来检测是否订单那个页面跳转过来的
+			this.business = opction.business
 			this.statusBar = app.globalData.statusBar
 			
 		},

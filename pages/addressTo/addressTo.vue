@@ -70,9 +70,19 @@
 				}
 			},
 			tonews(){
-				uni.navigateTo({
-					url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}`
-				})
+				if(this.way==1){
+					uni.navigateTo({
+						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}`
+					})
+				}else if(this.way==2){
+					uni.navigateTo({
+						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}`
+					})
+				}else{
+					uni.navigateTo({
+						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}`
+					})
+				}
 			},
 			Deleteaddress(index,address_id){
 				const _this = this
@@ -91,9 +101,19 @@
 			},
 			//点击跳到修改地址
 			setaddress(address_id){
-				uni.navigateTo({
-					url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}`
-				})
+				if(this.way==1){
+					uni.navigateTo({
+						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}`
+					})
+				}else if(this.way==2){
+					uni.navigateTo({
+						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}`
+					})
+				}else{
+					uni.navigateTo({
+						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}`
+					})
+				}
 			},
 			//封装一个获取用户收货地址的功能
 			getShippingAddressList(tokey,page,pages,_this){

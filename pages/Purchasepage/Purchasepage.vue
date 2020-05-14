@@ -109,6 +109,13 @@
 				</view>
 			</view>
 		</view>
+		<passkeyborad 
+			:show="passwordzhifutanchuang" 
+			:isIphoneX="isIphoneX" 
+			@Enterpasswordcompletepayment="Enterpasswordcompletepayment" 
+			:balancetext="((price*nums)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"
+			@close="close"
+			></passkeyborad>
 	</view>
 </template>
 
@@ -117,6 +124,8 @@
 	import actionbar from "@/components/actionbar/actionbar.vue"
 	//引入优惠券
 	import storecoupon from "@/components/Details/storecoupon.vue"
+	//引入插件密码弹窗页面
+	import passkeyborad from '@/components/yzc-paykeyboard/yzc-paykeyboard.vue'
 	//这是购买订单页面
 	const app = getApp();
 	export default {
@@ -143,63 +152,28 @@
 					"余额"
 				],
 				Username:"",
-				Userphone:0,
+				Userphone:"",
 				Userselect:"",
 				tokey:0,
 				coupondetails:[],
 				Favorablebalance:"",
 				cids:"",
-				address_id:0,//地址选中的id
+				address_id:"",//地址选中的id
 				ctype:"",//优惠券的类型 平台的还是店铺的
-				cid:""
+				cid:"",
+				passwordzhifutanchuang:false,//是否弹出输入支付密码弹窗
+				isIphoneX:false,//Iphone全面屏系列底部适配
+				zhifumimatext:"",
+				orderSnArray:[]
 			}
 		},
 		methods: {
-			priceorder(){
-				//为了小程序考虑只能这样写了
-				uni.getStorage({
-					key:"bindtokey",
-					success:(res)=>{
-						 // console.log(res.data,this.gid,this.nums,this.data,this.o_from,this.value)
-						 console.log(this.o_from)
-						if(this.o_from==1){
-							console.log("从pc")
-							uni.request({
-								url:"http://hbk.huiboke.com/api/order/createUnPayOrderInfo",
-								method:"POST",
-								data:{
-									token:res.data,
-									gid:this.gid,
-									spec:this.data,
-									quantity:this.nums,
-									o_from:this.o_from,
-									address_id:this.address_id,
-									p_msg:this.value
-								},
-								success(reslove) {
-									// console.log(reslove.data.code)
-									if(reslove.data.code==0){
-										console.log(reslove)
-									}else{//如果成功以后弹出提示框
-										console.log(111)
-									}
-								}
-							})
-						}else if(this.o_from==2){
-							console.log("从手机过来的过来的")
-						}else{
-							console.log("从小程序过来的")
-						}
-					}
-				})
-			},
 			RadioChange(e) {
 				this.radio = e.detail.value
 				// console.log(e.detail.value)
 				// console.log(this.radio)
 			},
 			Addressmodification(){
-				console.log(this.way)
 				//1是购物车过来的
 				//2是详情过来的
 				if(this.way==1){
@@ -233,6 +207,8 @@
 			},
 			//封装个根据购物车进来的还是订单进来的请求数据
 			GetorderdetailsData(){
+				// console.log(this.address_id)
+				const _this = this
 				//当用户选择支付时处理买家留言
 				let Leavemessage = {}
 				let Leavearr = []
@@ -242,60 +218,150 @@
 				//1是购物车过来的
 				//2是详情过来的
 				// console.log(this.way)
-				if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
-					uni.request({
-						url:`${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
-						method:"POST",
-						data:{
-							token:this.tokey,
-							c_ids:this.cids,//购物车选中的购物商品的id
-							o_from:this.o_from,//根据用户哪一端进来的
-							address_id:this.address_id,//地址对应的id
-							coupon_ids:this.coupondetails,//这是返回用户选择的那张优惠券
-							p_msg:Leavearr//用户的留言
-						},
-						success(res) {
-							console.log(res)
-						}
-					})
-				}else{//订单详情过来的
-					if(this.coupondetails.length<=0){
-						this.cid = ""
-						this.ctype = ""
-					}else{
-						this.cid = this.coupondetails[0].c_id
-						this.ctype = this.coupondetails[0].c_type
-					}
-					// console.log(this.tokey,this.gid,this.data,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
-					uni.request({
-						url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
-						method:"POST",
-						data:{
-							token:this.tokey,
-							gid:this.gid,//商品的id
-							spec:this.data,
-							quantity:this.nums,
-							o_from:this.o_from,//根据用户哪一端进来的
-							address_id:this.address_id,//地址对应的id
-							p_msg:this.value,//用户的留言
-							c_id:this.cid,//这是返回用户选择的那张优惠券
-							c_type:this.ctype
-						},
-						success(res) {
-							//orderSnArray订单的编组 支付的时候用到
-							if(res.data.code==0){//获取到支付前的数据
-								
+				if(this.address_id!==""){//判断新用户有没有地址
+					if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
+						uni.request({
+							url:`${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
+							method:"POST",
+							data:{
+								token:this.tokey,
+								c_ids:this.cids,//购物车选中的购物商品的id
+								o_from:this.o_from,//根据用户哪一端进来的
+								address_id:this.address_id,//地址对应的id
+								coupon_ids:this.coupondetails,//这是返回用户选择的那张优惠券
+								p_msg:Leavearr//用户的留言
+							},
+							success(res) {
+								// console.log(res)
+								if(res.data.code==0){
+									//获取订单编号数组
+									_this.orderSnArray = res.data.data.orderSnArray
+									//选择支付的框隐藏
+									_this.hideModal()
+									//检测是否设置了支付密码
+									_this.Detectionpaymentpassword(_this)
+									_this.Paywithbalance(_this)
+									// console.log(_this.orderSnArray )
+								}
 							}
+						})
+					}else{//订单详情过来的
+						if(this.coupondetails.length<=0){
+							this.cid = ""
+							this.ctype = ""
+						}else{
+							this.cid = this.coupondetails[0].c_id
+							this.ctype = this.coupondetails[0].c_type
 						}
-					})
+						// console.log(this.tokey,this.gid,this.data,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
+						uni.request({
+							url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
+							method:"POST",
+							data:{
+								token:this.tokey,
+								gid:this.gid,//商品的id
+								spec:this.data,
+								quantity:this.nums,
+								o_from:this.o_from,//根据用户哪一端进来的
+								address_id:this.address_id,//地址对应的id
+								p_msg:this.value,//用户的留言
+								c_id:this.cid,//这是返回用户选择的那张优惠券
+								c_type:this.ctype
+							},
+							success(res) {
+								// console.log(res)
+								//orderSnArray订单的编组 支付的时候用到
+								if(res.data.code==0){//获取到支付前的数据
+									//获取订单编号数组
+									_this.orderSnArray = res.data.data.orderSnArray
+									//选择支付的框隐藏
+									_this.hideModal()
+									//检测是否设置了支付密码
+									_this.Detectionpaymentpassword(_this)
+									_this.Paywithbalance(_this)
+								}
+							}
+						})
+					}
+				}else{
+					_this.hideModal()
+					app.globalData.showtoastsame("请选择地址进行支付")
 				}
+				
+			},
+			//封装一个检测用户是否设置支付密码的方法
+			Detectionpaymentpassword(_this){
+				uni.request({
+					url:`${app.globalData.Requestpath}user/isSetPayPassword`,
+					method:"POST",
+					data:{
+						token:_this.tokey
+					},
+					success(respaymentpassword) {
+						if(respaymentpassword.data.code==1){
+							// console.log("支付密码不存在")
+							// 如果用户没设置支付密码就让用户跳到设置支付密码页面
+							uni.showModal({
+								title:"请设置支付密码",
+								content:"设置平台的支付密码",
+								showCancel:true,
+								cancelColor:"#ff0000",
+								confirmColor:"#green",
+								success(res) {
+									if(res.confirm){
+										uni.navigateTo({
+											url:"/components/setcenter/setcenter?title=userset&titlename=设置&business=pay"
+										})
+										return 
+									}else{
+										app.globalData.showtoastsame("您可以选择其他支付方式")
+									}
+								}
+							})
+						}
+					}
+				})
 			},
 			//这是用来接收子组件传过来的订单数据
 			dingdancoupon(e){
 				//这是用户选择优惠券后 原价减去优惠卷的价格
 				this.Favorablebalance = e[0].money
 				this.coupondetails = e
-				// console.log(this.coupondetails[0].c_type)
+			},
+			//封装一个使用余额支付的方法
+			Paywithbalance(_this){
+				_this.passwordzhifutanchuang = true
+				_this.isIphoneX = true
+			},
+			//用来接受子组件传过来的值
+			Enterpasswordcompletepayment(e){//这是用户输入的密码
+				this.zhifumimatext = e
+				//当用户输入完执行下面的请求 密码正确
+				uni.request({
+					url:`${app.globalData.Requestpath}balance_pay/payOrdersNew`,
+					method:"POST",
+					data:{
+						token:this.tokey,
+						o_sns:this.orderSnArray,
+						pay_password:e
+					},
+					success(res) {
+						if(res.data.code==0){
+							uni.reLaunch({
+								url:"/pages/Paysuccess/Paysuccess"
+							})
+						}else{
+							app.globalData.showtoastsame(res.data.msg)
+						}
+					}
+				})
+			},
+			close(e){//这是点击×以后
+				this.passwordzhifutanchuang = e
+				this.isIphoneX = e
+				uni.reLaunch({
+					url:"/pages/orderpageRouter/orderpageRouter?index=1"
+				})
 			}
 		},
 		onLoad(opction){
@@ -372,7 +438,8 @@
 		},
 		components:{
 			actionbar,
-			storecoupon
+			storecoupon,
+			passkeyborad
 		},
 		onShow() {
 			const _this = this

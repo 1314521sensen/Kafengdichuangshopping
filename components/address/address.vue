@@ -55,6 +55,16 @@
 				Addressoption:"",
 				address:"",
 				returntitleparameter:"",
+				way:"",
+				gid:"",
+				cids:"",
+				specname:"",
+				num:"",
+				img:"",
+				storename:"",
+				price:"",
+				goodtitle:"",
+				storeid:""
 			}
 		},
 		methods:{
@@ -88,9 +98,20 @@
 							success(res) {
 								if(res.data.code==0){
 									//pages/addressTo/addressTo?title=收货地址
-									uni.redirectTo({
-										url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}`
-									})
+									console.log(_this.way)
+									if(_this.way==1){
+										uni.navigateTo({
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}`
+										})
+									}else if(_this.way==2){
+										uni.navigateTo({
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}`
+										})
+									}else{
+										uni.navigateTo({
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}`
+										})
+									}
 								}
 							}
 						})
@@ -112,9 +133,19 @@
 							},
 							success(res) {
 								if(res.data.code==0){
-									uni.redirectTo({
-										url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}`
-									})
+									if(_this.way==1){
+										uni.navigateTo({
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}`
+										})
+									}else if(_this.way==2){
+										uni.navigateTo({
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}`
+										})
+									}else{
+										uni.navigateTo({
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}`
+										})
+									}
 								}else{
 									app.globalData.showtoastsame("修改失败")
 								}
@@ -151,6 +182,27 @@
 			this.Addressoption = opction.title
 			this.address = opction.address
 			this.statusBar = app.globalData.statusBar
+			//1是购物车过来的
+			//2是详情过来的
+			console.log(opction.titleparameter)
+			if(opction.titleparameter=='orderaddress'){
+				let {way,gid,img,num,storename,price,goodtitle,storeid} = opction
+				this.way = way
+				if(this.way==1){//这是购物车过来的
+					let {cids} = opction
+					this.cids = cids
+				}else{//这是详情过来的
+					let {specname} = opction
+					this.specname = specname
+				}
+				this.gid = gid
+				this.num = num
+				this.img = img
+				this.storename = storename
+				this.price = price
+				this.goodtitle = goodtitle
+				this.storeid = storeid
+			}
 		},
 		
 		created() {

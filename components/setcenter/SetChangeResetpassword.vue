@@ -68,6 +68,7 @@
 				phonetext:"",
 				codevalue:"",
 				id:"",
+				business:"",
 				list:[
 					{
 						titlename:"用户登录密码",
@@ -112,6 +113,7 @@
 			},
 			//当用户设置或修改的时候
 			zhifubind(e){
+				const _this = this
 				let regnewspassword = /^\w{6,6}$/;
 				if(parseInt(this.showindex)){//这是1的时候就修改密码
 					let {oldpassword,newspassword} = e.detail.value
@@ -159,11 +161,26 @@
 								success:(res)=>{
 									if(res.data.code==0){
 										app.globalData.showtoastsame("设置成功")
-										uni.navigateTo({
-											url:"/components/setcenter/setcenter?title=userset&titlename=设置"
-										})
+										if(_this.business=="pay"){
+											uni.showModal({
+												title:"是否回到之前的订单",
+												content:"点击确认回到之前订单",
+												showCancel:true,
+												cancelColor:"#ff0000",
+												confirmColor:"#green",
+												success(res) {
+													uni.navigateBack({
+													    delta: 2
+													});
+												}
+											})
+										}else{
+											uni.reLaunch({
+												url:"/components/setcenter/setcenter?title=userset&titlename=设置"
+											})
+										}
 									}else{
-										app.globalData.showtoastsame("登录密码错误")
+										app.globalData.showtoastsame("登录密码错误或不能和登录密码一致")
 									}
 								}
 							})
@@ -244,6 +261,7 @@
 			}
 		},
 		onLoad(opction){
+			this.business = opction.business
 			this.showindex = opction.index
 			this.tokey = opction.tokey
 			this.id=opction.id

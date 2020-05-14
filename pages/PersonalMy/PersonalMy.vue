@@ -117,9 +117,25 @@
 							}
 						}
 					})
+				},
+				fail(err){
+					app.globalData.Detectionupdatetokey(err.data)
 				}
 			})
-		}
+		},
+		// created() {
+		// 	uni.getStorage({
+		// 		key:"bindtokey",
+		// 		success(res){
+		// 			console.log(res)
+		// 			_this.tokey = res.data
+		// 			app.globalData.Detectionupdatetokey(res.data)
+		// 		},
+		// 		fail(err){
+		// 			console.log(err)
+		// 		}
+		// 	})
+		// }
 	}
 </script>
 
