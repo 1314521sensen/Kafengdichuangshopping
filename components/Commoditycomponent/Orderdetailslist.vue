@@ -5,18 +5,18 @@
 				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
 				<!-- <button class="cu-btn bg-red margin-tb-sm lg" :style="{'display':display}">删除你不想要的商品</button> -->
 				<view class="cu-item" v-for="(item,index) in list" :key="index">
-					<view class="cu-item-left" @tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)">
+					<view class="cu-item-left" @tap="linkDetails(item.order_id,item.order_sn)">
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
 						<view 
 							class="cu-avatar round lg" 
-							:style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"></view>
+							:style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.store_logo)+')'}"></view>
 					</view>
 					<view class="cu-item-right">
 						<view class="content">
 							<!-- goods_name这个值和上面的值一样的返回的不一样 -->
-							<view class="text-grey">{{item.good_title?item.good_title:item.goods_name}}</view>
+							<view class="text-grey">{{item.store_name}}</view>
 							<view class="price">
-								￥{{item.good_price?item.good_price:(item.fav_price?item.fav_price:item.track_price)}}
+								￥{{item.good_price}}
 								<text class="lg text-gray cuIcon-delete" :style="{'display':display}" @tap="deletescollectionAndfootprint(index)"></text>
 							</view>
 						</view>
@@ -33,47 +33,48 @@
 			}
 		},
 		methods:{
-			linkDetails(id,storeid){
-				// console.log(storeid)
-				//当点击的时候跳转到详情页
+			linkDetails(orderid,ordersn){
+				//orderid----订单id
+				//ordersn----订单编号
+				//当点击的时候跳转到订单详情页
 				//根据index和我的组件中传过来的url 判断跳到哪里
 					uni.navigateTo({
-						url:`/pages/Details/Details?id=${id}&storeid=${storeid}`
+						url:`/pages/Temporarynonpayment/Temporarynonpayment?order=${btoa(orderid)}&ordersnSerial=${btoa(ordersn)}`
 					})
 			},
-			deletescollectionAndfootprint(index){
-				let deleteid = this.deletelist[index].fav_id?this.deletelist[index].fav_id:this.deletelist[index].track_id
-				uni.showModal({
-					title:"确定要删除该商品吗",
-					cancelText:true,
-					cancelText:"确认取消",
-					cancelColor:"#ff0000",
-					confirmText:"确认删除",
-					success:(res)=>{
-						if(res.confirm){
-							uni.request({
-								url:this.deleteurl,
-								method:"POST",
-								data:{
-									token:this.tokey,
-									fav_id:deleteid,
-									track_id:deleteid
-								},
-								success(res) {
-									console.log(res)
-									if(res.data.code==0){//这后期需要更改
-										uni.switchTab({
-											url:"/pages/PersonalMy/PersonalMy"
-										})
-									}
-								}
-							})
-						}else{
-							return false
-						}
-					}
-				})
-			}
+			// deletescollectionAndfootprint(index){
+			// 	let deleteid = this.deletelist[index].fav_id?this.deletelist[index].fav_id:this.deletelist[index].track_id
+			// 	uni.showModal({
+			// 		title:"确定要删除该商品吗",
+			// 		cancelText:true,
+			// 		cancelText:"确认取消",
+			// 		cancelColor:"#ff0000",
+			// 		confirmText:"确认删除",
+			// 		success:(res)=>{
+			// 			if(res.confirm){
+			// 				uni.request({
+			// 					url:this.deleteurl,
+			// 					method:"POST",
+			// 					data:{
+			// 						token:this.tokey,
+			// 						fav_id:deleteid,
+			// 						track_id:deleteid
+			// 					},
+			// 					success(res) {
+			// 						console.log(res)
+			// 						if(res.data.code==0){//这后期需要更改
+			// 							uni.switchTab({
+			// 								url:"/pages/PersonalMy/PersonalMy"
+			// 							})
+			// 						}
+			// 					}
+			// 				})
+			// 			}else{
+			// 				return false
+			// 			}
+			// 		}
+			// 	})
+			// }
 		},
 		props:["list","display","deleteurl","tokey","deletelist"]
 	}

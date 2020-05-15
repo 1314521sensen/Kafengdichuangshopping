@@ -9,13 +9,13 @@
 		<!-- <view v-for="(item,index) in 10" :key="index" v-if="index==TabCur" class="bg-grey padding margin text-center">
 			Tab{{index}}
 		</view> -->
-		<view >{{items}}</view>
-		<list :list="list" v-if="items==Myorder[TabCur]" url="/pages/Temporarynonpayment/Temporarynonpayment"></list>
+		<view >{{items}}--{{Myorder[TabCur].title}}</view>
+		<list :list="list" v-if="items==Myorder[TabCur].title" url="/pages/Temporarynonpayment/Temporarynonpayment"></list>
 	</view>
 </template>
 
 <script>
-	import list from "@/components/indexcomponents/list.vue"
+	import list from "@/components/Commoditycomponent/Orderdetailslist.vue"
 	const app = getApp();
 	export default {
 		//这是全部订单的顶部导航
@@ -63,7 +63,7 @@
 			//封装一个获取订单的方法
 			Allorders(url){
 				uni.request({
-					url:`http://hbk.huiboke.com/api/${url}`,
+					url:`${app.globalData.Requestpath}${url}`,
 					method:"POST",
 					data:{
 						token:this.tokey,
@@ -73,6 +73,7 @@
 					success:(res)=>{
 						if(res.data.code==0){
 							console.log(res)
+							// console.log(res)
 							this.list = res.data.data.list
 						}
 					}
@@ -100,6 +101,7 @@
 				url = this.Myorder[orderindex].url
 				this.Allorders(url)
 			}else{
+				
 				this.TabCur = 0;
 				this.items = this.Myorder[0].title
 				url =  this.Myorder[0].url

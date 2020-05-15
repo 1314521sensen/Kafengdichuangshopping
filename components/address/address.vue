@@ -80,6 +80,7 @@
 				if(this.value1 && this.value2.match(userphone)!==null && this.value4 && this.selectiondatalist.length>=3){
 					//这是跳转上页
 					// console.log(this.tokey)
+					console.log(this.selectiondatalist)
 					if(this.Addressoption=="newaddress"){
 							uni.request({
 							url:`${app.globalData.Requestpath}user/addShippingAddress`,

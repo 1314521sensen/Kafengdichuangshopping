@@ -235,7 +235,7 @@
 								// console.log(res)
 								if(res.data.code==0){
 									//获取订单编号数组
-									_this.orderSnArray = res.data.data.orderSnArray
+									_this.orderSnArray = res.data.data.orderSnArray[0]
 									//选择支付的框隐藏
 									_this.hideModal()
 									//检测是否设置了支付密码
@@ -269,7 +269,8 @@
 								c_type:this.ctype
 							},
 							success(res) {
-								// console.log(res)
+								// console.log(res.data.data.orderSnArray)//订单编号
+								// console.log(res.data.data.swiftNo)//订单流水号
 								//orderSnArray订单的编组 支付的时候用到
 								if(res.data.code==0){//获取到支付前的数据
 									//获取订单编号数组
@@ -337,6 +338,7 @@
 			Enterpasswordcompletepayment(e){//这是用户输入的密码
 				this.zhifumimatext = e
 				//当用户输入完执行下面的请求 密码正确
+				console.log(this.orderSnArray)
 				uni.request({
 					url:`${app.globalData.Requestpath}balance_pay/payOrdersNew`,
 					method:"POST",
@@ -360,7 +362,9 @@
 				this.passwordzhifutanchuang = e
 				this.isIphoneX = e
 				uni.reLaunch({
-					url:"/pages/orderpageRouter/orderpageRouter?index=1"
+					url:`/pages/Temporarynonpayment/Temporarynonpayment?ordersnSerial=${btoa(this.orderSnArray)}`
+					//MTU4OTUyNjU0NTUzNTM%3D
+					//MTU4OTUyNjU0NTUzNTM%3D
 				})
 			}
 		},

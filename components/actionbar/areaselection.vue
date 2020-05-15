@@ -65,6 +65,7 @@
 				//判断bool有没有值 没值 点击了取消 有值点击确定
 				if(bool){//有值的时候判断Haschosen数组中的长度 长度<3代表用户还没选择完 有值代表用户已经选择完
 					if(this.Haschosen.length==3){
+						console.log(this.Haschosen)
 						this.modalName = null
 						this.$emit("selectiondata",this.Haschosen)
 					}else{

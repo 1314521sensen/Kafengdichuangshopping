@@ -1,35 +1,34 @@
 <template>
 	<view class="shoporder">
 		<view class="Buycontent purchase-order">
-			<!-- 到时候循环这个order就可以 -->
 			<view class="order">
 				<view class="order-title">
-					丽江雅韵茶行
+					{{orderobj.store_name}}
 				</view>
-				<view class="shopgoosorder">
+				<view class="shopgoosorder" @tap="Orderdetailsjumpdetails(orderobj.store_id,ordershopinglist.good_id)">
 					<view class="shopgoosorder-left">
-						<image src="/static/horizontally/1.jpg"></image>
+						<image :src="imgyuming+ordershopinglist.good_pic"></image>
 					</view>
 					<view class="shopgoosorder-right">
 						<view class="shopgoosorder-title">
-							丽江雪茶云南白雪毫雪山古茶雪山白露苦甘露古藤茶丽江雪茶云南白雪毫雪山古茶雪山白露苦甘露古藤茶
+							{{ordershopinglist.good_name}}
 						</view>
 						<view class="shopgoosorder-pic">
-							<text>¥70.00</text>
-							<text>×1</text>
+							<text v-text="'¥'+ordershopinglist.good_price"></text>
+							<text>×{{ordershopinglist.good_num}}</text>
 						</view>
 					</view>
 				</view>
 				<view class="Deliverynote">
 					<!-- 这重新写 -->
 					<view class="commodityprice" v-for="(item,index) in list" :key="index">
-						<text>{{item.shoptitle}}</text>
-						<text>{{item.shoppic}}</text>
+						<text>{{orderobj.shoptitle}}</text>
+						<text>{{orderobj.shoppic}}</text>
 					</view>
 					<!-- 实付款 -->
 					<view class="Realpayment">
 						<text>实付款</text>
-						<text>¥60.19</text>
+						<text v-text="'¥'+ordershopinglist.good_pay_price*ordershopinglist.good_num"></text>
 					</view>
 				</view>
 			</view>
@@ -39,11 +38,11 @@
 			<view class="serial">
 				<view class="serialsame serial-left">
 					<text>订单编号:</text>
-					<text>支付宝交易号:</text>
+					<text>订单流水号:</text>
 				</view>
 				<view class="serialsame serial-right">
-					<text>8565465456489424</text>
-					<text>205548552585558555885555544</text>
+					<text>{{orderobj.order_sn}}</text>
+					<text>{{orderobj.swift_no}}</text>
 				</view>
 			</view>
 		</view>
@@ -52,6 +51,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		//这是订单详情中的中间的商品的部分
 		data(){
@@ -69,8 +69,61 @@
 						shoptitle:"运费",
 						shoppic:"¥0.00"
 					}
-				]
+				],
+				orderobj:[{}],//用于接收订单详情的返回的对象 
+				ordershopinglist:[],
+				imgyuming:""
 			}
+		},
+		methods:{
+			Orderdetailsjumpdetails(storeid,goodid){
+				// ?id=66&storeid=19
+				console.log(storeid,goodid)
+				uni.reLaunch({
+					url:`/pages/Details/Details?id=${goodid}&storeid=${storeid}`
+				})
+			}
+		},
+		props:["orderid","ordersnSerialid","tokey"],
+		created(){
+			const _this = this
+			_this.imgyuming = app.globalData.imgyuming
+			//获取订单详情信息的请求
+			// order/getOrderInfo
+			uni.request({
+				url:`${app.globalData.Requestpath}order/getOrderInfo`,
+				method:"POST",
+				data:{
+					token:_this.tokey,
+					sn:_this.ordersnSerialid
+				},
+				success(res) {//获取到用户详情 
+					if(res.data.code==0){
+						_this.orderobj = res.data.data
+						//将订单的状态传到父组件
+						_this.$emit("orderstatus",res.data.data.status)
+						_this.$emit("ordertime",res.data.data.create_time)
+						uni.request({
+							url:`${app.globalData.Requestpath}order/getOrderGoodList`,
+							method:"POST",
+							data:{
+								token:_this.tokey,
+								order_sn:_this.ordersnSerialid
+							},
+							success(ordershopinglist) {
+								if(ordershopinglist.data.code==0){
+									_this.ordershopinglist = ordershopinglist.data.data.list[0]
+									_this.$emit("orderNotpayingdefault",_this.ordershopinglist.good_pay_price)
+									_this.$emit("orderNotpayingnums",_this.ordershopinglist.good_num)
+								}
+								
+							}
+						})
+					}else{
+						console.log("没获取到")
+					}
+				}
+			})
 		}
 	}
 </script>

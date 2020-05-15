@@ -4,9 +4,9 @@
 			<view class="temporarynonpayment-top-bg">
 				<view :style="{'height':(statusBar*2)+'rpx'}"></view>
 				<actionbar url="/pages/PersonalMy/PersonalMy" message="订单详情" bg="#fe7a00"></actionbar>
-				<view class="bg-title">
+				<view class="bg-title" v-if="orderStatus==0">
 					<text>等待买家付款</text>
-					<text>剩余多少时间自动关闭</text>
+					<text>剩余{{min}}分{{miao}}自动取消订单</text>
 				</view>
 			</view>
 			<view class="Buycontent">
@@ -29,8 +29,22 @@
 					</view>
 				</view>
 			</view>
-			<shopoder></shopoder>
-			<shopoderbottom></shopoderbottom>
+			<shopoder 
+				:orderid="orderid" 
+				:ordersnSerialid="ordersnSerialid" 
+				:tokey="tokey" 
+				@orderstatus="orderstatus" 
+				@ordertime="ordertime"
+				@orderNotpayingdefault="orderNotpayingdefault"
+				@orderNotpayingnums="orderNotpayingnums"
+				></shopoder>
+			<shopoderbottom 
+				:tokey="tokey" 
+				:ordersnSerialid="ordersnSerialid"  
+				v-if="orderStatus==0" 
+				:orderNotpaynums="orderNotpaynums"
+				:orderNotpaydefault="orderNotpaydefault"
+				></shopoderbottom>
 			
 		</view>
 	</view>
@@ -45,19 +59,92 @@
 		//暂时不支付页面
 		data() {
 			return {
-				statusBar:0
+				statusBar:0,
+				tokey:"",
+				orderid:"",//订单id
+				ordersnSerialid:"",//订单编号
+				orderStatus:"",
+				provinceregion:[],
+				min:"",
+				miao:"",
+				orderNotpaynums:"",
+				orderNotpaydefault:""
 			}
 		},
 		methods: {
-			
+			//封装个获取tokey
+			gettokey(_this){
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						_this.tokey = res.data
+					}
+				})
+			},
+			//接收父组件的值
+			orderstatus(e){//这是订单的状态
+				this.orderStatus = e
+				// if(e==0){//等于0的时候代表没有付款 开始倒计时
+					
+				// }
+			},
+			ordertime(e){//这里是订单的时间
+				// const _this = this
+				// // 
+				// 		let kaishi = new Date(e)
+				// 		// console.log(kaishi)
+				// 		let kaishiHours = kaishi.getHours()//开始的小时
+				// 		let kaishiMinutes = kaishi.getMinutes()//开始的分钟
+				// 		let kaishiSeconds = kaishi.getSeconds()//开始的秒数
+				// 		let kaishiYear = kaishi.getFullYear()//这是开始的年
+				// 		let kaishiMonth = kaishi.getMonth()//这是开始的月
+				// 		let kaishiDay = kaishi.getDate()//这是开始的日
+				// 		let end = new Date(kaishiYear,kaishiMonth,kaishiDay,kaishiHours,kaishiMinutes+30,kaishiSeconds)//这是结束的时间
+				// 		// setInterval(function(){
+				// 			let shenhaomiao = end.getTime()-kaishi.getTime()//这是结束的毫秒数减去开始的毫秒的数
+				// 			let shenmin = Math.floor(shenhaomiao/(1000*60)%60)
+				// 			let shenmiao = Math.floor(shenhaomiao/1000%60)
+				// 			// if(shenmiao==0 && shenmin){
+				// 			// 	shenmiao = 59
+				// 			// 	shenmin-1
+				// 			// }
+				// 			// shenmiao = shenmiao--
+				// 			_this.min = shenmin
+				// 			_this.miao = shenmiao
+				// 			console.log(shenmin,shenmiao)
+					// },1000)
+				// console.log(end)
+			},
+			//商品单价
+			//orderNotpaynums:"",
+				// orderNotpaydefault:""
+			orderNotpayingdefault(e){
+				console.log(e)
+				this.orderNotpaydefault = e
+			},
+			orderNotpayingnums(e){
+				
+				this.orderNotpaynums = e
+			}
 		},
 		components:{
 			actionbar,
 			shopoder,
 			shopoderbottom
 		},
-		onLoad(){
+		onLoad(opction){
+			const _this = this
+			if(opction.order){
+				_this.orderid = atob(opction.order)
+			}
+			_this.ordersnSerialid = atob(opction.ordersnSerial)
+			_this.gettokey(_this)
+			
 			this.statusBar = app.globalData.statusBar
+		},
+		created() {
+			const _this = this
+			_this.gettokey(_this)
 		}
 	}
 </script>
