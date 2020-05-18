@@ -59,7 +59,7 @@
 					
 					//获取用户的id
 					uni.request({
-						url:'http://hbk.huiboke.com/api/user/getUserDetail',
+						url:`${app.globalData.Requestpath}user/getUserDetail`,
 						method:"POST",
 						data:{
 							token:_this.tokey
@@ -70,7 +70,7 @@
 					})
 					//获取用户的绑定的邮箱和手机信息
 					uni.request({
-						url:"http://hbk.huiboke.com/api/user/getUserBindInfo",
+						url:`${app.globalData.Requestpath}user/getUserBindInfo`,
 						method:"POST",
 						data:{
 							token:_this.tokey
@@ -82,12 +82,13 @@
 					})
 					//获取用户的实名认证
 					uni.request({
-						url:"http://hbk.huiboke.com/api/user/getRealNameAuthentication",
+						url:`${app.globalData.Requestpath}user/getRealNameAuthentication`,
 						method:"POST",
 						data:{
 							token:_this.tokey
 						},
 						success(resRealname) {
+							console.log(resRealname)
 							if(resRealname.data.code==0){
 								if(resRealname.data.data.idcard==null){//如果为null证明用户还未实名 
 									_this.Realnamebool = false
@@ -95,7 +96,8 @@
 									_this.Realnamebool = true
 								}
 							}
-						}
+							app.globalData.Requestmethod(resRealname.data.code,resRealname.data.msg)
+						},
 					})
 				},
 				fail(err){

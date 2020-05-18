@@ -59,8 +59,16 @@
 					}
 				})
 			},
-			Requestmethod(messagetokey){
-				
+			//封装tokey过期了
+			Requestmethod(codetokey,messagetokey){
+				if(codetokey==1 && messagetokey=='令牌错误'){//说明tokey过期了 跳转到登录页面
+					uni.reLaunch({
+						url:"/pages/login/login"
+					})
+					getApp().globalData.logintokeybool = false
+				}else{
+					console.log("tokey没过期")
+				}
 			}
 		},
 		onLaunch: function() {
@@ -97,6 +105,7 @@
 	page {
 		background-color: #DDDDDD;
 	}
+	
 	/* checkbox .uni-checkbox-input{
 		border-radius:50%;
 		width: 34rpx;

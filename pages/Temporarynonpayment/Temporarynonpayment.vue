@@ -29,6 +29,8 @@
 					</view>
 				</view>
 			</view>
+			<!-- 这是快递快递的组件@Courierinformation和@Queryasinglenumber是子组件传递够来的值 -->
+			<Selectexpresscompany @Queryasinglenumber="Queryasinglenumber" :tokey="tokey" @Courierinformation="Courierinformation"></Selectexpresscompany>
 			<shopoder 
 				:orderid="orderid" 
 				:ordersnSerialid="ordersnSerialid" 
@@ -37,6 +39,8 @@
 				@ordertime="ordertime"
 				@orderNotpayingdefault="orderNotpayingdefault"
 				@orderNotpayingnums="orderNotpayingnums"
+				:Couriercompanyvalue="Couriercompanyvalue"
+				:Couriercompanyobj="Couriercompanyobj"
 				></shopoder>
 			<shopoderbottom 
 				:tokey="tokey" 
@@ -52,7 +56,11 @@
 
 <script>
 	import actionbar from "@/components/actionbar/actionbar.vue"
+	//引入选择快递的组件
+	import Selectexpresscompany from "@/components/Commoditycomponent/Selectexpresscompany.vue"
+	//引入订单商品的组件
 	import shopoder from "@/components/Temporarynonpayment/shoporder.vue"
+	//引入底部两个button的组件
 	import shopoderbottom from "@/components/Temporarynonpayment/shoporderbottom.vue"
 	const app = getApp();
 	export default {
@@ -68,7 +76,9 @@
 				min:"",
 				miao:"",
 				orderNotpaynums:"",
-				orderNotpaydefault:""
+				orderNotpaydefault:"",
+				Couriercompanyvalue:"",//快递公司的value
+				Couriercompanyobj:{},//快递公司的信息
 			}
 		},
 		methods: {
@@ -125,12 +135,22 @@
 			orderNotpayingnums(e){
 				
 				this.orderNotpaynums = e
+			},
+			//这是快递传过来数据
+			// Couriercompanyvalue:"",//快递公司的value
+			// Couriercompanyobj:{},//快递公司的信息
+			Queryasinglenumber(e){
+				this.Couriercompanyvalue = e
+			},
+			Courierinformation(e){
+				this.Couriercompanyobj = e
 			}
 		},
 		components:{
 			actionbar,
 			shopoder,
-			shopoderbottom
+			shopoderbottom,
+			Selectexpresscompany
 		},
 		onLoad(opction){
 			const _this = this

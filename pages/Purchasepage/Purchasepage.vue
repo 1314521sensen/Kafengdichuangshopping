@@ -193,12 +193,45 @@
 				this.modalName = null
 			},
 			Determinepayment(){
-				
-				
 				if(this.radio=='radio0'){//微信支付
 					console.log("微信支付")
+					// app端微信支付---开始
+					// #ifdef APP-PLUS
+							//app端 orderInfo支付的数据
+							// uni.request({
+							// 	url:"https://api.mch.weixin.qq.com/pay/unifiedorder",
+							// 	method:"POST",
+							// 	success(res) {
+							// 		console.log(res)
+							// 	}
+							// })
+							// let appwxobj = {
+							// 	appid:"wx0f9236b57d357dbb",
+								
+							// }
+							// uni.getProvider({
+							// 	service:"payment",
+							// 	success(resgetProvider){
+							// 		// "provider":["alipay","wxpay"]} 
+							// 		// indexOf 找到返回 数组下标的位置  找不到返回-1
+							// 		// console.log(resgetProvider.provider[1])
+							// 		if(resgetProvider.provider.indexOf("wxpay")!==-1){//代表找到了
+							// 			let indexofindex = resgetProvider.provider.indexOf("wxpay") //这返回的下标
+							// 			// console.log(resgetProvider.provider[indexofindex])
+							// 			// uni.requestPayment({
+							// 			// 	provider:resgetProvider.provider[indexofindex],//这是微信还是支付宝 通过上面的请求服务提供商来的
+							// 			// 	orderInfo:
+							// 			// })
+										
+							// 		}
+							// 	}
+							// })
+						// #endif
+					//app端微信端---结束
 				}else if(this.radio=='radio1'){//支付宝支付
 					console.log("支付宝支付")
+					//app端支付宝支付---开始
+					//app端支付宝支付---结束
 				}else{
 					// console.log(this.tokey)					
 					this.GetorderdetailsData()
@@ -336,6 +369,7 @@
 			},
 			//用来接受子组件传过来的值
 			Enterpasswordcompletepayment(e){//这是用户输入的密码
+				const _this = this
 				this.zhifumimatext = e
 				//当用户输入完执行下面的请求 密码正确
 				console.log(this.orderSnArray)

@@ -113,23 +113,11 @@
 						o_sn:_this.ordersnSerialid
 					},
 					success(res) {
-						if(res.data.code==0){//取消成功以后
-							uni.request({//删除订单
-								url:`${app.globalData.Requestpath}order/deleteOrderInfo`,
-								method:"POST",
-								data:{
-									token:_this.tokey,
-									o_sn:_this.ordersnSerialid
-								},
-								success(ordedelect) {
-									// console.log(ordedelect)
-									if(ordedelect.data.code==0){//删除成功以后跳转到首页
-										uni.reLaunch({
-											url:"/pages/PersonalMy/PersonalMy"
-										})
-									}
-								}
-							})
+						if(res.data.code==0){
+							//付款成功以后跳转到首页
+								uni.reLaunch({
+									url:"/pages/PersonalMy/PersonalMy"
+								})
 						}
 					}
 				})

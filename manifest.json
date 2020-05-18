@@ -60,7 +60,7 @@
             "sdkConfigs" : {
                 "oauth" : {
                     "weixin" : {
-                        "appid" : "qbcdefg",
+                        "appid" : "wx0f9236b57d357dbb",
                         "appsecret" : "qbcdefg",
                         "UniversalLinks" : ""
                     }
@@ -68,7 +68,14 @@
                 "push" : {
                     "unipush" : {}
                 },
-                "payment" : {},
+                "payment" : {
+                    "alipay" : {},
+                    "weixin" : {
+                        "appid" : "wx0f9236b57d357dbb",
+                        "UniversalLinks" : ""
+                    },
+                    "appleiap" : {}
+                },
                 "ad" : {}
             },
             "splashscreen" : {

@@ -115,7 +115,6 @@
 					},
 					success(res) {
 						if(res.data.code==0){
-							console.log(res.data.data)
 							_this.list = res.data.data.list
 							_this.list.forEach((item,index)=>{
 								item.start_time = item.start_time.trim().split(" ")[0]
@@ -125,20 +124,24 @@
 					}
 				})
 			}else{//在订单的优惠券
-			//
+				//因为要显示平台或者店铺能使用的能满足当前价位的商品所以 传个数组
+				let newcouponboollist = []
+				newcouponboollist[0] = parseInt(_this.storeid)
+				newcouponboollist[1] = 0
+				// console.log(_this.Orderpaymentamount)
 				uni.request({
 					url:`${app.globalData.Requestpath}activity/getUserValidCouponList`,
 					method:"POST",
 					data:{
 						token:_this.tokey,
-						sid:_this.storeid,
+						sid:newcouponboollist,
 						t_price:_this.Orderpaymentamount
 					},
 					success(res) {
-						// console.log(res)
+							// console.log(res)
 						if(res.data.code==0){
 							_this.list = res.data.data
-							// console.log(res)
+							// console.log(_this.list)
 							_this.list.forEach((item,index)=>{
 								item.start_time = item.start_time.trim().split(" ")[0]
 								item.stop_time = item.stop_time.trim().split(" ")[0]

@@ -47,7 +47,8 @@
 		methods:{
 			receive(e){
 				let storeid = e.currentTarget.dataset.storeid;
-				if(storeid!==undefined){
+				console.log(storeid)
+				if(storeid!=='0'){
 					uni.reLaunch({
 						url:`/pages/Store/store?storeid=${storeid}`
 					})

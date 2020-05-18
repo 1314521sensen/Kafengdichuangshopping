@@ -9,11 +9,11 @@
 				<view class="center">请输入支付密码</view>
 				<view class="close"></view>
 			</view>
-			<view class="pay-money">
+			<view class="pay-money" v-if="ordershow!=='1'">
 				<view>金额</view>
 				<view class="money">￥ <text>{{balancetext}}</text></view>
 			</view>
-			<view class="pay-way">
+			<view class="pay-way" v-if="ordershow!=='1'">
 				<view>支付方式</view>
 				<view class="pay-img"><image src="../../static/yue.png"/>余额</view>
 			</view>
@@ -53,6 +53,10 @@
 			balancetext:{
 				type:String,
 				default:""
+			},
+			ordershow:{
+				type:String,
+				default:""
 			}
 		},
 		data() {
@@ -68,7 +72,6 @@
 					if (this.password.length == 6) {
 						// console.log(this.password);
 						this.$emit("Enterpasswordcompletepayment",this.password)
-						uni.showToast({	title: '输入完成' });
 					}
 				}
 			},

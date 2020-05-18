@@ -17,7 +17,7 @@
 						<view class="dot right"></view>
 						<view class="coupons-bottom">
 							<text>{{ citem.at_full?'满'+citem.at_full:'无门槛'}}使用</text>
-							<view class="at-once" @tap="Platformreceive(citem.platform_coupon_id)">
+							<view class="at-once" :data-coucontype="citem.coupon_type_id" @tap="Platformreceive">
 								立即抢券
 							</view>
 						</view>
@@ -36,59 +36,19 @@
 		data() {
 			return {
 				tokey:"",
-				list: [
-						{
-							price: 3,
-							preferential: 58
-						},
-						{
-							price: 5,
-							preferential: 88
-						},
-						{
-							price: 10,
-							preferential: 168
-						}
-					,
-					{
-							price: 18,
-							preferential: 68
-						},
-						{
-							price: 20,
-							preferential: 78
-						},
-						{
-							price: 10,
-							preferential: 168
-						},
-					
-					{
-							price: 30,
-							preferential: 98
-						},
-						{
-							price: 11,
-							preferential: 108
-						},
-						{
-							price: 13,
-							preferential: 208
-						}
-					
-				],
+				list: [],
 				couponsbool:true
 			}
 		},
 		methods:{
-			Platformreceive(cid){
+			Platformreceive(e){
 				// console.log(cid)
 				uni.request({
 					url:`${app.globalData.Requestpath}activity/userGetPlatformCoupon`,
 					method:"POST",
 					data:{
 						token:this.tokey,
-						cid:cid
+						cid:e.currentTarget.dataset.coucontype
 					},
 					success(res) {
 						if(res.data.code==0){

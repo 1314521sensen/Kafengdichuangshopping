@@ -81,10 +81,11 @@
 					data:{
 						token:this.tokey,
 						page:1,
-						pageSize:2
+						pageSize:5
 					},
 					success(Storecoupon){
 						if(Storecoupon.data.code==0){
+							// console.log(Storecoupon)
 							Storecoupon.data.data.list .forEach((item,index)=>{
 								item.coupon_img = app.globalData.imgyuming+item.coupon_img
 								if(item.status==1){//未使用
@@ -112,10 +113,12 @@
 					method:"POST",
 					data:{
 						token:this.tokey,
+						sid:-2,	
 						page:1,
-						pageSize:2
+						pageSize:10
 					},
 					success(resDiscountstores) {
+						console.log(resDiscountstores)
 						if(resDiscountstores.data.code==0){
 							// console.log(resDiscountstores.data.data.list)
 							// _this.couponslist[0].list = resDiscountstores.data.data.lists
