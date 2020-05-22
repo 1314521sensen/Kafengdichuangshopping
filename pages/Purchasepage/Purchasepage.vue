@@ -50,7 +50,7 @@
 							<text>普通配送</text>
 						</view>
 						<view class="distribution-right">
-							<text>快递免邮</text>
+							<text>{{freight?freight+'元':'包邮配送'}}</text>
 						</view>
 					</view>
 					<!-- 这是优惠券的组件 -->
@@ -73,7 +73,7 @@
 						<text>共{{nums}}件</text>
 						<text>小计:</text>
 						<!-- Favorablebalance优惠卷的面额 有值的时候采用有值 没值的时候采用0 -->
-						<text class="text-yellow" v-text="'¥'+((price*nums)-(Favorablebalance?Favorablebalance:0))"></text>
+						<text class="text-yellow" v-text="'¥'+((price*nums+freight)-(Favorablebalance?Favorablebalance:0))"></text>
 					</view>
 				</view>
 			</view>
@@ -82,7 +82,7 @@
 			<view class="detailscar-pic">
 				<text>共{{nums}}件,</text>
 				<text>合计</text>
-				<text v-text="'¥'+((price*nums)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"></text>
+				<text v-text="'¥'+((price*nums+freight)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"></text>
 				<!-- @tap="priceorder showModal" -->
 				<button class="cu-btn round bg-orange" @tap="showModal" data-target="bottomModal">提交订单</button>
 			</view>
@@ -113,7 +113,7 @@
 			:show="passwordzhifutanchuang" 
 			:isIphoneX="isIphoneX" 
 			@Enterpasswordcompletepayment="Enterpasswordcompletepayment" 
-			:balancetext="((price*nums)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"
+			:balancetext="((price*nums+freight)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"
 			@close="close"
 			></passkeyborad>
 	</view>
@@ -164,7 +164,9 @@
 				passwordzhifutanchuang:false,//是否弹出输入支付密码弹窗
 				isIphoneX:false,//Iphone全面屏系列底部适配
 				zhifumimatext:"",
-				orderSnArray:[]
+				orderSnArray:[],
+				Orderserialnumber:"",//订单流水号 用于H5支付用
+				freight:"",//商品的运费
 			}
 		},
 		methods: {
@@ -178,11 +180,11 @@
 				//2是详情过来的
 				if(this.way==1){
 					uni.navigateTo({
-						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&cids=${this.cids}&storeid=${this.storeid}`
+						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
 					})
 				}else{
 					uni.navigateTo({
-						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}`
+						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}&freight=${this.freight}`
 					})
 				}
 			},
@@ -192,42 +194,19 @@
 			hideModal(e) {
 				this.modalName = null
 			},
+			//当用户点击确定支付
 			Determinepayment(){
 				if(this.radio=='radio0'){//微信支付
 					console.log("微信支付")
 					// app端微信支付---开始
 					// #ifdef APP-PLUS
 							//app端 orderInfo支付的数据
-							// uni.request({
-							// 	url:"https://api.mch.weixin.qq.com/pay/unifiedorder",
-							// 	method:"POST",
-							// 	success(res) {
-							// 		console.log(res)
-							// 	}
-							// })
-							// let appwxobj = {
-							// 	appid:"wx0f9236b57d357dbb",
-								
-							// }
-							// uni.getProvider({
-							// 	service:"payment",
-							// 	success(resgetProvider){
-							// 		// "provider":["alipay","wxpay"]} 
-							// 		// indexOf 找到返回 数组下标的位置  找不到返回-1
-							// 		// console.log(resgetProvider.provider[1])
-							// 		if(resgetProvider.provider.indexOf("wxpay")!==-1){//代表找到了
-							// 			let indexofindex = resgetProvider.provider.indexOf("wxpay") //这返回的下标
-							// 			// console.log(resgetProvider.provider[indexofindex])
-							// 			// uni.requestPayment({
-							// 			// 	provider:resgetProvider.provider[indexofindex],//这是微信还是支付宝 通过上面的请求服务提供商来的
-							// 			// 	orderInfo:
-							// 			// })
-										
-							// 		}
-							// 	}
-							// })
-						// #endif
+							
+					// #endif
 					//app端微信端---结束
+					
+					//H5端支付---开始
+					//H5端支付---结束
 				}else if(this.radio=='radio1'){//支付宝支付
 					console.log("支付宝支付")
 					//app端支付宝支付---开始
@@ -265,16 +244,18 @@
 								p_msg:Leavearr//用户的留言
 							},
 							success(res) {
-								// console.log(res)
+								console.log(res)
 								if(res.data.code==0){
 									//获取订单编号数组
-									_this.orderSnArray = res.data.data.orderSnArray[0]
+									_this.orderSnArray = res.data.data.orderSnArray
+									
 									//选择支付的框隐藏
 									_this.hideModal()
-									//检测是否设置了支付密码
 									_this.Detectionpaymentpassword(_this)
 									_this.Paywithbalance(_this)
-									// console.log(_this.orderSnArray )
+								}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
+									_this.hideModal()
+									app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
 								}
 							}
 						})
@@ -311,8 +292,11 @@
 									//选择支付的框隐藏
 									_this.hideModal()
 									//检测是否设置了支付密码
-									_this.Detectionpaymentpassword(_this)
-									_this.Paywithbalance(_this)
+										_this.Detectionpaymentpassword(_this)
+										_this.Paywithbalance(_this)	
+								}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
+									_this.hideModal()
+									app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
 								}
 							}
 						})
@@ -444,7 +428,7 @@
 			//1是购物车过来的
 			//2是详情过来的
 			//把公共的提出来
-			let {gid,num,img,storename,price,goodtitle,storeid} = opction
+			let {gid,num,img,storename,price,goodtitle,storeid,freight} = opction
 			if(way=="1"){
 				// console.log("购物车过来的")
 				let {cids} = opction
@@ -452,6 +436,7 @@
 			}else{
 				// console.log("详情过来的")
 				//使用eval方法 将字符串数组 转换为 真数组
+				
 				this.data = eval(opction.specname)
 			}
 			//把公共的提出来
@@ -462,6 +447,7 @@
 			this.price = price
 			this.goodtitle = goodtitle
 			this.storeid = storeid
+			this.freight = parseFloat(freight)
 			// console.log(storeid)
 			// #ifdef H5
 				this.o_from = 1,
@@ -587,7 +573,7 @@
 							font-size: 28rpx;
 						}
 						.shopgoosorder-pic{
-							width: 20%;
+							width: 30%;
 							text{
 								display:block;
 								text-align:right;

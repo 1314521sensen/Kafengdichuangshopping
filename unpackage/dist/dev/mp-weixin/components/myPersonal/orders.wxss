@@ -1,9 +1,18 @@
 .orders.data-v-d6720e26 {
-  background-color: #fff;
-  padding-bottom: 30rpx;
-  margin-top: 10rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
 }
-.orders .orders-title-name.data-v-d6720e26 {
+.orders .orders-box.data-v-d6720e26 {
+  width: 95%;
+  box-shadow: 2rpx 0px 8rpx 6rpx #c6c6c6;
+  padding: 20rpx 4rpx;
+  background-color: #fff;
+}
+.orders .orders-box .orders-title-name.data-v-d6720e26 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -13,17 +22,17 @@
   line-height: 60rpx;
   padding: 0 20rpx;
 }
-.orders .orders-title-name text.data-v-d6720e26 {
+.orders .orders-box .orders-title-name text.data-v-d6720e26 {
   font-size: 28rpx;
   font-weight: bold;
 }
-.orders .orders-title-name .mintext.data-v-d6720e26 {
+.orders .orders-box .orders-title-name .mintext.data-v-d6720e26 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   color: #999;
 }
-.orders .orders-title-name .mintext text.data-v-d6720e26 {
+.orders .orders-box .orders-title-name .mintext text.data-v-d6720e26 {
   font-size: 25rpx;
   font-weight: normal;
 }

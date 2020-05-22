@@ -1,0 +1,17 @@
+.Confirmgoods {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+          justify-content: flex-end;
+  background-color: #fff;
+  margin-top: 10rpx;
+  padding: 15rpx 10rpx 15rpx 0;
+}
+.Confirmgoods .btn-padding-left {
+  padding: 0 26rpx;
+  height: 56rpx;
+  margin-right: 15rpx;
+}
+

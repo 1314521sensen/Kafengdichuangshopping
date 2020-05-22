@@ -1,13 +1,15 @@
 <template>
 	<view class="orders">
-		<view class="orders-title-name">
-			<text>全部订单</text>
-			<view class="mintext" @click="jumporder">
-				<text>查看全部</text>
-				<text class="lg text-gray cuIcon-right" ></text>
+		<view class="orders-box">
+			<view class="orders-title-name">
+				<text>全部订单</text>
+				<view class="mintext" @tap="jumporder">
+					<text>查看全部</text>
+					<text class="lg text-gray cuIcon-right" ></text>
+				</view>
 			</view>
+			<iconlist :iconList="iconList" align="space-between"></iconlist>
 		</view>
-		<iconlist :iconList="iconList" align="space-between"></iconlist>
 	</view>
 </template>
 
@@ -56,10 +58,17 @@
 
 <style lang="less" scoped>
 	.orders{
-		background-color: #fff;
-		padding-bottom:30rpx;
-		margin-top:10rpx;
-		.orders-title-name{
+		// 
+		// padding-bottom:30rpx;
+		// margin-top:10rpx;
+		display: flex;
+		justify-content: center;
+		.orders-box{
+			width: 95%;
+			box-shadow: 2rpx 0px 8rpx 6rpx #c6c6c6;
+			padding:20rpx 4rpx;
+			background-color: #fff;
+			.orders-title-name{
 			// width: ;
 			display: flex;
 			justify-content: space-between;
@@ -80,4 +89,5 @@
 				}
 			}
 		}
+	}
 </style>

@@ -14,7 +14,6 @@
 </template>
 
 <script>
-	import loading from "@/components/Commoditycomponent/loading.vue"
 	const app = getApp()
 	export default{
 		data(){
@@ -58,9 +57,6 @@
 			}
 		},
 		props:["tokey"],
-		components:{
-			loading
-		}
 	}
 </script>
 

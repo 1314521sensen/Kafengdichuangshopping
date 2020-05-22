@@ -93,7 +93,12 @@
 		text{
 			display:block;
 			color:#999;
+			/* #ifdef H5 */
 			font-size:16rpx;
+			/* #endif */
+			/* #ifdef APP-PLUS */
+			font-size: 24rpx;
+			/* #endif  */
 			line-height:50rpx;
 		}
 	}

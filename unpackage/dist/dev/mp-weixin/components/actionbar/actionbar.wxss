@@ -1,6 +1,6 @@
 
 .minheight{
-	min-height:70rpx;
+	min-height:100rpx;
 }
 
 

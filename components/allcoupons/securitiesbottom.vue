@@ -3,10 +3,9 @@
 		<view v-for="(item,index) in couponslist" :key="index">
 			<!-- {{item}} -->
 			<view class="couponstitle">
-				<view>{{item.couponstitle}}</view>
+				<view class="couponstitletext">{{item.couponstitle}}</view>
 			</view>
 			<view class="securitiesbottomitem" v-for="(items,indexs) in item.list" :key="indexs">
-				<!-- {{items}} -->
 				<view class="securities">
 					<view class="securities-left">
 						<view class="securities-left-imgs">
@@ -46,9 +45,9 @@
 		},
 		methods:{
 			receive(e){
-				let storeid = e.currentTarget.dataset.storeid;
-				console.log(storeid)
-				if(storeid!=='0'){
+				let storeid = parseInt(e.currentTarget.dataset.storeid);
+				// console.log(typeof storeid)
+				if(storeid!==0){
 					uni.reLaunch({
 						url:`/pages/Store/store?storeid=${storeid}`
 					})
@@ -79,99 +78,118 @@
 
 <style lang="less" scoped>
 	.securitiesbottom{
-		margin-top:15rpx;
-		.securitiesbottomitem{
-			margin-top:20rpx;
-		}
-		.securities{
-			display:flex;
-			background-color: #fff;
-			padding:15rpx 10rpx;
-			.securities-left{
-				display:flex;
-				width: 80%;
-				// height:50rpx;
-				// background-color:red;
-				.securities-left-imgs{
-					width: 40%;
-					height:220rpx;
-					// background-color:green;
-					image{
-						width: 100%;
-						height:100%;
-					}
-				}
-				.securities-left-right{
-					overflow: hidden;
-					display:flex;
-					flex-wrap: wrap;
-					align-items: center;
-					width: 60%;
-					// background-color:pink;
-					padding-left:20rpx;
-					.securities-left-right-top{
-						overflow:hidden;
-						font-size: 30rpx;
-						font-weight: bold;
-						text{
-							display:block;
-							white-space:nowrap;
-							// overflow:hidden;
-							// text-overflow:ellipsis;
-							&:last-child{
-								font-size: 27rpx;
-								color:#FF5706;
-								margin-top:14rpx;
-							}
-							// #e02e24
-						}
-					}
-					.securities-left-right-bottom{
-						color:#e02e24;
-						display:flex;
-						text{
-							font-size:24rpx;
-							margin-top:6rpx;
-							&:last-child{
-								font-size: 36rpx;
-								font-weight: bold;
-								margin:0 0 0 10rpx;
-							}
-						}
-					}
-				}
-			}
-			.securities-right{
-				display:flex;
-				align-items: center;
-				flex-wrap: wrap;
-				justify-content: center;
-				width: 20%;
-				// background-color:yellow;
-				border-left:2rpx dashed #ccc;
-				text-align:center;
-				color:#e02e24;
-				.securities-right-top{
-					display:flex;
-					justify-content: center;
-					text{
-						font-weight: bold;
-						font-size: 25rpx;
-						margin-top:10rpx;
-						&:last-child{
-							font-size: 36rpx;
-							margin-top:0rpx;
-						}
-					}
-				}
-				button{
-					width: 90%;
-					height:52rpx;
-					font-size: 20rpx;
-					padding:0;
-				}
-			}
-		}
-		
-	}
+	  
+	  margin-top:15rpx;
+	  padding-bottom:20rpx;
+	  .couponstitle{
+		  .couponstitletext{
+			  text-align:center;
+			  font-weight: bold;
+			  font-size: 32rpx;
+			  color:#c20e22;
+		  }
+	  }
+	  .securitiesbottomitem{
+	   
+	   margin: 0 auto;
+	   margin-top:20rpx;
+	   background-color: #c41225;
+	   color: white;
+	   width: 95%;
+	   height: 160rpx;
+	  }
+	  .full-text{
+	   font-size: 10rpx;
+	  }
+	  .securities{
+	   display:flex;
+	   // background-color: #fff;
+	   // padding:15rpx 10rpx;
+	   .securities-left{
+	    display:flex;
+	    width: 80%;
+	    // height:50rpx;
+	    // background-color:red;
+	    .securities-left-imgs{
+	     width: 40%;
+	     height:160rpx;
+	     // background-color:green;
+	     image{
+	      width: 100%;
+	      height:100%;
+	     }
+	    }
+	    .securities-left-right{
+	     overflow: hidden;
+	     display:flex;
+	     flex-wrap: wrap;
+	     align-items: center;
+	     width: 60%;
+	     // background-color:pink;
+	     padding-left:20rpx;
+	     .securities-left-right-top{
+	      overflow:hidden;
+	      font-size: 30rpx;
+	      font-weight: bold;
+	      text{
+	       display:block;
+	       white-space:nowrap;
+	       // overflow:hidden;
+	       // text-overflow:ellipsis;
+	       &:last-child{
+	        font-size: 27rpx;
+	        // color:#FF5706;
+	        margin-top:14rpx;
+	       }
+	       // #e02e24
+	      }
+	     }
+	     .securities-left-right-bottom{
+	      // color:#e02e24;
+	      display:flex;
+	      text{
+	       font-size:24rpx;
+	       margin-top:3rpx;
+	       &:last-child{
+	        font-size: 36rpx;
+	        font-weight: bold;
+	        margin:0 0 0 10rpx;
+	       }
+	      }
+	     }
+	    }
+	   }
+	   .securities-right{
+	    display:flex;
+	    align-items: center;
+	    flex-wrap: wrap;
+	    justify-content: center;
+	    width: 30%;
+	    // background-color:yellow;
+	    border-left:2rpx dashed #ccc;
+	    text-align:center;
+	    // color:#e02e24;
+	    .securities-right-top{
+	     display:flex;
+	     justify-content: center;
+	     text{
+	      font-weight: bold;
+	      font-size: 25rpx;
+	      margin-top:10rpx;
+	      &:last-child{
+	       font-size: 36rpx;
+	       margin-top:0rpx;
+	      }
+	     }
+	    }
+	    button{
+	     width: 90%;
+	     height:52rpx;
+	     font-size: 20rpx;
+	     padding:0;
+	    }
+	   }
+	  }
+	  
+	 }
 </style>

@@ -45,11 +45,12 @@
 				</view>
 			</view>
 		</view>
+		
 		<passkeyborad
 			:show="passwordzhifutanchuang"
 			:isIphoneX="isIphoneX" 
 			@close="close"
-			:balancetext="(orderNotpaydefault*orderNotpaynums).toFixed(2)"
+			:balancetext="(orderNotpaydefault*orderNotpaynums+Number(freightdata)).toFixed(2)"
 			@Enterpasswordcompletepayment="Enterpasswordcompletepayment"
 		></passkeyborad>
 	</view>
@@ -58,7 +59,7 @@
 <script>
 	import passkeyborad from '@/components/yzc-paykeyboard/yzc-paykeyboard.vue'
 	const app = getApp()
-	export default{
+	export default{//这是付款的组件***
 		data(){
 			return {
 				modalName: null,
@@ -177,7 +178,7 @@
 				})
 			},
 		},
-		props:["tokey","ordersnSerialid","orderNotpaydefault","orderNotpaynums"],
+		props:["tokey","ordersnSerialid","orderNotpaydefault","orderNotpaynums","freightdata"],
 		components:{
 			passkeyborad,
 		}

@@ -1,13 +1,16 @@
 <template>
-	<view>
+	<view class="PersonalMy-big-bg">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<!-- :amount="amount" :integral="integral" -->
 		<information :couponslistdata="couponslistdata" :tokey="tokey" :nickname="nickname" :images="images" :moneylist="moneylist" :logintokeytext="logintokeytext"></information>
-		<mycoupons></mycoupons>
 		<orders></orders>
-		<myScratchableLatex></myScratchableLatex>
 		<!-- <setup></setup> -->
-		<Selectionrecommended></Selectionrecommended>
+		<view class="Mynine-cell-operation">
+			<view class="Mynine-cell-operation-midden">
+				<myScratchableLatex></myScratchableLatex>
+			</view>
+		</view>
+		<Selectionrecommended></Selectionrecommended>	
 	</view>
 </template>
 
@@ -15,7 +18,6 @@
 	import orders from "@/components/myPersonal/orders.vue";
 	import myScratchableLatex from "@/components/myPersonal/myScratchableLatex.vue";
 	import information from "@/components/myPersonal/PersonalInformation.vue";
-	import mycoupons from "@/components/myPersonal/coupons.vue"
 	// import setup from "@/components/myPersonal/setup.vue"
 	//这是精选推荐
 	import Selectionrecommended from "@/components/myPersonal/Selectionrecommended.vue"
@@ -35,14 +37,19 @@
 				//这是账户的数据
 				moneylist:[
 					{
+						id:1,
 						num:0,
-						miao:"账户余额"
+						miao:"账户余额",
+						url:"/pages/balance/balance"
 					},
 					{
+						id:2,
 						num:0,
-						miao:"我的积分"
+						miao:"我的积分",
+						url:"/pages/integral/integral"
 					},
 					{
+						id:3,
 						num:0,
 						miao:"优惠券",
 						url:"/pages/Allcoupons/allcoupons"
@@ -54,8 +61,6 @@
 			orders,
 			myScratchableLatex,
 			information,
-			mycoupons,
-			// setup,
 			Selectionrecommended
 		},
 		onLoad(){
@@ -70,8 +75,8 @@
 				key:"bindtokey",
 				success(res){
 					_this.tokey = res.data
-					app.globalData.Detectionupdatetokey(res.data)
 					//这是检测用户是否登录退出
+					app.globalData.Detectionupdatetokey(res.data)
 					uni.request({
 						url:`${app.globalData.Requestpath}user/getUserDetail`,
 						method:"POST",
@@ -101,7 +106,6 @@
 						},
 						success(Storecoupon) {//这是获取到店铺的优惠券
 							if(Storecoupon.data.code==0){
-							// console.log(Storecoupon.data.data.list,"这是店铺的优惠券")
 								uni.request({
 									url:`${app.globalData.Requestpath}activity/getUserPlatformCouponList`,
 									method:"POST",
@@ -139,6 +143,17 @@
 	}
 </script>
 
-<style>
-
+<style lang="less" scoped>
+	.PersonalMy-big-bg{
+		background-color: #FFFFFF !important;
+	}
+	.Mynine-cell-operation{
+		margin-top: 40rpx;
+		display: flex;
+		justify-content: center;
+		.Mynine-cell-operation-midden{
+			width: 95%;
+			box-shadow: 2rpx 0px 8rpx 6rpx #c6c6c6;
+		}
+	}
 </style>

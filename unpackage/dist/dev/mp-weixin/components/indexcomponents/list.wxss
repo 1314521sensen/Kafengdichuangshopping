@@ -2,21 +2,32 @@
   height: 70rpx;
   background-color: deeppink ;
 }
-.list .cu-list.menu-avatar > .cu-item.data-v-c1810460 {
-  height: 200rpx;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-          align-items: center;
+.list .cu-list.data-v-c1810460 {
   margin-bottom: 20rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  padding: 0 36rpx;
 }
-.list .cu-list.menu-avatar > .cu-item.data-v-c1810460:last-child {
-  margin-bottom: 0;
+.list .cu-list.menu-avatar > .cu-item.data-v-c1810460 {
+  display: block;
+  height: 490rpx;
+  width: 320rpx;
+  margin-bottom: 18rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 10rpx 10rpx 10rpx #C0C0C0;
 }
 .list .cu-list.menu-avatar > .cu-item .cu-avatar.data-v-c1810460 {
   position: static !important;
 }
 .list .cu-list.menu-avatar > .cu-item .cu-item-right.data-v-c1810460 {
-  width: calc(100% - 20px - 30px - 60px - 10px) !important;
+  margin-top: 18rpx;
 }
 .list .cu-list.menu-avatar > .cu-item .cu-item-right .content.data-v-c1810460 {
   position: static !important;
@@ -31,12 +42,8 @@
   -webkit-align-items: stretch !important;
           align-items: stretch !important;
 }
-.list .cu-list.menu-avatar > .cu-item .cu-item-right .content .text-grey.data-v-c1810460 {
-  line-height: 28rpx;
-  color: #000;
-  font-size: 28rpx;
-}
 .list .cu-list.menu-avatar > .cu-item .cu-item-right .content .price.data-v-c1810460 {
+  margin-top: 20rpx;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -44,15 +51,14 @@
   color: red;
   font-weight: bold;
   font-size: 30rpx;
-  margin-top: 60rpx;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
           justify-content: space-between;
 }
 .list .cu-avatar.lg.data-v-c1810460 {
-  width: 200rpx;
-  height: 190rpx;
-  border-radius: 8rpx;
+  width: 318rpx;
+  height: 330rpx;
+  border-radius: 18rpx;
 }
 .list .cu-btn.lg.data-v-c1810460 {
   line-height: 80rpx;

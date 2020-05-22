@@ -1,7 +1,15 @@
 <template>
-	<view class="ScratchableLatex">
+	<view class="ScratchableLatex" :style="{'margin-top':Scratchableheight+'rpx'}">
 		<view class="cu-list grid" :class="['col-' + gridCol,gridBorder?'':'no-border']">
-			<view class="cu-item" v-for="(item,index) in cuIconList" :key="index" v-if="index<gridCol*2" @click="collection(item.url,item.Routinghopname,item.name)">
+			<view 
+				class="cu-item" 
+				v-for="(item,index) in cuIconList" 
+				:key="index" v-if="index<gridCol*2" 
+				@tap="collection"
+				:data-url="item.url"
+				:data-Routinghopname="item.Routinghopname"
+				:data-name="item.name"
+			>
 				<!-- <view :class="['cuIcon-' + item.cuIcon,'text-' + item.color]">
 				</view> -->
 				<!-- 把这变成image -->
@@ -21,12 +29,13 @@
 				gridBorder: false,
 			}
 		},
-		props:["cuIconList","gridCol","width","height"],
+		props:["cuIconList","gridCol","width","height","Scratchableheight"],
 		methods:{
-			collection(url,name,titlename){
+			collection(e){
+				let {url,routinghopname,name} = e.currentTarget.dataset
 				// console.log(url,name,list)
 				uni.navigateTo({
-					url:`${url}?title=${name}&titlename=${titlename}`
+					url:`${url}?title=${name}&titlename=${routinghopname}`
 				})
 			}
 		}
@@ -35,7 +44,7 @@
 
 <style lang="less" scoped>
 	.ScratchableLatex{
-		margin-top:68rpx;
+		// margin-top:68rpx;
 		.icon{
 			width: 50%;
 			height:80rpx;

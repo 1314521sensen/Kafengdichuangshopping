@@ -1,0 +1,4 @@
+.cu-load.load-modal.data-v-1656e568::after {
+  border-left: 6rpx solid #ff1456;
+}
+

@@ -1,8 +1,8 @@
 <template>
 	<cover-view class="banner">
-		<!-- 这个动态的设置高度 -->
+		<!-- 这个动态的设置高度 :autoplay="true" interval="3000" duration="500"-->
 		<swiper class="screen-swiper set-height" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
-		 :autoplay="true" interval="3000" duration="500" :style="{height:height+'rpx'}">
+		  :style="{height:height+'rpx'}">
 		 <!-- @click="jump(item.url2)" -->
 			<swiper-item class="swiper-item" v-for="(item,index) in swiperList" :key="index">
 				<!-- 如果type是image就显示图片 -->
@@ -43,7 +43,12 @@
 		width: 720rpx;
 		height: 260rpx;
 		left: calc(50% - 360rpx);
-		top: 105rpx;
+		/* #ifdef H5 */
+			top: 105rpx;
+		/* #endif */
+		/* #ifdef APP-PLUS */
+			top:160rpx;
+		/* #endif */
 		border-radius: 40rpx;
 		box-shadow: 0 12rpx 4rpx #cfcfcf;
 		.set-height {

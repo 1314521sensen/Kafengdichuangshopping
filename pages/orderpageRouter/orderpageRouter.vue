@@ -2,8 +2,11 @@
 	<view class="orderpagerouter">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft" v-if="refundindex!=='5'">
-			<view class="cu-item" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in Myorder" :key="index" @tap="tabSelect" :data-id="index" :data-items="item.title" :data-url="item.url">
+			
+			<view class="item-juactcontent">
+				<view class="cu-item" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in Myorder" :key="index" @tap="tabSelect" :data-id="index" :data-items="item.title" :data-url="item.url">
 				{{item.title}}
+				</view>
 			</view>
 		</scroll-view>
 		<!-- <view v-for="(item,index) in 10" :key="index" v-if="index==TabCur" class="bg-grey padding margin text-center">
@@ -43,12 +46,7 @@
 					{
 						title:"已发货",
 						url:"order/getSendOrderList"
-					},
-					{
-						title:"待评价",
-						url:"order/getConfirmPayOrderList"
 					}
-					
 				],
 				list:[],
 				tokey:0,
@@ -83,12 +81,6 @@
 					break;
 					case '3':
 						if(item.status==2){//当状态等于0的时候 代表未付款
-							this.list.push(item)
-						}
-						_this.display = "block"
-					break;
-					case '4':
-						if(item.status==3){//当状态等于0的时候 代表未付款
 							this.list.push(item)
 						}
 						_this.display = "block"
@@ -191,7 +183,6 @@
 					this.items = this.Myorder[orderindex].title
 					url = this.Myorder[orderindex].url
 					this.Allorders(url)
-					console.log("执行到这里")
 				}else{
 					//将退货的按钮下标赋值
 					this.refundindex = orderindex
@@ -199,7 +190,6 @@
 					this.ReturntheMoney()
 				}
 			}else{
-				console.log("执行到1这里来了")
 				this.TabCur = 0;
 				this.items = this.Myorder[0].title
 				url =  this.Myorder[0].url
@@ -212,6 +202,9 @@
 
 <style lang="less" scoped>
 	.orderpagerouter{
-		
+		.item-juactcontent{
+			display:flex;
+			justify-content: space-around;
+		}
 	}
 </style>

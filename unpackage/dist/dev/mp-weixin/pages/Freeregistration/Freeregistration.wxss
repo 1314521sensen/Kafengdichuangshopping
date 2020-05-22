@@ -2,10 +2,18 @@ page.data-v-1eca77d6 {
   background-color: #fff;
 }
 .freeregistration.data-v-1eca77d6 {
-  padding: 0 30rpx;
+  width: 70%;
+  margin: 0 auto;
 }
 .freeregistration .freeregistration-title.data-v-1eca77d6 {
   overflow: hidden;
+}
+.freeregistration .freeregistration-title .register-img.data-v-1eca77d6 {
+  height: 130rpx;
+  width: 130rpx;
+  background-size: 100% 100%;
+  border-radius: 10rpx;
+  margin: 100rpx auto 100rpx;
 }
 .freeregistration .freeregistration-title text.data-v-1eca77d6 {
   display: block;
@@ -28,7 +36,7 @@ page.data-v-1eca77d6 {
   margin-bottom: 25rpx;
 }
 .freeregistration form .cu-form-group.data-v-1eca77d6 {
-  border-bottom: 2rpx solid #ff5000;
+  border-bottom: 2rpx solid #CCCCCC;
   margin-bottom: 20rpx;
 }
 .freeregistration form .loginButton.data-v-1eca77d6 {
@@ -42,10 +50,23 @@ page.data-v-1eca77d6 {
   border-top: 0;
 }
 button[disabled].data-v-1eca77d6:not([type]) {
-  color: #fff;
-  background-color: #39b54a;
+  height: 40rpx;
+  color: red;
+  border-radius: 30rpx;
+  border: 2rpx solid red;
 }
 .cu-btn[disabled].data-v-1eca77d6 {
   opacity: 1;
+}
+.fa-verification.data-v-1eca77d6 {
+  border-bottom-color: #FFFFFF !important;
+  margin-top: 40rpx;
+}
+.fa-verification .verification.data-v-1eca77d6 {
+  border-bottom: 2rpx solid #CCCCCC;
+  display: inline-block;
+}
+.fa-verification .verify.data-v-1eca77d6 {
+  border-radius: 30rpx;
 }
 

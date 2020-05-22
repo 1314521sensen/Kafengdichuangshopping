@@ -128,6 +128,7 @@
 <style lang="less" scoped>
 	.scroll-view{
 		overflow: hidden;
-		height:100vh;	
+		height:100vh;
+		margin-top:20rpx;
 	}
 </style>

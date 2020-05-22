@@ -67,7 +67,7 @@
 					})
 					getApp().globalData.logintokeybool = false
 				}else{
-					console.log("tokey没过期")
+					// console.log("tokey没过期")
 				}
 			}
 		},
@@ -105,7 +105,6 @@
 	page {
 		background-color: #DDDDDD;
 	}
-	
 	/* checkbox .uni-checkbox-input{
 		border-radius:50%;
 		width: 34rpx;

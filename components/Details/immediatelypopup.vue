@@ -129,9 +129,10 @@
 						this.$emit("guigedata",arr)
 						this.$emit("hiddends",null)
 					}else{
+						// console.log(this.pic.good_freight)
 						//跳转到购买页面
 						uni.navigateTo({
-							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}`
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
 						})
 					}
 				}

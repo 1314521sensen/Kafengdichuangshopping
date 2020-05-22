@@ -18,19 +18,33 @@
 					</view>
 					<view class="Shippingaddress-right">
 						<view class="Shippingaddress-right-title">
-							<text>刘伟森</text>
-							<text>18769490209</text>
+							<!-- 收货人的姓名 -->
+							<text>{{consigneename}}</text>
+							<!-- 收货人的电话 -->
+							<text>{{consigneephone}}</text>
 						</view>
 						<view class="Receivingaddress">
 							<view class="address">
-								山东省德州市武城县广运街道德州市武城县广运街道齐鲁学院三楼学生处
+								{{Shippingaddressorder}}
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			<!-- 这是快递快递的组件@Courierinformation和@Queryasinglenumber是子组件传递够来的值 -->
-			<Selectexpresscompany @Queryasinglenumber="Queryasinglenumber" :tokey="tokey" @Courierinformation="Courierinformation"></Selectexpresscompany>
+			<Selectexpresscompany 
+				@Queryasinglenumber="Queryasinglenumber" 
+				:tokey="tokey" 
+				@Courierinformation="Courierinformation"
+				v-if="orderStatus==2"
+			></Selectexpresscompany>
+			<!-- 这是快递到哪了 只要状态 不是 0待付款 -1取消 就显示 -->
+			<Deliveryaddressshow 
+				v-if="orderStatus!==0" 
+				:tokey="tokey"
+				:ordersnSerialid="ordersnSerialid"
+			></Deliveryaddressshow>
+			<!-- 这是退款的组件 -->
 			<shopoder 
 				:orderid="orderid" 
 				:ordersnSerialid="ordersnSerialid" 
@@ -39,17 +53,25 @@
 				@ordertime="ordertime"
 				@orderNotpayingdefault="orderNotpayingdefault"
 				@orderNotpayingnums="orderNotpayingnums"
+				@orderfreight="orderfreight"
 				:Couriercompanyvalue="Couriercompanyvalue"
 				:Couriercompanyobj="Couriercompanyobj"
 				></shopoder>
+				<!-- 这是底部付款 和取消订单的组件 -->
 			<shopoderbottom 
 				:tokey="tokey" 
 				:ordersnSerialid="ordersnSerialid"  
 				v-if="orderStatus==0" 
 				:orderNotpaynums="orderNotpaynums"
 				:orderNotpaydefault="orderNotpaydefault"
+				:freightdata="freightdata"
 				></shopoderbottom>
-			
+				<!-- 这是底部确认收货组件 2是已发货的状态 -->
+			<Confirmgoods 
+				v-if="orderStatus==2"
+				:tokey="tokey"
+				:ordersnSerialid="ordersnSerialid"
+			></Confirmgoods>
 		</view>
 	</view>
 </template>
@@ -60,8 +82,12 @@
 	import Selectexpresscompany from "@/components/Commoditycomponent/Selectexpresscompany.vue"
 	//引入订单商品的组件
 	import shopoder from "@/components/Temporarynonpayment/shoporder.vue"
+	//引入商品到哪了的收货地址
+	import Deliveryaddressshow from "@/components/Temporarynonpayment/Deliveryaddressshow.vue"
 	//引入底部两个button的组件
 	import shopoderbottom from "@/components/Temporarynonpayment/shoporderbottom.vue"
+	// 引入 底部确认收货的组件
+	import Confirmgoods from "@/components/Temporarynonpayment/Confirmgoods.vue"
 	const app = getApp();
 	export default {
 		//暂时不支付页面
@@ -79,6 +105,13 @@
 				orderNotpaydefault:"",
 				Couriercompanyvalue:"",//快递公司的value
 				Couriercompanyobj:{},//快递公司的信息
+				freightdata:"",
+				consigneename:"",
+				consigneephone:"",
+				Shippingaddressorder:[{},{},{}],
+				// Requestidprovince:"",//这是保存省的id
+				// cityid:"",//这是市的id
+				// areaid:""//这是县的id
 			}
 		},
 		methods: {
@@ -91,49 +124,76 @@
 					}
 				})
 			},
+			//封装个请求省市区的方法
+			// Requestprovincialdistrict(diquid){
+			// 	const _this = this
+			// 	uni.request({//这是请求省市区
+			// 		url:`${app.globalData.Requestpath}user/getShippingAddress`,
+			// 		method:"POST",
+			// 		data:{
+			// 			token:_this.tokey,
+			// 			address_id:diquid
+			// 		},
+			// 		success(resinfo) {
+			// 			if(resinfo.data.code==0){
+			// 				console.log(resinfo)
+			// 				//收货人姓名
+			// 				_this.consigneename = resinfo.data.data.consignee_name
+			// 				//这是收货人的电话
+			// 				_this.consigneephone = resinfo.data.data.consignee_phone
+			// 				uni.request({
+			// 					url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
+			// 					data:{
+			// 						aid:resinfo.data.data.province
+			// 					},
+			// 					success(resprovince) {//这是市
+			// 						//把数组的第0项保存起来
+			// 						// console.log(resprovince)
+			// 						_this.Shippingaddressorder[0] = resprovince.data.data
+			// 						uni.request({
+			// 							url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
+			// 							data:{
+			// 								aid:resinfo.data.data.city-1
+			// 							},
+			// 							success(rescity) {//这是区
+			// 								_this.Shippingaddressorder[1] = rescity.data.data
+			// 								uni.request({
+			// 									url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
+			// 									data:{
+			// 										aid:resinfo.data.data.area-1
+			// 									},
+			// 									success(resarea) {
+			// 										_this.Shippingaddressorder[2] = resarea.data.data
+			// 									}
+			// 								})
+			// 							}
+			// 						})
+			// 					}
+			// 				})
+			// 			}
+			// 		}
+			// 	})
+			// },
 			//接收父组件的值
 			orderstatus(e){//这是订单的状态
 				this.orderStatus = e
+				// console.log(e)
+				// console.log(this.orderStatus)
 				// if(e==0){//等于0的时候代表没有付款 开始倒计时
 					
 				// }
 			},
 			ordertime(e){//这里是订单的时间
-				// const _this = this
-				// // 
-				// 		let kaishi = new Date(e)
-				// 		// console.log(kaishi)
-				// 		let kaishiHours = kaishi.getHours()//开始的小时
-				// 		let kaishiMinutes = kaishi.getMinutes()//开始的分钟
-				// 		let kaishiSeconds = kaishi.getSeconds()//开始的秒数
-				// 		let kaishiYear = kaishi.getFullYear()//这是开始的年
-				// 		let kaishiMonth = kaishi.getMonth()//这是开始的月
-				// 		let kaishiDay = kaishi.getDate()//这是开始的日
-				// 		let end = new Date(kaishiYear,kaishiMonth,kaishiDay,kaishiHours,kaishiMinutes+30,kaishiSeconds)//这是结束的时间
-				// 		// setInterval(function(){
-				// 			let shenhaomiao = end.getTime()-kaishi.getTime()//这是结束的毫秒数减去开始的毫秒的数
-				// 			let shenmin = Math.floor(shenhaomiao/(1000*60)%60)
-				// 			let shenmiao = Math.floor(shenhaomiao/1000%60)
-				// 			// if(shenmiao==0 && shenmin){
-				// 			// 	shenmiao = 59
-				// 			// 	shenmin-1
-				// 			// }
-				// 			// shenmiao = shenmiao--
-				// 			_this.min = shenmin
-				// 			_this.miao = shenmiao
-				// 			console.log(shenmin,shenmiao)
-					// },1000)
-				// console.log(end)
+				
 			},
 			//商品单价
 			//orderNotpaynums:"",
 				// orderNotpaydefault:""
 			orderNotpayingdefault(e){
-				console.log(e)
+				// console.log(e)
 				this.orderNotpaydefault = e
 			},
 			orderNotpayingnums(e){
-				
 				this.orderNotpaynums = e
 			},
 			//这是快递传过来数据
@@ -144,22 +204,43 @@
 			},
 			Courierinformation(e){
 				this.Couriercompanyobj = e
-			}
+			},
+			orderfreight(e){//这是快递数据
+				this.freightdata = e
+			},
 		},
 		components:{
 			actionbar,
 			shopoder,
+			Deliveryaddressshow,
 			shopoderbottom,
-			Selectexpresscompany
+			Selectexpresscompany,
+			Confirmgoods
 		},
 		onLoad(opction){
 			const _this = this
+			console.log(opction)
 			if(opction.order){
 				_this.orderid = atob(opction.order)
 			}
 			_this.ordersnSerialid = atob(opction.ordersnSerial)
 			_this.gettokey(_this)
-			
+			//获取订单详情 因为子组件传值 存在异步问题
+			uni.request({
+				url:`${app.globalData.Requestpath}order/getOrderInfo`,
+				method:"POST",
+				data:{
+					token:_this.tokey,
+					sn:_this.ordersnSerialid
+				},
+				success(res) {
+					console.log(res)
+					if(res.data.code==0){
+					}
+					// res.data.data.address_id
+					// _this.Requestprovincialdistrict(res.data.data.address_id)
+				}
+			})
 			this.statusBar = app.globalData.statusBar
 		},
 		created() {

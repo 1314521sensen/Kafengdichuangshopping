@@ -110,7 +110,7 @@
   font-size: 28rpx;
 }
 .Purchasepage .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic.data-v-433371b6 {
-  width: 20%;
+  width: 30%;
 }
 .Purchasepage .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic text.data-v-433371b6 {
   display: block;

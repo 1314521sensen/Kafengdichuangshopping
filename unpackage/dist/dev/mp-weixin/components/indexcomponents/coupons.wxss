@@ -80,18 +80,4 @@
   text-align: center;
   width: 100%;
 }
-.coupons .rows .coupons-for .coupons-list .coupons-bottom .at-once.data-v-44df594b {
-  position: absolute;
-  width: 120rpx;
-  left: calc(50% - 60rpx);
-  bottom: -20rpx;
-  height: 30rpx;
-  margin-top: -20rpx;
-  border-radius: 20rpx;
-  background-color: #fff;
-  color: #f00;
-  border: 4rpx solid #fae053;
-  font-size: 10rpx;
-  line-height: 30rpx;
-}
 

@@ -145,9 +145,10 @@
 						this.numlistxiabiao[index][indexs].checked = true
 						this.checkbool = true
 						//把选中的数组发送过去
-						// console.log(this.numlistxiabiao[index][indexs])
-						let {good_id,store_name,good_name,good_pic,good_price} = this.numlistxiabiao[index][indexs]
+						
+						let {good_id,store_name,good_name,good_pic,good_price,good_freight} = this.numlistxiabiao[index][indexs]
 						// console.log(good_pic)
+						// console.log(this.numlistxiabiao[index][indexs])
 						//向父组件传递 用于结算用---开始  这么写后期改小程序用
 						this.$emit("datagoodid",good_id)//商品的id
 						this.$emit("datastorename",store_name)//店铺名称
@@ -155,7 +156,9 @@
 						this.$emit("datagoodimg",good_pic)//商品的图片
 						this.$emit("datagoodprice",good_price)//商品的单价
 						this.$emit("Purchasequantity",this.numlistxiabiao[index][indexs].good_num)//商品的数量
+						this.$emit("freight",good_freight)//商品运费
 						//向父组件传递 用于结算用---结束
+						// console.log(this.numlistxiabiao[index])
 						this.$emit("datalist",this.numlistxiabiao[index])
 						this.$emit("dataindex",indexs)
 						this.$emit("datacarid",carid)

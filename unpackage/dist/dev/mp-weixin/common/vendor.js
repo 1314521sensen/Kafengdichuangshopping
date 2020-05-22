@@ -8633,7 +8633,18 @@ main();
 
 /***/ }),
 
-/***/ 554:
+/***/ 6:
+/*!******************************************************!*\
+  !*** ./node_modules/@dcloudio/uni-stat/package.json ***!
+  \******************************************************/
+/*! exports provided: _from, _id, _inBundle, _integrity, _location, _phantomChildren, _requested, _requiredBy, _resolved, _shasum, _spec, _where, author, bugs, bundleDependencies, deprecated, description, devDependencies, files, gitHead, homepage, license, main, name, repository, scripts, version, default */
+/***/ (function(module) {
+
+module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.0.0-26420200313001","_inBundle":false,"_integrity":"sha512-7dPuazTiDmUyRcw+WW+UlWGKH0eeCUB+p0P4pJVKEHjpdXnXgvDQCSdJk764NH99TfsUycnuxecP5oHckVa88g==","_location":"/@dcloudio/uni-stat","_phantomChildren":{},"_requested":{"type":"tag","registry":true,"raw":"@dcloudio/uni-stat@next","name":"@dcloudio/uni-stat","escapedName":"@dcloudio%2funi-stat","scope":"@dcloudio","rawSpec":"next","saveSpec":null,"fetchSpec":"next"},"_requiredBy":["#USER","/","/@dcloudio/vue-cli-plugin-uni"],"_resolved":"https://registry.npmjs.org/@dcloudio/uni-stat/-/uni-stat-2.0.0-26420200313001.tgz","_shasum":"a006e329e033cd412accfa635f8933dbb822a9c3","_spec":"@dcloudio/uni-stat@next","_where":"/Users/guoshengqiang/Documents/dcloud-plugins/release/uniapp-cli","author":"","bugs":{"url":"https://github.com/dcloudio/uni-app/issues"},"bundleDependencies":false,"deprecated":false,"description":"","devDependencies":{"@babel/core":"^7.5.5","@babel/preset-env":"^7.5.5","eslint":"^6.1.0","rollup":"^1.19.3","rollup-plugin-babel":"^4.3.3","rollup-plugin-clear":"^2.0.7","rollup-plugin-commonjs":"^10.0.2","rollup-plugin-copy":"^3.1.0","rollup-plugin-eslint":"^7.0.0","rollup-plugin-json":"^4.0.0","rollup-plugin-node-resolve":"^5.2.0","rollup-plugin-replace":"^2.2.0","rollup-plugin-uglify":"^6.0.2"},"files":["dist","package.json","LICENSE"],"gitHead":"b1fdbafab5dd4673cff64188a5203d0c947e4f50","homepage":"https://github.com/dcloudio/uni-app#readme","license":"Apache-2.0","main":"dist/index.js","name":"@dcloudio/uni-stat","repository":{"type":"git","url":"git+https://github.com/dcloudio/uni-app.git","directory":"packages/uni-stat"},"scripts":{"build":"NODE_ENV=production rollup -c rollup.config.js","dev":"NODE_ENV=development rollup -w -c rollup.config.js"},"version":"2.0.0-26420200313001"};
+
+/***/ }),
+
+/***/ 673:
 /*!***************************************************************!*\
   !*** E:/Kafengdichuangshopping/components/uni-icons/icons.js ***!
   \***************************************************************/
@@ -8739,17 +8750,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
-/***/ 6:
-/*!******************************************************!*\
-  !*** ./node_modules/@dcloudio/uni-stat/package.json ***!
-  \******************************************************/
-/*! exports provided: _from, _id, _inBundle, _integrity, _location, _phantomChildren, _requested, _requiredBy, _resolved, _shasum, _spec, _where, author, bugs, bundleDependencies, deprecated, description, devDependencies, files, gitHead, homepage, license, main, name, repository, scripts, version, default */
-/***/ (function(module) {
-
-module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.0.0-26420200313001","_inBundle":false,"_integrity":"sha512-7dPuazTiDmUyRcw+WW+UlWGKH0eeCUB+p0P4pJVKEHjpdXnXgvDQCSdJk764NH99TfsUycnuxecP5oHckVa88g==","_location":"/@dcloudio/uni-stat","_phantomChildren":{},"_requested":{"type":"tag","registry":true,"raw":"@dcloudio/uni-stat@next","name":"@dcloudio/uni-stat","escapedName":"@dcloudio%2funi-stat","scope":"@dcloudio","rawSpec":"next","saveSpec":null,"fetchSpec":"next"},"_requiredBy":["#USER","/","/@dcloudio/vue-cli-plugin-uni"],"_resolved":"https://registry.npmjs.org/@dcloudio/uni-stat/-/uni-stat-2.0.0-26420200313001.tgz","_shasum":"a006e329e033cd412accfa635f8933dbb822a9c3","_spec":"@dcloudio/uni-stat@next","_where":"/Users/guoshengqiang/Documents/dcloud-plugins/release/uniapp-cli","author":"","bugs":{"url":"https://github.com/dcloudio/uni-app/issues"},"bundleDependencies":false,"deprecated":false,"description":"","devDependencies":{"@babel/core":"^7.5.5","@babel/preset-env":"^7.5.5","eslint":"^6.1.0","rollup":"^1.19.3","rollup-plugin-babel":"^4.3.3","rollup-plugin-clear":"^2.0.7","rollup-plugin-commonjs":"^10.0.2","rollup-plugin-copy":"^3.1.0","rollup-plugin-eslint":"^7.0.0","rollup-plugin-json":"^4.0.0","rollup-plugin-node-resolve":"^5.2.0","rollup-plugin-replace":"^2.2.0","rollup-plugin-uglify":"^6.0.2"},"files":["dist","package.json","LICENSE"],"gitHead":"b1fdbafab5dd4673cff64188a5203d0c947e4f50","homepage":"https://github.com/dcloudio/uni-app#readme","license":"Apache-2.0","main":"dist/index.js","name":"@dcloudio/uni-stat","repository":{"type":"git","url":"git+https://github.com/dcloudio/uni-app.git","directory":"packages/uni-stat"},"scripts":{"build":"NODE_ENV=production rollup -c rollup.config.js","dev":"NODE_ENV=development rollup -w -c rollup.config.js"},"version":"2.0.0-26420200313001"};
-
-/***/ }),
-
 /***/ 7:
 /*!*************************************************************!*\
   !*** E:/Kafengdichuangshopping/pages.json?{"type":"style"} ***!
@@ -8758,7 +8758,7 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/Accessinformation/Accessinformation": {}, "pages/index/index": { "navigationBarTitleText": "uni-app" }, "pages/classification/classification": {}, "pages/shoppingCart/shoppingCart": { "enablePullDownRefresh": true }, "pages/PersonalMy/PersonalMy": {}, "pages/bannerRouter/bannerRouter": {}, "pages/Details/Details": {}, "pages/SearchTo/SearchTo": {}, "pages/Sortinglist/Sortinglist": {}, "pages/Personaldata/Personaldata": {}, "pages/orderpageRouter/orderpageRouter": {}, "pages/addressTo/addressTo": { "enablePullDownRefresh": true }, "components/address/address": {}, "components/collection/collection": {}, "pages/login/login": {}, "pages/Allcoupons/allcoupons": {}, "pages/Store/store": {}, "pages/SMSlogin/SMSlogin": {}, "pages/Freeregistration/Freeregistration": {}, "pages/Purchasepage/Purchasepage": {}, "pages/Temporarynonpayment/Temporarynonpayment": {}, "pages/Paysuccess/Paysuccess": {}, "pages/Allevaluation/Allevaluation": {}, "components/setcenter/setcenter": {}, "components/indexcomponents/indexbindinfo": {}, "components/setcenter/returnloginpasswordall": {}, "components/setcenter/SetChangeResetpassword": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "uni-app", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2", "navigationStyle": "custom" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/Accessinformation/Accessinformation": {}, "pages/index/index": { "navigationBarTitleText": "uni-app" }, "pages/classification/classification": {}, "pages/shoppingCart/shoppingCart": { "enablePullDownRefresh": true }, "pages/PersonalMy/PersonalMy": {}, "pages/bannerRouter/bannerRouter": {}, "pages/Details/Details": {}, "pages/SearchTo/SearchTo": {}, "pages/Sortinglist/Sortinglist": {}, "pages/Personaldata/Personaldata": {}, "pages/orderpageRouter/orderpageRouter": {}, "pages/addressTo/addressTo": { "enablePullDownRefresh": true }, "components/address/address": {}, "components/collection/collection": {}, "pages/login/login": {}, "pages/Allcoupons/allcoupons": {}, "pages/Store/store": {}, "pages/SMSlogin/SMSlogin": {}, "pages/Freeregistration/Freeregistration": {}, "pages/Purchasepage/Purchasepage": {}, "pages/Temporarynonpayment/Temporarynonpayment": {}, "pages/Paysuccess/Paysuccess": {}, "pages/Allevaluation/Allevaluation": {}, "components/setcenter/setcenter": {}, "components/indexcomponents/indexbindinfo": {}, "components/setcenter/returnloginpasswordall": {}, "components/setcenter/SetChangeResetpassword": {}, "pages/Allrightsreserved/Allrightsreserved": {}, "pages/integral/integral": {}, "pages/logistics/logistics": {}, "pages/balance/balance": {}, "pages/Newgift/Newgift": {}, "pages/evaluate/evaluate": {}, "pages/starevaluation/starevaluation": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "uni-app", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2", "navigationStyle": "custom" } };exports.default = _default;
 
 /***/ }),
 
@@ -8770,7 +8770,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "__UNI__1EABF77" };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "__UNI__F002EB6" };exports.default = _default;
 
 /***/ })
 

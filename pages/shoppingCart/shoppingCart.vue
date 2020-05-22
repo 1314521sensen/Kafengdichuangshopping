@@ -24,6 +24,7 @@
 				@datagoodprice="datagoodprice"
 				@datagoodid="datagoodid"
 				@datastoreid="datastoreid"
+				@freight="freight"
 				:shopinglist="shopinglist"
 				:delatestaticbool="delatestaticbool"
 			></shoppingcatlist>
@@ -47,6 +48,7 @@
 			:goodimg="goodimg"
 			:goodprice="goodprice"
 			:storeid="storeid"
+			:freightnum="freightnum"
 		></shopingbottompay>
 	</view>
 </template>
@@ -73,7 +75,8 @@
 				goodname:"",
 				goodimg:"",
 				goodprice:"",
-				storeid:""
+				storeid:"",
+				freightnum:""
 			}
 		},
 		methods: {
@@ -173,8 +176,11 @@
 			datagoodprice(e){
 				// console.log(e)
 				this.goodprice = e
-			}
+			},
 			//用户点击购买的数量发送过来  父组件进行接收 用于结算---结束
+			freight(e){//这是子组件传过来的 运费价
+				this.freightnum = e
+			}
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar

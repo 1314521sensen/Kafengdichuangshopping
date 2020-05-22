@@ -1,4 +1,6 @@
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "passkeyborad": "/components/yzc-paykeyboard/yzc-paykeyboard"
+  }
 }

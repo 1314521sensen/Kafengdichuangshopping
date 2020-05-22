@@ -1,14 +1,15 @@
 <template>
 	<view class="smslogin">
 		<logobg></logobg>
+		<logintitle msg="验证码登录"></logintitle>
 		<view class="sms">
 			<form @submit="smslogin">
 				<view class="cu-form-group">
-					<view class="title">+86</view>
-					<input placeholder="请输入手机号" v-model="phone" @change="validationphone" name="phone"></input>
+					<view class=" verification title lg text-gray cuIcon-mobilefill phone"></view>
+					<input class="verification" placeholder="请输入手机号" v-model="phone" @change="validationphone" name="phone"></input>
 				</view>
 				<view class="cu-form-group">
-					<input placeholder="请输入验证码" name="sms"></input>
+					<input class="verification" placeholder="请输入验证码" name="sms"></input>
 					<button class='cu-btn bg-green shadow' @tap="countdown"  :disabled="bool">{{countdowntext}}</button>
 				</view>
 				<!-- #ifdef APP-PLUS -->
@@ -17,7 +18,7 @@
 					</view>
 				<!-- #endif -->
 				<view class="loginButton">
-					<button class="cu-btn block bg-orange margin-tb-sm lg" form-type="submit">
+					<button class="cu-btn block bg-orange margin-tb-sm lg bg-gradual-red" form-type="submit">
 						<text class="cuIcon-loading2 cuIconfont-spin"></text>短信登录
 					</button>
 				</view>
@@ -29,6 +30,8 @@
 <script>
 	//引入图标组件
 	import logobg from "@/components/login/loginbg.vue";
+	//引入登录的标题
+	import logintitle from "@/components/login/logintitle.vue"
 	const app = getApp()
 	export default {
 		data() {//这是短信登录
@@ -196,51 +199,68 @@
 			}
 		},
 		components:{
-			logobg
+			logobg,
+			logintitle
 		}
 	}
 </script>
 
 <style lang="less" scoped>
 	page{
-		background-color: #fff;
-	}
-	.smslogin{
-		.sms{
-			padding:0 25rpx;
-			form{
-				.cu-form-group{
-					border-bottom:2rpx solid #ff5000;
-					margin-bottom:20rpx;
-				}
-				.sms-and-registration{
-					font-size: 24rpx;
-					color:#999;
-					display: flex;
-					justify-content: space-between;
-				}
-				.loginButton{
-					margin-top:60rpx;
-					margin-bottom:0;
-					button{
-						border-radius:35rpx;
-					}
-				}
-			}
-		}
-	}
-	.cu-form-group+.cu-form-group{
-		border-top:0;
-	}
-	.cu-form-group+.cu-form-group{
-		border-top:0;
-	}
-	// button[disabled]:not([type])
-	button[disabled]:not([type]){
-		color:#fff;
-		background-color:#39b54a;
-	}
-	.cu-btn[disabled]{
-		opacity: 1;
-	}
+	  background-color: #fff;
+	 }
+	 .smslogin{
+	  .sms{
+	   width: 90%;
+	   margin: 0 auto;
+	   padding:0 25rpx;
+	   form{
+	    .cu-form-group{
+	     margin-bottom:20rpx;
+	    }
+	    .sms-and-registration{
+	     font-size: 24rpx;
+	     color:#999;
+	     display: flex;
+	     justify-content: space-between;
+	    }
+	    .loginButton{
+	     margin-top:60rpx;
+	     margin-bottom:0;
+	     button{
+	      border-radius:35rpx;
+	     }
+	    }
+	   }
+	  }
+	 }
+	 .cu-form-group+.cu-form-group{
+	  border-top:0;
+	 }
+	 .cu-form-group+.cu-form-group{
+	  border-top:0;
+	 }
+	 // button[disabled]:not([type])
+	 button[disabled]:not([type]){
+	  color:red;
+	  border: 2rpx solid #FF0000;
+	  border-radius: 20rpx;
+	  height: 40rpx;
+	 }
+	 .cu-btn[disabled]{
+	  opacity: 1;
+	 }
+	 .verification{
+	  
+	  border-bottom:2rpx solid #ff5000;
+	  display: inline-block;
+	  
+	 }
+	 .verification-btn{
+	  display: inline-block;
+	 }
+	 
+	 .phone{
+	  margin-bottom: 18rpx;
+	 }
 </style>

@@ -4,7 +4,6 @@
     "orders": "/components/myPersonal/orders",
     "my-scratchable-latex": "/components/myPersonal/myScratchableLatex",
     "information": "/components/myPersonal/PersonalInformation",
-    "mycoupons": "/components/myPersonal/coupons",
     "selectionrecommended": "/components/myPersonal/Selectionrecommended"
   }
 }

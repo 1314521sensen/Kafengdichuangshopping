@@ -97,7 +97,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   pageheight: () =>
-    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 226))
+    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 284))
 }
 var render = function() {
   var _vm = this
@@ -136,7 +136,11 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var search = function search() {return __webpack_require__.e(/*! import() | components/indexcomponents/search */ "components/indexcomponents/search").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/search.vue */ 231));};var banner = function banner() {return __webpack_require__.e(/*! import() | components/indexcomponents/indexbanner */ "components/indexcomponents/indexbanner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/indexbanner.vue */ 238));};var ScratchableLatex = function ScratchableLatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 245));};var coupons = function coupons() {return __webpack_require__.e(/*! import() | components/indexcomponents/coupons */ "components/indexcomponents/coupons").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/coupons.vue */ 252));};var Recommend = function Recommend() {return __webpack_require__.e(/*! import() | components/indexcomponents/Recommend */ "components/indexcomponents/Recommend").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/Recommend.vue */ 259));};var shoppinglist = function shoppinglist() {return __webpack_require__.e(/*! import() | components/indexcomponents/shoppinglist */ "components/indexcomponents/shoppinglist").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/shoppinglist.vue */ 266));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var search = function search() {return __webpack_require__.e(/*! import() | components/indexcomponents/search */ "components/indexcomponents/search").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/search.vue */ 294));};var banner = function banner() {return __webpack_require__.e(/*! import() | components/indexcomponents/indexbanner */ "components/indexcomponents/indexbanner").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/indexbanner.vue */ 301));};var ScratchableLatex = function ScratchableLatex() {return __webpack_require__.e(/*! import() | components/indexcomponents/ScratchableLatex */ "components/indexcomponents/ScratchableLatex").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/ScratchableLatex.vue */ 308));};var coupons = function coupons() {return __webpack_require__.e(/*! import() | components/indexcomponents/coupons */ "components/indexcomponents/coupons").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/coupons.vue */ 315));};var Recommend = function Recommend() {return __webpack_require__.e(/*! import() | components/indexcomponents/Recommend */ "components/indexcomponents/Recommend").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/Recommend.vue */ 322));};var shoppinglist = function shoppinglist() {return __webpack_require__.e(/*! import() | components/indexcomponents/shoppinglist */ "components/indexcomponents/shoppinglist").then(__webpack_require__.bind(null, /*! @/components/indexcomponents/shoppinglist.vue */ 329));};
+
+
+
+
 
 
 
@@ -190,8 +194,10 @@ var app = getApp();var _default =
         cuIcon: 'noticefill',
         color: 'olive',
         badge: 22,
-        name: '领劵',
-        imgs: "/static/index/Scratchablelatexicon/Ledsecurities.png" },
+        name: '新人礼',
+        imgs: "/static/index/Scratchablelatexicon/Ledsecurities.png",
+        url: "/pages/Newgift/Newgift",
+        Routinghopname: "Newgift" },
       {
         cuIcon: 'upstagefill',
         color: 'cyan',
@@ -222,37 +228,27 @@ var app = getApp();var _default =
       swiperList: [{
         id: 0,
         type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big84000.jpg',
+        url: '/static/indexbanner/banner1.jpg',
         url2: "/pages/bannerRouter/bannerRouter" },
       {
         id: 1,
         type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
+        url: '/static/indexbanner/banner2.png',
         url2: "pages/bannerRouter/bannerRouter" },
       {
         id: 2,
         type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big39000.jpg',
+        url: '/static/indexbanner/banner3.jpg',
         url2: "/pages/bannerRouter/bannerRouter" },
       {
         id: 3,
         type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+        url: '/static/indexbanner/banner4.jpg',
         url2: "/pages/bannerRouter/bannerRouter" },
       {
         id: 4,
         type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25011.jpg',
-        url2: "/pages/bannerRouter/bannerRouter" },
-      {
-        id: 5,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big21016.jpg',
-        url2: "/pages/bannerRouter/bannerRouter" },
-      {
-        id: 6,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg',
+        url: '/static/indexbanner/banner5.jpg',
         url2: "/pages/bannerRouter/bannerRouter" }] };
 
 

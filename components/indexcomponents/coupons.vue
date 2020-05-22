@@ -1,5 +1,5 @@
 <template>
-	<view class="coupons" v-if="couponsbool==true">
+	<view class="coupons" v-if="list.length>0">
 		<!-- 这是优惠卷的信息 -->
 		<scroll-view scroll-x="true">
 			<view class="rows">
@@ -17,7 +17,7 @@
 						<view class="dot right"></view>
 						<view class="coupons-bottom">
 							<text>{{ citem.at_full?'满'+citem.at_full:'无门槛'}}使用</text>
-							<view class="at-once" :data-coucontype="citem.coupon_type_id" @tap="Platformreceive">
+							<view class="at-once" :data-coucontype="citem.coupon_type_id" :data-storeid="citem.store_id" @tap="Platformreceive">
 								立即抢券
 							</view>
 						</view>
@@ -41,23 +41,48 @@
 			}
 		},
 		methods:{
+			//这是用户领取优惠券方法
 			Platformreceive(e){
-				// console.log(cid)
-				uni.request({
-					url:`${app.globalData.Requestpath}activity/userGetPlatformCoupon`,
-					method:"POST",
-					data:{
-						token:this.tokey,
-						cid:e.currentTarget.dataset.coucontype
-					},
-					success(res) {
-						if(res.data.code==0){
-							app.globalData.showtoastsame(res.data.msg)
-						}else{
-							app.globalData.showtoastsame(res.data.msg)
+				const _this = this
+				// e.currentTarget.dataset.coucontype 这是优惠券的id
+				//e.currentTarget.dataset.storeid 这是店铺id
+				let storeidtype = parseInt(e.currentTarget.dataset.storeid)
+				let cid = e.currentTarget.dataset.coucontype
+				if(storeidtype!==0){//代表是店铺的
+					uni.request({//这是调用用户领取首页店铺优惠券
+						url:`${app.globalData.Requestpath}activity/userGetStoreCoupon`,
+						method:"POST",
+						data:{
+							token:_this.tokey,
+							sid:storeidtype,//店铺id
+							cid:cid
+						},
+						success(res) {
+							if(res.data.code==0){
+								app.globalData.showtoastsame("领取成功")
+							}else{
+								app.globalData.showtoastsame(res.data.msg)
+							}
 						}
-					}
-				})
+					})
+				}else{//否则等于0代表是平台的
+					//发起用户领取平台的优惠券请求
+					uni.request({
+						url:`${app.globalData.Requestpath}activity/userGetPlatformCoupon`,
+						method:"POST",
+						data:{
+							token:_this.tokey,
+							cid:cid
+						},
+						success(res) {
+							if(res.data.code==0){
+								app.globalData.showtoastsame("领取成功")
+							}else{
+								app.globalData.showtoastsame(res.data.msg)
+							}
+						}
+					})
+				}
 			}
 		},
 		created() {
@@ -67,20 +92,23 @@
 				success(res){
 					_this.tokey = res.data
 					// console.log(res.data)
+					//这个是首页展示平台和店铺优惠券 ---随机
 					uni.request({
-						url:`${app.globalData.Requestpath}activity/getPlatformCouponTypeList`,
+						url:`${app.globalData.Requestpath}activity/getRandomCouponTypeList`,
 						method:"POST",
 						data:{
 							token:res.data,
-							page:1,
-							pageSize:3,
+							limit:10,
 						},
 						success(rescoupons) {
 							if(rescoupons.data.code==0){
 								_this.list = rescoupons.data.data.list
-								_this.couponsbool = true
+							// console.log(rescoupons.data.data.store_id)
+							// 	_this.couponsbool = true
+							// }else{
+							// 	_this.couponsbool = false
 							}else{
-								_this.couponsbool = false
+								_this.list = []
 							}
 						}
 					})
@@ -167,23 +195,41 @@
 					}
 					
 					.coupons-bottom {
-						text-align: center;
-						width: 100%;
-
-						.at-once {
-							position: absolute;
-							width: 120rpx;
-							left: calc(50% - 60rpx);
-							bottom: -20rpx;
-							height: 30rpx;
-							margin-top: -20rpx;
-							border-radius: 20rpx;
-							background-color: #fff;
-							color: #f00;
-							border: 4rpx solid #fae053;
-							font-size: 10rpx;
-							line-height: 30rpx;
-						}
+					      text-align: center;
+					      width: 100%;
+					      /* #ifdef APP-PLUS */
+					       .at-once {
+					        position: absolute;
+					        width: 160rpx;
+					        left: calc(50% - 80rpx);
+					        bottom: -20rpx;
+					        height: 40rpx;
+					        margin-top: -20rpx;
+					        border-radius: 20rpx;
+					        background-color: #fff;
+					        color: #f00;
+					        border: 4rpx solid #fae053;
+					        font-size: 30rpx;
+					        line-height: 40rpx;
+					       }
+					      /* #endif*/
+					      /* #ifdef H5 */
+					       .at-once {
+					        position: absolute;
+					        width: 140rpx;
+					        left: calc(50% - 70rpx);
+					        bottom: -20rpx;
+					        height: 40rpx;
+					        margin-top: -20rpx;
+					        border-radius: 20rpx;
+					        background-color: #fff;
+					        color: #f00;
+					        border: 4rpx solid #fae053;
+					        font-size: 26rpx;
+					        line-height: 30rpx;
+					       }
+					      /* #endif */
+					      
 					}
 				}
 			}

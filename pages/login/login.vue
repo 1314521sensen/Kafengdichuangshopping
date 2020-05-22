@@ -3,22 +3,25 @@
 			<view class="app-login">
 				<!-- 这是图标 -->
 				<logobg></logobg>
+				<logintitle msg="密码登录"></logintitle>
 				<view class="from">
 					<form @submit="ordinarylogin">
 						<view class="cu-form-group margin-top inp">
+							<view class="lg text-gray cuIcon-myfill title" ></view>
 							<input  @blur="Losefocus" placeholder="请输入您的账号" v-model="username" name="username" type="text"></input>
 						</view>
 						<view class="cu-form-group margin-top inp inp-bottom">
+							<view class="lg text-gray cuIcon-lock title"></view>
 							<input  placeholder="请输入您的密码" name="password" type="password"></input>
 						</view>
 						<!--#ifdef APP-PLUS || H5 -->
 							<view class="cu-form-group margin-top inp">
-								<view class="title">+86</view>
+								<view class="lg text-gray cuIcon-mobilefill title"></view>
 								<input placeholder="请输入手机号" @change="validationphone" v-model="phone" name="phone"></input>
 							</view>
-							<view class="cu-form-group margin-top inp">
-								<input placeholder="请输入验证码" name="sms"></input>
-								<button class='cu-btn bg-green shadow' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
+							<view class="fa-verification cu-form-group margin-top inp">
+								<input class="verification" placeholder="请输入验证码" name="sms"></input>
+								<button class='verify cu-btn bg-green shadow' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
 							</view>
 						<!-- #endif -->
 						<view class="sms-and-registration">
@@ -26,14 +29,12 @@
 							<!--#ifdef APP-PLUS || MP-WEIXIN || H5 -->
 								<text @tap="smslogin('/pages/SMSlogin/SMSlogin')">短信验证码登录</text>
 							<!-- #endif -->
-							<!-- #ifdef APP-PLUS || H5 -->
-								<text @tap="smslogin('/pages/Freeregistration/Freeregistration')">免费注册</text>
-							<!--#endif -->
 						</view>
 						<view class="loginButton" v-if="bool">
-							<button class="cu-btn block bg-orange margin-tb-sm lg" form-type="submit">
-								<text class="cuIcon-loading2 cuIconfont-spin"></text> 登录
-							</button>
+							<button class="cu-btn bg-gradual-red round register" form-type="submit">登录</button>
+							<!-- #ifdef APP-PLUS || H5 -->
+								<button class="cu-btn  round login-one" @tap="smslogin('/pages/Freeregistration/Freeregistration')">注册</button>	
+							<!--#endif -->
 						</view>
 					</form>
 				</view>
@@ -46,6 +47,8 @@
 <script>
 	//引入图标组件
 	import logobg from "@/components/login/loginbg.vue"
+	//引入登录的标题
+	import logintitle from "@/components/login/logintitle.vue"
 	const app = getApp()
 	export default {
 		data() {
@@ -238,66 +241,90 @@
 			}
 		},
 		components:{
-			logobg
+			logobg,
+			logintitle
 		}
 	}
 </script>
 
 <style lang="less" scoped>
 	.login{
-		height:100vh;
-		background-color: #fff;
-		.app-login{
-			width: 100%;
-			// height:70rpx;
-			// background-color: red;
-			.logo{
-				display:flex;
-				justify-content: center;
-				align-items: center;
-				height:300rpx;
-			}
-			.from{
-				padding:0 30rpx;
-				.inp{
-					border-bottom:2rpx solid #ff5000;
-					min-height:60rpx;
-					margin-bottom:46rpx;
-				}
-				.inp-bottom{
-					margin-bottom:25rpx;
-				}
-				.sms-and-registration{
-					font-size: 24rpx;
-					color:#999;
-					display: flex;
-					justify-content: space-between;
-				}
-				.loginButton{
-					margin-top:60rpx;
-					margin-bottom:0;
-					button{
-						border-radius:35rpx;
-					}
-				}
-			}
-		}
-	}
-	.cu-form-group+.cu-form-group{
-		border-top:0;
-	}
-	.cu-form-group+.cu-form-group{
-		border-top:0;
-	}
-	.cu-form-group+.cu-form-group{
-		border-top:0;
-	}
-	// button[disabled]:not([type])
-	button[disabled]:not([type]){
-		color:#fff;
-		background-color:#39b54a;
-	}
-	.cu-btn[disabled]{
-		opacity: 1;
-	}
+	  height:100vh;
+	  background-color: #fff;
+	  margin: 0 auto;
+	  width: 80%;
+	  .app-login{
+	   width: 100%;
+	   // height:70rpx;
+	   // background-color: red;
+	   .logo{
+	    display:flex;
+	    justify-content: center;
+	    align-items: center;
+	    height:300rpx;
+	   }
+	   .from{
+	    .inp{
+	     border-bottom:2rpx solid #CCCCCC;
+	     min-height:60rpx;
+	     margin-bottom:46rpx;
+	    }
+	    .inp-bottom{
+	     margin-bottom:25rpx;
+	    }
+	    .sms-and-registration{
+	     font-size: 24rpx;
+	     color:#999;
+	     display: flex;
+	     justify-content: space-between;
+	    }
+	    .loginButton{
+	     margin-top:60rpx;
+	     margin-bottom:0;
+	     button{
+	      border-radius:35rpx;
+	     }
+	    }
+	   }
+	  }
+	 }
+	 .cu-form-group+.cu-form-group{
+	  border-top:0;
+	 }
+	 .cu-form-group+.cu-form-group{
+	  border-top:0;
+	 }
+	 .cu-form-group+.cu-form-group{
+	  border-top:0;
+	 }
+	 // button[disabled]:not([type])
+	 button[disabled]:not([type]){
+	  color:red;
+	  border: 2rpx solid #FF0000;
+	  height: 40rpx;
+	  
+	 }
+	 .cu-btn[disabled]{
+	  opacity: 1;
+	 }
+	 .fa-verification{
+	  border-bottom-color: #FFFFFF !important;
+	  margin-top: 40rpx;
+	  .verification{
+	   border-bottom:2rpx solid #CCCCCC;
+	   display: inline-block;
+	   
+	  }
+	  .verify{
+	   border-radius: 30rpx;
+	  }
+	 }
+	 .register{
+	  margin-top: 50rpx;
+	  width: 100%;
+	 }
+	 .login-one{
+	  margin-top: 50rpx;
+	  width: 100%;
+	 }
 </style>

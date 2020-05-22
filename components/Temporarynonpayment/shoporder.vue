@@ -33,10 +33,14 @@
 						<text>{{orderobj.shoptitle}}</text>
 						<text>{{orderobj.shoppic}}</text>
 					</view>
+					<view class="Orderdetailsfreight">
+						<text>快递费</text>
+						<text>{{orderobj.dispatch_price}}</text>
+					</view>
 					<!-- 实付款 -->
 					<view class="Realpayment">
 						<text>实付款</text>
-						<text v-text="'¥'+ordershopinglist.good_pay_price*ordershopinglist.good_num"></text>
+						<text v-text="'¥'+(ordershopinglist.good_pay_price*ordershopinglist.good_num+parseFloat(Number(orderobj.dispatch_price)))"></text>
 					</view>
 				</view>
 			</view>
@@ -85,7 +89,6 @@
 			:show="passwordzhifutanchuang"
 			:isIphoneX="isIphoneX" 
 			@close="close"
-			:balancetext="(ordershopinglist.good_pay_price*ordershopinglist.good_num).toFixed(2)"
 			@Enterpasswordcompletepayment="Enterpasswordcompletepayment"
 			ordershow="1"
 		></passkeyborad>
@@ -94,7 +97,7 @@
 
 <script>
 	import passkeyborad from '@/components/yzc-paykeyboard/yzc-paykeyboard.vue'
-	
+	//这是退款的***
 	const app = getApp()
 	export default{
 		//这是订单详情中的中间的商品的部分
@@ -175,13 +178,14 @@
 			//参数  password支付密码  returnordertype 退货的类型 Courierid 快递公司的id CourierSerialnumber 快递的编号
 			returnCancelordersteps(password,returnordertype,Courierid,CourierSerialnumber){
 				const _this = this
+				console.log()
 				uni.request({
 					url:`${app.globalData.Requestpath}order/applyForRefundOrder`,
 					method:"POST",
 					data:{
 						token:_this.tokey,
-						o_sn:_this.ordersnSerialid,//退货的订单编号
-						af_price:_this.ordershopinglist.good_pay_price*_this.ordershopinglist.good_num,//退款的实际金额
+						o_sn:_this.ordersnSerialid,//退货的订单编号   ↓//退款的实际金额
+						af_price:_this.ordershopinglist.good_pay_price*_this.ordershopinglist.good_num+parseFloat(_this.orderobj.dispatch_price),
 						pay_pwd:password,//用户的输入密码
 						r_text:_this.returnparagraphlist[_this.radiotext],//退款原因文字
 						r_type:returnordertype,
@@ -189,7 +193,6 @@
 						e_sn:CourierSerialnumber
 					},
 					success(res) {
-						//
 						if(res.data.code==0){//当退款成功
 							console.log(res)
 							_this.disabled = true
@@ -247,10 +250,11 @@
 				success(res) {//获取到用户详情 
 					if(res.data.code==0){
 						_this.orderobj = res.data.data
-						// console.log(res.data.data)
+						// console.log(res.data.data.address_id)
 						//将订单的状态传到父组件
 						_this.$emit("orderstatus",res.data.data.status)
 						_this.$emit("ordertime",res.data.data.create_time)
+						_this.$emit("orderfreight",res.data.data.dispatch_price)
 						uni.request({
 							url:`${app.globalData.Requestpath}order/getOrderGoodList`,
 							method:"POST",
@@ -344,6 +348,10 @@
 						justify-content: space-between;
 						font-size: 32rpx;
 						margin-top:10rpx;
+					}
+					.Orderdetailsfreight{
+						display:flex;
+						justify-content: space-between;
 					}
 					.Realpayment{
 						display:flex;

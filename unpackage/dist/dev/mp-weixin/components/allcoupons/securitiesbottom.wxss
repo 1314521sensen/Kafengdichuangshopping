@@ -1,15 +1,28 @@
 .securitiesbottom.data-v-01cb995e {
   margin-top: 15rpx;
+  padding-bottom: 20rpx;
+}
+.securitiesbottom .couponstitle .couponstitletext.data-v-01cb995e {
+  text-align: center;
+  font-weight: bold;
+  font-size: 32rpx;
+  color: #c20e22;
 }
 .securitiesbottom .securitiesbottomitem.data-v-01cb995e {
+  margin: 0 auto;
   margin-top: 20rpx;
+  background-color: #c41225;
+  color: white;
+  width: 95%;
+  height: 160rpx;
+}
+.securitiesbottom .full-text.data-v-01cb995e {
+  font-size: 10rpx;
 }
 .securitiesbottom .securities.data-v-01cb995e {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  background-color: #fff;
-  padding: 15rpx 10rpx;
 }
 .securitiesbottom .securities .securities-left.data-v-01cb995e {
   display: -webkit-box;
@@ -19,7 +32,7 @@
 }
 .securitiesbottom .securities .securities-left .securities-left-imgs.data-v-01cb995e {
   width: 40%;
-  height: 220rpx;
+  height: 160rpx;
 }
 .securitiesbottom .securities .securities-left .securities-left-imgs image.data-v-01cb995e {
   width: 100%;
@@ -49,18 +62,16 @@
 }
 .securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-top text.data-v-01cb995e:last-child {
   font-size: 27rpx;
-  color: #FF5706;
   margin-top: 14rpx;
 }
 .securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom.data-v-01cb995e {
-  color: #e02e24;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
 }
 .securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom text.data-v-01cb995e {
   font-size: 24rpx;
-  margin-top: 6rpx;
+  margin-top: 3rpx;
 }
 .securitiesbottom .securities .securities-left .securities-left-right .securities-left-right-bottom text.data-v-01cb995e:last-child {
   font-size: 36rpx;
@@ -79,10 +90,9 @@
   -webkit-box-pack: center;
   -webkit-justify-content: center;
           justify-content: center;
-  width: 20%;
+  width: 30%;
   border-left: 2rpx dashed #ccc;
   text-align: center;
-  color: #e02e24;
 }
 .securitiesbottom .securities .securities-right .securities-right-top.data-v-01cb995e {
   display: -webkit-box;

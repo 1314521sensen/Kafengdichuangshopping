@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "zhifupassword": "/components/yzc-paykeyboard/yzc-paykeyboard"
+  }
+}

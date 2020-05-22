@@ -171,10 +171,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _default =
+
+var app = getApp();var _default =
 {
   data: function data() {
     return {
+      statusBar: 0,
       windows_height: 0, //屏幕高度
       swiperList: [],
       catrgoryList: [],
@@ -190,6 +192,9 @@ var _default =
   onLoad: function onLoad() {
     this.init();
     this.windows_height = uni.getSystemInfoSync().windowHeight;
+    //这是出路高度的
+    this.statusBar = app.globalData.statusBar;
+    console.log(this.statusBar);
   },
   methods: {
     init: function init() {var _this2 = this;

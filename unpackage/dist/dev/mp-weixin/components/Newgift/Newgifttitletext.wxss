@@ -1,0 +1,9 @@
+.exclusive {
+  border-bottom: 2rpx solid #FF0000;
+  width: 230rpx;
+  margin: 40rpx auto 0 ;
+}
+.exclusive .color-red {
+  color: red;
+}
+

@@ -2,6 +2,9 @@
   "usingComponents": {
     "actionbar": "/components/actionbar/actionbar",
     "shopoder": "/components/Temporarynonpayment/shoporder",
-    "shopoderbottom": "/components/Temporarynonpayment/shoporderbottom"
+    "deliveryaddressshow": "/components/Temporarynonpayment/Deliveryaddressshow",
+    "shopoderbottom": "/components/Temporarynonpayment/shoporderbottom",
+    "selectexpresscompany": "/components/Commoditycomponent/Selectexpresscompany",
+    "confirmgoods": "/components/Temporarynonpayment/Confirmgoods"
   }
 }

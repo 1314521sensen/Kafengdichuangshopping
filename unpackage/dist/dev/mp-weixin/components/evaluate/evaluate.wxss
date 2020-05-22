@@ -1,0 +1,80 @@
+page.data-v-26fbe874 {
+  background-color: #f2f2f2;
+}
+.evaluate.data-v-26fbe874 {
+  height: 95vh;
+}
+.order-evaluation.data-v-26fbe874 {
+  width: 95%;
+  background-color: white;
+  margin: 20rpx auto 0;
+  border-radius: 15rpx;
+}
+.order-evaluation .company-top.data-v-26fbe874 {
+  width: 95%;
+  margin: 0 auto;
+  font-weight: bold;
+  font-size: 30rpx;
+  padding: 16rpx 0;
+}
+.order-evaluation .company-bottom.data-v-26fbe874 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  margin-top: 8rpx;
+}
+.order-evaluation .company-bottom .bottom-left.data-v-26fbe874 {
+  padding-bottom: 20rpx;
+}
+.order-evaluation .company-bottom .bottom-left .bottom-img.data-v-26fbe874 {
+  width: 156rpx;
+  height: 156rpx;
+}
+.order-evaluation .company-bottom .bottom-left .bottom-img ._img.data-v-26fbe874 {
+  width: 100%;
+  height: 100%;
+}
+.order-evaluation .company-bottom .bottom-right.data-v-26fbe874 {
+  width: 65%;
+}
+.order-evaluation .company-bottom .bottom-right .price-number.data-v-26fbe874 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  margin-top: 20rpx;
+}
+.order-evaluation .company-bottom .bottom-right .price-number .number.data-v-26fbe874 {
+  display: block;
+  width: 100%;
+  text-indent: 2.3em;
+  color: #999;
+}
+.order-evaluation .company-bottom .bottom-right .price-number .cu-btn.data-v-26fbe874 {
+  width: 136rpx;
+  height: 40rpx;
+  color: #FFFFFF;
+  background-color: #ff0000;
+  margin-top: 26rpx;
+}
+.order-evaluation .company-bottom .bottom-right .introduce.data-v-26fbe874 {
+  height: 70rpx;
+}
+.order-evaluation .company-bottom .bottom-right .introduce .introduce-text.data-v-26fbe874 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 26rpx;
+  font-weight: 800;
+}
+.order-evaluation .company-bottom .bottom-right .price.data-v-26fbe874 {
+  display: block;
+  color: #666;
+  font-weight: 600;
+}
+

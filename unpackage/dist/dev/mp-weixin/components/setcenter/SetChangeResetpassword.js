@@ -1,6 +1,6 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["components/setcenter/SetChangeResetpassword"],{
 
-/***/ 220:
+/***/ 222:
 /*!****************************************************************************************************!*\
   !*** E:/Kafengdichuangshopping/main.js?{"page":"components%2Fsetcenter%2FSetChangeResetpassword"} ***!
   \****************************************************************************************************/
@@ -11,13 +11,13 @@
 /* WEBPACK VAR INJECTION */(function(createPage) {__webpack_require__(/*! uni-pages */ 4);__webpack_require__(/*! @dcloudio/uni-stat */ 5);
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
-var _SetChangeResetpassword = _interopRequireDefault(__webpack_require__(/*! ./components/setcenter/SetChangeResetpassword.vue */ 221));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var _SetChangeResetpassword = _interopRequireDefault(__webpack_require__(/*! ./components/setcenter/SetChangeResetpassword.vue */ 223));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 createPage(_SetChangeResetpassword.default);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["createPage"]))
 
 /***/ }),
 
-/***/ 221:
+/***/ 223:
 /*!*********************************************************************************!*\
   !*** E:/Kafengdichuangshopping/components/setcenter/SetChangeResetpassword.vue ***!
   \*********************************************************************************/
@@ -26,8 +26,8 @@ createPage(_SetChangeResetpassword.default);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _SetChangeResetpassword_vue_vue_type_template_id_b4b0df8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SetChangeResetpassword.vue?vue&type=template&id=b4b0df8a& */ 222);
-/* harmony import */ var _SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SetChangeResetpassword.vue?vue&type=script&lang=js& */ 224);
+/* harmony import */ var _SetChangeResetpassword_vue_vue_type_template_id_b4b0df8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SetChangeResetpassword.vue?vue&type=template&id=b4b0df8a& */ 224);
+/* harmony import */ var _SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SetChangeResetpassword.vue?vue&type=script&lang=js& */ 226);
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/runtime/componentNormalizer.js */ 14);
 
@@ -58,7 +58,7 @@ component.options.__file = "E:/Kafengdichuangshopping/components/setcenter/SetCh
 
 /***/ }),
 
-/***/ 222:
+/***/ 224:
 /*!****************************************************************************************************************!*\
   !*** E:/Kafengdichuangshopping/components/setcenter/SetChangeResetpassword.vue?vue&type=template&id=b4b0df8a& ***!
   \****************************************************************************************************************/
@@ -67,7 +67,7 @@ component.options.__file = "E:/Kafengdichuangshopping/components/setcenter/SetCh
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_16_0_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_template_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_uni_app_loader_page_meta_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_template_id_b4b0df8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--16-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!./SetChangeResetpassword.vue?vue&type=template&id=b4b0df8a& */ 223);
+/* harmony import */ var _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_16_0_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_template_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_uni_app_loader_page_meta_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_template_id_b4b0df8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--16-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!./SetChangeResetpassword.vue?vue&type=template&id=b4b0df8a& */ 225);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_16_0_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_template_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_uni_app_loader_page_meta_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_template_id_b4b0df8a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_16_0_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_template_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_uni_app_loader_page_meta_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_template_id_b4b0df8a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
@@ -80,7 +80,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 223:
+/***/ 225:
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--16-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/Kafengdichuangshopping/components/setcenter/SetChangeResetpassword.vue?vue&type=template&id=b4b0df8a& ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -95,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   pageheight: () =>
-    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 226))
+    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 284))
 }
 var render = function() {
   var _vm = this
@@ -110,7 +110,7 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ 224:
+/***/ 226:
 /*!**********************************************************************************************************!*\
   !*** E:/Kafengdichuangshopping/components/setcenter/SetChangeResetpassword.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************************/
@@ -119,14 +119,14 @@ render._withStripped = true
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_12_1_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!./SetChangeResetpassword.vue?vue&type=script&lang=js& */ 225);
+/* harmony import */ var _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_12_1_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!./SetChangeResetpassword.vue?vue&type=script&lang=js& */ 227);
 /* harmony import */ var _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_12_1_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_12_1_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_12_1_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_12_1_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
  /* harmony default export */ __webpack_exports__["default"] = (_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_babel_loader_lib_index_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_webpack_preprocess_loader_index_js_ref_12_1_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_script_js_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_cli_plugin_uni_packages_vue_loader_lib_index_js_vue_loader_options_D_uni_app_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_webpack_uni_mp_loader_lib_style_js_SetChangeResetpassword_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
-/***/ 225:
+/***/ 227:
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!E:/Kafengdichuangshopping/components/setcenter/SetChangeResetpassword.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -204,6 +204,7 @@ var app = getApp();var _default =
       phonetext: "",
       codevalue: "",
       id: "",
+      business: "",
       list: [
       {
         titlename: "用户登录密码",
@@ -248,6 +249,7 @@ var app = getApp();var _default =
     },
     //当用户设置或修改的时候
     zhifubind: function zhifubind(e) {
+      var _this = this;
       var regnewspassword = /^\w{6,6}$/;
       if (parseInt(this.showindex)) {//这是1的时候就修改密码
         var _e$detail$value = e.detail.value,oldpassword = _e$detail$value.oldpassword,newspassword = _e$detail$value.newspassword;
@@ -266,7 +268,7 @@ var app = getApp();var _default =
                 if (res.data.code == 0) {
                   app.globalData.showtoastsame("修改成功");
                   uni.navigateTo({
-                    url: "/components/setcenter/setcenter?title=设置" });
+                    url: "/components/setcenter/setcenter?title=userset&titlename=设置" });
 
                 } else {
                   app.globalData.showtoastsame(res.data.msg);
@@ -295,11 +297,26 @@ var app = getApp();var _default =
               success: function success(res) {
                 if (res.data.code == 0) {
                   app.globalData.showtoastsame("设置成功");
-                  uni.navigateTo({
-                    url: "/components/setcenter/setcenter?title=设置" });
+                  if (_this.business == "pay") {
+                    uni.showModal({
+                      title: "是否回到之前的订单",
+                      content: "点击确认回到之前订单",
+                      showCancel: true,
+                      cancelColor: "#ff0000",
+                      confirmColor: "#green",
+                      success: function success(res) {
+                        uni.navigateBack({
+                          delta: 2 });
 
+                      } });
+
+                  } else {
+                    uni.reLaunch({
+                      url: "/components/setcenter/setcenter?title=userset&titlename=设置" });
+
+                  }
                 } else {
-                  app.globalData.showtoastsame("登录密码错误");
+                  app.globalData.showtoastsame("登录密码错误或不能和登录密码一致");
                 }
               } });
 
@@ -338,7 +355,7 @@ var app = getApp();var _default =
       };app.globalData.VerificationCode(json);
     },
     //这是左侧弹窗点击确定按钮
-    changeform: function changeform(e) {var _this = this;var _e$detail$value3 =
+    changeform: function changeform(e) {var _this2 = this;var _e$detail$value3 =
       e.detail.value,code = _e$detail$value3.code,idcard = _e$detail$value3.idcard,loginpassword = _e$detail$value3.loginpassword,newpaypassword = _e$detail$value3.newpaypassword;
       //验证手机号
       var regphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
@@ -364,9 +381,9 @@ var app = getApp();var _default =
             success: function success(res) {
               if (res.data.code == 0) {
                 app.globalData.showtoastsame("重置成功");
-                _this.hideModal();
+                _this2.hideModal();
                 uni.navigateTo({
-                  url: "/components/setcenter/setcenter?title=设置" });
+                  url: "/components/setcenter/setcenter?title=userset&titlename=设置" });
 
               } else {
                 app.globalData.showtoastsame(res.data.msg);
@@ -380,6 +397,7 @@ var app = getApp();var _default =
     } },
 
   onLoad: function onLoad(opction) {
+    this.business = opction.business;
     this.showindex = opction.index;
     this.tokey = opction.tokey;
     this.id = opction.id;
@@ -390,5 +408,5 @@ var app = getApp();var _default =
 
 /***/ })
 
-},[[220,"common/runtime","common/vendor"]]]);
+},[[222,"common/runtime","common/vendor"]]]);
 //# sourceMappingURL=../../../.sourcemap/mp-weixin/components/setcenter/SetChangeResetpassword.js.map

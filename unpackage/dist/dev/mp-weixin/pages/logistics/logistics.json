@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "pageheight": "/components/pageheight/pageheight",
+    "actionbar": "/components/actionbar/actionbar",
+    "recommend": "/components/indexcomponents/Recommend",
+    "shoppinglist": "/components/indexcomponents/shoppinglist"
+  }
+}

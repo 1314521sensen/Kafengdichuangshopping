@@ -46,7 +46,8 @@
 				way:0,
 				specname:"",
 				storeid:"",
-				cids:""
+				cids:"",
+				freight:""
 			}
 		},
 		methods: {
@@ -60,11 +61,11 @@
 					//2是详情过来的
 					if(this.way==1){
 						uni.reLaunch({
-							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&cids=${this.cids}&storeid=${this.storeid}`
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
 						})
 					}else{
 						uni.reLaunch({
-							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}`
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}&freight=${this.freight}`
 						})
 					}
 				}
@@ -72,11 +73,11 @@
 			tonews(){
 				if(this.way==1){
 					uni.navigateTo({
-						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}`
+						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
 					})
 				}else if(this.way==2){
 					uni.navigateTo({
-						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}`
+						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}&freight=${this.freight}`
 					})
 				}else{
 					uni.navigateTo({
@@ -154,7 +155,7 @@
 			//1是购物车过来的
 			//2是详情过来的
 			if(this.titleparameter=='orderaddress'){
-				let {way,gid,img,num,storename,price,goodtitle,storeid} = opction
+				let {way,gid,img,num,storename,price,goodtitle,storeid,freight} = opction
 				this.way = way
 				if(this.way==1){//这是购物车过来的
 					let {cids} = opction
@@ -170,6 +171,7 @@
 				this.price = price
 				this.goodtitle = goodtitle
 				this.storeid = storeid
+				this.freight = freight
 			}
 		}
 	}

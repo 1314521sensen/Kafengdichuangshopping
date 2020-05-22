@@ -4,7 +4,6 @@
   width: 720rpx;
   height: 260rpx;
   left: calc(50% - 360rpx);
-  top: 105rpx;
   border-radius: 40rpx;
   box-shadow: 0 12rpx 4rpx #cfcfcf;
 }

@@ -1,6 +1,8 @@
 .login.data-v-c612d0ec {
   height: 100vh;
   background-color: #fff;
+  margin: 0 auto;
+  width: 80%;
 }
 .login .app-login.data-v-c612d0ec {
   width: 100%;
@@ -17,11 +19,8 @@
           align-items: center;
   height: 300rpx;
 }
-.login .app-login .from.data-v-c612d0ec {
-  padding: 0 30rpx;
-}
 .login .app-login .from .inp.data-v-c612d0ec {
-  border-bottom: 2rpx solid #ff5000;
+  border-bottom: 2rpx solid #CCCCCC;
   min-height: 60rpx;
   margin-bottom: 46rpx;
 }
@@ -55,10 +54,30 @@
   border-top: 0;
 }
 button[disabled].data-v-c612d0ec:not([type]) {
-  color: #fff;
-  background-color: #39b54a;
+  color: red;
+  border: 2rpx solid #FF0000;
+  height: 40rpx;
 }
 .cu-btn[disabled].data-v-c612d0ec {
   opacity: 1;
+}
+.fa-verification.data-v-c612d0ec {
+  border-bottom-color: #FFFFFF !important;
+  margin-top: 40rpx;
+}
+.fa-verification .verification.data-v-c612d0ec {
+  border-bottom: 2rpx solid #CCCCCC;
+  display: inline-block;
+}
+.fa-verification .verify.data-v-c612d0ec {
+  border-radius: 30rpx;
+}
+.register.data-v-c612d0ec {
+  margin-top: 50rpx;
+  width: 100%;
+}
+.login-one.data-v-c612d0ec {
+  margin-top: 50rpx;
+  width: 100%;
 }
 

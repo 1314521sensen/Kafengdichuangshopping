@@ -97,7 +97,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   pageheight: () =>
-    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 226))
+    __webpack_require__.e(/*! import() | components/pageheight/pageheight */ "components/pageheight/pageheight").then(__webpack_require__.bind(null, /*! @/components/pageheight/pageheight.vue */ 284))
 }
 var render = function() {
   var _vm = this
@@ -136,7 +136,12 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var shoppingcatlist = function shoppingcatlist() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shoppingcartlist */ "components/shoppingcartlist/shoppingcartlist").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shoppingcartlist.vue */ 271));};var shopingbottompay = function shopingbottompay() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shopingbottompay */ "components/shoppingcartlist/shopingbottompay").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shopingbottompay.vue */ 278));};
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var shoppingcatlist = function shoppingcatlist() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shoppingcartlist */ "components/shoppingcartlist/shoppingcartlist").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shoppingcartlist.vue */ 334));};var shopingbottompay = function shopingbottompay() {return __webpack_require__.e(/*! import() | components/shoppingcartlist/shopingbottompay */ "components/shoppingcartlist/shopingbottompay").then(__webpack_require__.bind(null, /*! @/components/shoppingcartlist/shopingbottompay.vue */ 341));};
+
+
+
+
+
 
 
 
@@ -207,7 +212,9 @@ var app = getApp();var _default =
       storename: "",
       goodname: "",
       goodimg: "",
-      goodprice: "" };
+      goodprice: "",
+      storeid: "",
+      freightnum: "" };
 
   },
   methods: {
@@ -227,8 +234,12 @@ var app = getApp();var _default =
     dataindex: function dataindex(e) {
       this.xiabiao = e;
     },
-    datacarid: function datacarid(e) {
+    datacarid: function datacarid(e) {//这是购物车选中id
       this.carid = e;
+    },
+    //这是店铺id
+    datastoreid: function datastoreid(e) {
+      this.storeid = e;
     },
     //这是shopingbottompay组件传过来的删除后的数组  在将下标返回去删除
     // console.log(this.totalpic)
@@ -267,6 +278,9 @@ var app = getApp();var _default =
               }
             } });
 
+        },
+        fail: function fail(err) {
+          app.globalData.Detectionupdatetokey(err.data);
         } });
 
 
@@ -281,7 +295,7 @@ var app = getApp();var _default =
     },
     //用户子组件发送过来  父组件进行接收 用于结算---开始
     Purchasequantity: function Purchasequantity(e) {//购买的数量
-      console.log(e);
+      // console.log(e)
       this.num = e;
     },
     datagoodid: function datagoodid(e) {//商品id
@@ -300,9 +314,12 @@ var app = getApp();var _default =
     datagoodprice: function datagoodprice(e) {
       // console.log(e)
       this.goodprice = e;
-    }
+    },
     //用户点击购买的数量发送过来  父组件进行接收 用于结算---结束
-  },
+    freight: function freight(e) {//这是子组件传过来的 运费价
+      this.freightnum = e;
+    } },
+
   onLoad: function onLoad() {
     this.statusBar = app.globalData.statusBar;
   },

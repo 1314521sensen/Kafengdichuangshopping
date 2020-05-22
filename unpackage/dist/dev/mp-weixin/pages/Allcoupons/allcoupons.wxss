@@ -1,21 +1,39 @@
 
 .minheight{
-	min-height:70rpx;
+	min-height:100rpx;
 }
 
 
+.allcoupons.data-v-415d0b56 {
+  margin: 0 auto;
+  background: -webkit-linear-gradient(top, #fe3217, #fc8c62);
+  background: linear-gradient(to bottom, #fe3217, #fc8c62);
+  height: 500rpx;
+  border-radius: 0 0 40rpx 40rpx;
+}
+.bg-white.data-v-415d0b56 {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 10rpx;
+  border-radius: 20rpx;
+}
 .nav-text.data-v-415d0b56 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-around;
           justify-content: space-around;
+  border-bottom: 2rpx solid #f6dad2;
 }
 .nav .cu-item.data-v-415d0b56 {
-  height: 74rpx;
+  height: 56rpx;
+  line-height: 56rpx;
 }
 .nav-bg.data-v-415d0b56 {
   background-color: #eb9078;
   color: #fff;
+}
+.nav .cu-item.cur.data-v-415d0b56 {
+  border-bottom: 0;
 }
 

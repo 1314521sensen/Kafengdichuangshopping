@@ -64,7 +64,8 @@
 				storename:"",
 				price:"",
 				goodtitle:"",
-				storeid:""
+				storeid:"",
+				freight:""
 			}
 		},
 		methods:{
@@ -102,11 +103,11 @@
 									console.log(_this.way)
 									if(_this.way==1){
 										uni.navigateTo({
-											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}`
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}&freight=${_this.freight}`
 										})
 									}else if(_this.way==2){
 										uni.navigateTo({
-											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}`
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}&freight=${_this.freight}`
 										})
 									}else{
 										uni.navigateTo({
@@ -136,11 +137,11 @@
 								if(res.data.code==0){
 									if(_this.way==1){
 										uni.navigateTo({
-											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}`
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}&freight=${_this.freight}`
 										})
 									}else if(_this.way==2){
 										uni.navigateTo({
-											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}`
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}&freight=${_this.freight}`
 										})
 									}else{
 										uni.navigateTo({
@@ -187,7 +188,7 @@
 			//2是详情过来的
 			console.log(opction.titleparameter)
 			if(opction.titleparameter=='orderaddress'){
-				let {way,gid,img,num,storename,price,goodtitle,storeid} = opction
+				let {way,gid,img,num,storename,price,goodtitle,storeid,freight} = opction
 				this.way = way
 				if(this.way==1){//这是购物车过来的
 					let {cids} = opction
@@ -203,6 +204,7 @@
 				this.price = price
 				this.goodtitle = goodtitle
 				this.storeid = storeid
+				this.freight = freight
 			}
 		},
 		

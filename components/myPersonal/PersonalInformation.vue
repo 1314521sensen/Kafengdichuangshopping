@@ -4,11 +4,12 @@
 			<view class="Personal-top">
 				<view class="Personaladdlogin">
 					<view class="Personal">
-						<view class="head-portrait" @click="jumppersonal ">
+						<view class="head-portrait">
 							<image :src="images"></image>
 						</view>
 						<view class="head-information">
 							<text>{{nickname}}</text>
+							<text class="Personalhomepagebtn" @tap="jumppersonal">个人主页</text>
 						</view>
 					</view>
 					<!-- 新增加的登录退出 -->
@@ -21,13 +22,8 @@
 						</view>
 					<!-- #endif -->
 				</view>
-				
-				<view class="Personal-list">
-					<view class="money-list" v-for="(item,index) in moneylist" :key="index" @tap="jumpcenter(item.url)">
-						<text>{{item.num}}</text>
-						<text>{{item.miao}}</text>
-					</view>
-				</view>
+				<!-- 这是用户余额这块 -->
+				<usermoney :moneylist="moneylist"></usermoney>
 			</view>
 			
 		</view>
@@ -35,6 +31,7 @@
 </template>
 
 <script>
+	import usermoney from "@/components/myPersonal/usermoney.vue"
 	//这是个人中心的头像 个人信息
 	const app  = getApp()
 	export default{
@@ -54,12 +51,7 @@
 					url:"/pages/login/login"
 				})
 			},
-			jumpcenter(url){
-				// console.log(url)
-				uni.navigateTo({
-					url
-				})
-			},
+			
 			// getcouponslistdata(){
 			// 	// console.log(this.couponslistdata)
 			// 	if(this.couponslistdata.length<=0){
@@ -73,22 +65,28 @@
 		created(){
 			const _this = this
 		},
+		components:{
+			usermoney
+		},
 		props:["tokey","images","nickname","moneylist","logintokeytext"]
 	}
 </script>
 
 <style lang="less" scoped>
 	.Personal-information{
-		border-radius:16rpx;
-		padding:0 20rpx 10rpx;
+		// border-radius:16rpx;
+		// padding:0 20rpx 10rpx;
 		.Personal-bg{
-			background-color: #000;
-			padding-bottom:25rpx;
-			border-radius:16rpx;
+			// background-color: #000;
+			// padding-bottom:25rpx;
+			// border-radius:16rpx;
+			margin-bottom: 84rpx;
 			.Personal-top{
-				background-color: #fff;
-				padding-bottom:20rpx;
-				border-radius:16rpx;
+				// background-color: #fff;
+				// padding-bottom:20rpx;
+				// border-radius:16rpx;
+				background-color:#f84443;
+				height: 300rpx;
 				.Personaladdlogin{
 					display:flex;
 					justify-content: space-between;
@@ -109,10 +107,21 @@
 						}
 						.head-information{
 							padding-top:10rpx;
-							margin-left:22rpx;
+							margin-left:32rpx;
+							color:#fff;
 							text{
 								display:block;
 								font-size: 30rpx;
+								font-weight: bold;
+							}
+							.Personalhomepagebtn{
+								font-size: 24rpx;
+								background-color: #fff;
+								color:red;
+								border-radius:20rpx;
+								padding:4rpx 0 4rpx;
+								text-align:center;
+								margin-top:12rpx;
 							}
 						}
 					}
@@ -124,23 +133,7 @@
 					}
 				}
 				
-				.Personal-list{
-					display:flex;
-					justify-content: space-around;
-					margin-top:30rpx;
-					.money-list{
-						text{
-							display:block;
-							text-align:center;
-							font-weight: bold;
-							font-size: 24rpx;
-							color:#616161;
-							&:first-child{
-								color:red;
-							}
-						}
-					}
-				}
+				
 			}
 		}
 	}

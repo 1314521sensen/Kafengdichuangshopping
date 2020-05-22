@@ -1,0 +1,66 @@
+
+.minheight{
+	min-height:100rpx;
+}
+
+
+.logistics.data-v-e0090b44 {
+  background-color: white;
+  background-image: -webkit-linear-gradient(#e64a52, #ffffff);
+  background-image: linear-gradient(#e64a52, #ffffff);
+  background-size: 100% 500rpx;
+  background-repeat: no-repeat;
+}
+.commodity.data-v-e0090b44 {
+  overflow: hidden;
+  width: 94%;
+  height: 130rpx;
+  background-color: white;
+  margin: 0 auto;
+  margin-top: 40rpx;
+  border-radius: 15rpx;
+  padding-top: 10rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+}
+.commodity .commodity-img.data-v-e0090b44 {
+  display: inline-block;
+  width: 110rpx;
+  height: 110rpx;
+}
+.commodity .commodity-img ._img.data-v-e0090b44 {
+  width: 100%;
+  height: 100%;
+}
+.commodity .commodity-text.data-v-e0090b44 {
+  display: inline-block;
+  width: 50%;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+.commodity-price.data-v-e0090b44 {
+  display: inline-block;
+}
+.cu-timeline.data-v-e0090b44 {
+  width: 94%;
+  margin: 40rpx auto 0;
+  border-radius: 15rpx;
+}
+.text-one.data-v-e0090b44 {
+  display: block;
+  font-size: 26rpx;
+  color: black;
+}
+.text-two.data-v-e0090b44 {
+  display: block;
+  font-size: 16rpx;
+  color: #ccc;
+  margin-top: 20rpx;
+}
+.cu-timeline > .cu-item.data-v-e0090b44::after {
+  background-color: #FF0000;
+}
+

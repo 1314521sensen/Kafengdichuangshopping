@@ -54,7 +54,7 @@
 							// console.log(this.goodprice)//商品的单价
 							//点击购买现在进行跳转
 							uni.navigateTo({
-								url:`/pages/Purchasepage/Purchasepage?gid=${this.goodid}&num=${this.num}&way=1&img=${JSON.stringify(this.goodimg)}&storename=${this.storename}&price=${this.goodprice}&goodtitle=${this.goodname}&cids=${this.carid}&storeid=${this.storeid}`
+								url:`/pages/Purchasepage/Purchasepage?gid=${this.goodid}&num=${this.num}&way=1&img=${JSON.stringify(this.goodimg)}&storename=${this.storename}&price=${this.goodprice}&goodtitle=${this.goodname}&cids=${this.carid}&storeid=${this.storeid}&freight=${this.freightnum}`
 							})
 						}
 					}
@@ -149,7 +149,22 @@
 				}
 			}
 		},
-		props:["totalpic","bool","zizujianlist","xiabiao","tokey","carid","num","goodid","storename","goodname","goodimg","goodprice","storeid"],
+		props:[
+				"totalpic",
+				"bool",
+				"zizujianlist",
+				"xiabiao",
+				"tokey",
+				"carid",
+				"num",
+				"goodid",
+				"storename",
+				"goodname",
+				"goodimg",
+				"goodprice",
+				"storeid",
+				"freightnum",
+		],
 		
 	}
 </script>

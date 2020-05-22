@@ -58,7 +58,6 @@
 .bottomline text.data-v-56c4e987 {
   display: block;
   color: #999;
-  font-size: 16rpx;
   line-height: 50rpx;
 }
 

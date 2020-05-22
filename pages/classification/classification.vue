@@ -1,6 +1,6 @@
 <template>
 	<view class="category">
-		<view class="category-wrapper" v-if="catrgoryList.length>0">
+		<view class="category-wrapper" v-if="catrgoryList.length>0" :style="{'padding-top':statusBar+'px'}">
 			<!-- 左边导航 -->
 			<scroll-view scroll-y="true" class="left-wrapper" scroll-with-animation="true" :scroll-top="left_scroll">
 				<view class="left-content">
@@ -37,9 +37,11 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data() {
 			return {
+				statusBar:0,
 				windows_height: 0, //屏幕高度
 				swiperList: [],
 				catrgoryList: [],
@@ -55,6 +57,9 @@
 		onLoad() {
 			this.init();
 			this.windows_height = uni.getSystemInfoSync().windowHeight;
+			//这是出路高度的
+			this.statusBar = app.globalData.statusBar
+			console.log(this.statusBar)
 		},
 		methods: {
 			init() {
@@ -201,7 +206,6 @@
 							display: flex;
 							flex-wrap: wrap;
 							margin-top:30rpx;
-							background-color:rgb(211,211,211);
 							.category-title {
 								height: 60rpx;
 								font-size: 26rpx;

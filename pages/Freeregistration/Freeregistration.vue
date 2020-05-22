@@ -1,7 +1,7 @@
 <template>
 	<view class="freeregistration">
 		<view class="freeregistration-title">
-			<text>用户注册</text>
+			<view class="register-img" style="background-image:url(/static/logo.png)"></view>
 			<text>亲,欢迎注册账号</text>
 		</view>
 		<view class="form">
@@ -18,12 +18,12 @@
 					<view class="title">+86</view>
 					<input placeholder="请输入手机号" v-model="phone" @change="validationphone" name="phone"></input>
 				</view>
-				<view class="cu-form-group inp">
-					<input placeholder="请输入验证码" name="phonecode"></input>
+				<view class=" fa-verification cu-form-group inp">
+					<input class="verification" placeholder="请输入验证码" name="phonecode"></input>
 					<button class='cu-btn bg-green shadow' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
 				</view>
 				<view class="loginButton">
-					<button class="cu-btn block bg-orange margin-tb-sm lg" loading form-type="submit">
+					<button class="bg-gradual-red cu-btn block bg-orange margin-tb-sm lg" loading form-type="submit">
 						注册
 					</button>
 				</view>
@@ -245,54 +245,82 @@
 
 <style lang="less" scoped>
 	page{
-		background-color: #fff;
-	}
-	.freeregistration{
-		padding:0 30rpx;
-		.freeregistration-title{
-			overflow:hidden;
-			text{
-				display:block;
-				font-size: 40rpx;
-				margin-top:28rpx;
-				&:last-child{
-					font-size: 30rpx;
-					color:#999;
-				}
-			}
-		}
-		form{
-			padding:0 30rpx;
-			.inp{
-				border-bottom:2rpx solid #ff5000;
-				min-height:80rpx;
-				margin-bottom:36rpx;
-			}
-			.inp-bottom{
-				margin-bottom:25rpx;
-			}
-			.cu-form-group{
-				border-bottom:2rpx solid #ff5000;
-				margin-bottom:20rpx;
-			}
-			.loginButton{
-				margin-top:60rpx;
-				margin-bottom:0;
-				button{
-					border-radius:35rpx;
-				}
-			}
-		}
-	}
-	.cu-form-group+.cu-form-group{
-		border-top:0;
-	}
-	// button[disabled]:not([type])
-	button[disabled]:not([type]){
-		color:#fff;
-		background-color:#39b54a;
-	}
-	.cu-btn[disabled]{
-		opacity: 1;
-	}
+	  background-color: #fff;
+	 }
+	 .freeregistration{
+	  width: 70%;
+	  margin: 0 auto;
+	  
+	  .freeregistration-title{
+	   
+	   .register-img{
+	    height: 130rpx;
+	    width: 130rpx;
+		background-size: 100% 100%;
+	    // background-color: red;
+	    border-radius: 10rpx;
+	    margin: 100rpx auto 100rpx;
+	    
+	   }
+	   overflow:hidden;
+	   text{
+	    display:block;
+	    font-size: 40rpx;
+	    margin-top:28rpx;
+	    &:last-child{
+	     font-size: 30rpx;
+	     color:#999;
+	    }
+	   }
+	  }
+	  form{
+	   padding:0 30rpx;
+	   .inp{
+	    border-bottom:2rpx solid #ff5000;
+	    min-height:80rpx;
+	    margin-bottom:36rpx;
+	   }
+	   .inp-bottom{
+	    margin-bottom:25rpx;
+	   }
+	   .cu-form-group{
+	    border-bottom:2rpx solid #CCCCCC;
+	    margin-bottom:20rpx;
+	   }
+	   .loginButton{
+	    margin-top:60rpx;
+	    margin-bottom:0;
+	    button{
+	     border-radius:35rpx;
+	    }
+	   }
+	  }
+	 }
+	 .cu-form-group+.cu-form-group{
+	  border-top:0;
+	 }
+	 // button[disabled]:not([type])
+	 button[disabled]:not([type]){
+	  height: 40rpx;
+	  color:red;
+	  border-radius: 30rpx;
+	  border:2rpx solid red;
+	  // background-color:#39b54a;
+	 }
+	 .cu-btn[disabled]{
+	  opacity: 1;
+	 }
+	 
+	 .fa-verification{
+	  border-bottom-color: #FFFFFF !important;
+	  margin-top: 40rpx;
+	  .verification{
+	   border-bottom:2rpx solid #CCCCCC;
+	   display: inline-block;
+	   
+	  }
+	  .verify{
+	   border-radius: 30rpx;
+	  }
+	 }
 </style>

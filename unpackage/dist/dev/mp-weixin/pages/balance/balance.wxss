@@ -1,0 +1,87 @@
+
+.minheight{
+	min-height:100rpx;
+}
+
+
+.balance {
+  width: 100%;
+  height: 400rpx;
+  background-size: 100% 100%;
+}
+.balance .my-balance {
+  font-size: 38rpx;
+  color: white;
+  height: 86rpx;
+  line-height: 86rpx;
+  text-align: center;
+}
+.balance .cny {
+  height: 246rpx;
+  width: 95%;
+  background-color: #FFFFFF;
+  margin: 20rpx auto 0;
+  border-radius: 20rpx;
+  box-shadow: 2px 2px 5px #888888;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  padding: 30rpx 30rpx;
+}
+.balance .cny .cny-one {
+  font-size: 30rpx;
+}
+.balance .cny .cny-two {
+  font-size: 56rpx;
+  margin-top: 30rpx;
+}
+.balance .cny .cny-left > text {
+  display: block;
+}
+.balance .cny .cny-right > button {
+  display: block;
+  width: 160rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+}
+.detail {
+  background-color: #FFFFFF;
+  height: 900rpx;
+  width: 95%;
+  margin: 20rpx auto 0;
+  border-radius: 20rpx;
+}
+.detail .detail-top {
+  width: 100%;
+  height: 74rpx;
+  line-height: 74rpx;
+  border-bottom: 2rpx solid #CCCCCC;
+  font-size: 34rpx;
+  padding-left: 20rpx;
+}
+.detail .detail-bottom {
+  width: 90%;
+  height: 74rpx;
+  border-bottom: 2rpx solid #CCCCCC;
+  margin: 0 auto;
+  padding: 0 10rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  line-height: 74rpx;
+}
+.detail .detail-bottom .dtail-text-left {
+  font-size: 18rpx;
+  font-weight: bold;
+}
+.detail .detail-bottom .dtail-text-right {
+  font-size: 30rpx;
+  font-weight: bold;
+}
+

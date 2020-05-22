@@ -4,10 +4,14 @@
 		<search  @inpblue="inpblue"></search>
 		<banner :swiperList="swiperList" height="260"></banner>
 		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
-			<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol"></ScratchableLatex>
+			<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68"></ScratchableLatex>
 			<coupons></coupons>
-			<Recommend title="热门推荐"></Recommend>
-			<shoppinglist class="setmarginTop"></shoppinglist>
+			<view class="father-two">
+			    <view class="father-one">
+					<Recommend title="热门推荐"></Recommend>
+					<shoppinglist class="setmarginTop"></shoppinglist>
+				</view>
+			</view>
 		</scroll-view>
 	</view>
 </template>
@@ -52,8 +56,10 @@
 					cuIcon: 'noticefill',
 					color: 'olive',
 					badge: 22,
-					name: '领劵',
-					imgs:"/static/index/Scratchablelatexicon/Ledsecurities.png"
+					name: '新人礼',
+					imgs:"/static/index/Scratchablelatexicon/Ledsecurities.png",
+					url:"/pages/Newgift/Newgift",
+					Routinghopname:"Newgift"
 				}, {
 					cuIcon: 'upstagefill',
 					color: 'cyan',
@@ -84,37 +90,27 @@
 				swiperList: [{
 					id: 0,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big84000.jpg',
+					url: '/static/indexbanner/banner1.jpg',
 					url2:"/pages/bannerRouter/bannerRouter"
 				}, {
 					id: 1,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
+					url: '/static/indexbanner/banner2.png',
 					url2:"pages/bannerRouter/bannerRouter"
 				}, {
 					id: 2,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big39000.jpg',
+					url: '/static/indexbanner/banner3.jpg',
 					url2:"/pages/bannerRouter/bannerRouter"
 				}, {
 					id: 3,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+					url: '/static/indexbanner/banner4.jpg',
 					url2:"/pages/bannerRouter/bannerRouter"
 				}, {
 					id: 4,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25011.jpg',
-					url2:"/pages/bannerRouter/bannerRouter"
-				}, {
-					id: 5,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big21016.jpg',
-					url2:"/pages/bannerRouter/bannerRouter"
-				}, {
-					id: 6,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg',
+					url: '/static/indexbanner/banner5.jpg',
 					url2:"/pages/bannerRouter/bannerRouter"
 				}],
 			}
@@ -253,25 +249,29 @@
 
 <style lang="less" scoped>
 	.scroll-view{
-		overflow: hidden;
-		height: 100vh;
-		margin-top: 100rpx;
-		background-color: #fff;
-		border-top-left-radius: 40rpx;
-		border-top-right-radius: 40rpx;
-		margin-top:-60rpx;
-	}
-	.Popup-tanchuang{
-		.action{
-			width: 100%;
-			display:flex;
-			justify-content: space-between;
-			button{
-				width: 49%;
-			}
-		}
-	}
-	.setmarginTop{
-		margin-top:100rpx;
-	}
+	  overflow: hidden;
+	  height: 100vh;
+	  margin-top: 100rpx;
+	  background-color: #fff;
+	  border-top-left-radius: 40rpx;
+	  border-top-right-radius: 40rpx;
+	  margin-top:-60rpx;
+	  
+	 }
+	 .Popup-tanchuang{
+	  .action{
+	   width: 100%;
+	   display:flex;
+	   justify-content: space-between;
+	   button{
+	    width: 49%;
+	   }
+	  }
+	 }
+	 .setmarginTop{
+	  // margin-top:100rpx;
+	 }
+	 .father-one{
+		width: 100%;
+	 }
 </style>

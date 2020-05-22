@@ -1,20 +1,23 @@
 <template>
-	<view class="allcoupons">
-		<actionbar url="/pages/PersonalMy/PersonalMy" message="优惠券"></actionbar>
-		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
-			<view class="nav-text">
-				<view class="cu-item" :class="index==TabCur?'nav-bg text-red cur':''" v-for="(item,index) in coupons" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
-					{{item}}
+	<view class="facoupons">
+		<pageheight :statusBar="statusBar"></pageheight>
+		<view class="allcoupons">
+			<actionbar url="/pages/PersonalMy/PersonalMy" message="优惠券"></actionbar>
+			<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
+				<view class="nav-text">
+					<view class="cu-item" :class="index==TabCur?'nav-bg text-red cur':''" v-for="(item,index) in coupons" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
+						{{item}}
+					</view>
 				</view>
-			</view>
-		</scroll-view>
-		<!-- <view v-for="(item,index) in 10" :key="index" v-if="index==TabCur" class="bg-grey padding margin text-center">
-			Tab{{index}}
-		</view> -->
-		<!-- {{coupons[TabCur]}}
-		{{items}} -->
-		<!-- @getchildlist 用来接收子组件传过来的值 -->
-		<securitiesbottom v-if="items==coupons[TabCur]" :couponslist="couponslist"></securitiesbottom>
+			<securitiesbottom v-if="items==coupons[TabCur]" :couponslist="couponslist"></securitiesbottom>
+			</scroll-view>
+			<!-- <view v-for="(item,index) in 10" :key="index" v-if="index==TabCur" class="bg-grey padding margin text-center">
+				Tab{{index}}
+			</view> -->
+			<!-- {{coupons[TabCur]}}
+			{{items}} -->
+			<!-- @getchildlist 用来接收子组件传过来的值 -->
+		</view>
 	</view>
 </template>
 
@@ -60,18 +63,6 @@
 				this.platformcouponsdata(this)
 				this.storecouponsdata(this)
 			},
-			//子组件的数据 在methods定义接收  在生命周期的函数中 负责执行该函数
-			// getchildlist(e){
-			// 	this.getchildlistdata = e;
-			// 	//再将新的数组加入到缓存中
-			// 	uni.setStorage({
-			// 		key:"couponsData",
-			// 		data:this.getchildlistdata,
-			// 		success:(res)=>{
-						
-			// 		}
-			// 	})
-			// }
 			//封装个函数用于请求优惠券的数据
 			platformcouponsdata(_this){
 				//这个是获取平台优惠券的接口
@@ -85,7 +76,6 @@
 					},
 					success(Storecoupon){
 						if(Storecoupon.data.code==0){
-							// console.log(Storecoupon)
 							Storecoupon.data.data.list .forEach((item,index)=>{
 								item.coupon_img = app.globalData.imgyuming+item.coupon_img
 								if(item.status==1){//未使用
@@ -118,9 +108,8 @@
 						pageSize:10
 					},
 					success(resDiscountstores) {
-						console.log(resDiscountstores)
 						if(resDiscountstores.data.code==0){
-							// console.log(resDiscountstores.data.data.list)
+							console.log(resDiscountstores)
 							// _this.couponslist[0].list = resDiscountstores.data.data.lists
 							resDiscountstores.data.data.list .forEach((item,index)=>{
 								item.coupon_img = app.globalData.imgyuming+item.coupon_img
@@ -165,15 +154,32 @@
 </script>
 
 <style lang="less" scoped>
-	.nav-text{
-		display:flex;
-		justify-content: space-around;
-	}
-	.nav .cu-item{
-			height:74rpx;
-	}
-	.nav-bg{
-		background-color: #eb9078;
-		color:#fff;
-	}
+	 .allcoupons{
+	  margin: 0 auto;
+	  background: linear-gradient(to bottom,#fe3217,#fc8c62);
+	  height: 500rpx;
+	  border-radius: 0 0 40rpx 40rpx;
+	  }
+	 .bg-white{
+	  width: 90%;
+	  margin: 0 auto;
+	  margin-top: 10rpx;
+	  border-radius: 20rpx;
+	 }
+	 .nav-text{
+	  display:flex;
+	  justify-content: space-around;
+	  border-bottom: 2rpx solid #f6dad2;
+	 }
+	 .nav .cu-item{
+	   height:56rpx;
+	   line-height: 56rpx;
+	 }
+	 .nav-bg{
+	  background-color: #eb9078;
+	  color:#fff;
+	 }
+	 .nav .cu-item.cur{
+	  border-bottom: 0;
+	 }
 </style>

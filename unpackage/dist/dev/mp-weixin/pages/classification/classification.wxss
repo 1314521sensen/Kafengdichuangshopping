@@ -83,7 +83,6 @@
   -webkit-flex-wrap: wrap;
           flex-wrap: wrap;
   margin-top: 30rpx;
-  background-color: #d3d3d3;
 }
 .category .category-wrapper .right-wrapper .right-content .product-wrapper .category-item .category-title {
   height: 60rpx;

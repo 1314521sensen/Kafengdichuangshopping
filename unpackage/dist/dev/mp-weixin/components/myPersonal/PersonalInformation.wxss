@@ -1,16 +1,9 @@
-.Personal-information.data-v-43b81b54 {
-  border-radius: 16rpx;
-  padding: 0 20rpx 10rpx;
-}
 .Personal-information .Personal-bg.data-v-43b81b54 {
-  background-color: #000;
-  padding-bottom: 25rpx;
-  border-radius: 16rpx;
+  margin-bottom: 84rpx;
 }
 .Personal-information .Personal-bg .Personal-top.data-v-43b81b54 {
-  background-color: #fff;
-  padding-bottom: 20rpx;
-  border-radius: 16rpx;
+  background-color: #f84443;
+  height: 300rpx;
 }
 .Personal-information .Personal-bg .Personal-top .Personaladdlogin.data-v-43b81b54 {
   display: -webkit-box;
@@ -41,32 +34,25 @@
 }
 .Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-information.data-v-43b81b54 {
   padding-top: 10rpx;
-  margin-left: 22rpx;
+  margin-left: 32rpx;
+  color: #fff;
 }
 .Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-information text.data-v-43b81b54 {
   display: block;
   font-size: 30rpx;
+  font-weight: bold;
+}
+.Personal-information .Personal-bg .Personal-top .Personaladdlogin .Personal .head-information .Personalhomepagebtn.data-v-43b81b54 {
+  font-size: 24rpx;
+  background-color: #fff;
+  color: red;
+  border-radius: 20rpx;
+  padding: 4rpx 0 4rpx;
+  text-align: center;
+  margin-top: 12rpx;
 }
 .Personal-information .Personal-bg .Personal-top .Personaladdlogin .login .cu-btn.data-v-43b81b54 {
   height: 50rpx;
   line-height: 50rpx;
-}
-.Personal-information .Personal-bg .Personal-top .Personal-list.data-v-43b81b54 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-justify-content: space-around;
-          justify-content: space-around;
-  margin-top: 30rpx;
-}
-.Personal-information .Personal-bg .Personal-top .Personal-list .money-list text.data-v-43b81b54 {
-  display: block;
-  text-align: center;
-  font-weight: bold;
-  font-size: 24rpx;
-  color: #616161;
-}
-.Personal-information .Personal-bg .Personal-top .Personal-list .money-list text.data-v-43b81b54:first-child {
-  color: red;
 }
 

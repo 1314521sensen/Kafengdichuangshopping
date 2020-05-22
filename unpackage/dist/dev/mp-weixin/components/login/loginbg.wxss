@@ -13,4 +13,7 @@ page.data-v-5b008ded {
           align-items: center;
   height: 300rpx;
 }
+.logobg .logo .logHeadportrait.data-v-5b008ded {
+  border-radius: 20rpx;
+}
 

@@ -55,6 +55,12 @@
 .shoporder .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic text.data-v-1e5cdf78:last-child {
   font-size: 24rpx;
 }
+.shoporder .purchase-order .order .shopgoosorder .shopgoosorder-right .shopgoosorder-pic .returnparagraphbtn.data-v-1e5cdf78 {
+  width: 100rpx;
+  height: 48rpx;
+  font-size: 24rpx;
+  padding: 0;
+}
 .shoporder .purchase-order .order .Deliverynote.data-v-1e5cdf78 {
   margin-top: 48rpx;
   padding: 0 20rpx;
@@ -68,6 +74,14 @@
           justify-content: space-between;
   font-size: 32rpx;
   margin-top: 10rpx;
+}
+.shoporder .purchase-order .order .Deliverynote .Orderdetailsfreight.data-v-1e5cdf78 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
 }
 .shoporder .purchase-order .order .Deliverynote .Realpayment.data-v-1e5cdf78 {
   display: -webkit-box;
@@ -106,5 +120,16 @@
 }
 .shoporder .orderSerial .serial .serial-right text.data-v-1e5cdf78 {
   margin: 30rpx 0 0 30rpx;
+}
+.operation-btn.data-v-1e5cdf78 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  padding: 15rpx 0;
+}
+.operation-btn button.data-v-1e5cdf78 {
+  width: 45%;
 }
 
