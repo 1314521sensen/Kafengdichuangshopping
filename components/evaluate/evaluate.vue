@@ -1,7 +1,11 @@
 <template>
 	<view>
 		<scroll-view class="evaluate" scroll-y="true" >
-			<view class="order-evaluation" v-for="(item,index) in evaluatelist" :key="index">
+			<view class="order-evaluation" 
+				v-for="(item,index) in evaluatelist" 
+				:key="index" 
+				v-if="TabCur==(item.iscomment==2?item.iscomment-1:item.iscomment)"
+			>
 				<view v-for="(items,indexs) in shopinglist[index]" :key="indexs">
 					<!-- {{yuming+items.good_pic}} -->
 					<view class="company-top">
@@ -29,7 +33,7 @@
 										:data-img="items.good_pic"
 										:data-goodname="items.good_name"
 										@tap="changevaluation"
-										
+										v-if="item.iscomment==0"
 									>评价</button>
 								</view>
 							</view>
@@ -47,11 +51,11 @@
 	export default {
 		data() {
 			return {
-				tokey:"",
-				evaluatelist:[],//这是几个订单
-				loadingbool:true,
-				shopinglist:[],//这是这个订单下的几个商品 类似购物车一样
-				yuming:"",
+				// tokey:"",
+				// evaluatelist:[],//这是几个订单
+				// loadingbool:true,
+				// shopinglist:[],//这是这个订单下的几个商品 类似购物车一样
+				// yuming:"",
 			};
 		},
 		methods:{
@@ -65,58 +69,8 @@
 				})
 			},
 		},
-		created(){
-			const _this = this
-			uni.getStorage({
-				key:"bindtokey",
-				success(res){
-					//检测tokey过没过期
-					app.globalData.Detectionupdatetokey(res.data)
-					_this.tokey = res.data
-					uni.request({
-						url:`${app.globalData.Requestpath}order/getConfirmPayOrderList`,
-						method:"POST",
-						data:{
-							token:_this.tokey,
-							page:1,
-							pageSize:10,
-						},
-						success(resevaluatelist) {
-							if(resevaluatelist.data.code==0){//待评价请求成功
-								// console.log(resevaluatelist)
-								//这是订单 的数组
-								_this.evaluatelist = resevaluatelist.data.data.list
-								//这是是否让加载出现
-								_this.loadingbool = false
-								//这是图片的前缀
-								_this.yuming = app.globalData.imgyuming
-								console.log(resevaluatelist.data.data.list)
-								resevaluatelist.data.data.list.forEach((item,index)=>{
-									console.log(item)
-									// console.log(item.order_sn)
-									uni.request({//根据商品的编号 去查订单内的订单商品
-										url:`${app.globalData.Requestpath}order/getOrderGoodList`,
-										method:"POST",
-										data:{
-											token:_this.tokey,
-											order_sn:item.order_sn,
-											page:1,
-											pageSize:index
-										},
-										success(resshopid) {//根据订单号找到的商品
-											
-											if(resshopid.data.code==0){
-												_this.shopinglist.push(resshopid.data.data.list)
-											}
-										}
-									})
-								})
-							}
-						}
-					})
-				}
-			})
-		}
+		props:["TabCur","tokey","evaluatelist","loadingbool","shopinglist","yuming"]
+		
 	}
 </script>
 

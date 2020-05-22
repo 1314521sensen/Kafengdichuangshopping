@@ -120,10 +120,10 @@
 					key:"bindtokey",
 					success(res){
 						_this.tokey = res.data
-						// console.log(_this.tokey)
+						uni.startPullDownRefresh()
 						app.globalData.Detectionupdatetokey(res.data)
 						uni.request({
-							url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+							url:`${app.globalData.Requestpath}shopping_cart/getShoppingCartList`,
 							method:"POST",
 							data:{
 								token:_this.tokey,
@@ -188,6 +188,7 @@
 		onShow(){
 			//在购物车每次显示的时候 获取用户的tokey值
 			const _this = this
+			
 			_this.UpdateShoppingCartlist()
 		},
 		created(){

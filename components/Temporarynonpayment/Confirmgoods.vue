@@ -56,6 +56,9 @@
 							_this.isIphoneX = false
 							app.globalData.showtoastsame('收货完成')
 							//就跳到评价的页面
+							uni.redirectTo({
+								url:"/pages/evaluate/evaluate"
+							})
 							return 
 						}
 						app.globalData.showtoastsame(res.data.msg)

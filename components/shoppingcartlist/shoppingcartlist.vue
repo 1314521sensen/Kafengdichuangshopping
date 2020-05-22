@@ -227,6 +227,7 @@
 			UpdateShoppingCart(_this){
 				console.log(_this.tokey)
 				console.log(_this.shopinglist)
+				console.log("从这报错")
 				if(_this.shopinglist.length<=0){
 					uni.request({
 							url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",

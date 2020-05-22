@@ -1,5 +1,6 @@
 <template>
 	<view class="star-evaluation">
+		<pageheight :statusBar="statusBar"></pageheight>
 		<view class="commodity">
 			<view class="father-one">
 				<!-- {{img}} -->
@@ -91,6 +92,7 @@
 	export default {
 		data() {
 			return {
+				statusBar:0,
 				tokey:"",
 				imgList: [],
 				topvalue:0,
@@ -204,6 +206,7 @@
 			this.img = oipction.img
 			this.goodname = oipction.goodname
 			this.yuming = app.globalData.imgyuming
+			this.statusBar = app.globalData.statusBar
 			uni.getStorage({
 				key:"bindtokey",
 				success(res){
