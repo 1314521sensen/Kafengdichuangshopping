@@ -8,7 +8,7 @@
 					<form @submit="ordinarylogin">
 						<view class="cu-form-group margin-top inp">
 							<view class="lg text-gray cuIcon-myfill title" ></view>
-							<input  @blur="Losefocus" placeholder="请输入您的账号" v-model="username" name="username" type="text"></input>
+							<input placeholder="请输入您的账号" v-model="username" name="username" type="text"></input>
 						</view>
 						<view class="cu-form-group margin-top inp inp-bottom">
 							<view class="lg text-gray cuIcon-lock title"></view>
@@ -21,7 +21,7 @@
 							</view>
 							<view class="fa-verification cu-form-group margin-top inp">
 								<input class="verification" placeholder="请输入验证码" name="sms"></input>
-								<button class='verify cu-btn bg-green shadow' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
+								<button class='verify cu-btn bg-green shadow newcu-btn' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
 							</view>
 						<!-- #endif -->
 						<view class="sms-and-registration">
@@ -30,7 +30,7 @@
 								<text @tap="smslogin('/pages/SMSlogin/SMSlogin')">短信验证码登录</text>
 							<!-- #endif -->
 						</view>
-						<view class="loginButton" v-if="bool">
+						<view class="loginButton">
 							<button class="cu-btn bg-gradual-red round register" form-type="submit">登录</button>
 							<!-- #ifdef APP-PLUS || H5 -->
 								<button class="cu-btn  round login-one" @tap="smslogin('/pages/Freeregistration/Freeregistration')">注册</button>	
@@ -63,10 +63,6 @@
 			}
 		},
 		methods: {
-			//当失去焦点的时候
-			Losefocus(){
-				this.bool = true
-			},
 		// #ifdef APP-PLUS || H5
 			//点击验证码时
 			countdown(){
@@ -326,5 +322,14 @@
 	 .login-one{
 	  margin-top: 50rpx;
 	  width: 100%;
+	 }
+	 .newcu-btn{
+	 		 height:50rpx;
+	 }
+	 .bg-green{
+	 		 border:2rpx solid red;
+	 		 color:red;
+	 		 background-color: #fff;
+	 		 border-radius: 13px;
 	 }
 </style>

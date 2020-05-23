@@ -10,7 +10,7 @@
 				</view>
 				<view class="cu-form-group">
 					<input class="verification" placeholder="请输入验证码" name="sms"></input>
-					<button class='cu-btn bg-green shadow' @tap="countdown"  :disabled="bool">{{countdowntext}}</button>
+					<button class='cu-btn bg-green shadow newcu-btn' @tap="countdown"  :disabled="bool">{{countdowntext}}</button>
 				</view>
 				<!-- #ifdef APP-PLUS -->
 					<view class="sms-and-registration">
@@ -262,5 +262,14 @@
 	 
 	 .phone{
 	  margin-bottom: 18rpx;
+	 }
+	 .newcu-btn{
+	 		 height:50rpx;
+	 }
+	 .bg-green{
+	 		 border:2rpx solid red;
+	 		 color:red;
+	 		 background-color: #fff;
+	 		 border-radius: 13px;
 	 }
 </style>

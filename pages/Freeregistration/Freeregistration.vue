@@ -20,7 +20,7 @@
 				</view>
 				<view class=" fa-verification cu-form-group inp">
 					<input class="verification" placeholder="请输入验证码" name="phonecode"></input>
-					<button class='cu-btn bg-green shadow' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
+					<button class='cu-btn bg-green shadow newcu-btn' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
 				</view>
 				<view class="loginButton">
 					<button class="bg-gradual-red cu-btn block bg-orange margin-tb-sm lg" loading form-type="submit">
@@ -322,5 +322,14 @@
 	  .verify{
 	   border-radius: 30rpx;
 	  }
+	 }
+	 .newcu-btn{
+		 height:50rpx;
+	 }
+	 .bg-green{
+		 border:2rpx solid red;
+		 color:red;
+		 background-color: #fff;
+		 border-radius: 13px;
 	 }
 </style>
