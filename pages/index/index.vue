@@ -2,7 +2,7 @@
 	<view class="content">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<search  @inpblue="inpblue"></search>
-		<banner :swiperList="swiperList" height="260"></banner>
+		<banner height="260"></banner>
 		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
 			<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68"></ScratchableLatex>
 			<coupons></coupons>
@@ -86,33 +86,6 @@
 					imgs:"/static/index/Scratchablelatexicon/help.png"
 				}],
 				gridCol: 4,//这是格数
-				// 这是banner的数据
-				swiperList: [{
-					id: 0,
-					type: 'image',
-					url: '/static/indexbanner/banner1.jpg',
-					url2:"/pages/bannerRouter/bannerRouter"
-				}, {
-					id: 1,
-					type: 'image',
-					url: '/static/indexbanner/banner2.png',
-					url2:"pages/bannerRouter/bannerRouter"
-				}, {
-					id: 2,
-					type: 'image',
-					url: '/static/indexbanner/banner3.jpg',
-					url2:"/pages/bannerRouter/bannerRouter"
-				}, {
-					id: 3,
-					type: 'image',
-					url: '/static/indexbanner/banner4.jpg',
-					url2:"/pages/bannerRouter/bannerRouter"
-				}, {
-					id: 4,
-					type: 'image',
-					url: '/static/indexbanner/banner5.jpg',
-					url2:"/pages/bannerRouter/bannerRouter"
-				}],
 			}
 		},
 		
@@ -243,6 +216,8 @@
 			// #ifdef MP-WEIXIN
 				this.booltanchuang()
 			// #endif
+			const _this = this
+			
 		}
 	}
 </script>

@@ -252,7 +252,6 @@
 									//选择支付的框隐藏
 									_this.hideModal()
 									_this.Detectionpaymentpassword(_this)
-									_this.Paywithbalance(_this)
 								}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
 									_this.hideModal()
 									app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
@@ -267,7 +266,7 @@
 							this.cid = this.coupondetails[0].c_id
 							this.ctype = this.coupondetails[0].c_type
 						}
-						// console.log(this.tokey,this.gid,this.data,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
+						console.log(this.tokey,this.gid,this.data,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
 						uni.request({
 							url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
 							method:"POST",
@@ -280,9 +279,10 @@
 								address_id:this.address_id,//地址对应的id
 								p_msg:this.value,//用户的留言
 								c_id:this.cid,//这是返回用户选择的那张优惠券
-								c_type:this.ctype
+								c_type:this.ctype?'store':'platform'
 							},
 							success(res) {
+								console.log(res)
 								// console.log(res.data.data.orderSnArray)//订单编号
 								// console.log(res.data.data.swiftNo)//订单流水号
 								//orderSnArray订单的编组 支付的时候用到
@@ -293,7 +293,7 @@
 									_this.hideModal()
 									//检测是否设置了支付密码
 										_this.Detectionpaymentpassword(_this)
-										_this.Paywithbalance(_this)	
+										
 								}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
 									_this.hideModal()
 									app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
@@ -333,15 +333,20 @@
 										return 
 									}else{
 										app.globalData.showtoastsame("您可以选择其他支付方式")
+										return 
 									}
 								}
 							})
+						}else{
+							//如果用户设置了支付密码 才能执行输入支付密码
+							_this.Paywithbalance(_this)
 						}
 					}
 				})
 			},
 			//这是用来接收子组件传过来的订单数据
 			dingdancoupon(e){
+				console.log(e)
 				//这是用户选择优惠券后 原价减去优惠卷的价格
 				this.Favorablebalance = e[0].money
 				this.coupondetails = e
@@ -372,6 +377,8 @@
 							})
 						}else{
 							app.globalData.showtoastsame(res.data.msg)
+							_this.passwordzhifutanchuang = null
+							_this.isIphoneX = null
 						}
 					}
 				})

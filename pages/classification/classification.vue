@@ -14,8 +14,8 @@
 					<!-- banner区域 -->
 					<view class="banner-wrapper">
 						<swiper class="swiper-content" :autoplay="true" :interval="3000" :circular="true">
-							<swiper-item class="swiper-item" v-for="imgs in swiperList" :key="imgs.id">
-								<!-- <image class="swiper-img" :src="imgs.src"></image> -->
+							<swiper-item class="swiper-item" v-for="imgs in swiperList" :key="imgs.adv_id">
+								<image class="swiper-img" :src="yuming+imgs.adv_thumb"></image>
 							</swiper-item>
 						</swiper>
 					</view>
@@ -24,7 +24,7 @@
 						<view class="category-item" :id="'list'+c_index" v-for="(c_item,c_index) in catrgoryList" :key="c_index">
 							<view class="category-content" v-for="(d_item,d_index) in catrgoryList[c_index].children" :key="d_index">
 								<view class="product-item">
-									<image class="product-img" src="/static/logo.png"></image>
+									<image class="product-img" :src='yuming+d_item.pic'></image>
 									<view class="category-title">{{d_item.gc_title}}</view>
 								</view>
 							</view>
@@ -51,7 +51,8 @@
 				left_height: 0, //左侧总高度
 				left_scroll: 0, //左侧滑动值
 				last: 0,
-				childlist:[]
+				childlist:[],
+				yuming:"http://hbk.huiboke.com",//以防万一给个默认值
 			}
 		},
 		onLoad() {
@@ -59,21 +60,37 @@
 			this.windows_height = uni.getSystemInfoSync().windowHeight;
 			//这是出路高度的
 			this.statusBar = app.globalData.statusBar
-			console.log(this.statusBar)
+			// console.log(this.statusBar)
+		},
+		created() {
+			this.yuming = app.globalData.imgyuming
+			const _this = this
+			uni.request({
+				url:`${app.globalData.Requestpath}platform_config/getThumbSlideshow`,
+				method:"POST",
+				data:{
+					limit:5
+				},
+				success:(res)=>{
+					if(res.data.code==0){
+						_this.swiperList = res.data.data
+					}
+				}
+			})
 		},
 		methods: {
 			init() {
 				uni.request({
-					url: 'http://hbk.huiboke.com/api/common/getCategoryListTwoLevel', //仅为示例，并非真实接口地址。
+					url: `${app.globalData.Requestpath}common/getCategoryListTwoLevel`, //仅为示例，并非真实接口地址。
 					method: 'GET',
 					success: (res) => {
-						// if (res.data.error === 0) {
+						if (res.data.code == 0) {
 							this.catrgoryList = res.data.data;
 						// 	this.swiperList = res.data.data.banner;
 							this.$nextTick(() => {
 								this.getHeightList();
 							})
-						// }
+						}
 					}
 				});
 			},
@@ -211,7 +228,7 @@
 								font-size: 26rpx;
 								line-height: 60rpx;
 								font-weight: 500;
-								background-color: #f6f6f6;
+								// background-color: #f6f6f6;
 								padding-left: 20rpx;
 								color: #000;
 							}

@@ -84,17 +84,21 @@
 							token:_this.tokey
 						},
 						success(resinfo) {
-							if(app.globalData.logintokeybool){
+							if(resinfo.data.code==0){
+								if(app.globalData.logintokeybool){
 								_this.logintokeytext = "退出"
+								}else{
+									_this.logintokeytext = "登录"
+								}
+								let {user_nick,user_pic,user_amount,user_integral} = resinfo.data.data
+								// console.log(user_nick,user_pic)
+								_this.nickname = user_nick
+								_this.images = `http://hbk.huiboke.com${user_pic}`
+								_this.moneylist[0].num = user_amount
+								_this.moneylist[1].num = user_integral
 							}else{
-								_this.logintokeytext = "登录"
+								app.globalData.Requestmethod(resinfo.data.code,resinfo.data.msg)
 							}
-							let {user_nick,user_pic,user_amount,user_integral} = resinfo.data.data
-							// console.log(user_nick,user_pic)
-							_this.nickname = user_nick
-							_this.images = `http://hbk.huiboke.com${user_pic}`
-							_this.moneylist[0].num = user_amount
-							_this.moneylist[1].num = user_integral
 						}
 					})
 					//这获取用户的优惠券的数量

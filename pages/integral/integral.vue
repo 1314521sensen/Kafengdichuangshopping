@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<pageheight :statusBar="statusBar"></pageheight>
-		<actionbar message="积分商城" url="/pages/PersonalMy/PersonalMy"></actionbar>
+		<actionbar message="我的积分" url="/pages/PersonalMy/PersonalMy"></actionbar>
 		<view class="integra-banner" :style="{'background-image':'url('+integrabannerbgurl+')'}">
 			<view class="integra-img" :style="{'background-image':'url('+integraimgbgurl+')'}">
 				<view class="integral-text-left">

@@ -245,12 +245,12 @@
 
 <style lang="less" scoped>
 	.login{
-	  height:100vh;
-	  background-color: #fff;
-	  margin: 0 auto;
-	  width: 80%;
+		display:flex;
+		justify-content: center;
+		height:100vh;
+		background-color: #fff;
 	  .app-login{
-	   width: 100%;
+	   width: 80%;
 	   // height:70rpx;
 	   // background-color: red;
 	   .logo{

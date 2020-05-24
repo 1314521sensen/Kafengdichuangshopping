@@ -73,31 +73,37 @@
 					})
 				// #endif
 				// #ifdef H5 || APP-PLUS
-					uni.request({
-						url,
-						method:"POST",
-						data:{
-							token:this.tokey,
-							page:this.listindex,
-							pageSize:this.listnum
-						},
-						success:(reslist)=>{
-							if(reslist.data.data!==undefined){
-								this.deletelist = reslist.data.data.list
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						uni.request({
+							url,
+							method:"POST",
+							data:{
+								token:res.data,
+								page:_this.listindex,
+								pageSize:_this.listnum
+							},
+							success:(reslist)=>{
+								if(reslist.data.data!==undefined){
+									_this.deletelist = reslist.data.data.list
+								}
+								if(reslist.data.code==1 && reslist.data.msg){
+									_this.text = "我也是有底线的"
+									return
+								}
+								_this.listindex++
+								_this.list = _this.list.concat(reslist.data.data.list)
 							}
-							if(reslist.data.code==1 && reslist.data.msg){
-								this.text = "我也是有底线的"
-								return
-							}
-							this.listindex++
-							this.list = this.list.concat(reslist.data.data.list)
-						}
-					})
+						})
+					}
+				})
 				// #endif
 			},
 			//监控scroll-view 滚动标签是否滚动到底部
 			scrollbottom(){
-				this.mycollection("http://hbk.huiboke.com/api/user/getGoodFavoriteList")
+				this.mycollection(`${app.globalData.Requestpath}user/getGoodFavoriteList`)
 			}
 		},
 		onLoad(opctry){
@@ -108,16 +114,20 @@
 					this.tokey = res.data
 				}
 			})
-			this.message=opctry.titlename
-			if(opctry.title=="userMycollection"){
+			this.message=opctry.title
+			if(opctry.titlename=="userMycollection"){
 				//在这里请求渲染数据
-				this.mycollection("http://hbk.huiboke.com/api/user/getGoodFavoriteList")
-				this.deleteurl = 'http://hbk.huiboke.com/api/user/deleteFavoriteInfo'
+				//这是获取收藏的列表
+				this.mycollection(`${app.globalData.Requestpath}user/getGoodFavoriteList`)
+				//这是删除收藏的商品
+				this.deleteurl = `${app.globalData.Requestpath}user/deleteFavoriteInfo`
 			}else{
-				if(opctry.title=="userMyfootprint"){
+				if(opctry.titlename=="userMyfootprint"){
 					// 在这里请求渲染数据
-					this.mycollection("http://hbk.huiboke.com/api/user/getTrackList")
-					this.deleteurl = 'http://hbk.huiboke.com/api/user/deleteTrackInfo'
+					//这是获取我的足迹
+					this.mycollection(`${app.globalData.Requestpath}user/getTrackList`)
+					//这是删除我的足迹商品
+					this.deleteurl = `${app.globalData.Requestpath}user/deleteTrackInfo`
 				}
 			}
 			this.statusBar = app.globalData.statusBar

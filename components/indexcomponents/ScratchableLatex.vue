@@ -23,6 +23,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		data(){//这是九宫格
 			return {
@@ -33,10 +34,13 @@
 		methods:{
 			collection(e){
 				let {url,routinghopname,name} = e.currentTarget.dataset
-				// console.log(url,name,list)
-				uni.navigateTo({
-					url:`${url}?title=${name}&titlename=${routinghopname}`
-				})
+				if(url!==undefined){
+					uni.navigateTo({
+						url:`${url}?title=${name}&titlename=${routinghopname}`
+					})
+				}else{
+					app.globalData.showtoastsame("功能正在开发,请耐心等待")
+				}
 			}
 		}
 	}
@@ -46,8 +50,8 @@
 	.ScratchableLatex{
 		// margin-top:68rpx;
 		.icon{
-			width: 50%;
-			height:80rpx;
+			width: 40%;
+			height:64rpx;
 			// background-color:pink;
 			margin:auto;
 			image{

@@ -38,7 +38,6 @@
 			</view>
 		</view>
 		<!-- 这是昵称 -->
-		
 		<Nickname :bool="bool" :text="text" @changebool="changebool" @changetext="changetext" :json="json" @jsons="jsons" @srcurl="srcurl"></Nickname>
 	</view>
 </template>
@@ -115,7 +114,7 @@
 				// }else{
 					const _this = this
 					uni.uploadFile({
-						url:"http://hbk.huiboke.com/api/common/uploadImage?type=user",
+						url:`${app.globalData.Requestpath}ommon/uploadImage?type=user`,
 						filePath:this.pathurl,
 						name:"file",
 						fileType:"image",
@@ -146,7 +145,7 @@
 				// console.log(this.json)
 			},
 			srcurl(e){
-				// console.log(e)
+				console.log(e)
 				this.pathurl = `http://hbk.huiboke.com${e}`
 			}
 		},

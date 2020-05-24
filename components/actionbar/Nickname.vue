@@ -14,7 +14,7 @@
 					
 					<view class="action">
 						<!--  @tap="showModal" -->
-						<input :style="{'margin-right': '44rpx'}" :name="item.name" :value="item.zhi" :disabled="item.disabled"></input>
+						<input :style="{'margin-right': '44rpx'}" :name="item.name" :value="item.zhi!==null?item.zhi:''" :disabled="item.disabled"></input>
 						<text class="lg text-gray cuIcon-right"></text>
 					</view>
 				</view>
@@ -152,10 +152,11 @@
 			// 				this.$emit("jsons",this.json)
 							// console.log(this.json)//就拿到了父组件里面的值
 							let {code} = this.json
-							// console.log(code,"已经获取到code码")
+							console.log(code,"已经获取到code码")
 			// 				//如果code==0的时候代表tokey没过期 
 							if(code==0){
 								let {src} = this.json.data
+								console.log(src)
 								// console.log(usernick,username,num,src)
 								// console.log(this.selectiondatalist[0][0].area_id,this.selectiondatalist[1][0].area_id,this.selectiondatalist[2][0].area_id)
 								// console.log(this.tokey)
@@ -197,86 +198,7 @@
 						this.toast("请填写完整的信息")
 					}
 				}
-				// console.log(e.mp.detail.value)
-			// 	// let arr = []
-			// 	// arr.push(e.mp.detail.value)
-			// 	// arr.forEach((item,index)=>{
-			// 	// 	console.log(item)
-			// 	// })
-			// 	//当用户点击了保存后 存一个状态在缓存中 或者发给服务器
-			// 	// 并强制用户跳转到首页
-			// 	// uni.switchTab({
-			// 	// 	url:"/pages/index/index"
-			// 	// })
 			}
-			
-			//这后期或许用
-			// //这时候输入手机号的表单事件
-			// Modifyphone(){
-			// 	//当输入的手机号的时候 如果手机号的长度是11位那么就解锁点击验证码的状态
-			// 	if(this.phonevalue.length==11){
-			// 		this.disabled = false
-			// 	}
-			// },
-			// time(){
-			// 	let times = null
-			// 	this.disabled = true
-			// 	//这块点击反复执行定时器
-			// 	// clearInterval(times)
-			// 	let {countdowntext,wait} = this.$data
-			// 	// console.log(countdowntext,wait)
-			// 		times = setInterval(()=>{
-			// 			wait--
-			// 			// console.log(wait)
-			// 			this.countdowntext = wait
-			// 			if(wait==0){
-			// 				this.disabled = false
-			// 				countdowntext = "重新获取验证码"
-			// 				clearInterval(times)
-			// 				this.countdowntext = countdowntext
-			// 				this.wait = 60
-			// 			}
-						
-			// 		},1000)
-			// },
-			//点击验证码时
-			// countdown(){
-			// 	this.time()
-			// },
-			//封装用户点击修改实时刷新的
-			// userupdata(){
-			// 	const _this = this
-			// 	uni.getStorage({
-			// 		key:"usertokey",
-			// 		success(res){
-			// 			console.log(res.data)
-			// 			uni.request({
-			// 				url:"http://hbk.huiboke.com/api/user/getUserDetail",
-			// 				method:"POST",
-			// 				data:{
-			// 					token:res.data
-			// 				},
-			// 				success(resinfo){
-			// 					console.log(resinfo)
-			// 					let {user_nick,real_name,user_sex,province,city,area} = resinfo.data.data
-			// 					let userarr = []
-			// 					userarr.push(user_nick,real_name,user_sex,province,city,area)
-			// 					console.log(userarr)
-			// 					_this.Personalinformationlist.forEach((item,index)=>{
-			// 					// 	// console.log()
-			// 						item.zhi = userarr[index]
-			// 					// 	// console.log()
-			// 					})
-			// 				}
-			// 			})
-			// 			// let {user_nick,real_name,user_sex,province,city,area} = res.data
-			// 			// // console.log(user_nick,real_name,user_sex,province,city,area)
-						
-			// 			// // console.log(userarr)
-						
-			// 		}
-			// 	})
-			// }
 		},
 		components:{
 			selection
@@ -313,7 +235,7 @@
 								_this.Personalinformationlist[1].zhi = real_name
 								_this.Personalinformationlist[2].zhi = sex
 								_this.Personalinformationlist[0].value3 = user_nick
-								_this.Personalinformationlist[1].value3 = real_name
+								_this.Personalinformationlist[1].value3 = real_name!==null?real_name:''
 								_this.Personalinformationlist[2].value3 = sex
 								//defaultselectiondatalist
 								//获取用户的默认的省市县

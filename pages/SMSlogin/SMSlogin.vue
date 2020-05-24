@@ -206,10 +206,12 @@
 </script>
 
 <style lang="less" scoped>
-	page{
-	  background-color: #fff;
-	 }
+	// page{
+	//   background-color: #fff;
+	//  }
 	 .smslogin{
+		 height:100vh;
+		 background-color: #fff;
 	  .sms{
 	   width: 90%;
 	   margin: 0 auto;

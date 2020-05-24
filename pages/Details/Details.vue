@@ -51,7 +51,7 @@
 			this.storeid = opction.storeid
 			//先去请求详情页的轮播数据图片
 			uni.request({
-				url	:`http://hbk.huiboke.com/api/good/getGoodImageList`,
+				url	:`${app.globalData.Requestpath}good/getGoodImageList`,
 				data:{
 					gid:opction.id,
 					lt:5,
@@ -64,7 +64,7 @@
 			})
 			//在去请求详情页的其他数据
 			uni.request({
-				url:"http://hbk.huiboke.com/api/good/getGoodInfo",
+				url:`${app.globalData.Requestpath}good/getGoodInfo`,
 				data:{
 					gid:opction.id
 				},
@@ -79,7 +79,7 @@
 							method:"POST",
 							data:{
 								token:_this.tokey,
-								good_id:_this.id,
+								good_id:_this.gid,
 								good_name:_this.pic.good_title,
 								good_image:_this.pic.good_pic,
 								track_price:_this.pic.good_price

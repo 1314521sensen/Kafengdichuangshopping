@@ -6,27 +6,9 @@
 						<!-- <view class="cu-tag badge"></view> -->
 					</view> 店铺
 				</button>
-				<view class="action text-orange" @tap="showModal" data-target="DialogModal1">
+				<view class="action text-orange" @tap="collectionwork">
 					<!-- cuIcon-favorfill这是已收藏图标 -->
 					<view :class="collectionbool?'cuIcon-favorfill':'cuIcon-favor'"></view>{{collection}}
-				</view>
-				<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
-					<view class="cu-dialog">
-						<view class="cu-bar bg-white justify-end">
-							<view class="content">备注信息</view>
-							<view class="action" @tap="hideModal">
-								<text class="cuIcon-close text-red"></text>
-							</view>
-						</view>
-						<view class="padding-xl">
-							<input type="text" v-model="Noteinformation" :placeholder="Noteplaceholder">
-						</view>
-						<view class="cu-bar bg-white justify-end">
-							<view class="action btn-que">
-								<button class="cu-btn bg-green" @tap="collectionwork">确定</button>
-							</view>
-						</view>
-					</view>
 				</view>
 				<view class="action" @tap="shoppingcart">
 					<view class="cuIcon-cart">
@@ -58,6 +40,7 @@
 	export default{
 		data(){
 			return {
+				tokey:"",
 				newscarobj:{},
 				newcararr:[],
 				len:"",
@@ -65,8 +48,6 @@
 				collection:"未收藏",
 				modalName: null,
 				Noteinformation:"",
-				Noteplaceholder:"请输入商品的备注信息",
-				favid:"",
 				immediatelylist:[],
 				bool:false
 			}
@@ -136,40 +117,18 @@
 						}
 					}
 				})
-				//当点击加入到购物车 就加入到缓存中 获取店铺名字 商品的图片 商品的标题 商品的参数(可有可无) 商品的价格
-				// let {newscarobj,newcararr} = this.$data
-				// newscarobj = obj
-				// newscarobj.img = img
-				// this.newscarobj = newscarobj
-				// newcararr.unshift(newscarobj)
-				// this.newcararr = newcararr
-				// if(newcararr.length==0){
-				// 	this.len=""
-				// }else{
-				// 	this.len = newcararr.length
-				// }
-				// uni.setStorage({
-				//     key:"Addcart",
-				//     data:this.newcararr,
-				//     success:(res)=>{
-				// 		console.log(res)
-				//     },
-				// 	fail(err){
-				// 		console.log(err)
-				// 	}
-				// });
 			},
 			//这是点击弹窗的确定是否确定添加收藏
 			collectionwork(){
 				app.globalData.Detectionupdatetokey(this.tokey)
 				//this.Noteinformation收藏信息
-					if(this.Noteinformation!==""){
 						//在这里添加数据
-						this.Noteplaceholder = "请输入商品的备注信息"
+					if(this.collectionbool==false){//如果为false的话代表用户为添加收藏 
+						console.log("当前为true")
 						this.collectionbool = true
 						this.collection = "已收藏"
 						uni.request({//请求添加收藏信息的接口
-							url:"http://hbk.huiboke.com/api/user/addGoodFavoriteInfo",
+							url:`${app.globalData.Requestpath}user/addGoodFavoriteInfo`,
 							method:"POST",
 							data:{
 								token:this.tokey,
@@ -177,9 +136,10 @@
 								good_name:this.pic.good_title,
 								good_image:this.pic.good_pic,
 								fav_price:this.pic.good_price,
-								fav_remark:this.Noteinformation
+								fav_remark:""
 							},
 							success:(res)=>{
+								// console.log(res)
 								if(res.data.code==0){
 									app.globalData.showtoastsame("收藏成功")
 									this.favid = parseInt(res.data.data.fav_id)
@@ -189,9 +149,26 @@
 								}
 							}
 						})
-						this.hideModal()
-					}else{
-						this.Noteplaceholder = "收藏备注不能为空"
+					}else{//如果用户点击收藏的时候 为true的时候 就让用户取消收藏
+						//这里是删除收藏
+						const _this = this
+						_this.collectionbool = false
+						_this.collection = "收藏"
+						uni.request({
+							url:`${app.globalData.Requestpath}user/deleteFavoriteInfo`,
+							method:"POST",
+							data:{
+								token:_this.tokey,
+								fav_id:_this.favid
+							},
+							success(res) {
+								if(res.data.code==0){
+									app.globalData.showtoastsame("取消成功")
+								}else{
+									app.globalData.showtoastsame(res.data.msg)
+								}
+							}
+						})
 					}
 			},
 			Skiporder(e){
@@ -203,22 +180,28 @@
 				this.modalName = e
 			}
 		},
-		props:["pic","imgs","tokey","gid","storeid"],
+		props:["pic","imgs","gid","storeid"],
 		created(){
 			const _this = this
-			uni.request({//请求一条商品来看一下 用户收藏没收藏
-				url:"http://hbk.huiboke.com/api/user/getGoodFavoriteInfo",
-				method:"POST",
-				data:{
-					token:this.tokey,
-					id:this.gid
-				},
-				success:(res)=>{
-					if(res.data.code==0){
-						this.collectionbool = true
-						this.collection = "已收藏"
-						_this.favid = res.data.data.fav_id
-					}
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					_this.tokey = res.data
+					uni.request({//请求一条商品来看一下 用户收藏没收藏
+						url:`${app.globalData.Requestpath}user/getGoodFavoriteInfo`,
+						method:"POST",
+						data:{
+							token:res.data,
+							id:_this.gid
+						},
+						success:(res)=>{
+							if(res.data.code==0){
+								_this.collectionbool = true
+								_this.collection = "已收藏"
+								_this.favid = res.data.data.fav_id
+							}
+						}
+					})
 				}
 			})
 			//购物车弹窗数据

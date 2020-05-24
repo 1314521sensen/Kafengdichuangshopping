@@ -1,24 +1,27 @@
 <template>
-	<cover-view class="banner">
-		<!-- 这个动态的设置高度 :autoplay="true" interval="3000" duration="500"-->
+	<scroll-view class="banner">
+		<!-- 这个动态的设置高度 -->
+		<!-- {{'http://hbk.huiboke.com'+swiperList[0].adv_thumb}} -->
 		<swiper class="screen-swiper set-height" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
-		  :style="{height:height+'rpx'}">
+		  :autoplay="true" interval="3000" duration="500" :style="{height:height+'rpx'}">
 		 <!-- @click="jump(item.url2)" -->
 			<swiper-item class="swiper-item" v-for="(item,index) in swiperList" :key="index">
 				<!-- 如果type是image就显示图片 -->
-					<image :src="item.url" mode="aspectFill" class="img"></image>
+					<image :src="'http://hbk.huiboke.com'+item.adv_thumb" class="img"></image>
+					<!-- {{'http://hbk.huiboke.com'+item.adv_thumb}} -->
 				<!-- 如果是视频就显示视频 -->
 				<!-- <video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video> -->
 			</swiper-item>
 		</swiper>
-	</cover-view>
+	</scroll-view>
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		data(){
 			return {
-				
+				swiperList:[],
 				dotStyle: false,
 			}
 		},
@@ -30,7 +33,22 @@
 			// 	});
 			// }
 		},
-		props:["swiperList","height"]
+		props:["height"],
+		created() {
+			const _this = this
+			uni.request({
+				url:`${app.globalData.Requestpath}platform_config/getThumbSlideshow`,
+				method:"POST",
+				data:{
+					limit:5
+				},
+				success(res) {
+					if(res.data.code==0){
+						_this.swiperList = res.data.data
+					}
+				}
+			})
+		}
 	}
 </script>
 
@@ -58,7 +76,9 @@
 			position: absolute;
 			z-index: 20;
 			width: 100%;
+			height:260rpx !important;
 			border-radius: 40rpx;
+			// overflow: hidden;
 			.swiper-item {
 				height: 260rpx !important;
 				border-radius: 40rpx;

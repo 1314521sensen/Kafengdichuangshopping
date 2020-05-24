@@ -17,7 +17,12 @@
 							<view class="text-grey">{{item.store_name}}</view>
 							<view class="price">
 								￥{{item.good_price}}
-								<text class="lg text-gray cuIcon-delete" :style="{'display':display}" @tap="deletescollectionAndfootprint(index)"></text>
+								<text 
+									class="lg text-gray cuIcon-delete def" 
+									:style="{'display':display}" 
+									@tap="deletescollectionAndfootprint" 
+									:data-index="index"
+								></text>
 							</view>
 						</view>
 					</view>
@@ -42,8 +47,11 @@
 						url:`/pages/Temporarynonpayment/Temporarynonpayment?order=${btoa(orderid)}&ordersnSerial=${btoa(ordersn)}`
 					})
 			},
-			// deletescollectionAndfootprint(index){
-			// 	let deleteid = this.deletelist[index].fav_id?this.deletelist[index].fav_id:this.deletelist[index].track_id
+			deletescollectionAndfootprint(e){
+				let index = e.currentTarget.dataset.index
+				console.log(this.deletelist)
+				// let deleteid = this.deletelist[index].fav_id?this.deletelist[index].fav_id:this.deletelist[index].track_id
+				// console.log(deleteid)
 			// 	uni.showModal({
 			// 		title:"确定要删除该商品吗",
 			// 		cancelText:true,
@@ -74,7 +82,7 @@
 			// 			}
 			// 		}
 			// 	})
-			// }
+			}
 		},
 		props:["list","display","deleteurl","tokey","deletelist"]
 	}
