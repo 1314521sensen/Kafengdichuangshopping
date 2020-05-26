@@ -192,6 +192,7 @@
 		left:0;
 		width: 100%;
 		background-color: #fff;
+		padding:10rpx 0;
 		.shopoderbottomflex{
 			display:flex;
 			justify-content: flex-end;

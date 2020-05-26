@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
-    "actionbar": "/components/actionbar/actionbar",
-    "modelkuang": "/components/personaldata/modelkuang"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
-    "list": "/components/Commoditycomponent/Orderdetailslist",
-    "returnthe-moneylist": "/components/Commoditycomponent/ReturntheMoneylist"
-  }
-}

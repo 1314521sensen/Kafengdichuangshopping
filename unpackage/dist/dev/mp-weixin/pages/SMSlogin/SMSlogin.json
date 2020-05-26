@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "logobg": "/components/login/loginbg",
-    "logintitle": "/components/login/logintitle"
-  }
-}

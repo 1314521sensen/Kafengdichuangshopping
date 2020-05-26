@@ -59,6 +59,7 @@
 					badge: 0,
 					name: '设置',
 					url:"/components/setcenter/setcenter",
+					imgs:"/static/Settheicon/shezhi.png",
 					Routinghopname:"userset"
 				}
 				],

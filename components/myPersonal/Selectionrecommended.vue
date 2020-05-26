@@ -4,6 +4,7 @@
 			<text>精选推荐</text>
 		</view>
 		<horizontallylist :horizontallylist="horizontallylist"></horizontallylist>
+		<loading v-if="iconbool"></loading>
 	</view>
 </template>
 
@@ -16,6 +17,7 @@
 			return {
 				//这是横排的数据
 				horizontallylist:[],
+				iconbool:true
 			}
 		},
 		components:{
@@ -32,6 +34,7 @@
 					if(res.data.code==0){
 						_this.horizontallylist = res.data.data
 					}
+					_this.iconbool = false
 				}
 			})
 		}

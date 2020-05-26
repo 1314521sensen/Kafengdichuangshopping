@@ -2,7 +2,7 @@
 	<view class="PersonalMy-big-bg">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<!-- :amount="amount" :integral="integral" -->
-		<information :couponslistdata="couponslistdata" :tokey="tokey" :nickname="nickname" :images="images" :moneylist="moneylist" :logintokeytext="logintokeytext"></information>
+		<information :couponslistdata="couponslistdata" :tokey="tokey" :nickname="nickname" :images="images" :moneylist="moneylist"></information>
 		<orders></orders>
 		<!-- <setup></setup> -->
 		<view class="Mynine-cell-operation">
@@ -33,7 +33,6 @@
 				images:"",
 				amount:0,
 				integral:0,
-				logintokeytext:"",//根据tokey值有没有 来判断用户有没有登录
 				//这是账户的数据
 				moneylist:[
 					{
@@ -85,11 +84,6 @@
 						},
 						success(resinfo) {
 							if(resinfo.data.code==0){
-								if(app.globalData.logintokeybool){
-								_this.logintokeytext = "退出"
-								}else{
-									_this.logintokeytext = "登录"
-								}
 								let {user_nick,user_pic,user_amount,user_integral} = resinfo.data.data
 								// console.log(user_nick,user_pic)
 								_this.nickname = user_nick

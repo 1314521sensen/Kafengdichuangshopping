@@ -1,1 +1,0 @@
-<view class="storerecommended data-v-3115c61a"><scroll-view class="scroll-view data-v-3115c61a" scroll-y="true"><view class="storerecommended-title data-v-3115c61a"><text class="data-v-3115c61a">热销宝贝</text></view><horizontallylist vue-id="4c0fec23-1" horizontallylist="{{horizontallylist}}" class="data-v-3115c61a" bind:__l="__l"></horizontallylist></scroll-view></view>

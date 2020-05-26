@@ -60,25 +60,29 @@
 					imgs:"/static/index/Scratchablelatexicon/Ledsecurities.png",
 					url:"/pages/Newgift/Newgift",
 					Routinghopname:"Newgift"
-				}, {
-					cuIcon: 'upstagefill',
-					color: 'cyan',
-					badge: 0,
-					name: '积分',
-					imgs:"/static/index/Scratchablelatexicon/integral.png"
-				}, {
-					cuIcon: 'clothesfill',
-					color: 'blue',
-					badge: 0,
-					name: '专题',
-					imgs:"/static/index/Scratchablelatexicon/project.png"
-				}, {
+				}, 
+				{
 					cuIcon: 'discoverfill',
 					color: 'purple',
 					badge: 0,
 					name: '品牌',
 					imgs:"/static/index/Scratchablelatexicon/brand.png"
-				}, {
+				},
+				{
+					cuIcon: 'clothesfill',
+					color: 'blue',
+					badge: 0,
+					name: '专题',
+					imgs:"/static/index/Scratchablelatexicon/project.png"
+				}, 
+				{
+					cuIcon: 'upstagefill',
+					color: 'cyan',
+					badge: 0,
+					name: '积分',
+					imgs:"/static/index/Scratchablelatexicon/integral.png"
+				},
+				 {
 					cuIcon: 'questionfill',
 					color: 'mauve',
 					badge: 0,

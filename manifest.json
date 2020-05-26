@@ -1,5 +1,5 @@
 {
-    "name" : "com.huiboke",
+    "name" : "惠播客",
     "appid" : "__UNI__F002EB6",
     "description" : "",
     "versionName" : "1.0.0",
@@ -15,6 +15,9 @@
             "waiting" : true,
             "autoclose" : true,
             "delay" : 0
+        },
+        "compatible" : {
+            "ignoreVersion" : true
         },
         /* 模块配置 */
         "modules" : {

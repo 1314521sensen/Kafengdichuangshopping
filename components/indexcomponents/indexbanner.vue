@@ -55,6 +55,7 @@
 
 <style lang="less" scoped>
 	.banner {
+		overflow: hidden;
 		position: absolute;
 		// background-color: orange;
 		z-index: 10;
@@ -68,7 +69,7 @@
 			top:160rpx;
 		/* #endif */
 		border-radius: 40rpx;
-		box-shadow: 0 12rpx 4rpx #cfcfcf;
+		box-shadow: 0 10rpx 6rpx #cfcfcf;
 		.set-height {
 			min-height: 212rpx;
 		}

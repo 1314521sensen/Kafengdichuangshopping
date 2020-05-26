@@ -90,7 +90,7 @@
 		<!-- 底部弹出框 框里面嵌套单选-->
 		<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
 			<view class="cu-dialog">
-				<view class="cu-bar bg-white">
+				<view class="cu-bar bg-white cu-modal-left-padding">
 					<view class="action text-blue" @tap="hideModal">取消支付</view>
 					<view class="action text-green" @tap="Determinepayment">确定支付</view>
 				</view>
@@ -346,7 +346,7 @@
 			},
 			//这是用来接收子组件传过来的订单数据
 			dingdancoupon(e){
-				console.log(e)
+				// console.log(e)
 				//这是用户选择优惠券后 原价减去优惠卷的价格
 				this.Favorablebalance = e[0].money
 				this.coupondetails = e
@@ -388,17 +388,19 @@
 				this.isIphoneX = e
 				uni.reLaunch({
 					url:`/pages/Temporarynonpayment/Temporarynonpayment?ordersnSerial=${btoa(this.orderSnArray)}`
-					//MTU4OTUyNjU0NTUzNTM%3D
-					//MTU4OTUyNjU0NTUzNTM%3D
 				})
-			}
+			},
+			//封装个 进来订单的这个页面就开始加载的订单的页面
+			Orderrender(){
+			},
 		},
 		onLoad(opction){
+			// console.log("onload先执行")
 			let {way} = opction
 			this.way = way//判断是从购物车来的 还是详情来的
+			
 			if(opction.selectitem){
-				// console.log(opction.selectitem)
-				let {consignee_name,consignee_phone,street_number,address_id} = JSON.parse(opction.selectitem)
+				let {consignee_name,consignee_phone,street_number,address_id} = JSON.parse(decodeURI(opction.selectitem))
 				this.Username = consignee_name
 				this.Userphone = consignee_phone
 				this.Userselect = street_number
@@ -436,6 +438,7 @@
 			//2是详情过来的
 			//把公共的提出来
 			let {gid,num,img,storename,price,goodtitle,storeid,freight} = opction
+			// console.log(opction)
 			if(way=="1"){
 				// console.log("购物车过来的")
 				let {cids} = opction
@@ -443,7 +446,6 @@
 			}else{
 				// console.log("详情过来的")
 				//使用eval方法 将字符串数组 转换为 真数组
-				
 				this.data = eval(opction.specname)
 			}
 			//把公共的提出来
@@ -473,6 +475,7 @@
 			passkeyborad
 		},
 		onShow() {
+			// console.log("onsho先执行")
 			const _this = this
 			uni.getStorage({
 				key:"bindtokey",
@@ -669,5 +672,8 @@
 				}
 			}
 		}
+	}
+	.cu-modal-left-padding{
+		padding:0 20rpx;
 	}
 </style>

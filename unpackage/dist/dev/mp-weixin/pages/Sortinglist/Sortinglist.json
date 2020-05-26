@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
-    "sorting": "/components/sortinglist/sorting",
-    "horizontallylist": "/components/sortinglist/horizontallylist",
-    "seachinput": "/components/sortinglist/seachinput"
-  }
-}

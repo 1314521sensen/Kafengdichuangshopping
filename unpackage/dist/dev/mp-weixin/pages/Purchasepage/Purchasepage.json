@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
-    "actionbar": "/components/actionbar/actionbar",
-    "storecoupon": "/components/Details/storecoupon",
-    "passkeyborad": "/components/yzc-paykeyboard/yzc-paykeyboard"
-  }
-}

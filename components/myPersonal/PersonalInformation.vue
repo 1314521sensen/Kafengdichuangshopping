@@ -17,7 +17,7 @@
 						<view class="login">
 							<view class="margin-tb-sm text-center">
 								<!-- 到时候判断用户有没有登录 有的话就改成退出 -->
-								<button class="cu-btn round bg-green" @tap="login">{{logintokeytext}}</button>
+								<button class="cu-btn round bg-green" @tap="login">退出</button>
 							</view>
 						</view>
 					<!-- #endif -->
@@ -37,7 +37,7 @@
 	export default{
 		data(){
 			return {
-				logintext:"",
+				
 			}
 		},
 		methods:{
@@ -47,9 +47,18 @@
 				})
 			},
 			login(){
-				uni.navigateTo({
-					url:"/pages/login/login"
+				uni.removeStorage({
+					key:"bindtokey",
+					success(res) {
+						console.log(res)
+						uni.reLaunch({
+							url:"/pages/login/login"
+						})
+					}
 				})
+				// uni.navigateTo({
+				
+				// })
 			},
 			
 			// getcouponslistdata(){
@@ -68,7 +77,7 @@
 		components:{
 			usermoney
 		},
-		props:["tokey","images","nickname","moneylist","logintokeytext"]
+		props:["tokey","images","nickname","moneylist"]
 	}
 </script>
 

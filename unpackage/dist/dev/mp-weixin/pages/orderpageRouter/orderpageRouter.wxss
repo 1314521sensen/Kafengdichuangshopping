@@ -1,8 +1,0 @@
-.orderpagerouter .item-juactcontent.data-v-12e91678 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-justify-content: space-around;
-          justify-content: space-around;
-}
-

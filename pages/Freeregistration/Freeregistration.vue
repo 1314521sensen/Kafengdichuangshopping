@@ -9,11 +9,11 @@
 				<form @submit="smslogin">
 					<view class="cu-form-group margin-top inp">
 						<view class="title">账号:</view>
-						<input placeholder="请输入您要注册的账号" v-model="username" name="username" type="text"></input>
+						<input placeholder="注册账号长度不能超过五位" v-model="username" name="username" type="text"></input>
 					</view>
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<view class="title">密码:</view>
-						<input  placeholder="请设置您的密码" name="password" type="password"></input>
+						<input  placeholder="密码最小设置6位" name="password" type="password"></input>
 					</view>
 					<view class="cu-form-group inp">
 						<view class="title">+86</view>
@@ -24,7 +24,7 @@
 						<button class='cu-btn bg-green shadow newcu-btn' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
 					</view>
 					<view class="loginButton">
-						<button class="bg-gradual-red cu-btn block bg-orange margin-tb-sm lg" loading form-type="submit">
+						<button class="bg-gradual-red cu-btn block bg-orange margin-tb-sm lg" form-type="submit">
 							注册
 						</button>
 					</view>
@@ -189,10 +189,7 @@
 													}
 												})
 										}else{
-											uni.showToast({
-												title:"该用户已经注册过了",
-												icon:"none"
-											})
+											app.globalData.showtoastsame(ress.data.msg)
 										}
 									},
 									fail(){//请求失败的时候

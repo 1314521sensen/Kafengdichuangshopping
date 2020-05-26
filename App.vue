@@ -52,9 +52,6 @@
 							uni.reLaunch({
 								url:"/pages/login/login"
 							})
-							getApp().globalData.logintokeybool = false
-						}else{
-							getApp().globalData.logintokeybool = true
 						}
 					}
 				})
@@ -71,14 +68,22 @@
 				}
 			}
 		},
+		//此生命周期只会app打开时 只会触发一次
 		onLaunch: function() {
 			const _this = this
+			//这里为了设置状态栏的高 ----开始
 			uni.getSystemInfo({
 				success(e){
 					_this.globalData.statusBar = e.statusBarHeight
 					// console.log(e.statusBarHeight)
 				}
 			})
+			////这里为了设置状态栏的高 ----结束
+			// #ifdef APP-PLUS
+				// console.log(plus.runtime.version)//这是版本号
+				// console.log(plus.runtime.appid)//这是appid
+				// console.log(plus.os.name)//这是Android
+			// #endif
 		},
 		onShow: function() {
 			

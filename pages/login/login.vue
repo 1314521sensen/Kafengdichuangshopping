@@ -14,16 +14,6 @@
 							<view class="lg text-gray cuIcon-lock title"></view>
 							<input  placeholder="请输入您的密码" name="password" type="password"></input>
 						</view>
-						<!--#ifdef APP-PLUS || H5 -->
-							<view class="cu-form-group margin-top inp">
-								<view class="lg text-gray cuIcon-mobilefill title"></view>
-								<input placeholder="请输入手机号" @change="validationphone" v-model="phone" name="phone"></input>
-							</view>
-							<view class="fa-verification cu-form-group margin-top inp">
-								<input class="verification" placeholder="请输入验证码" name="sms"></input>
-								<button class='verify cu-btn bg-green shadow newcu-btn' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
-							</view>
-						<!-- #endif -->
 						<view class="sms-and-registration">
 							<!-- 这里的app和微信显示暂时先注释 -->
 							<!--#ifdef APP-PLUS || MP-WEIXIN || H5 -->
@@ -39,7 +29,6 @@
 					</form>
 				</view>
 			</view>
-		 
 		<!-- 这是微信的登录的 微信登录需要在页面刚加载的时候就获取用户 -->
 	</view>
 </template>
@@ -54,60 +43,10 @@
 		data() {
 			return {
 				bool:false,
-				countdowntext:"验证码",
-				wait:60,
-				disabled:true,
-				username:"",
-				phone:"",
-				times:null
+				username:""
 			}
 		},
 		methods: {
-		// #ifdef APP-PLUS || H5
-			//点击验证码时
-			countdown(){
-				this.regphone()
-				//在这里发起验证码的请求  //注：微信的话没有手机号登录  没有验证码
-				uni.request({
-					url:"http://hbk.huiboke.com/api/common/getSMSCaptcha",
-					method:"POST",
-					data:{
-						mobile:this.phone,
-						type:1,
-						username:this.username
-					},
-					success(res){
-						console.log(res)
-					},
-					fail(err){
-						console.log(err)
-					}
-				})
-				this.time()
-			},
-			
-			//这是当输入手机号失去焦点的时候
-			validationphone(){
-				this.regphone()
-			},
-			//封装个方法来验证手机号
-			regphone(){
-				let regusername = /^[\W|\w]{5,100}$/;
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
-				if(this.username.match(regusername) && this.phone.match(userphone)){
-					this.disabled = false
-					clearInterval(this.times)
-				}else{
-					this.disabled = true
-					clearInterval(this.times)
-					this.wait = 60
-					uni.showToast({
-						title:"请输入正确的手机号或者用户名不能为空",
-						icon:"none"
-					})
-				}
-			},
-		// #endif
 			//这是点击跳转到短信登录
 			smslogin(url){
 				uni.navigateTo({
@@ -124,17 +63,17 @@
 			//封装一个app和微信端 不同的登录请求方法
 			Ordinarydifferentlogin(data,username,password,bingjson){
 				uni.request({
-					url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
+					url:`${app.globalData.Requestpath}login_and_register/userLogin`,
 					method:"POST",
 					data,
 					success:(res)=>{
-					// #ifdef APP-PLUS || H5 || MP-WEIXIN
-						uni.setStorage({//这个是把tokey存起来
-							key:"bindtokey",
-							data:res.data.data.token
-						})
-					// #endif
 						if(res.data.code==0){
+							// #ifdef APP-PLUS || H5 || MP-WEIXIN
+								uni.setStorage({//这个是把tokey存起来
+									key:"bindtokey",
+									data:res.data.data.token
+								})
+							// #endif
 							// #ifdef MP-WEIXIN
 								//如果登录成功了 就设置 用户登录状态码loginstate 为1
 								uni.setStorage({
@@ -149,12 +88,12 @@
 								})
 							// #endif
 						}else{
-							this.toast("验证码错误")
+							this.toast(res.data.msg)
 							//否则就设置用户登录的状态的码 为0
-							uni.setStorage({
-								key:"loginstate",
-								data:0
-							})
+								uni.setStorage({
+									key:"loginstate",
+									data:0
+								})
 						}
 					},
 					fail:(err)=>{
@@ -164,7 +103,7 @@
 			},
 			//当用户点击的button
 			ordinarylogin(e){
-				let {username,password,phone,sms} = e.detail.value
+				let {username,password} = e.detail.value
 				//写两个正则
 				//这是验证账号
 				let regusername = /^[\W|\w]{5,100}$/;
@@ -172,15 +111,11 @@
 				let reguserpassword = /^\w{6,16}$/;
 				// #ifdef APP-PLUS || H5
 				//这是APP端
-					let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
-					username.match(regusername)
-					if(username.match(regusername) && password.match(reguserpassword) && phone.match(userphone) && sms!==""){
+					if(username.match(regusername) && password.match(reguserpassword)){
 						let data = {
 							login_type:"normal",
 							username:username,	
-							password:password,
-							user_phone:phone,
-							code:sms
+							password:password
 						}
 						this.Ordinarydifferentlogin(data,username,password)
 					}else{
@@ -213,27 +148,6 @@
 						}
 					})
 				// #endif
-			},
-			//这是封装点击验证码的倒计时
-			time(){
-				this.disabled = true
-				//这块点击反复执行定时器
-				// clearInterval(times)
-				let {countdowntext,wait} = this.$data
-				// console.log(countdowntext,wait)
-					this.times = setInterval(()=>{
-						wait--
-						// console.log(wait)
-						this.countdowntext = wait
-						if(wait==0){
-							this.disabled = false
-							countdowntext = "重新获取验证码"
-							clearInterval(this.times)
-							this.countdowntext = countdowntext
-							this.wait = 60
-						}
-						
-					},1000)
 			}
 		},
 		components:{

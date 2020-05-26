@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
-    "seachinput": "/components/sortinglist/seachinput"
-  }
-}

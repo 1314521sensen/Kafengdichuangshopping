@@ -132,7 +132,8 @@
 				passwordzhifutanchuang:false,//是否弹出输入支付密码弹窗
 				isIphoneX:false,//Iphone全面屏系列底部适配
 				zhifumimatext:"",
-				disabled:false
+				disabled:false,
+				tokey:"",
 			}
 		},
 		methods:{
@@ -229,53 +230,71 @@
 					}
 					//当用户选择其他的时候 执行普通退款
 					this.returnCancelordersteps(e,1,this.Couriercompanyobj.express_id,this.Couriercompanyvalue)
+			},
+			//封装一个获取订单信息的方法 由于app 无法获取到数据 只能在封装一个
+			getOrderInfo(_this,tokeys,ordersnSerialids){
+				uni.request({
+					url:`${app.globalData.Requestpath}order/getOrderInfo`,
+					method:"POST",
+					data:{
+						token:tokeys,
+						sn:ordersnSerialids
+					},
+					success(res) {//获取到用户详情 
+						if(res.data.code==0){
+							_this.orderobj = res.data.data
+							// console.log(res.data.data.address_id)
+							//将订单的状态传到父组件
+							_this.$emit("orderstatus",res.data.data.status)
+							_this.$emit("ordertime",res.data.data.create_time)
+							_this.$emit("orderfreight",res.data.data.dispatch_price)
+							uni.request({
+								url:`${app.globalData.Requestpath}order/getOrderGoodList`,
+								method:"POST",
+								data:{
+									token:tokeys,
+									order_sn:ordersnSerialids
+								},
+								success(ordershopinglist) {
+									if(ordershopinglist.data.code==0){
+										_this.ordershopinglist = ordershopinglist.data.data.list[0]
+										_this.$emit("orderNotpayingdefault",_this.ordershopinglist.good_pay_price)
+										_this.$emit("orderNotpayingnums",_this.ordershopinglist.good_num)
+									}else{
+										app.globalData.showtoastsame(res.data.msg)
+									}
+								}
+							})
+						}else{
+							app.globalData.showtoastsame(res.data.msg)
+						}
+					}
+				})
 			}
 		},
-		props:["orderid","ordersnSerialid","tokey","Couriercompanyvalue","Couriercompanyobj"],
+		props:["orderid","ordersnSerialid","Couriercompanyvalue","Couriercompanyobj"],
 		components:{
 			passkeyborad
 		},
 		created(){
 			const _this = this
 			_this.imgyuming = app.globalData.imgyuming
-			//获取订单详情信息的请求
-			// order/getOrderInfo
-			uni.request({
-				url:`${app.globalData.Requestpath}order/getOrderInfo`,
-				method:"POST",
-				data:{
-					token:_this.tokey,
-					sn:_this.ordersnSerialid
-				},
-				success(res) {//获取到用户详情 
-					if(res.data.code==0){
-						_this.orderobj = res.data.data
-						// console.log(res.data.data.address_id)
-						//将订单的状态传到父组件
-						_this.$emit("orderstatus",res.data.data.status)
-						_this.$emit("ordertime",res.data.data.create_time)
-						_this.$emit("orderfreight",res.data.data.dispatch_price)
-						uni.request({
-							url:`${app.globalData.Requestpath}order/getOrderGoodList`,
-							method:"POST",
-							data:{
-								token:_this.tokey,
-								order_sn:_this.ordersnSerialid
-							},
-							success(ordershopinglist) {
-								if(ordershopinglist.data.code==0){
-									_this.ordershopinglist = ordershopinglist.data.data.list[0]
-									_this.$emit("orderNotpayingdefault",_this.ordershopinglist.good_pay_price)
-									_this.$emit("orderNotpayingnums",_this.ordershopinglist.good_num)
-								}
-								
-							}
-						})
-					}else{
-						console.log("没获取到")
-					}
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					_this.tokey = res.data
+					// #ifdef APP-PLUS
+						_this.getOrderInfo(_this,_this.tokey,_this.ordersnSerialid)
+					// #endif
 				}
 			})
+			// console.log(_this.ordersnSerialid)
+			// console.log(_this.tokey)
+			//获取订单详情信息的请求
+			// order/getOrderInfo
+			// #ifdef H5
+				_this.getOrderInfo(_this,_this.tokey,_this.ordersnSerialid)
+			// #endif
 		}
 	}
 </script>

@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
-    "actionbar": "/components/actionbar/actionbar",
-    "securitiesbottom": "/components/allcoupons/securitiesbottom"
-  }
-}

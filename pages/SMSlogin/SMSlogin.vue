@@ -18,8 +18,8 @@
 					</view>
 				<!-- #endif -->
 				<view class="loginButton">
-					<button class="cu-btn block bg-orange margin-tb-sm lg bg-gradual-red" form-type="submit">
-						<text class="cuIcon-loading2 cuIconfont-spin"></text>短信登录
+					<button class="cu-btn block margin-tb-sm lg bg-gradual-red" form-type="submit">
+						<text class="cuIconfont-spin"></text>短信登录
 					</button>
 				</view>
 			</form>
@@ -115,21 +115,21 @@
 				// #endif
 				if(phone.match(userphone) && sms!==""){//验证通过 就进行请求登录
 					uni.request({
-						url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
+						url:`${app.globalData.Requestpath}login_and_register/userLogin`,
 						method:"POST",
 						data:jsons,
 						success(res){
-							console.log(res)
-							let token =  res.data.data.token
-							// console.log(token)
-							//当用户登录成功以后 将token存到缓存当中 为以后方便使用
-						// #ifdef APP-PLUS || H5 || MP-WEIXIN
-							uni.setStorage({
-								key:"bindtokey",
-								data:res.data.data.token
-							})
-						// #endif
 							if(res.data.code==0){
+								let token =  res.data.data.token
+									// console.log(token)
+									//当用户登录成功以后 将token存到缓存当中 为以后方便使用
+								// #ifdef APP-PLUS || H5 || MP-WEIXIN
+									uni.setStorage({
+										key:"bindtokey",
+										data:res.data.data.token
+									})
+								// #endif
+							
 								//当用户登录成功设置用户登录的状态码 1
 								// #ifdef MP-WEIXIN
 									//如果登录成功了 就设置 用户登录状态码loginstate 为1
@@ -139,7 +139,7 @@
 									})
 								// #endif
 								uni.request({
-									url:`http://hbk.huiboke.com/api/user/getUserDetail`,
+									url:`${app.globalData.Requestpath}user/getUserDetail`,
 									method:"POST",
 									data:{
 										token:token
@@ -172,24 +172,15 @@
 										data:0
 									})
 								// #endif
-								uni.showToast({
-									title:"验证码错误",
-									icon:"none"
-								})
+								app.globalData.showtoastsame(res.data.msg)
 							}
 						},
 						fail(err){
-							uni.showToast({
-								title:"手机号或验证码不正确",
-								icon:"none"
-							})
+							app.globalData.showtoastsame("手机号或验证码不正确")
 						}
 					})
 				}else{
-					uni.showToast({
-						title:"手机号或验证码不正确",
-						icon:"none"
-					})
+					app.globalData.showtoastsame("手机号或验证码不正确")
 				}
 			},
 			registration(){

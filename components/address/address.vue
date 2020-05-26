@@ -81,16 +81,16 @@
 				if(this.value1 && this.value2.match(userphone)!==null && this.value4 && this.selectiondatalist.length>=3){
 					//这是跳转上页
 					// console.log(this.tokey)
-					console.log(this.selectiondatalist)
+					// console.log(this.selectiondatalist[0][0].area_id+1)
 					if(this.Addressoption=="newaddress"){
 							uni.request({
 							url:`${app.globalData.Requestpath}user/addShippingAddress`,
 							method:"POST",
 							data:{
 								token:this.tokey,
-								province:this.selectiondatalist[0][0].area_id,
-								city:this.selectiondatalist[1][0].area_id,
-								area:this.selectiondatalist[2][0].area_id,
+								province:this.selectiondatalist[0][0].area_id+1,
+								city:this.selectiondatalist[1][0].area_id+1,
+								area:this.selectiondatalist[2][0].area_id+1,
 								street_number:this.value4,
 								postal_code:"",//这到明天需要改
 								consignee_name:this.value1,
@@ -99,6 +99,7 @@
 							},
 							success(res) {
 								if(res.data.code==0){
+									console.log(res)
 									//pages/addressTo/addressTo?title=收货地址
 									console.log(_this.way)
 									if(_this.way==1){
@@ -124,9 +125,9 @@
 							data:{
 								token:this.tokey,
 								address_id:this.address,
-								province:this.selectiondatalist[0][0].area_id,
-								city:this.selectiondatalist[1][0].area_id,
-								area:this.selectiondatalist[2][0].area_id,
+								province:this.selectiondatalist[0][0].area_id+1,
+								city:this.selectiondatalist[1][0].area_id+1,
+								area:this.selectiondatalist[2][0].area_id+1,
 								street_number:this.value4,
 								postal_code:"",//这到明天需要改
 								consignee_name:this.value1,

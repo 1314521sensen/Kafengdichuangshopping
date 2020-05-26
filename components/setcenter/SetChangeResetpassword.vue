@@ -114,13 +114,13 @@
 			//当用户设置或修改的时候
 			zhifubind(e){
 				const _this = this
-				let regnewspassword = /^\w{6,6}$/;
+				let regnewspassword = /^\d{6,6}$/;
 				if(parseInt(this.showindex)){//这是1的时候就修改密码
 					let {oldpassword,newspassword} = e.detail.value
 					if(oldpassword!=="" && newspassword!==""){
 						if(regnewspassword.test(newspassword)){
 							uni.request({
-								url:"http://hbk.huiboke.com/api/user/editPayPassword",
+								url:`${app.globalData.Requestpath}user/editPayPassword`,
 								method:"POST",
 								data:{
 									token:this.tokey,
@@ -140,7 +140,7 @@
 								}
 							})
 						}else{
-							app.globalData.showtoastsame("密码请设置6位数")
+							app.globalData.showtoastsame("密码请设置数字6位数")
 						}
 					}else{
 						app.globalData.showtoastsame("请输入完整信息")
@@ -150,7 +150,7 @@
 					if(loginpassword!=="" && zhifupassword!==""){
 						if(regnewspassword.test(zhifupassword)){
 							uni.request({
-								url:"http://hbk.huiboke.com/api/user/savePayPassword",
+								url:`${app.globalData.Requestpath}user/savePayPassword`,
 								method:"POST",
 								data:{
 									token:this.tokey,
@@ -232,7 +232,7 @@
 					//130928200006117711
 					if(idcardReg.test(idcard) && regnewspassword.test(newpaypassword)){
 						uni.request({
-							url:"http://hbk.huiboke.com/api/user/resetPayPassword",
+							url:`${app.globalData.Requestpath}user/resetPayPassword`,
 							method:"POST",
 							data:{
 								token:this.tokey,

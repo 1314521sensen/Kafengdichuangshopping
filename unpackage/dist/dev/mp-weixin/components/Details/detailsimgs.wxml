@@ -1,1 +1,0 @@
-<view class="detailsimgs data-v-230f86ca"><block wx:for="{{imglist}}" wx:for-item="item" wx:for-index="index" wx:key="index"><view class="imgs data-v-230f86ca"><image src="{{item}}" class="data-v-230f86ca"></image></view></block></view>

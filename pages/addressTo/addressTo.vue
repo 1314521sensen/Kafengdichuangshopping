@@ -52,18 +52,22 @@
 		},
 		methods: {
 			selecteditem(index,itemitem){
-				// console.log(itemitem)selectname=${itemitem.consignee_name}&selectphone=${itemitem.consignee_phone}&selectstreet=${itemitem.street_number}
-				
 				this.addressselectedindex = index
 				if(this.titleparameter=='orderaddress'){
-					console.log(this.cids)
+					// console.log(this.cids)
 					//1是购物车过来的
-					//2是详情过来的
-					if(this.way==1){
+					// 2是详情过来的
+					// console.log(this.way,typeof this.way)
+					if(this.way==1 || this.way=="1"){
+						// console.log("购物车")
+						// console.log(this.freight)
 						uni.reLaunch({
 							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
 						})
+						// console.log(this.gid)
 					}else{
+						// console.log("执行这里详情")
+						// console.log(this.freight)
 						uni.reLaunch({
 							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}&freight=${this.freight}`
 						})
@@ -106,6 +110,7 @@
 					uni.navigateTo({
 						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}`
 					})
+					// console.log()
 				}else if(this.way==2){
 					uni.navigateTo({
 						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}`
@@ -152,6 +157,7 @@
 		},
 		onLoad(opction){
 			this.titleparameter = opction.title
+			this.statusBar = app.globalData.statusBar
 			//1是购物车过来的
 			//2是详情过来的
 			if(this.titleparameter=='orderaddress'){

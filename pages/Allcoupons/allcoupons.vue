@@ -11,12 +11,6 @@
 				</view>
 			<securitiesbottom v-if="items==coupons[TabCur]" :couponslist="couponslist"></securitiesbottom>
 			</scroll-view>
-			<!-- <view v-for="(item,index) in 10" :key="index" v-if="index==TabCur" class="bg-grey padding margin text-center">
-				Tab{{index}}
-			</view> -->
-			<!-- {{coupons[TabCur]}}
-			{{items}} -->
-			<!-- @getchildlist 用来接收子组件传过来的值 -->
 		</view>
 	</view>
 </template>
@@ -78,6 +72,7 @@
 						if(Storecoupon.data.code==0){
 							Storecoupon.data.data.list .forEach((item,index)=>{
 								item.coupon_img = app.globalData.imgyuming+item.coupon_img
+								console.log(item)
 								if(item.status==1){//未使用
 									if(_this.TabCur==0){
 										_this.couponslist[1].list = Storecoupon.data.data.list
@@ -109,7 +104,7 @@
 					},
 					success(resDiscountstores) {
 						if(resDiscountstores.data.code==0){
-							console.log(resDiscountstores)
+							// console.log(resDiscountstores)
 							// _this.couponslist[0].list = resDiscountstores.data.data.lists
 							resDiscountstores.data.data.list .forEach((item,index)=>{
 								item.coupon_img = app.globalData.imgyuming+item.coupon_img

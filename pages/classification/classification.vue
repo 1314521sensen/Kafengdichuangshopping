@@ -33,6 +33,7 @@
 				</view>
 			</scroll-view>
 		</view>
+		<loading v-if="iconbool"></loading>
 	</view>
 </template>
 
@@ -53,6 +54,7 @@
 				last: 0,
 				childlist:[],
 				yuming:"http://hbk.huiboke.com",//以防万一给个默认值
+				iconbool:true,
 			}
 		},
 		onLoad() {
@@ -81,12 +83,13 @@
 		methods: {
 			init() {
 				uni.request({
-					url: `${app.globalData.Requestpath}common/getCategoryListTwoLevel`, //仅为示例，并非真实接口地址。
+					url: `${app.globalData.Requestpath}common/getCategoryListTwoLevel`,
 					method: 'GET',
 					success: (res) => {
 						if (res.data.code == 0) {
 							this.catrgoryList = res.data.data;
 						// 	this.swiperList = res.data.data.banner;
+							this.iconbool = false
 							this.$nextTick(() => {
 								this.getHeightList();
 							})

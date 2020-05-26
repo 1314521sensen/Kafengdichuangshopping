@@ -1,1 +1,0 @@
-<view data-event-opts="{{[['tap',[['Logisticsinformation',['$event']]]]]}}" class="cu-form-group margin-top Deliveryaddressminheight" bindtap="__e"><view class="title">物流信息</view><view></view><text class="lg text-gray cuIcon-right"></text></view>

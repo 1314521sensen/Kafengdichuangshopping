@@ -1,1 +1,0 @@
-<view class="SeachTo data-v-3100e196"><pageheight vue-id="aed7d040-1" statusBar="{{statusBar}}" class="data-v-3100e196" bind:__l="__l"></pageheight><searchbusiness vue-id="aed7d040-2" value3="{{value}}" class="data-v-3100e196" bind:__l="__l"></searchbusiness></view>

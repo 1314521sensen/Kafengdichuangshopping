@@ -2,6 +2,7 @@
 	<view class="shoppinglist">
 		<!-- 这里是组件定义出去 -->
 		<list :list="list" display="none"></list>
+		<loading v-if="iconbool"></loading>
 	</view>
 </template>
 
@@ -13,6 +14,7 @@
 		data(){
 			return {
 				list:[],
+				iconbool:true,
 			}
 		},
 		components:{
@@ -31,6 +33,7 @@
 					}else{
 						app.globalData.showtoastsame("数据暂无")
 					}
+					_this.iconbool = false
 				}
 			})
 		}

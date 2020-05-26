@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "pageheight": "/components/pageheight/pageheight",
-    "evaluate": "/components/evaluate/evaluate"
-  }
-}
