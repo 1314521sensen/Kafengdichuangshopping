@@ -21,7 +21,7 @@
 									class="lg text-gray cuIcon-delete def" 
 									:style="{'display':display}" 
 									@tap="deletescollectionAndfootprint" 
-									:data-index="index"
+									:data-ordersn="item.order_sn"
 								></text>
 							</view>
 						</view>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data(){
 			return {
@@ -48,40 +49,44 @@
 					})
 			},
 			deletescollectionAndfootprint(e){
-				let index = e.currentTarget.dataset.index
-				console.log(this.deletelist)
-				// let deleteid = this.deletelist[index].fav_id?this.deletelist[index].fav_id:this.deletelist[index].track_id
-				// console.log(deleteid)
-			// 	uni.showModal({
-			// 		title:"确定要删除该商品吗",
-			// 		cancelText:true,
-			// 		cancelText:"确认取消",
-			// 		cancelColor:"#ff0000",
-			// 		confirmText:"确认删除",
-			// 		success:(res)=>{
-			// 			if(res.confirm){
-			// 				uni.request({
-			// 					url:this.deleteurl,
-			// 					method:"POST",
-			// 					data:{
-			// 						token:this.tokey,
-			// 						fav_id:deleteid,
-			// 						track_id:deleteid
-			// 					},
-			// 					success(res) {
-			// 						console.log(res)
-			// 						if(res.data.code==0){//这后期需要更改
-			// 							uni.switchTab({
-			// 								url:"/pages/PersonalMy/PersonalMy"
-			// 							})
-			// 						}
-			// 					}
-			// 				})
-			// 			}else{
-			// 				return false
-			// 			}
-			// 		}
-			// 	})
+				// console.log(e.currentTarget.dataset.index)
+				const _this = this
+				let ordersn = parseInt(e.currentTarget.dataset.ordersn)
+				uni.showModal({
+					title:"确定要删除该订单吗",
+					content:"删除之后联系平台进行恢复",
+					cancelText:true,
+					cancelText:"确认取消",
+					cancelColor:"#ff0000",
+					confirmText:"确认删除",
+					success(res){
+						if(res.confirm){
+							uni.request({
+								url:`${app.globalData.Requestpath}order/deleteOrderInfo`,
+								method:"POST",
+								data:{
+									token:_this.tokey,
+									o_sn:ordersn
+								},
+								success(res) {
+									if(res.data.code==0){//这后期需要更改
+										uni.switchTab({
+											url:"/pages/PersonalMy/PersonalMy"
+										})
+									}else{
+										switch(res.data.code){
+											case 1:
+												app.globalData.showtoastsame("订单正在进行,无法删除")
+											break;
+										}
+									}
+								}
+							})
+						}else{
+							return false
+						}
+					}
+				})
 			}
 		},
 		props:["list","display","deleteurl","tokey","deletelist"]
@@ -133,6 +138,13 @@
 				 		font-size: 30rpx;
 						margin-top:60rpx;
 						justify-content: space-between;
+						padding-right:14rpx;
+						.def{
+							font-size: 32rpx;
+							/* #ifdef APP-PLUS */ 
+								font-size: 38rpx;
+							/* #endif */
+						}
 				 	}
 				 }
 			}

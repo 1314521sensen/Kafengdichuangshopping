@@ -7,6 +7,7 @@
 				<view class="cu-item" v-for="(item,index) in list" :key="index">
 					
 					<!-- @tap="linkDetails(item.order_id,item.order_sn)" -->
+					
 					<view class="cu-item-left">
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
 						<view 
@@ -19,6 +20,7 @@
 							<view class="text-grey">{{item.store_name}}</view>
 							<view class="price">
 								￥{{item.good_price}}
+								
 								<text class="">{{item.refund_state==1?'退款':'退货退款'}}</text>
 							</view>
 						</view>
@@ -35,7 +37,8 @@
 			}
 		},
 		methods:{
-			// linkDetails(orderid,ordersn){
+			// linkDetails(){
+			// 	console.log(1)
 			// 	//orderid----订单id
 			// 	//ordersn----订单编号
 			// 	//当点击的时候跳转到订单详情页

@@ -12,7 +12,7 @@
 		<!-- <view v-for="(item,index) in 10" :key="index" v-if="index==TabCur" class="bg-grey padding margin text-center">
 			Tab{{index}}
 		</view> -->
-		<list :list="list" v-if="items==Myorder[TabCur].title && refundindex!=='5'" url="/pages/Temporarynonpayment/Temporarynonpayment" :display="display"></list>
+		<list :list="list" v-if="items==Myorder[TabCur].title && refundindex!=='5'" url="/pages/Temporarynonpayment/Temporarynonpayment" :display="display" :tokey="tokey"></list>
 		<ReturntheMoneylist :list="refundlist" v-if="refundindex=='5'"></ReturntheMoneylist>
 	</view>
 </template>
@@ -58,7 +58,8 @@
 			tabSelect(e) {
 				// console.log(orderindex)
 				let {id,items,url} = e.currentTarget.dataset
-				console.log(url)
+				// console.log(id,items,url)
+				// console.log(url)
 				this.items = items
 				this.TabCur = id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
@@ -66,20 +67,21 @@
 			},
 			//封装一个用户点击不同的选项 显示不同状态的订单
 			statusorder(_this,item){
-				switch(_this.TabCur){
-					case '1':
+				// console.log(_this.TabCur)
+				switch(parseInt(_this.TabCur)){
+					case 1:
 						if(item.status==0){//当状态等于0的时候 代表未付款
 							this.list.push(item)
 						}
 						_this.display = "none"
 					break;
-					case '2':
+					case 2:
 						if(item.status==1){//当状态等于0的时候 代表未付款
 							this.list.push(item)
 						}
 						_this.display = "block"
 					break;
-					case '3':
+					case 3:
 						if(item.status==2){//当状态等于0的时候 代表未付款
 							this.list.push(item)
 						}
@@ -87,18 +89,19 @@
 					break;
 				}
 			},
-			//封装一个获取订单的方法
-			Allorders(url){
-				const _this = this
+			//由于APP这边无法获取tokey值 只能在封装一个获取订单方法
+			getorderinfoAppAndPc(_this,tokey,url){
+				// console.log(url)
 				uni.request({
 					url:`${app.globalData.Requestpath}${url}`,
 					method:"POST",
 					data:{
-						token:this.tokey,
+						token:tokey,
 						page:1,
 						pageSize:10
 					},
 					success(res){
+						// console.log(res)
 						if(res.data.code==0){
 							if(_this.TabCur=='0'){//如果等于0的话就代表 点击了全部 赋值 直接return 出去
 								_this.list = res.data.data.list
@@ -113,6 +116,19 @@
 						app.globalData.Requestmethod(_this.tokey,res.data.msg)
 					}
 				})
+			},
+			//封装一个获取订单的方法
+			Allorders(url){
+				const _this = this
+				// #ifdef APP-PLUS
+					uni.getStorage({
+						key:"bindtokey",
+						success(restokey){
+							_this.getorderinfoAppAndPc(_this,restokey.data,url)
+						}
+					})
+				// #endif
+				_this.getorderinfoAppAndPc(_this,_this.tokey,url)
 			},
 			//封装一个 退货款的方法
 			ReturntheMoney(refundurl){
@@ -148,7 +164,6 @@
 						if(resrefund.data.code==0){
 						// console.log(resrefund,"这是退货退款的")
 							_this.refundlist = _this.refundlist.concat(resrefund.data.data.list)
-							
 						}
 						app.globalData.Requestmethod(_this.tokey,resrefund.data.msg)
 					}
@@ -178,6 +193,7 @@
 			let url = null
 			
 			if(orderindex){
+				// console.log(orderindex)
 				if(orderindex!=='5'){
 					this.TabCur = orderindex
 					this.items = this.Myorder[orderindex].title
