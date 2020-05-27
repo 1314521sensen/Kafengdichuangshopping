@@ -111,7 +111,7 @@
 	  .cu-list.menu-avatar>.cu-item{
 	   display:block;
 	   height:490rpx;
-	   width: 320rpx;
+	   width: 332rpx;
 	   // border: 2rpx solid red;
 	   margin-bottom: 18rpx;
 	   border-radius: 20rpx;

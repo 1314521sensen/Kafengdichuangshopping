@@ -135,6 +135,10 @@
 		{
 			"path":"pages/starevaluation/starevaluation"
 		}
+        ,{
+            "path" : "pages/Liveplatform/Liveplatform",
+            "style" : {}
+        }
     ],
 	
 	"globalStyle": {
@@ -162,6 +166,12 @@
 			    "iconPath": "static/tabber/classificationwei.png",
 			    "selectedIconPath": "static/tabber/classification.png",
 			    "text": "分类"
+			}, 
+			{
+			    "pagePath": "pages/Liveplatform/Liveplatform",
+			    "iconPath": "static/tabber/classificationwei.png",
+			    "selectedIconPath": "static/tabber/classification.png",
+			    "text": "直播"
 			}, 
 			{
 		        "pagePath": "pages/shoppingCart/shoppingCart",

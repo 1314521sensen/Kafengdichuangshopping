@@ -3,7 +3,7 @@
 		<view class="cu-dialog">
 			<view class="immediately-top">
 				<view class="immediately-top-image">
-					<image :src="'http://hbk.huiboke.com'+pic.good_pic"></image>
+					<!-- <image :src="'http://hbk.huiboke.com'+pic.good_pic"></image> -->
 				</view>
 				<view class="immediately-top-describe">
 					<view class="price">
@@ -27,7 +27,7 @@
 									:key="indexs" :style="{'color':color}"  
 									@tap="choose(items,index,indexs,item)"
 									class="test"
-								>{{items}}</text>
+								>{{items}}</text>  
 							</view>
 						</view>
 					</view>
@@ -206,36 +206,6 @@
 						color:#7f7f7f;
 						
 					}
-					// .yispecifications{
-					// 	display:flex;
-					// 	flex-wrap: wrap;
-					// 	margin-top:50rpx;
-					// 	.specifications{
-					// 		display: flex;
-					// 		flex-wrap: wrap;
-					// 		align-items: center;
-					// 		margin:0 22rpx 10rpx 0;
-					// 		// .specifications-left{
-					// 		// 	width: 68rpx;
-					// 		// 	height: 68rpx;
-					// 		// 	background-color:red;
-					// 		// 	image{
-					// 		// 		width: 100%;
-					// 		// 		height:100%;
-					// 		// 	}
-					// 		// }
-					// 		.specifications-right{
-					// 			// display:inline-block;
-					// 			display: inline-block;
-					// 			white-space: nowrap; 
-					// 			overflow: hidden;
-					// 			text-overflow:ellipsis;
-					// 			background-color: #eee;
-					// 			line-height:68rpx;
-					// 			padding:0 10rpx;
-					// 		}
-					// 	}
-					// }
 				}
 				//这是midden一些配置规格
 				.scrollareapagespecifications{

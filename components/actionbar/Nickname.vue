@@ -61,7 +61,7 @@
 						zhi:"",
 						showname:"1",
 						dialogtitle:"您要修改的昵称",
-						placeholdertext:"请输入你要修改的昵称",
+						placeholdertext:"昵称至少五位最多10位",
 						value3:"",
 						name:"usernick",
 						disabled:false
@@ -81,7 +81,7 @@
 						zhi:"",
 						showname:"3",
 						dialogtitle:"您要修改的性别",
-						placeholdertext:"请输入你的性别",
+						placeholdertext:"性别男/女",
 						value3:"",
 						name:"usersex",
 						disabled:false
@@ -135,7 +135,7 @@
 					if(usernick && username && usersex){
 						// console.log("验证账号")
 			// 			//这是验证账号
-						let regusernick = /^[\W|\w]{5,100}$/;
+						let regusernick = /^[\W|\w]{5,10}$/;
 			// 			//验证真实姓名
 						let regusername = /^\W{2,5}$/;
 			// 			//验证性别
@@ -237,42 +237,6 @@
 								_this.Personalinformationlist[0].value3 = user_nick
 								_this.Personalinformationlist[1].value3 = real_name!==null?real_name:''
 								_this.Personalinformationlist[2].value3 = sex
-								//defaultselectiondatalist
-								//获取用户的默认的省市县
-								// uni.request({
-								// 	url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
-								// 	data:{
-								// 		aid:province
-								// 	},
-								// 	success(resprovince) {
-								// 		if(resprovince.data.code==0){
-								// 			// console.log(resprovince.data.data)
-								// 			_this.defaultselectiondatalist[0] = [resprovince.data.data]
-								// 			uni.request({
-								// 				url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
-								// 				data:{
-								// 					aid:city
-								// 				},
-								// 				success(rescity) {
-								// 					// console.log(rescity)
-								// 					_this.defaultselectiondatalist[1] = [rescity.data.data]
-								// 					uni.request({
-								// 						url:`${app.globalData.Requestpath}common/getOneAreaInfo`,
-								// 						data:{
-								// 							aid:area
-								// 						},
-								// 						success(resarea) {
-								// 							// console.log(resarea)
-								// 							_this.defaultselectiondatalist[2] = [resarea.data.data]
-															
-								// 						}
-								// 					})
-								// 				}
-								// 			})
-								// 		}
-								// 	}
-								// })
-								
 							}
 						}
 					})

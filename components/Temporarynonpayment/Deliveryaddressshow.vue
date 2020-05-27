@@ -17,6 +17,8 @@
 		},
 		methods:{
 			Logisticsinformation(){
+				// console.log(this.tokey)
+				// console.log(this.ordersnSerialid)
 				uni.navigateTo({
 					url:`/pages/logistics/logistics?tokey=${btoa(this.tokey)}&ordernumber=${btoa(this.ordersnSerialid)}`
 				})

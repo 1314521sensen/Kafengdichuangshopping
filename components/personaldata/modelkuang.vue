@@ -114,12 +114,12 @@
 				// }else{
 					const _this = this
 					uni.uploadFile({
-						url:`${app.globalData.Requestpath}ommon/uploadImage?type=user`,
+						url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
 						filePath:this.pathurl,
 						name:"file",
 						fileType:"image",
 						success(res){
-							
+							// console.log(res)
 							this.json = JSON.parse(res.data)
 							// console.log(this.json,"333")
 							this.pathurl =this.json.data.src

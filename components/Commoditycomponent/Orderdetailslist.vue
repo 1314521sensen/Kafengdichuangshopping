@@ -22,6 +22,7 @@
 									:style="{'display':display}" 
 									@tap="deletescollectionAndfootprint" 
 									:data-ordersn="item.order_sn"
+									v-if="item.status!==1 && item.status!==2"
 								></text>
 							</view>
 						</view>
@@ -49,7 +50,6 @@
 					})
 			},
 			deletescollectionAndfootprint(e){
-				// console.log(e.currentTarget.dataset.index)
 				const _this = this
 				let ordersn = parseInt(e.currentTarget.dataset.ordersn)
 				uni.showModal({

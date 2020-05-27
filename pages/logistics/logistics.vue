@@ -94,7 +94,7 @@
 						})
 						//这是获取订单详情里的店铺id
 						_this.storeid = resinfo.data.data.store_id
-						console.log(resinfo.data.data.express_sn)//快递单号
+						console.log(resinfo)//快递单号
 						//根据单号查询快递公司的编码
 						uni.request({
 							url:`${app.globalData.Requestpath}order/getLogisticCompanyInfo`,

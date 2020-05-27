@@ -3,12 +3,12 @@
 			<view class="app-login">
 				<!-- 这是图标 -->
 				<logobg></logobg>
-				<logintitle msg="密码登录"></logintitle>
+				<logintitle msg="用户名登录"></logintitle>
 				<view class="from">
 					<form @submit="ordinarylogin">
 						<view class="cu-form-group margin-top inp">
 							<view class="lg text-gray cuIcon-myfill title" ></view>
-							<input placeholder="请输入您的账号" v-model="username" name="username" type="text"></input>
+							<input placeholder="请输入您的用户名" v-model="username" name="username" type="text"></input>
 						</view>
 						<view class="cu-form-group margin-top inp inp-bottom">
 							<view class="lg text-gray cuIcon-lock title"></view>

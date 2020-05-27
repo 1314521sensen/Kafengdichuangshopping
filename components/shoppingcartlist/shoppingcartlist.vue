@@ -1,7 +1,7 @@
 <template>
 	<view class="cart-list">
 		<!-- 最后循环这个item -->
-		<view class="cart-item" v-for="(item,index) in shopinglist" :key="index">
+		<view class="cart-item" v-for="(item,index) in shopinglists" :key="index" v-if="mark" >
 			<view class="cart-item-top">
 				<text class="cart-item-title">{{item.store_name}}</text>
 				<text class="lg text-gray cuIcon-right"></text>
@@ -17,13 +17,12 @@
 					:data-carid="items.cart_id"
 					:data-storeid="item.store_id"
 				>
-					{{numlistxiabiao[index][indexs].checked}}
-					{{items.good_id}}
+				
 					<view>
 						<checkbox :class="items.good_id==idbool &&checkbool?'checked':''" :checked="numlistxiabiao[index][indexs].checked" value="index"></checkbox>
-					</view>
+					</view>  
 				</checkbox-group>
-				<view class="images">
+				<view class="images" >
 					<image :src="'http://hbk.huiboke.com/'+items.good_pic"></image>
 				</view>
 				<view class="describe">
@@ -54,7 +53,6 @@
 					</view>
 				</view>
 			</view>
-			111
 			<!-- 弹窗商品规格列表 -->
 			<immediatelypopup :class="modalName=='bottomModal'?'show':''"  
 				:immediatelylist="immediatelylist"
@@ -70,7 +68,6 @@
 <script>
 	const app = getApp()
 	import immediatelypopup from "@/components/Details/immediatelypopup.vue"
-	// import tanchuang from "@/components/Details/immediatelypopup.vue"
 	export default{
 		data(){
 			return {
@@ -90,7 +87,13 @@
 				toals:0,
 				shopcheckboxindex:0,
 				shopcheckboxindexs:0,
+				shopinglists:[],
+				mark:false
+				
 			}
+		},
+		onShow() {
+			console.log(this.good)
 		},
 		methods:{
 			//封装一个数量增加 减少功能
@@ -147,8 +150,6 @@
 						//把选中的数组发送过去
 						
 						let {good_id,store_name,good_name,good_pic,good_price,good_freight} = this.numlistxiabiao[index][indexs]
-						// console.log(good_pic)
-						// console.log(this.numlistxiabiao[index][indexs])
 						//向父组件传递 用于结算用---开始  这么写后期改小程序用
 						this.$emit("datagoodid",good_id)//商品的id
 						this.$emit("datastorename",store_name)//店铺名称
@@ -158,7 +159,6 @@
 						this.$emit("Purchasequantity",this.numlistxiabiao[index][indexs].good_num)//商品的数量
 						this.$emit("freight",good_freight)//商品运费
 						//向父组件传递 用于结算用---结束
-						// console.log(this.numlistxiabiao[index])
 						this.$emit("datalist",this.numlistxiabiao[index])
 						this.$emit("dataindex",indexs)
 						this.$emit("datacarid",carid)
@@ -169,25 +169,10 @@
 				
 			},
 			showModal(e) {
-				//获取id值用来获取商品的规格
+				//获取id值用来获取商品的规格 
 				this.id = e.currentTarget.dataset.id
 				
 				this.modalName = e.currentTarget.dataset.target
-				console.log(e.currentTarget.dataset.target)
-				// http://hbk.huiboke.com/api/
-				// uni.request({
-				// 	url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
-				// 	data:{
-				// 		gid:this.id
-				// 	},
-				// 	success:(res)=>{
-				// 		if(res.data.code==0){
-				// 			this.immediatelylist = res.data.data
-				// 			// this.modalName = e.currentTarget.dataset.target
-				// 			// console.log(this.modalName)
-				// 		}
-				// 	}
-				// })
 			},
 			hiddends(e) {
 				this.modalName = e
@@ -217,71 +202,45 @@
 								_this.onloadbool = false
 							}
 						}else{
-							console.log(_this.onloadbool)
-							console.log("修改失败")
+							// console.log(_this.onloadbool)
+							// console.log("修改失败")
 						}
 					}
 				})
 			},
-			//更新购物车
-			UpdateShoppingCart(_this){
-				console.log(_this.tokey)
-				console.log(_this.shopinglist)
-				console.log("从这报错")
-				if(_this.shopinglist.length<=0){
-					uni.request({
-							url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
-							method:"POST",
-							data:{
-								token:_this.tokey,
-								page:1,
-								pageSize:10
-							},
-							success(res){
-								console.log(res)
-								if(res.data.code==0){//代表获取成功
-									if(_this.onloadbool==false){
-										// console.log(res.data.data)
-										_this.shopinglist = res.data.data
-										uni.stopPullDownRefresh();//关闭下拉刷新
-								}
-								}else{
-									console.log("重新登录")
-								}
-								//这个遍历为了拿到购物车的数量
-								_this.shopinglist.forEach((item,index)=>{
-									_this.numlistxiabiao[index] = item.sub
-								})
-							}
-						})
-				}else{
-					console.log("数组里面有值")
-					_this.shopinglist = _this.shopinglist
-				}
-			}
 		},
 		components:{
 			immediatelypopup
-			// tanchuang
 		},
-		props:["tokey","shopinglist","delatestaticbool"], //这是传过来啊的下标
-		created(){
-			// console.log(111)
-			// console.log(this.shopinglist)
-			const _this = this
-			if(_this.tokey==""){
-				uni.getStorage({
-					key:"bindtokey",
-					success(res){
-						console.log(res)
-						_this.tokey = res.data
-						// console.log(_this.tokey)
-						_this.UpdateShoppingCart(_this)
-					}
-				})
-			}else{
-				_this.UpdateShoppingCart(_this)
-			}		
+		props:{
+			shopinglist:{
+				type: Array
+			},
+			tokey:{
+				type:String
+			},
+			delatestaticbool:{
+				type:Boolean
+			}
+		}, //这是传过来啊的下标
+		created(){ 
+			const _this = this ;
+			
+			
+			_this.$watch("shopinglist", function(newVal, oldVal) {
+				
+			  _this.shopinglists = newVal;
+			  
+			    //判断数组是否为空值
+			     if(_this.shopinglists){
+					 _this.mark = true
+					 _this.shopinglists.forEach((item,index)=>{
+					 	_this.numlistxiabiao[index] = item.sub
+					 })
+				 }else{
+					  _this.mark = false
+				 }
+			});
 		}
 	}
 </script>
@@ -393,11 +352,8 @@
 							input{
 								width: 108rpx;
 								height:20rpx;
-								// border:2rpx 0 solid #999;
 								border-top:2rpx solid #ccc;
 								border-bottom:2rpx solid #ccc;
-								// border-style: solid;
-								// border-color:#ccc;
 								font-size: 24rpx;
 								text-align:center;
 								height:44rpx;

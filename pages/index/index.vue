@@ -57,7 +57,7 @@
 					color: 'olive',
 					badge: 22,
 					name: '新人礼',
-					imgs:"/static/index/Scratchablelatexicon/Ledsecurities.png",
+					imgs:"/static/index/Scratchablelatexicon/Ledsecurities.gif",
 					url:"/pages/Newgift/Newgift",
 					Routinghopname:"Newgift"
 				}, 
@@ -88,8 +88,23 @@
 					badge: 0,
 					name: '帮助',
 					imgs:"/static/index/Scratchablelatexicon/help.png"
-				}],
-				gridCol: 4,//这是格数
+				},
+				{
+					cuIcon: 'questionfill',
+					color: 'mauve',
+					badge: 0,
+					name: '限时秒杀',
+					imgs:"/static/index/Scratchablelatexicon/help.png"
+				},
+				{
+					cuIcon: 'questionfill',
+					color: 'mauve',
+					badge: 0,
+					name: '自营',
+					imgs:"/static/index/Scratchablelatexicon/help.png"
+				}
+				],
+				gridCol: 5,//这是格数
 			}
 		},
 		

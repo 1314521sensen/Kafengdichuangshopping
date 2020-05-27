@@ -9,9 +9,6 @@
 				</view>
 			</view>
 		</scroll-view>
-		<!-- <view v-for="(item,index) in 10" :key="index" v-if="index==TabCur" class="bg-grey padding margin text-center">
-			Tab{{index}}
-		</view> -->
 		<list :list="list" v-if="items==Myorder[TabCur].title && refundindex!=='5'" url="/pages/Temporarynonpayment/Temporarynonpayment" :display="display" :tokey="tokey"></list>
 		<ReturntheMoneylist :list="refundlist" v-if="refundindex=='5'"></ReturntheMoneylist>
 	</view>

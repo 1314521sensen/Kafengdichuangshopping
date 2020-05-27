@@ -110,7 +110,6 @@
 				freightdata:"",
 				consigneename:"",
 				consigneephone:"",
-				// Shippingaddressorder:[{},{},{}],
 				resprovince:"",//这是保存省的id
 				rescity:"",//这是市的id
 				resarea:""//这是县的id
@@ -138,7 +137,7 @@
 			     },
 			     success(resinfo) {
 			      if(resinfo.data.code==0){
-			       console.log(resinfo)
+			       // console.log(resinfo)
 			       //收货人姓名
 			       _this.consigneename = resinfo.data.data.consignee_name
 			       //这是收货人的电话
@@ -178,11 +177,7 @@
 			//接收父组件的值
 			orderstatus(e){//这是订单的状态
 				this.orderStatus = e
-				// console.log(e)
-				// console.log(this.orderStatus)
-				// if(e==0){//等于0的时候代表没有付款 开始倒计时
-					
-				// }
+				console.log(e)
 			},
 			ordertime(e){//这里是订单的时间
 				

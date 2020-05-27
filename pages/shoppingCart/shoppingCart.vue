@@ -67,7 +67,7 @@
 				returnsindex:[],
 				tokey:"",
 				carid:"",
-				shopinglist:[],
+				shopinglist:[], 
 				delatestaticbool:false,
 				num:0,
 				goodid:0,
@@ -79,6 +79,12 @@
 				freightnum:""
 			}
 		},
+		 onPullDownRefresh() {
+				// console.log('refresh');
+				setTimeout(function () {
+					uni.stopPullDownRefresh();
+				}, 2000);
+			},
 		methods: {
 			//这是传过来的价格
 			price(e){
@@ -124,17 +130,19 @@
 						app.globalData.Detectionupdatetokey(res.data)
 						uni.request({
 							url:`${app.globalData.Requestpath}shopping_cart/getShoppingCartList`,
-							method:"POST",
+							method:"POST",      
 							data:{
 								token:_this.tokey,
 								page:1,
 								pageSize:10
 							},
 							success(res){
-								// console.log(res)
+								// console.log(res)  
 								if(res.data.code==0){//代表获取成功
 										_this.shopinglist = res.data.data
+										// console.log(res.data.data[0])
 										uni.stopPullDownRefresh();//关闭下拉刷新
+										// console.log(_this.shopinglist)
 								}else{
 									console.log("重新登录")
 								}
@@ -186,10 +194,11 @@
 			this.statusBar = app.globalData.statusBar
 		},
 		onShow(){
-			//在购物车每次显示的时候 获取用户的tokey值
+			//在购物车每次显示的时候 获取用户的tokey值  
 			const _this = this
-			
+			 
 			_this.UpdateShoppingCartlist()
+			this.$forceUpdate();   //强制刷新
 		},
 		created(){
 			const _this = this
