@@ -23,7 +23,10 @@
         "modules" : {
             "OAuth" : {},
             "Push" : {},
-            "Payment" : {}
+            "Payment" : {},
+            "LivePusher" : {},
+            "VideoPlayer" : {},
+            "Share" : {}
         },
         /* 应用发布信息 */
         "distribute" : {

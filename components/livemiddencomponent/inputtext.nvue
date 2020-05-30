@@ -1,0 +1,45 @@
+<template>
+	<cover-view :style="{width:componentwidth+'px',height:keyboardheight/2+'rpx'}" class="inptext">
+		{{keyboardheight}}
+		<cover-view class="inp-box bg-write">
+			<input type="text" class="inptextbox font-size-thirty text-weight" :singleline="true" placeholder="输入点什么..."></input>
+		</cover-view>
+		<cover-view class="inpbtn bg-orders-red">
+			<text class="text-center font-size-thirty inptext-btn textcolorwrite text-weight">发送</text>
+		</cover-view>
+	</cover-view>
+</template>
+
+<script>
+	export default {
+		props:["componentwidth","componentheight","keyboardheight"]
+	}
+</script>
+
+<style scoped>
+	.inptext{
+		flex-direction: row;
+		/* align-items: center; */
+		color:#fff;
+		background-color:yellow;
+	}
+	.inp-box{
+		overflow:hidden;
+		flex: 1;
+		height:90rpx;
+		/* background-color:green; */
+	}
+	.inptextbox{
+		flex:1;
+		/* background-color:pink; */
+		margin-top:20rpx;
+	}
+	.inpbtn{
+		width: 120rpx;
+		height:90rpx;
+	}
+	.inptext-btn{
+		line-height:110rpx;
+		/* background-color:deeppink */
+	}
+</style>

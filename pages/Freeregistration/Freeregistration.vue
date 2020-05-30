@@ -9,11 +9,11 @@
 				<form @submit="smslogin">
 					<view class="cu-form-group margin-top inp">
 						<view class="title">账号:</view>
-						<input placeholder="注册账号至少五位,最多10位" v-model="username" name="username" type="text"></input>
+						<input placeholder="注册账号至少五位最多20位" v-model="username" name="username" type="text"></input>
 					</view>
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<view class="title">密码:</view>
-						<input  placeholder="密码最小设置6位" name="password" type="password"></input>
+						<input  placeholder="密码最小设置6位,包含单词数字_" name="password" type="password"></input>
 					</view>
 					<view class="cu-form-group inp">
 						<view class="title">+86</view>
@@ -112,7 +112,7 @@
 				//写两个正则
 				//来匹配账号
 				//账号必须为5到100位
-				let regname = /^[\W|\w]{5,10}$/;
+				let regname = /^[\W|\w]{5,20}$/;
 				//密码为6-16位 单词，数字加_
 				let userpassword = /^\w{6,16}$/;
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/

@@ -1,0 +1,106 @@
+/*字体颜色--开始*/
+.textcolorwrite{
+	color:#FFFFFF;
+}
+.textcolor-Promptreply{
+	color:#d9d9d9;
+}
+.textcolor-red{
+	color:red;
+}
+/*字体颜色---结束*/
+
+
+/*背景颜色---开始*/
+.bg-deepink{
+	background-color:deeppink;
+}
+.bg-write{
+	background-color: #fff;
+}
+.bg-Black-gradient{
+	background-color:rgba(0,0,0,.4);
+}
+.bg-gradient-white{
+	background-color:rgba(255,255,255,0.5)
+}
+.bg-orders-red{
+	background-color: #ff3600;
+}
+/*背景颜色--结束*/
+
+
+/*字体居中开始*/
+.text-center{
+	text-align:center;
+}
+/*字体居中结束*/
+
+/*内边距大小---开始*/
+.text-padding-plice{
+	padding:10rpx 0;
+}
+.text-padding-six{
+	padding:6rpx 0;
+}
+.parent-padding-leftAndright{
+	padding:0 40rpx;
+}
+/*内边距大小---结束*/
+/* 字体大小---开始 */
+.font-size-twenty-four{
+	font-size: 24rpx;
+}
+.font-size-twenty-senve{
+	font-size: 27rpx;
+}
+.font-size-twenty-flxed{
+	font-size: 26rpx;
+}
+.font-size-thirty{
+	font-size: 30rpx;
+}
+
+/*字体大小---结束*/
+
+/* 这是封装的圆角的--开始 */
+.border-radiusthirty{
+	border-radius:30rpx;
+}
+.border-radiusfifty{
+	border-radius:50rpx;
+}
+.border-radiusOnehundred{
+	border-radius:100rpx;
+}
+.border-radius-topLeft{
+	border-top-left-radius:30rpx;
+}
+.border-radius-topright{
+	border-top-right-radius:30rpx;
+}
+/* 这是封装的圆角的结束 */
+
+/*文字允许换行---开始*/
+
+	
+
+/*文字允许换行--结束*/
+
+/*边线--开始*/
+	.border-size{
+		border-bottom-width:2rpx;
+	}
+	.border-plice{
+		border-width:2rpx;
+	}
+	.border-styles{
+		border-style:solid;
+	}
+/*边线--结束*/
+
+/*文字加粗--开始*/
+.text-weight{
+	font-weight: bold;
+}
+/*文字加粗---结束*/

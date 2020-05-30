@@ -1,0 +1,39 @@
+<template>
+	<conver-view class="Dimsum">
+		<cover-view class="Dimsum-image" v-for="(item,index) in viewList" :key="index">
+		</cover-view>
+	</conver-view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				
+				// pageDate : new Date()	//全局时间用于函数节流
+			}
+		},
+		props:["viewList"]
+	}	
+</script>
+
+<style>
+	.Dimsum{
+		position: absolute;
+		top:120px;
+		right:0;
+		width: 100px;
+		height:200px;
+		background-color:yellow;
+	}
+	.Dimsum-image{
+		position: absolute;
+		bottom:0;
+		left:90rpx;
+		width: 60rpx;
+		height:60rpx;
+		background-color:red;
+		border-radius:30rpx;
+	}
+	
+</style>

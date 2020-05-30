@@ -135,7 +135,7 @@
 					if(usernick && username && usersex){
 						// console.log("验证账号")
 			// 			//这是验证账号
-						let regusernick = /^[\W|\w]{5,10}$/;
+						let regusernick = /^[\W|\w]{5,20}$/;
 			// 			//验证真实姓名
 						let regusername = /^\W{2,5}$/;
 			// 			//验证性别

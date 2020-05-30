@@ -50,8 +50,8 @@
 	.ScratchableLatex{
 		// margin-top:68rpx;
 		.icon{
-			width: 40%;
-			height:64rpx;
+			width: 56%;
+			height:72rpx;
 			// background-color:pink;
 			margin:auto;
 			image{

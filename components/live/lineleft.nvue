@@ -1,0 +1,18 @@
+<template>
+	<cover-view  class="left-cover-view" :style="{width:componentwidth+'px',height:componentheight+'px'}">
+		小明小明小码
+	</cover-view>
+</template>
+
+<script>
+	export default {
+		props:["componentwidth","componentheight"]
+	}
+</script>
+
+<style>
+	.left-cover-view{
+		color:#fff;
+		background-color:yellow;
+	}
+</style>

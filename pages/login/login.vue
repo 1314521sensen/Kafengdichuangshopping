@@ -106,7 +106,7 @@
 				let {username,password} = e.detail.value
 				//写两个正则
 				//这是验证账号
-				let regusername = /^[\W|\w]{5,100}$/;
+				let regusername = /^[\W|\w]{2,20}$/;
 				//这是验证密码
 				let reguserpassword = /^\w{6,16}$/;
 				// #ifdef APP-PLUS || H5

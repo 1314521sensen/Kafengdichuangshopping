@@ -99,11 +99,14 @@
 
 <style>
 	/*每个页面公共css */
-	@import "colorui/main.css";
-	@import "colorui/icon.css";
-	page {
-		background-color: #DDDDDD;
-	}
+	/* #ifndef APP-PLUS-NVUE*/
+		@import "colorui/main.css";
+		@import "colorui/icon.css";
+		page {
+			background-color: #DDDDDD;
+		}
+	/* #endif */
+	@import "/static/stylenvue/stylenvue.css";
 	/* checkbox .uni-checkbox-input{
 		border-radius:50%;
 		width: 34rpx;

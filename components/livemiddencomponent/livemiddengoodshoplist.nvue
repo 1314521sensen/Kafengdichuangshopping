@@ -1,0 +1,102 @@
+<template>
+	<cover-view class="shoplist" :style="{width:componentwidth+'px',height:componentheight/2+'px'}">
+		<scroller :show-scrollbar="false" scroll-direction="vertical" class="scrollerlist" :style="{height:componentheight/2+'px','padding-bottom':25+'px'}">
+			<cover-view class="list-item border-size border-styles" v-for="(item,index) in list" :key="index">
+				<!-- 上面的是列表 -->
+				<cover-view class="item-top">
+					<cover-view class="item-left-img">
+						<cover-image src="../../static/Details/banner1.png" class="item-imgs"></cover-image>
+					</cover-view>
+					<cover-view class="item-right">
+						<cover-view class="item-textinfo">
+							<text class="font-size-thirty">卡西欧手表男G-shcok赛车大黄蜂色石英户外运动手表</text>
+						</cover-view>
+						<cover-view class="item-plice">
+							<text class="font-size-thirty textcolor-red">¥299.00</text>
+						</cover-view>
+					</cover-view>
+				</cover-view>
+				<!-- 下面是按钮 -->
+				<cover-view class="item-bottom">
+					<text class="item-button border-plice border-styles text-center font-size-thirty textcolorwrite">马上抢</text>
+				</cover-view>
+			</cover-view>
+		</scroller>
+	</cover-view>
+</template>
+
+<script>
+	//这是直播商品组件
+	export default {
+		data(){
+			return {
+				list:[
+					"1",
+					"2",
+					"3",
+					"4",
+					"5"
+				]
+			}
+		},
+		props:["componentheight","componentwidth"]
+	}
+</script>
+
+<style scoped>
+	.shoplist{
+		overflow:hidden;
+		background-color:#FFFFFF;
+		border-top-left-radius:60rpx;
+		border-top-right-radius:60rpx;
+		padding-top:30px;
+	}
+	.scrollerlist{
+	}
+	.list-item{
+		/* background-color:yellow; */
+		padding:0 20rpx 20rpx;
+		/* border:2rpx; */
+		border-color: #ccc;
+		margin-bottom:20rpx;
+	}
+	.item-top{
+		flex-direction:row;
+	}
+	.item-left-img{
+		width: 200rpx;
+		/* height:200rpx; */
+		/* background-color:red; */
+		margin-right:15rpx;
+	}
+	.item-imgs{
+		width:200rpx;
+		height:200rpx;
+	}
+	.item-right{
+		flex:1;
+		/* background-color:green; */
+		justify-content: center;
+	}
+	.item-textinfo{
+		overflow:hidden;
+		/* background-color:pink; */
+		height:150rpx;
+	}
+	.item-plice{
+		/* background-color:deeppink; */
+	}
+	/*这是底部的样式  */
+	.item-bottom{
+		align-items: flex-end;
+	}
+	.item-button{
+		width:160rpx;
+		height:60rpx;
+		border-radius:60rpx;
+		line-height:60rpx;
+		/* font-size: 20rpx; */
+		background-color: #ff3600;
+		border-color:#ff3600;
+	}
+</style>

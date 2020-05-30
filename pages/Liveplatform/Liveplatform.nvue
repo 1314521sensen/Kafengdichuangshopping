@@ -1,0 +1,76 @@
+<template>
+ <!-- #ifdef APP-PLUS -->
+		<view>
+			 <video 
+				id="myVideo"
+				src="rtmp://39.100.133.222:1935/hbk/6849214d688825e66645d5ad65437c46" 
+				:style="{width:wdith+'px',height :height+ 'px'}"
+				:autoplay="true" 
+				:page-gesture="true" 
+				:show-fullscreen-btn="false" 
+				:enable-play-gesture="false" 
+				:direction="direction"
+				>
+				<cover-view :style="{width:wdith+'px',height :height+ 'px'}" class="cover-view-box">
+					<scroller scroll-direction="horizontal" :style="{width:wdith+'px',height :height+ 'px'}" class="covercomponent" >
+						<livemidden :componentwidth="width" :componentheight="height" :statusheight="statusheight" :bottomheight="bottomheight"></livemidden>
+						<!-- <liveleft :componentwidth="width" :componentheight="height"></liveleft> -->
+						<!-- <liveright :componentwidth="width" :componentheight="height"></liveright> -->
+					</scroller>
+				</cover-view>
+			</video>
+		</view>
+<!-- #endif --> 
+</template>
+
+<script>
+	import liveleft from "@/components/live/lineleft.nvue"
+	import livemidden from "@/components/live/livemidden.nvue"
+	import liveright from "@/components/live/liveright.nvue"
+	export default {
+		// #ifdef APP-PLUS
+		data() {
+			return {
+				height:0,
+				width:0,
+				direction:0,
+				statusheight:0,
+				bottomheight:0
+			}
+		},
+		methods: {
+			
+		},
+		components:{
+			liveleft,
+			livemidden,
+			liveright
+			
+		},
+		created() {
+			let _this = this
+			uni.getSystemInfo({
+				success(res) {
+					console.log(res)
+					//获取手机宽度
+					_this.width = res.screenWidth
+					_this.height = res.screenHeight
+					//这是获取屏幕状态栏的高度
+					_this.statusheight = res.statusBarHeight+10
+					//获取屏幕底部的高度
+					_this.bottomheight = res.windowBottom
+				}
+			})
+		}
+	// #endif
+	}
+</script>
+
+<style>
+	.covercomponent{
+		flex-direction:row;
+	}
+	.cover-view-box{
+		overflow:hidden;
+	}
+</style>

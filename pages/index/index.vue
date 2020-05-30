@@ -69,6 +69,13 @@
 					imgs:"/static/index/Scratchablelatexicon/brand.png"
 				},
 				{
+					cuIcon: 'questionfill',
+					color: 'mauve',
+					badge: 0,
+					name: '限时秒杀',
+					imgs:"/static/index/Scratchablelatexicon/Secondskill.gif"
+				},
+				{
 					cuIcon: 'clothesfill',
 					color: 'blue',
 					badge: 0,
@@ -82,25 +89,18 @@
 					name: '积分',
 					imgs:"/static/index/Scratchablelatexicon/integral.png"
 				},
-				 {
-					cuIcon: 'questionfill',
-					color: 'mauve',
-					badge: 0,
-					name: '帮助',
-					imgs:"/static/index/Scratchablelatexicon/help.png"
-				},
-				{
-					cuIcon: 'questionfill',
-					color: 'mauve',
-					badge: 0,
-					name: '限时秒杀',
-					imgs:"/static/index/Scratchablelatexicon/help.png"
-				},
 				{
 					cuIcon: 'questionfill',
 					color: 'mauve',
 					badge: 0,
 					name: '自营',
+					imgs:"/static/index/Scratchablelatexicon/proprietary.png"
+				},
+				{
+					cuIcon: 'questionfill',
+					color: 'mauve',
+					badge: 0,
+					name: '帮助',
 					imgs:"/static/index/Scratchablelatexicon/help.png"
 				}
 				],

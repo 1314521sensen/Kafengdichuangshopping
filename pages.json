@@ -139,6 +139,10 @@
             "path" : "pages/Liveplatform/Liveplatform",
             "style" : {}
         }
+        ,{
+            "path" : "pages/Liveplatformlist/Liveplatformlist",
+            "style" : {}
+        }
     ],
 	
 	"globalStyle": {
@@ -151,7 +155,7 @@
 	
 	"tabBar": {
 		    "color": "#7A7E83",
-		    "selectedColor": "#3cc51f",
+		    "selectedColor": "#eb246d",
 		    "borderStyle": "black",
 		    "backgroundColor": "#ffffff",
 		    "list": [
@@ -168,9 +172,9 @@
 			    "text": "分类"
 			}, 
 			{
-			    "pagePath": "pages/Liveplatform/Liveplatform",
-			    "iconPath": "static/tabber/classificationwei.png",
-			    "selectedIconPath": "static/tabber/classification.png",
+			    "pagePath": "pages/Liveplatformlist/Liveplatformlist",
+			    "iconPath": "static/tabber/Liveplatformwei.png",
+			    "selectedIconPath": "static/tabber/Liveplatform.png",
 			    "text": "直播"
 			}, 
 			{
