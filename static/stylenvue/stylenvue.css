@@ -27,6 +27,9 @@
 .bg-orders-red{
 	background-color: #ff3600;
 }
+.bg-btn-red{
+	background-color:#de4758;
+}
 /*背景颜色--结束*/
 
 
@@ -59,6 +62,9 @@
 }
 .font-size-thirty{
 	font-size: 30rpx;
+}
+.font-size-forty{
+	font-size: 40rpx;
 }
 
 /*字体大小---结束*/
@@ -97,6 +103,15 @@
 	.border-styles{
 		border-style:solid;
 	}
+	.border-Dotted{
+		border-style:dashed;
+	}
+	.border-Size{
+		border-width:2rpx;
+	}
+	.border-Size-fith{
+		border-width:5rpx;
+	}
 /*边线--结束*/
 
 /*文字加粗--开始*/
@@ -104,3 +119,10 @@
 	font-weight: bold;
 }
 /*文字加粗---结束*/
+/*小图标大小---开始*/
+.icon{
+	width: 60rpx;
+	height:60rpx;
+	/* background-color:deeppink; */
+}
+/* 小图标大小--结束*/

@@ -131,7 +131,6 @@
 		{
 			"path":"pages/evaluate/evaluate"
 		},
-		
 		{
 			"path":"pages/starevaluation/starevaluation"
 		}
@@ -141,6 +140,14 @@
         }
         ,{
             "path" : "pages/Liveplatformlist/Liveplatformlist",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Livecover/Livecover",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/livestudio/livestudio",
             "style" : {}
         }
     ],
@@ -173,8 +180,8 @@
 			}, 
 			{
 			    "pagePath": "pages/Liveplatformlist/Liveplatformlist",
-			    "iconPath": "static/tabber/Liveplatformwei.png",
-			    "selectedIconPath": "static/tabber/Liveplatform.png",
+			    "iconPath": "static/tabber/Liveplatform.png",
+			    "selectedIconPath": "static/tabber/Liveplatform.gif",
 			    "text": "直播"
 			}, 
 			{

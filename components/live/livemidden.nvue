@@ -5,26 +5,9 @@
 			<cover-view class="midden-top" :style="{height:(componentheight/2)+'px','padding-top':statusheight+'px'}" >
 				<cover-view class="midden-top-childTop">
 					<!-- 顶部的结构 -->
-					<cover-view class="midden-childTop-info">
-						<cover-view class="midden-childTop-left border-radiusfifty bg-Black-gradient">
-							<cover-view class="midden-left-image border-radiusOnehundred">
-								<cover-image src="/static/logo.png" class="imgs border-radiusfifty"></cover-image>
-							</cover-view>
-							<cover-view class="midden-left-text">
-								<text class="textcolorwrite textsize text-center margin-top-firchild">老海家农产品</text>
-								<text class="textcolorwrite textsize text-center margin-top font-size-twenty-four">1005观看|中国</text>
-							</cover-view>
-							<cover-view class="midden-left-Focuson bg-deepink border-radiusthirty">
-								<text class="textcolor-Promptreply textsize text-center">关注</text>
-							</cover-view>
-						</cover-view>
-						<cover-view class="midden-childTop-right">
-							<cover-view class="midden-childTop-right-title bg-Black-gradient border-radiusthirty">
-								<text class="font-size-twenty-four text-center bg-gradient-white text-padding-plice border-radius-topLeft border-radius-topright">惠播客直播</text>
-								<text class="font-size-twenty-four text-center textcolor-Promptreply text-padding-six">ID:1370539</text>
-							</cover-view>
-						</cover-view>
-					</cover-view>
+					<!-- 这是公共的 -->
+					<liveroomtopinfo :Focusshow="true"></liveroomtopinfo>
+					<!--  -->
 					<cover-view class="midden-childtopmidden-info">
 						<cover-view class="intimacy border-radiusthirty bg-Black-gradient">
 							<cover-image src="/static/liveplatfrom/xin.png" class="topbottomimgs border-radiusOnehundred"></cover-image>
@@ -36,14 +19,8 @@
 			</cover-view>
 			<!-- 下面占一半 在让他们的子元素占上面还是占下面-->
 			<cover-view class="midden-bottom" :style="{height:(componentheight/2)+'px','padding-bottom':(bottomheight+10)+'px'}">
-				<cover-view class="midden-bottom-childBottom ">
-					<cover-view class="chat parent-padding-leftAndright" :style="{width:(componentwidth/2+30)+'px'}">
-						<scroller scroll-direction :show-scrollbar="false">
-							<cover-view class="bg-Black-gradient chat-item" v-for="(item,index) in list" :key="index">
-								<text class="font-size-twenty-flxed textcolor-Promptreply text-wrap">明天的你 &nbsp;这手速可以大萨达撒大师大多大大大大萨达撒</text>
-							</cover-view>
-						</scroller>
-					</cover-view>
+				<cover-view class="midden-bottom-childBottom">
+					<livechatlist :componentwidth="componentwidth" :list="list"></livechatlist>
 					<!-- 引入文本框 -->
 					<!-- <inptext :componentheight="componentheight" :keyboardheight="keyboardheight" :componentwidth="componentwidth"></inptext> -->
 					<cover-view class="bottomevent parent-padding-leftAndright">
@@ -67,11 +44,11 @@
 						</cover-view>
 					</cover-view>
 					<!-- 引入商品列表组件 -->
-				<livemiddengoodshoplist :componentheight="componentheight" :componentwidth="componentwidth" v-if="shopbool"></livemiddengoodshoplist>
+				<livemiddengoodshoplist :componentheight="componentheight" :componentwidth="componentwidth" paddingbottom="30" v-if="shopbool"></livemiddengoodshoplist>
 				
 				</cover-view>
 				<!-- 引入小心心组件 -->
-				<xiaoxinxin :viewList="viewList"></xiaoxinxin>
+				<!-- <xiaoxinxin :viewList="viewList"></xiaoxinxin> -->
 			</cover-view>
 		</cover-view>
 	</cover-view>
@@ -84,6 +61,10 @@
 	import inptext from "../livemiddencomponent/inputtext.nvue"
 	//引入小心心组件
 	import xiaoxinxin from "../givelike/givelive.nvue"
+	//引入公共的房间头部的组件
+	import liveroomtopinfo from "../liveplice/liveroomtopinfo.nvue"
+	//引入聊天列表
+	import livechatlist from "../liveplice/livechatlist.nvue"
 	export default {
 		data(){
 			return {
@@ -147,7 +128,9 @@
 		components:{
 			livemiddengoodshoplist,
 			inptext,
-			xiaoxinxin
+			xiaoxinxin,
+			liveroomtopinfo,
+			livechatlist
 		}
 	}
 </script>
@@ -170,59 +153,10 @@
 		padding:0 50rpx 0 30rpx;
 		margin-top:30rpx;
 	}
-	.midden-childTop-info{
-		flex-direction:row;
-		padding:0 50rpx 0 30rpx;
-	}
-	.midden-childTop-left{
-		flex:1;
-		flex-direction:row;
-		justify-content:space-around;
-		align-items: center;
-		/* width:400rpx; */
-		height:80rpx;
-		/* border-radius:50rpx; */
-	}
-	.midden-left-image{
-		width: 70rpx;
-		height:70rpx;
-		/* background-color:blue; */
-	}
 	.imgs{
 		width: 70rpx;
 		height:70rpx;
 		
-	}
-	.midden-left-text{
-		overflow:hidden;
-		/* width:180rpx ; */
-		height:100rpx;
-		/* background-color:green; */
-	}
-	.midden-left-Focuson{
-		width: 105rpx;
-		height:50rpx;
-	}
-	.textsize{
-		font-size: 28rpx;
-		line-height:50rpx;
-	}
-	.margin-top{
-		margin-top:-16rpx;
-	}
-	.margin-top-firchild{
-		margin-top:10rpx;
-	}
-	.midden-childTop-right{
-		flex:0.7;
-		justify-content: center;
-		align-items: flex-end;
-		/* height:80rpx; */
-		/* background-color:yellow; */
-	}
-	.midden-childTop-right-title{
-		width: 180rpx;
-		height:85rpx;
 	}
 	.intimacy{
 		overflow:hidden;
@@ -245,20 +179,7 @@
 		/* background-color:deeppink; */
 		flex-direction:column-reverse;
 	}
-	.chat{
-		/* background-color:green; */
-		height:400rpx;
-		margin-bottom:40rpx;
-	}
-	.chat-item{
-		flex-wrap:wrap;
-		margin-top:10rpx;
-		border-radius:8rpx;
-		padding:6rpx 20rpx;
-	}
-	.text-wrap{
-		flex-wrap:wrap;
-	}
+	
 	.bottomevent{
 		justify-content: space-between;
 		flex-direction:row;

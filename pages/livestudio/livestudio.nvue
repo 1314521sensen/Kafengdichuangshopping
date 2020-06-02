@@ -1,0 +1,194 @@
+<template>
+	<view :style="{width:windowwidth+'px',height:windowheight+'px'}" class="livestudio">
+		<!--这是直播推流组件 -->
+		<live-pusher 
+			id='livePusher' 
+			ref="livePusher"
+			url="rtmp://39.100.133.222:1935/hbk/6849214"
+			mode="FHD"
+			aspect="3:2"
+			:muted="true"
+			:enable-camera="true"
+			:auto-focus="true"
+			:beauty="9"
+			:whiteness="9"
+			orientation="vertical"
+			audio-quality="high"
+			device-position="front"
+			:audio-reverb-type="1"
+			:enable-mic="true"
+			:enable-ans="true"
+			audio-volume-type="media"
+			local-mirror="enable"
+			:style="{width:windowwidth+'px',height:windowheight+'px'}"
+		>
+		</live-pusher>
+		<cover-view class="coverfather" :style="{width:windowwidth+'px',height:windowheight+'px','padding-top':statusBarHeight+'px'}" @click="Removeevent">
+			<cover-view class="coverfather-top" :style="{width:windowwidth+'px',height:(windowheight/2)+'px'}">
+				<liveroomtopinfo :Focusshow="false"></liveroomtopinfo>
+			</cover-view>
+			<!-- 这是商品列表 -->
+			<livemiddengoodshoplist :componentheight="windowheight" :componentwidth="windowwidth" paddingbottom="50" v-if="shopbool"></livemiddengoodshoplist>
+			
+			<cover-view class="coverfather-bottom" :style="{width:windowwidth+'px',height:(windowheight/2)+'px','padding-bottom':(windowBottom+40)+'px'}">
+				<conver-view class="coverfather-bottom-bottomlist">
+					<cover-view class="bottomevent parent-padding-leftAndright">
+						<cover-view class="bottomevent-imgs">
+							<cover-image src="/static/liveplatfrom/car.png" class="bottomevent-img" @tap="zhiboshop"></cover-image>
+						</cover-view>
+						<cover-view class="inp">
+							<input type="text" @focus="focusinp" @blur="blurinp" placeholder="跟大家聊聊" class="font-size-thirty textcolorwrite inptext"></input>
+						</cover-view>
+						<cover-view class="share">
+							<cover-image src="/static/Pushflow/fenxiang.png" class="shareimgs"></cover-image>
+						</cover-view>
+						<cover-view class="share">
+							<cover-image src="/static/Pushflow/Closeby.png" class="shareimgs" @click="xin"></cover-image>
+						</cover-view>
+					</cover-view>
+				</conver-view>
+				<cover-view class="coverfather-bottom-toplist">
+					<livechatlist :componentwidth="windowwidth" :list="list"></livechatlist>
+				</cover-view>
+			</cover-view>
+		</cover-view>
+	</view>
+</template>
+
+<script>
+	import liveroomtopinfo from "@/components/liveplice/liveroomtopinfo.nvue"
+	import livechatlist from "@/components/liveplice/livechatlist.nvue"
+	import livemiddengoodshoplist from "@/components/livemiddencomponent/livemiddengoodshoplist.nvue"
+	export default {
+		data() {
+			return {
+				windowwidth:"",
+				windowheight:"",
+				statusBarHeight:"",
+				windowBottom:"",
+				list:[
+					"这手速可以大萨达撒大师大多大大大大萨达撒",
+					"这手速可以大萨达撒大师大多大大大大萨达撒",
+					"这手速可以大萨达撒大师大多大大大大萨达撒",
+					"这手速可以大萨达撒大师大多大大大大萨达撒",
+					"这手速可以大萨达撒大师大多大大大大萨达撒",
+					"这手速可以大萨达撒大师大多大大大大萨达撒",
+					"这手速可以大萨达撒大师大多大大大大萨达撒",
+					"这手速可以大萨达撒大师大多大大大大萨达撒"
+				],
+				shopbool:false
+			}
+		},
+		methods: {
+			zhiboshop(e){
+				e.stopPropagation()
+				this.shopbool = true
+			},
+			Removeevent(){
+				if(this.shopbool){
+					this.shopbool = false
+					return 
+				}
+			}
+		},
+		created(){
+			const _this = this
+			uni.getSystemInfo({
+				success(res){
+					_this.windowBottom = res.windowBottom
+					_this.windowwidth = res.screenWidth
+					_this.windowheight = res.screenHeight
+					_this.statusBarHeight = res.statusBarHeight
+					
+				}
+			})
+		},
+		onReady(){
+			this.context = uni.createLivePusherContext("livePusher", this);
+			// console.log(this.context)
+			// console.log(this.context)
+			//开启推流
+			this.context.start()
+			//开启摄像头预览
+			// this.context.startPreview()
+			//切换前后摄像头
+			this.context.switchCamera()
+		},
+		components:{
+			liveroomtopinfo,
+			livechatlist,
+			livemiddengoodshoplist
+		}
+	}
+</script>
+
+<style>
+.livestudio{
+	/* background-color:yellow; */
+}
+.coverfather{
+		position: absolute;
+		top:0;
+		left:0;
+		/* background-color:red; */
+	}
+	.coverfather-top{
+		/* background-color:#f00; */
+	}
+	.coverfather-bottom{
+		flex-direction:column-reverse;
+	}
+	.coverfather-bottom-toplist{
+		/* background-color:pink; */
+		margin-bottom:20rpx;
+	}
+	.bottomevent{
+		justify-content: space-between;
+		flex-direction:row;
+		align-items: flex-end;
+		/* height:20px; */
+		/* background-color: yellow; */
+	}
+	.bottomevent-imgs{
+		width: 70rpx;
+		/* height:80rpx; */
+		/* background-color:red; */
+	}
+	.bottomevent-img{
+		width: 70rpx;
+		height:80rpx;
+		/* background-color:blue; */
+	}
+	.inp{
+		width:300rpx;
+		height:70rpx;
+		/* background-color:red; */
+		justify-content: flex-end;
+	}
+	.inptext{
+		height:70rpx;
+		/* line-height: */
+	}
+	.share{
+		width: 60rpx;
+		height:60rpx;
+		/* background-color:green; */
+	}
+	.shareimgs{
+		position: relative;
+		width: 60rpx;
+		height:60rpx;
+	}
+	.report{
+		position: absolute;
+		top:0px;
+		left:0;
+		width: 70rpx;
+		height:70rpx;
+		background-color:yellow;
+		border-radius: 15px;
+	}
+	.reporttext{
+		line-height:70rpx;
+	}
+</style>

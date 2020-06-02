@@ -25,8 +25,9 @@
             "Push" : {},
             "Payment" : {},
             "LivePusher" : {},
+            "Share" : {},
             "VideoPlayer" : {},
-            "Share" : {}
+            "Maps" : {}
         },
         /* 应用发布信息 */
         "distribute" : {

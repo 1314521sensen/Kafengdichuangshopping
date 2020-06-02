@@ -1,6 +1,6 @@
 <template>
 	<cover-view class="shoplist" :style="{width:componentwidth+'px',height:componentheight/2+'px'}">
-		<scroller :show-scrollbar="false" scroll-direction="vertical" class="scrollerlist" :style="{height:componentheight/2+'px','padding-bottom':25+'px'}">
+		<scroller :show-scrollbar="false" scroll-direction="vertical" class="scrollerlist" :style="{height:componentheight/2+'px','padding-bottom':paddingbottom+'px'}">
 			<cover-view class="list-item border-size border-styles" v-for="(item,index) in list" :key="index">
 				<!-- 上面的是列表 -->
 				<cover-view class="item-top">
@@ -39,7 +39,7 @@
 				]
 			}
 		},
-		props:["componentheight","componentwidth"]
+		props:["componentheight","componentwidth","paddingbottom"]
 	}
 </script>
 

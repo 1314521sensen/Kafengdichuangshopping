@@ -1,0 +1,74 @@
+<template>
+	<cover-view class="livecovemidden">
+		<cover-view class="livecovemiddenborder border-Size border-Dotted" :style="{width:(windowWidth/2)+'px'}" @click="uploadimgs">
+			<text class="textcolorwrite text-center covertext font-size-forty" v-if="fengmianbool==false">添加封面</text>
+			<cover-image :src="imgurl" class="covermidden-imgs" v-if="fengmianbool"></cover-image>
+		</cover-view>
+		<cover-view class="cover-imgsbottomtext">
+			<text class="textcolorwrite text-center font-size-forty">您要直播什么呢?</text>
+		</cover-view>
+		<cover-view class="cover-infotext" :style="{width:(windowWidth/2)+'px'}">
+			<input type="text" class="infotextinp font-size-twenty-four textcolorwrite text-center" v-model="value" placeholder="请输入直播描述" />
+		</cover-view>
+	</cover-view>
+</template>
+
+<script>
+	export default {
+		data(){
+			return {
+				fengmianbool:false,
+				value:"",
+				imgurl:""
+			}
+		},
+		methods:{
+			uploadimgs(){
+				const _this = this
+				uni.chooseImage({
+					count:1,
+					sizeType:["compressed"],
+					sourceType:["album"],
+					success(res){
+						_this.imgurl = res.tempFilePaths[0]
+						if(res.tempFilePaths[0]!==""){
+							_this.fengmianbool = true
+						}
+					}
+				})
+			}
+		},
+		props:["windowWidth"]
+	}
+</script>
+
+<style>
+.livecovemidden{
+	color:#fff;
+	align-items: center;
+	margin-top:60rpx;
+}
+.livecovemiddenborder{
+	height:360rpx;
+	/* background-color:yellow; */
+	border-color:#FFFFFF;
+}
+.covertext{
+	line-height:360rpx;
+	
+}
+.covermidden-imgs{
+	height:360rpx;
+}
+.cover-imgsbottomtext{
+	margin-top:30rpx;
+}
+.cover-infotext{
+	/* background-color:red; */
+	height:60rpx;
+	justify-content: center;
+}
+.infotextinp{
+	/* background-color:pink; */
+}
+</style>

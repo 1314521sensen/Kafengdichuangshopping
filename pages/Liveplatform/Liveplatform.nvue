@@ -3,12 +3,13 @@
 		<view>
 			 <video 
 				id="myVideo"
-				src="rtmp://39.100.133.222:1935/hbk/6849214d688825e66645d5ad65437c46" 
+				src="rtmp://39.100.133.222:1935/hbk/6849214" 
 				:style="{width:wdith+'px',height :height+ 'px'}"
 				:autoplay="true" 
 				:page-gesture="true" 
 				:show-fullscreen-btn="false" 
 				:enable-play-gesture="false" 
+				:muted="false"
 				:direction="direction"
 				>
 				<cover-view :style="{width:wdith+'px',height :height+ 'px'}" class="cover-view-box">
@@ -51,7 +52,6 @@
 			let _this = this
 			uni.getSystemInfo({
 				success(res) {
-					console.log(res)
 					//获取手机宽度
 					_this.width = res.screenWidth
 					_this.height = res.screenHeight

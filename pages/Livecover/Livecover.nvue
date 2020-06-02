@@ -1,0 +1,220 @@
+<template>
+	<view class="livecover" :style="{width:windowWidth+'px',height:windowHeight+'px'}">
+		<!--这是直播推流组件 -->
+		<live-pusher 
+			id='livePusher' 
+			ref="livePusher"
+			url=""
+			mode="SD"
+			aspect="3:2"
+			:muted="false"
+			:enable-camera="true"
+			:auto-focus="true"
+			:beauty="beauty"
+			:whiteness="whiteness"
+			orientation="vertical"
+			audio-quality="high"
+			device-position="front"
+			:audio-reverb-type="1"
+			:enable-mic="true"
+			:enable-ans="true"
+			audio-volume-type="media"
+			local-mirror="enable"
+			:style="{width:windowWidth+'px',height:windowHeight+'px'}"
+		>
+			
+		</live-pusher>
+		<cover-view class="coverfather" :style="{width:windowWidth+'px',height:windowHeight+'px','padding-top':statusBarHeight+'px'}">
+			<!-- <livecovetop></livecovetop> -->
+			<cover-view class="livecovetop">
+				<cover-view class="livecovetop-left">
+					<cover-view class="icon iconmargin" v-for="(item,index) in righticon" :key="index" :data-index="index" @click="cameraimgs">
+						<cover-image class="icon-imgs" :src="item.url"></cover-image>
+					</cover-view>
+				</cover-view>
+				<cover-view class="livecovetop-right">
+					<cover-image src="/static/Pushflow/cha.png" class="icon-imgs"></cover-image>
+				</cover-view>
+			</cover-view>
+			<livecovemidden :windowWidth="windowWidth"></livecovemidden>
+			<!-- 上面的两个组件最后给父组件 把接下来的按钮留给父组件 这样就能少了一步传值 -->
+			<cover-view class="livecover-bottom parent-padding-leftAndright" :style="{width:windowWidth+'px','padding-bottom':(windowBottom+5)+'px'}">
+				<!-- <cover-view class="location">
+					<cover-image class="locationicon icon" src="/static/Pushflow/location.png"></cover-image>
+					<text class="locationicontext textcolorwrite font-size-thirty">德州市</text>
+				</cover-view> -->
+				<!-- 这是直播的按钮 -->
+				<button class="livecover-btn border-radiusOnehundred bg-btn-red" @tap="Begintolive">
+					<text class="textcolorwrite text-weight">开始直播</text>
+				</button>
+			</cover-view>
+			<!-- <cover-view class="slider parent-padding-leftAndright" :style="{width:windowWidth+'px',top:(windowHeight/2)+'px'}">
+				<cover-view class="sliderborder border-Size-fith border-styles"></cover-view>
+				<cover-view class="Slidinground border-radiusthirty"></cover-view>
+			</cover-view> -->
+		</cover-view>
+	</view>
+</template>
+
+<script>
+	// import livecovetop from "@/components/Livecoverfengmian/livecovetop.nvue" 
+	import livecovemidden from "@/components/Livecoverfengmian/livecovemidden.nvue"
+	export default {//这是直播的封面
+		data() {
+			return {
+				windowWidth:0,//可使用屏幕的宽度
+				windowHeight:0,//克数用屏幕的高度
+				beauty:9,//美颜，取值范围 0-9（iOS取值范围为1） ，0 表示关闭
+				whiteness:9,//	美白，取值范围 0-9（iOS取值范围为1） ，0 表示关闭。
+				statusBarHeight:0,//拿到状态栏高度
+				windowBottom:0,//距离底部的距离
+				righticon:[
+					{
+						url:"/static/Pushflow/Skincare.png"
+					}
+					// {
+					// 	url:"/static/Pushflow/Cameratransformation.png"
+					// }
+				],
+			}
+		},
+		methods: {
+			dianji(e){
+				e.stopPropagation()
+			},
+			cameraimgs(e){
+				let indexs = e.currentTarget.dataset.index
+				// if(indexs==0){//代表点击了美颜
+					
+				// }
+			},
+			//开始直播
+			Begintolive(){
+				//关闭摄像头预览
+				this.context.stopPreview()
+				uni.redirectTo({
+					url:`/pages/livestudio/livestudio`
+				})
+			}
+		},
+		created() {
+			const _this = this
+			uni.getSystemInfo({
+				success(res) {
+					// console.log(res)
+					_this.statusBarHeight = res.statusBarHeight
+					_this.windowWidth = res.screenWidth
+					_this.windowHeight = res.screenHeight
+					_this.windowBottom = res.windowBottom
+				}
+			})
+			// uni.getLocation({
+			// 	success(res) {
+			// 		// console.log(res)
+			// 		 uni.openLocation({
+			// 			 latitude:res.latitude,
+			// 			 longitude:res.longitude,
+			// 			 success(reslocationicon) {
+			// 			 	console.log(reslocationicon)
+			// 			 }
+			// 		 })
+			// 	}
+			// })
+		},
+		onShow(){
+			
+		},
+		onReady(){
+			this.context = uni.createLivePusherContext("livePusher", this);
+			// console.log(this.context)
+			// console.log(this.context)
+			//开启推流
+			// this.context.start()
+			//开启摄像头预览
+			this.context.startPreview()
+			//切换前后摄像头
+			this.context.switchCamera()
+		},
+		components:{
+			livecovemidden
+		}
+	}
+</script>
+
+<style>
+	.livecover{
+		/* background-color:yellow; */
+	}
+	.coverfather{
+		position: absolute;
+		top:0;
+		left:0;
+		/* background-color:red; */
+	}
+	.livecovetop{
+		/* height:30px; */
+		/* background-color:red; */
+		flex-direction: row;
+		padding:0 40rpx;
+	}
+	.livecovetop-left{
+		flex:1;
+		flex-direction: row;
+		/* background-color:pink; */
+	}
+	.livecovetop-right{
+		width: 60rpx;
+		/* background-color:yellow; */
+	}
+	.icon-imgs{
+		width: 60rpx;
+		height:60rpx;
+	}
+	.iconmargin{
+		margin-right:40rpx;
+	}
+	.iconmargin:last-child{
+		margin-right:0;
+	}
+	.livecover-bottom{
+		position: absolute;
+		bottom:0;
+		left:0;
+		/* width: 100px; */
+		height:100px;
+		/* background-color:red; */
+		justify-content: center;
+	}
+	.location{
+		flex-direction: row;
+	}
+	.locationicon{
+		/* background-color:yellow; */
+	}
+	.locationicontext{
+		margin:10rpx 0 0 10rpx;
+	}
+	.livecover-btn{
+		height:110rpx;
+		border-width:0;
+	}
+	.slider{
+		position: absolute;
+		height:60rpx;
+		background-color:red;
+		justify-content: center;
+	}
+	.sliderborder{
+		/* height:3rpx; */
+		border-color:yellow;
+		
+	}
+	.Slidinground{
+		position:absolute;
+		top:0;
+		left:40rpx;
+		width:60rpx;
+		height:60rpx;
+		background-color:pink;
+	}
+</style>

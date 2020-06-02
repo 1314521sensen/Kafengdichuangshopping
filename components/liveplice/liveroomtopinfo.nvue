@@ -1,0 +1,86 @@
+<template>
+	<cover-view class="midden-childTop-info">
+		<cover-view class="midden-childTop-left border-radiusfifty bg-Black-gradient">
+			<cover-view class="midden-left-image border-radiusOnehundred">
+				<cover-image src="/static/logo.png" class="imgs border-radiusfifty"></cover-image>
+			</cover-view>
+			<cover-view class="midden-left-text">
+				<text class="textcolorwrite textsize text-center margin-top-firchild">老海家农产品</text>
+				<text class="textcolorwrite textsize text-center margin-top font-size-twenty-four">1005观看|中国</text>
+			</cover-view>
+			<cover-view class="midden-left-Focuson bg-deepink border-radiusthirty" v-if="Focusshow">
+				<text class="textcolor-Promptreply textsize text-center">关注</text>
+			</cover-view>
+		</cover-view>
+		<cover-view class="midden-childTop-right">
+			<cover-view class="midden-childTop-right-title bg-Black-gradient border-radiusthirty">
+				<text class="font-size-twenty-four text-center bg-gradient-white text-padding-plice border-radius-topLeft border-radius-topright">惠播客直播</text>
+				<text class="font-size-twenty-four text-center textcolor-Promptreply text-padding-six">ID:1370539</text>
+			</cover-view>
+		</cover-view>
+	</cover-view>
+</template>
+
+<script>
+	export default {
+		props:["Focusshow",]
+	}
+</script>
+
+<style>
+	.midden-childTop-info{
+		flex-direction:row;
+		padding:0 50rpx 0 30rpx;
+	}
+	.midden-childTop-left{
+		flex:1;
+		flex-direction:row;
+		justify-content:space-around;
+		align-items: center;
+		/* width:400rpx; */
+		height:80rpx;
+		/* border-radius:50rpx; */
+	}
+	.midden-left-image{
+		width: 70rpx;
+		height:70rpx;
+		/* background-color:blue; */
+	}
+	.imgs{
+		width: 70rpx;
+		height:70rpx;
+		
+	}
+	.midden-left-text{
+		overflow:hidden;
+		/* width:180rpx ; */
+		height:100rpx;
+		/* background-color:green; */
+	}
+	.midden-left-Focuson{
+		width: 105rpx;
+		height:50rpx;
+	}
+	.textsize{
+		font-size: 28rpx;
+		line-height:50rpx;
+	}
+	.margin-top{
+		margin-top:-16rpx;
+	}
+	.margin-top-firchild{
+		margin-top:10rpx;
+	}
+	.midden-childTop-right{
+		flex:0.7;
+		justify-content: center;
+		align-items: flex-end;
+		/* height:80rpx; */
+		/* background-color:yellow; */
+	}
+	.midden-childTop-right-title{
+		width: 180rpx;
+		height:85rpx;
+	}
+	/*这是底部的----结束*/
+</style>
