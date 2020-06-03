@@ -2,6 +2,7 @@
 	<view class="Liveplatformlist">
 		<button @click="bofang" class="btn">拉流</button>
 		<button @click="zhibo" class="btn">推流</button>
+		<button @click="jieshu" class="btn">结束</button>
 	</view>
 </template>
 
@@ -21,6 +22,11 @@
 			zhibo(){
 				uni.navigateTo({
 					url:`/pages/Livecover/Livecover`
+				})
+			},
+			jieshu(){
+				uni.navigateTo({
+					url:`/pages/Closeby/Closeby`
 				})
 			}
 		}

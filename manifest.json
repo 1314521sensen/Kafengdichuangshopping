@@ -21,13 +21,13 @@
         },
         /* 模块配置 */
         "modules" : {
-            "OAuth" : {},
             "Push" : {},
             "Payment" : {},
             "LivePusher" : {},
             "Share" : {},
             "VideoPlayer" : {},
-            "Maps" : {}
+            "Maps" : {},
+            "OAuth" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -68,7 +68,7 @@
                 "oauth" : {
                     "weixin" : {
                         "appid" : "wx0f9236b57d357dbb",
-                        "appsecret" : "qbcdefg",
+                        "appsecret" : "ce11e7fd9e0236b65d62b9d663b823f6",
                         "UniversalLinks" : ""
                     }
                 },
@@ -83,7 +83,13 @@
                     },
                     "appleiap" : {}
                 },
-                "ad" : {}
+                "ad" : {},
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wx0f9236b57d357dbb",
+                        "UniversalLinks" : ""
+                    }
+                }
             },
             "splashscreen" : {
                 "android" : {

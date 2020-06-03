@@ -39,11 +39,11 @@
 						<cover-view class="inp">
 							<input type="text" @focus="focusinp" @blur="blurinp" placeholder="跟大家聊聊" class="font-size-thirty textcolorwrite inptext"></input>
 						</cover-view>
-						<cover-view class="share">
+						<cover-view class="share" @click="share">
 							<cover-image src="/static/Pushflow/fenxiang.png" class="shareimgs"></cover-image>
 						</cover-view>
-						<cover-view class="share">
-							<cover-image src="/static/Pushflow/Closeby.png" class="shareimgs" @click="xin"></cover-image>
+						<cover-view class="share" @click="Closeby">
+							<cover-image src="/static/Pushflow/Closeby.png" class="shareimgs"></cover-image>
 						</cover-view>
 					</cover-view>
 				</conver-view>
@@ -89,6 +89,21 @@
 					this.shopbool = false
 					return 
 				}
+			},
+			share(){
+				uni.shareWithSystem({
+					type:"image",
+					href:"https://uniapp.dcloud.io",
+					imageUrl:"/static/logo.png"
+				})
+			},
+			Closeby(){
+				//点击关播 先把摄像头停止推流
+				this.context.stop()
+				//暂时跳到首页
+				uni.switchTab({
+					url:"/pages/index/index"
+				})
 			}
 		},
 		created(){
@@ -99,7 +114,6 @@
 					_this.windowwidth = res.screenWidth
 					_this.windowheight = res.screenHeight
 					_this.statusBarHeight = res.statusBarHeight
-					
 				}
 			})
 		},

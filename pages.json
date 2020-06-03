@@ -149,6 +149,14 @@
         ,{
             "path" : "pages/livestudio/livestudio",
             "style" : {}
+        },
+		{
+		    "path" : "pages/livereport/returnsthe",
+		    "style" : {}
+		}
+        ,{
+            "path" : "pages/Closeby/Closeby",
+            "style" : {}
         }
     ],
 	

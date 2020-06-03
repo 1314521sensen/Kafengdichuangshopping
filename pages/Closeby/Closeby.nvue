@@ -1,0 +1,93 @@
+<template>
+	<cover-view class="Closeby parent-padding-leftAndright" :style="{width:windowwidth+'px',height:windowheight+'px','padding-top':statusBarHeight+'px'}">
+		<cover-view class="Shutdown">
+			<image src="/static/Pushflow/cha.png" class="cha"></image>
+		</cover-view>
+		<cover-view class="Close-headersection">
+			<cover-view class="headersection-top">
+				<image src="/static/logo.png" class="headersection-top-imgs"></image>
+				<text class="textcolorwrite font-size-forty text-center headersectionshopname">老海家农产品</text>
+			</cover-view>
+			<cover-view class="headersection-bottom">
+				<text class="textcolorwrite font-size-flivety text-center">直播已结束</text>
+				<cover-view class="Closeby-time">
+					<text class="textcolor-Promptreply font-size-thirty">16:32~16:32</text>
+					<text class="textcolor-Promptreply font-size-thirty Close-min">共一分钟</text>
+				</cover-view>
+			</cover-view>
+		</cover-view>
+		<cover-view class="Close-nums">
+			
+		</cover-view>
+	</cover-view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				windowwidth:"",
+				windowheight:"",
+				statusBarHeight:""
+			}
+		},
+		methods: {
+			
+		},
+		created() {
+			let _this = this
+			uni.getSystemInfo({
+				success(res) {
+					_this.statusBarHeight = res.statusBarHeight
+					_this.windowwidth = res.windowWidth
+					_this.windowheight = res.windowHeight
+				}
+			})
+
+		}
+	}
+</script>
+
+<style>
+	.Closeby{
+		background-color:rgb(0,0,0);
+	}
+	.Shutdown{
+		/* height:30px; */
+		/* background-color:red; */
+	}
+	.cha{
+		width: 60rpx;
+		height:60rpx;
+		/* background-color:yellow; */
+	}
+	.Close-headersection{
+		align-items: center;
+		margin-top:40rpx;
+	}
+	.headersection-top{
+		
+	}
+	.headersection-top-imgs{
+		width: 240rpx;
+		height:240rpx;
+		border-radius:120rpx;
+	}
+	.headersectionshopname{
+		margin-top:40rpx;
+	}
+	.headersection-bottom{
+		margin-top:100rpx;
+	}
+	.Closeby-time{
+		flex-direction: row;
+		margin-top:20rpx;
+	}
+	.Close-min{
+		margin-left:20rpx;
+	}
+	.Close-nums{
+		background-color: #111111;
+		height:100px;
+	}
+</style>

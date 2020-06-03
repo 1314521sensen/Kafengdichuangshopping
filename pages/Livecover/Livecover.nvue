@@ -1,4 +1,5 @@
 <template>
+<!-- #ifdef APP-PLUS -->
 	<view class="livecover" :style="{width:windowWidth+'px',height:windowHeight+'px'}">
 		<!--这是直播推流组件 -->
 		<live-pusher 
@@ -32,11 +33,11 @@
 						<cover-image class="icon-imgs" :src="item.url"></cover-image>
 					</cover-view>
 				</cover-view>
-				<cover-view class="livecovetop-right">
+				<cover-view class="livecovetop-right" @click="Shutdown">
 					<cover-image src="/static/Pushflow/cha.png" class="icon-imgs"></cover-image>
 				</cover-view>
 			</cover-view>
-			<livecovemidden :windowWidth="windowWidth"></livecovemidden>
+			<livecovemidden :windowWidth="windowWidth" @coverurl="coverurl" @inpvalue="inpvalue"></livecovemidden>
 			<!-- 上面的两个组件最后给父组件 把接下来的按钮留给父组件 这样就能少了一步传值 -->
 			<cover-view class="livecover-bottom parent-padding-leftAndright" :style="{width:windowWidth+'px','padding-bottom':(windowBottom+5)+'px'}">
 				<!-- <cover-view class="location">
@@ -54,11 +55,14 @@
 			</cover-view> -->
 		</cover-view>
 	</view>
+	<!-- #endif -->
 </template>
 
 <script>
+	// #ifdef APP-PLUS
 	// import livecovetop from "@/components/Livecoverfengmian/livecovetop.nvue" 
 	import livecovemidden from "@/components/Livecoverfengmian/livecovemidden.nvue"
+	const app = getApp()
 	export default {//这是直播的封面
 		data() {
 			return {
@@ -68,6 +72,8 @@
 				whiteness:9,//	美白，取值范围 0-9（iOS取值范围为1） ，0 表示关闭。
 				statusBarHeight:0,//拿到状态栏高度
 				windowBottom:0,//距离底部的距离
+				Backcoverurl:"",//这是传回来的图片
+				Backinpvalue:"",//这是穿回来的value
 				righticon:[
 					{
 						url:"/static/Pushflow/Skincare.png"
@@ -88,20 +94,91 @@
 					
 				// }
 			},
+			covermodel(msgtitle,msgcotent){
+				const _this = this
+				uni.showModal({
+					title:msgtitle,
+					content:msgcotent,
+					showCancel:true,
+					cancelText:"稍后直播",
+					cancelColor:"#f00",
+					confirmText:"继续直播",
+					confirmColor:"#0f0",
+					success(res){
+						if(res.confirm){
+							//关闭摄像头预览
+							_this.context.stopPreview()
+							uni.redirectTo({
+								url:`/pages/livestudio/livestudio`
+							})
+						}
+					}
+				})
+			},
+			//封装一个执行上面的模态框的方法
+			Detectionlive(_this){
+				if(_this.Backcoverurl!=="" && _this.Backinpvalue!==""){//如果两个值不为空的情况下
+					//关闭摄像头预览
+					_this.context.stopPreview()
+					uni.redirectTo({
+						url:`/pages/livestudio/livestudio`
+					})
+				}else if(_this.Backcoverurl==""){//如果图片的为空
+					_this.covermodel('封面图片未选择',"为了让其他人更好的关注您,请设置封面图片")
+				}else if(_this.Backinpvalue==""){//如果描述为空的情况下
+					_this.covermodel("标题未填写","为了让其他人更好的关注您,请填写标题")
+				}
+			},
 			//开始直播
 			Begintolive(){
-				//关闭摄像头预览
-				this.context.stopPreview()
-				uni.redirectTo({
-					url:`/pages/livestudio/livestudio`
+				const _this = this
+				uni.getNetworkType({
+					success(res) {
+						if(res.networkType!=="wifi" && res.networkType!=="none"){//判断用户在不在wifi情况下 并且判断用户的网不在none的情况下
+							uni.showModal({
+								title:`您正在使用${res.networkType}网`,
+								content:"确定要继续直播吗",
+								showCancel:true,
+								cancelText:"稍后直播",
+								cancelColor:"#f00",
+								confirmText:"继续直播",
+								confirmColor:"#0f0",
+								success(reslut) {
+									if(reslut.confirm){//如果用户选择了继续播放 
+										_this.Detectionlive(_this)
+									}
+								}
+							})
+						}else if(res.networkType=="none"){//如果是在美网的情况下
+							app.globalData.showtoastsame("网络连接失败,请检查您的网络")
+						}else{
+							_this.Detectionlive(_this)
+						}
+					},
+					fail(err){
+						
+					}
 				})
+				
+			},
+			//点击×的时候
+			Shutdown(){
+				uni.switchTab({
+					url:"/pages/Liveplatformlist/Liveplatformlist"
+				})
+			},
+			//这是子组件穿回来的值
+			coverurl(e){
+				this.Backcoverurl = e
+			},
+			inpvalue(e){
+				this.Backinpvalue = e
 			}
 		},
 		created() {
 			const _this = this
 			uni.getSystemInfo({
 				success(res) {
-					// console.log(res)
 					_this.statusBarHeight = res.statusBarHeight
 					_this.windowWidth = res.screenWidth
 					_this.windowHeight = res.screenHeight
@@ -139,9 +216,11 @@
 			livecovemidden
 		}
 	}
+// #endif
 </script>
 
 <style>
+	/* #ifdef APP-PLUS */
 	.livecover{
 		/* background-color:yellow; */
 	}
@@ -217,4 +296,5 @@
 		height:60rpx;
 		background-color:pink;
 	}
+	/* #endif */
 </style>

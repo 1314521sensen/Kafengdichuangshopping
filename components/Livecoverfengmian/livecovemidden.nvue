@@ -8,12 +8,18 @@
 			<text class="textcolorwrite text-center font-size-forty">您要直播什么呢?</text>
 		</cover-view>
 		<cover-view class="cover-infotext" :style="{width:(windowWidth/2)+'px'}">
-			<input type="text" class="infotextinp font-size-twenty-four textcolorwrite text-center" v-model="value" placeholder="请输入直播描述" />
+			<input 
+				type="text" 
+				class="infotextinp font-size-twenty-four textcolorwrite text-center" 
+				v-model="value" 
+				placeholder="请输入直播描述,最多10个字符"  
+				@blur="inpLivedescribe"/>
 		</cover-view>
 	</cover-view>
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data(){
 			return {
@@ -33,9 +39,19 @@
 						_this.imgurl = res.tempFilePaths[0]
 						if(res.tempFilePaths[0]!==""){
 							_this.fengmianbool = true
+							_this.$emit('coverurl',res.tempFilePaths[0])
+							_this.$emit("inpvalue",_this.value)
 						}
 					}
 				})
+			},
+			inpLivedescribe(){
+				if(this.value.length<=10){
+					this.$emit('inpvalue',this.value)
+				}else{
+					app.globalData.showtoastsame("最大只能输入10个字符")
+				}
+				
 			}
 		},
 		props:["windowWidth"]
