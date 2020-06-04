@@ -32,7 +32,9 @@
 			<!-- 这是新品 -->
 			<storenews v-if="items=='新品'" :Month="Month" :day="day" :newslist="newslist"></storenews>
 			<!-- 这是视频 -->
-			<!-- <storevideo v-if="items=='视频'"></storevideo> -->
+			<!-- #ifdef APP-PLUS -->
+				<storevideo v-if="items=='直播'"></storevideo>
+			<!-- #endif -->
 		</view>
 	</view>
 </template>
@@ -48,7 +50,7 @@
 	//引入新品列表
 	import storenews from "@/components/store/storenews.vue"
 	//引入视频
-	// import storevideo from "@/components/store/storevideo.vue"
+	import storevideo from "@/components/store/storevideo.vue"
 	const app = getApp()
 	export default {
 		//这是店铺
@@ -70,7 +72,7 @@
 		},
 		methods: {
 			getChildnav(e){
-				// console.log(e)
+				console.log(e)
 				this.items = e
 				// console.log(this.items)
 			}
@@ -86,7 +88,7 @@
 			_this.day = day
 			// console.log(_this.Month,_this.day)
 			uni.request({
-				url:"http://hbk.huiboke.com/api/store/getStoreInfo",
+				url:`${app.globalData.Requestpath}store/getStoreInfo`,
 				data:{
 					sid:_this.storeid
 				},
@@ -120,7 +122,7 @@
 			})
 			//获取宝贝信息
 			uni.request({
-				url:"http://hbk.huiboke.com/api/store/getStoreGoodList",
+				url:`${app.globalData.Requestpath}store/getStoreGoodList`,
 				data:{
 					sid:_this.storeid,
 					page:1,
@@ -132,7 +134,7 @@
 			})
 			//获取商品的新品信息系
 			uni.request({
-				url:"http://hbk.huiboke.com/api/store/getNewStoreGoodList",
+				url:`${app.globalData.Requestpath}store/getNewStoreGoodList`,
 				data:{
 					sid:_this.storeid,
 					limit:10
@@ -148,7 +150,7 @@
 			storerecommended,
 			storebady,
 			storenews,
-			// storevideo
+			storevideo
 		}
 	}
 </script>

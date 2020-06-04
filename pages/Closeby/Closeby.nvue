@@ -16,8 +16,20 @@
 				</cover-view>
 			</cover-view>
 		</cover-view>
-		<cover-view class="Close-nums">
-			
+		<cover-view class="Close-nums parent-padding-leftAndright border-radiusthirty bg-Black-gradient">
+			<cover-view class="Close-nums-item" v-for="(item,index) in clonselist" :key="index">
+				<text class="textcolorwrite nums text-center font-size-forty text-weight">{{item.nums}}</text>
+				<text class="textcolorwrite nums font-size-thirty text-center">{{item.title}}</text>
+			</cover-view>
+		</cover-view>
+		<cover-view class="close-problem bg-Black-gradient border-radiusthirty parent-padding-leftAndright">
+			<cover-view class="rich-title">
+				<text class="textcolorwrite font-size-thirty">您在本次直播中遇到了哪些问题?</text>
+			</cover-view>
+			<cover-view class="rich-text border-radiusthirty border-styles border-plice">
+				<textarea cols="30" rows="10" class="textcolorwrite font-size-thirty text-padding-plice text-padding-leftshis" placeholder="请描述你的问题..."></textarea>
+			</cover-view>
+			<button class="btn bg-Lightgrey"><text class="textcolorwrite">提交</text></button>
 		</cover-view>
 	</cover-view>
 </template>
@@ -28,7 +40,21 @@
 			return {
 				windowwidth:"",
 				windowheight:"",
-				statusBarHeight:""
+				statusBarHeight:"",
+				clonselist:[
+					{
+						nums:3055,
+						title:"观看人数"
+					},
+					{
+						nums:3055,
+						title:"本次直播总收入"
+					},
+					{
+						nums:5,
+						title:"新增粉丝数"
+					}
+				]
 			}
 		},
 		methods: {
@@ -87,7 +113,29 @@
 		margin-left:20rpx;
 	}
 	.Close-nums{
-		background-color: #111111;
-		height:100px;
+		flex-direction: row;
+		justify-content: space-between;
+		margin:40rpx 0 60rpx 0;
+	}
+	.Close-nums-item{
+		padding-bottom:60rpx;
+	}
+	.nums{
+		margin-top:60rpx;
+	}
+	.close-problem{
+		
+	}
+	.rich-title{
+		margin:40rpx 0;
+	}
+	.rich-text{
+		height:200rpx;
+		border-color:#CCCCCC;
+	}
+	.btn{
+		height:80rpx;
+		border-width:0;
+		margin:40rpx 0 40rpx 0;
 	}
 </style>

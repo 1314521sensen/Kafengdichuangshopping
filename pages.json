@@ -157,7 +157,16 @@
         ,{
             "path" : "pages/Closeby/Closeby",
             "style" : {}
-        }
+        },
+		{
+			"path":"pages/discount/discount"
+		},
+		{
+			"path":"pages/help/help"
+		},
+		{
+			"path":"pages/grouppurchase/grouppurchase"
+		}
     ],
 	
 	"globalStyle": {

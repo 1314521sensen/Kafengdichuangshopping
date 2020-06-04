@@ -45,13 +45,15 @@
 					color: 'orange',
 					badge: 1,
 					name: '团购',
-					imgs:"/static/index/Scratchablelatexicon/bulk.png"
+					imgs:"/static/index/Scratchablelatexicon/bulk.png",
+					url:"/pages/grouppurchase/grouppurchase"
 				}, {
 					cuIcon: 'picfill',
 					color: 'yellow',
 					badge: 0,
 					name: '折扣',
-					imgs:"/static/index/Scratchablelatexicon/discount.png"
+					imgs:"/static/index/Scratchablelatexicon/discount.png",
+					url:"/pages/discount/discount"
 				}, {
 					cuIcon: 'noticefill',
 					color: 'olive',
@@ -101,7 +103,8 @@
 					color: 'mauve',
 					badge: 0,
 					name: '帮助',
-					imgs:"/static/index/Scratchablelatexicon/help.png"
+					imgs:"/static/index/Scratchablelatexicon/help.png",
+					url:"/pages/help/help"
 				}
 				],
 				gridCol: 5,//这是格数
