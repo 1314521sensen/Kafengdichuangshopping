@@ -16,7 +16,7 @@
 						<view class="dot left"></view>
 						<view class="dot right"></view>
 						<view class="coupons-bottom">
-							<text>{{ citem.at_full?'满'+citem.at_full:'无门槛'}}使用</text>
+							<text :style="{'font-size':24+'rpx'}">{{ citem.at_full?'满'+citem.at_full:'无门槛'}}使用</text>
 							<view class="at-once" :data-coucontype="citem.coupon_type_id" :data-storeid="citem.store_id" @tap="Platformreceive">
 								立即抢券
 							</view>
@@ -123,6 +123,7 @@
 		width: 100%;
 		height: 152rpx;
 		padding-left:20rpx;
+		margin:10rpx 0;
 		.rows {
 			width: 300%;
 			display: flex;
@@ -147,21 +148,23 @@
 					margin-right:20rpx;
 					border-radius:16rpx;
 					.coupons-top {
+						display: flex;
+						justify-content: center;
 						// border: 2px solid blue;
 						border-bottom: 4rpx dashed #fff;
 						overflow: hidden;
 
 						font-weight: 700;
-						font-size: 40rpx;
-						padding-left: 10rpx;
+						font-size: 44rpx;
+						// padding-left: 10rpx;
 						height: 50rpx;
 						line-height: 50rpx;
-						position: relative;
+						// position: relative;
 						width: 100%;
-						margin: 0 auto;
-
+						// margin: 0 auto;
+						padding-bottom:52rpx;
 						.price {
-							margin-left: 25rpx;
+							// margin-left: 25rpx;
 						}
 
 						.quan {

@@ -131,42 +131,49 @@
 			ReturntheMoney(refundurl){
 				const _this = this
 				//这是去申请退款的商品的列表
-				uni.request({
-					url:`${app.globalData.Requestpath}order/getRefundOrderList`,
-					method:"POST",
-					data:{
-						token:this.tokey,
-						page:1,
-						pageSize:5,
-					},
-					success(resrefund) {
-						if(resrefund.data.code==0){
-						// console.log(resrefund,"这是退款的")
-							_this.refundlist = _this.refundlist.concat(resrefund.data.data.list)
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey){
+						uni.request({
+							url:`${app.globalData.Requestpath}order/getRefundOrderList`,
+							method:"POST",
+							data:{
+								token:restokey.data,
+								page:1,
+								pageSize:5,
+							},
+							success(resrefund) {
+								// console.log(resrefund)
+								if(resrefund.data.code==0){
+								// console.log(resrefund,"这是退款的")
+									_this.refundlist = _this.refundlist.concat(resrefund.data.data.list)
+									
+								}
+								app.globalData.Requestmethod(_this.tokey,resrefund.data.msg)
+							}
+						})
+						//这是退货退款的
+						uni.request({
+							url:`${app.globalData.Requestpath}order/getRefundAndGoodsOrderList`,
+							method:"POST",
+							data:{
+								token:restokey.data,
+								page:1,
+								pageSize:5,
+							},
+							success(resrefund) {
+								if(resrefund.data.code==0){
+									// console.log(resrefund)
+								// console.log(resrefund,"这是退货退款的")
+									_this.refundlist = _this.refundlist.concat(resrefund.data.data.list)
+									// console.log(_this.refundlist)
+								}
+								app.globalData.Requestmethod(_this.tokey,resrefund.data.msg)
+							}
 							
-						}
-						app.globalData.Requestmethod(_this.tokey,resrefund.data.msg)
+						})
 					}
 				})
-				//这是退货退款的
-				uni.request({
-					url:`${app.globalData.Requestpath}order/getRefundAndGoodsOrderList`,
-					method:"POST",
-					data:{
-						token:this.tokey,
-						page:1,
-						pageSize:5,
-					},
-					success(resrefund) {
-						if(resrefund.data.code==0){
-						// console.log(resrefund,"这是退货退款的")
-							_this.refundlist = _this.refundlist.concat(resrefund.data.data.list)
-						}
-						app.globalData.Requestmethod(_this.tokey,resrefund.data.msg)
-					}
-					
-				})
-				
 			}
 		},
 		components:{

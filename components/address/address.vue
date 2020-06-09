@@ -65,7 +65,8 @@
 				price:"",
 				goodtitle:"",
 				storeid:"",
-				freight:""
+				freight:"",
+				spec_id:0
 			}
 		},
 		methods:{
@@ -108,7 +109,7 @@
 										})
 									}else if(_this.way==2){
 										uni.navigateTo({
-											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}&freight=${_this.freight}`
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}&freight=${_this.freight}&spec_id=${_this.spec_id}`
 										})
 									}else{
 										uni.navigateTo({
@@ -142,7 +143,7 @@
 										})
 									}else if(_this.way==2){
 										uni.navigateTo({
-											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}&freight=${_this.freight}`
+											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}&freight=${_this.freight}&spec_id=${_this.spec_id}`
 										})
 									}else{
 										uni.navigateTo({
@@ -187,9 +188,10 @@
 			this.statusBar = app.globalData.statusBar
 			//1是购物车过来的
 			//2是详情过来的
-			console.log(opction.titleparameter)
+			// console.log(opction.titleparameter)
 			if(opction.titleparameter=='orderaddress'){
-				let {way,gid,img,num,storename,price,goodtitle,storeid,freight} = opction
+				let {way,gid,img,num,storename,price,goodtitle,storeid,freight,spec_id} = opction
+				console.log(spec_id)
 				this.way = way
 				if(this.way==1){//这是购物车过来的
 					let {cids} = opction
@@ -198,6 +200,7 @@
 					let {specname} = opction
 					this.specname = specname
 				}
+				this.spec_id = spec_id
 				this.gid = gid
 				this.num = num
 				this.img = img

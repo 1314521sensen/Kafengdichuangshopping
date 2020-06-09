@@ -166,6 +166,29 @@
 		},
 		{
 			"path":"pages/grouppurchase/grouppurchase"
+		},
+		{
+			"path":"pages/integralstore/integralstore"
+		},
+		{
+			"path":"pages/limitedtimesecondskill/limitedtimesecondskill"
+		},
+		{
+			"path":"pages/groupbooking/groupbooking"
+		},
+		{
+			"path":"pages/topicpage/topicpage"
+		},
+		{
+			"path":"pages/autotrophy/autotrophy"
+		}
+        ,{
+            "path" : "pages/liveuserSowing/liveuserSowing",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/giftdetails/giftdetails",
+		    "style" : {}
 		}
     ],
 	

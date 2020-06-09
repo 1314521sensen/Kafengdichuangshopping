@@ -1,18 +1,36 @@
 <template>
 	<view class="content">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<search  @inpblue="inpblue"></search>
-		<banner height="260"></banner>
-		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
-			<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68"></ScratchableLatex>
-			<coupons></coupons>
-			<view class="father-two">
-			    <view class="father-one">
-					<Recommend title="热门推荐"></Recommend>
-					<shoppinglist class="setmarginTop"></shoppinglist>
-				</view>
-			</view>
-		</scroll-view>
+		<search  @inpblue="inpblue" :TabCur="TabCur"></search>
+		<scroll-view scroll-x class="text-white nav nav_top" scroll-with-animation :scroll-left="scrollLeft">
+		   <view class="cu-item nav" :class="index==TabCur?'text-yellow':''" v-for="(item,index) in nanlist" :key="index" @tap="tabSelect" :data-id="index">
+		    {{item.name}}
+		   </view>
+		  </scroll-view>
+		  <view v-if="TabCur==0">
+			  <banner height="260"></banner>
+			  <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
+			  	<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68"></ScratchableLatex>
+			  	<product></product>
+			  	<coupons></coupons>
+				<bgbanner :swiperList='swiperList' :isRounddot="swiperList.length>1?true:false"></bgbanner>
+			  	<Wouldyoulive></Wouldyoulive>
+			  	<Recommend title="特色购" height="60" bordercolor="#000"></Recommend>
+			  	<purchasing></purchasing>
+			  	<view class="father-two">
+			  	    <view class="father-one">
+			  			<Recommend title="热门推荐" bg="#f5f5f5"></Recommend>
+			  			<shoppinglist class="setmarginTop"></shoppinglist>
+			  		</view>
+			  	</view>
+			  </scroll-view>
+		  </view>
+		  <!-- 这是未选中的 -->
+		  <view v-if="TabCur!==0">
+			  <ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68" :style="{'margin-top':0}"></ScratchableLatex>
+			  <bgbanner :swiperList='swiperList' :isRounddot="swiperList.length>1?true:false"></bgbanner>
+			  <shoppinglist class="setmarginTop"></shoppinglist>
+		  </view>
 	</view>
 </template>
 
@@ -23,6 +41,10 @@
 	import coupons from "@/components/indexcomponents/coupons.vue"
 	import Recommend from '@/components/indexcomponents/Recommend.vue'
 	import shoppinglist from "@/components/indexcomponents/shoppinglist.vue"
+	import product from "@/components/indexcomponents/product.vue"
+	import Wouldyoulive from "@/components/indexcomponents/Wouldyoulive.vue"
+	import purchasing from "@/components/indexcomponents/purchasing.vue"
+	import bgbanner from "@/components/indexcomponents/menswearaaner.vue"
 	const app = getApp();
 	export default {
 		//这是首页
@@ -32,13 +54,13 @@
 				statusBar:0,
 				modalName: null,
 				//这是九宫格的数据通过父子组件传递
-				cuIconList: [
-					{
+				cuIconList: [{
 					cuIcon: 'cardboardfill',
 					color: 'red',
 					badge: 120,
 					name: '拼团',
-					imgs:"/static/index/Scratchablelatexicon/Spellgroup.png"
+					imgs:"/static/index/Scratchablelatexicon/Spellgroup.png",
+					url:"/pages/groupbooking/groupbooking"
 				},
 				{
 					cuIcon: 'recordfill',
@@ -75,28 +97,32 @@
 					color: 'mauve',
 					badge: 0,
 					name: '限时秒杀',
-					imgs:"/static/index/Scratchablelatexicon/Secondskill.gif"
+					imgs:"/static/index/Scratchablelatexicon/Secondskill.gif",
+					url:"/pages/limitedtimesecondskill/limitedtimesecondskill"
 				},
 				{
 					cuIcon: 'clothesfill',
 					color: 'blue',
 					badge: 0,
 					name: '专题',
-					imgs:"/static/index/Scratchablelatexicon/project.png"
+					imgs:"/static/index/Scratchablelatexicon/project.png",
+					url:"/pages/topicpage/topicpage"
 				}, 
 				{
 					cuIcon: 'upstagefill',
 					color: 'cyan',
 					badge: 0,
 					name: '积分',
-					imgs:"/static/index/Scratchablelatexicon/integral.png"
+					imgs:"/static/index/Scratchablelatexicon/integral.png",
+					url:"/pages/integralstore/integralstore"
 				},
 				{
 					cuIcon: 'questionfill',
 					color: 'mauve',
 					badge: 0,
 					name: '自营',
-					imgs:"/static/index/Scratchablelatexicon/proprietary.png"
+					imgs:"/static/index/Scratchablelatexicon/proprietary.png",
+					url:"/pages/autotrophy/autotrophy"
 				},
 				{
 					cuIcon: 'questionfill',
@@ -108,15 +134,52 @@
 				}
 				],
 				gridCol: 5,//这是格数
+				nanlist:[
+				     {
+				      name:"首页"
+				     },
+				     {
+				      name:"运动"
+				     },
+				     {
+				      name:"男装"
+				     },
+				     {
+				      name:"鞋靴"
+				     },
+				     {
+				      name:"食品"
+				     },
+				     {
+				      name:"医疗"
+				     },
+				     {
+				      name:"电器"
+				     },
+				     {
+				      name:'女装'
+				     }
+				    ],
+				scrollLeft:0,
+				TabCur: 0,
+				swiperList: [{
+				     id: 0,
+				     type: 'image',
+				     url: '/static/index/indexDailygood/activitybanner.gif'
+				}]
 			}
 		},
-		
 		methods: {
 			inpblue(e){
 				if(e){
 					e.blur()
 				}
+				
 			},
+			tabSelect(e) {
+				this.TabCur = e.currentTarget.dataset.id;
+				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			 },
 			//监控scroll-view 滚动标签是否滚动到底部
 			scrollbottom(){
 				console.log(22)
@@ -200,7 +263,11 @@
 			ScratchableLatex,
 			coupons,
 			shoppinglist,
-			Recommend
+			Recommend,
+			product,
+			Wouldyoulive,
+			purchasing,
+			bgbanner
 			// pageheight
 		},
 		onShow(){
@@ -245,6 +312,20 @@
 </script>
 
 <style lang="less" scoped>
+	.nav{
+		font-weight: bold;
+		font-size: 30rpx;
+		line-height: 102rpx;
+	}
+	.nav_top{
+	   position: absolute;
+	   /* #ifdef H5 */
+		top: 80rpx;
+	   /* #endif */
+	   /* #ifdef APP-PLUS */
+		top:140rpx;
+	   /* #endif */
+	}
 	.scroll-view{
 	  overflow: hidden;
 	  height: 100vh;

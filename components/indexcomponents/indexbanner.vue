@@ -63,10 +63,10 @@
 		height: 260rpx;
 		left: calc(50% - 360rpx);
 		/* #ifdef H5 */
-			top: 105rpx;
+			top: 170rpx;
 		/* #endif */
 		/* #ifdef APP-PLUS */
-			top:160rpx;
+			top:230rpx;
 		/* #endif */
 		border-radius: 40rpx;
 		box-shadow: 0 10rpx 6rpx #cfcfcf;

@@ -23,21 +23,23 @@
 					</view>  
 				</checkbox-group>
 				<view class="images" >
-					<image :src="'http://hbk.huiboke.com/'+items.good_pic"></image>
+					<image :src="'http://hbk.huiboke.com'+items.good_pic"></image>
 				</view>
 				<view class="describe">
 					<view class="shoping-title shopping-Title">
 						{{items.good_name}}
 					</view>
-					<view class="shoping-title ModelSize">
+					<view 
+						class="shoping-title ModelSize" 
+						@tap="showModal" 
+						data-target="bottomModal"
+						:data-storeid="items.store_id"
+						:data-goodid="items.good_id"
+						:data-img="items.good_pic"
+					>
 						<!-- spec_name spec_value -->
-						<text 
-							v-for="(itemitem,indexss) in JSON.parse(items.spec)" 
-							:key="indexss" 
-							@tap="showModal" 
-							data-target="bottomModal"
-							:data-id="items.good_id"
-						>{{itemitem.spec_name+" "+itemitem.spec_value}}</text>
+						<!-- 这是商品详情规格 {{itemitem.spec_name+" "+itemitem.spec_value}}-->
+						<text>{{items.spec_value}}</text>
 					</view>
 					<view class="price-box">
 						<text>¥{{items.good_price}}</text>
@@ -55,10 +57,14 @@
 			</view>
 			<!-- 弹窗商品规格列表 -->
 			<immediatelypopup :class="modalName=='bottomModal'?'show':''"  
-				:immediatelylist="immediatelylist"
+				:good_gid="good_gid"
+				:good_sid="good_sid"
 				:bool="bool"
+				:imgs="imgs"
+				:immediatelylist="immediatelylist"
 				@hiddends="hiddends"
 				@guigedata="guigedata"
+				@updataimmediatelylist="updataimmediatelylist"
 			></immediatelypopup>
 			<!-- 这是cart-item-bottom小列表结束 -->
 		</view>
@@ -67,7 +73,7 @@
 
 <script>
 	const app = getApp()
-	import immediatelypopup from "@/components/Details/immediatelypopup.vue"
+	import immediatelypopup from "@/components/shoppingcartlist/shopcarlistPopup.vue"
 	export default{
 		data(){
 			return {
@@ -88,12 +94,14 @@
 				shopcheckboxindex:0,
 				shopcheckboxindexs:0,
 				shopinglists:[],
-				mark:false
-				
+				mark:false,
+				good_gid:0,//这是商品id
+				good_sid:0,//这是店铺id
+				imgs:""
 			}
 		},
 		onShow() {
-			console.log(this.good)
+			// console.log(this.good)
 		},
 		methods:{
 			//封装一个数量增加 减少功能
@@ -169,10 +177,30 @@
 				
 			},
 			showModal(e) {
+				let {target,storeid,goodid,img} = e.currentTarget.dataset
 				//获取id值用来获取商品的规格 
-				this.id = e.currentTarget.dataset.id
-				
-				this.modalName = e.currentTarget.dataset.target
+				this.id = goodid
+				this.good_gid = goodid
+				this.good_sid = storeid
+				this.modalName = target
+				this.imgs = img
+				// console.log(goodid,storeid)
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}good/getGoodSpecListOneLever`,
+					data:{
+						sid:this.good_sid,
+						gid:this.good_gid
+					},
+					success(res) {
+						// console.log(res)
+						if(res.data.code==0){
+							_this.immediatelylist = res.data.data
+							return 
+						}
+						_this.immediatelylist=[]
+					}
+				})
 			},
 			hiddends(e) {
 				this.modalName = e
@@ -187,7 +215,7 @@
 				this.onloadbool = true
 				// console.log(e)
 				uni.request({
-					url:"http://hbk.huiboke.com/api/shopping_cart/updateGoodSpec",
+					url:`${app.globalData.Requestpath}shopping_cart/updateGoodSpec`,
 					method:"POST",
 					data:{
 						token:this.tokey,
@@ -208,6 +236,10 @@
 					}
 				})
 			},
+			updataimmediatelylist(e){
+				console.log(e)
+				this.immediatelylist = e
+			}
 		},
 		components:{
 			immediatelypopup
@@ -230,7 +262,7 @@
 			_this.$watch("shopinglist", function(newVal, oldVal) {
 				
 			  _this.shopinglists = newVal;
-			  
+			  // console.log(_this.shopinglists)
 			    //判断数组是否为空值
 			     if(_this.shopinglists){
 					 _this.mark = true

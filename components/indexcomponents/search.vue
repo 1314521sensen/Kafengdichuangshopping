@@ -1,5 +1,5 @@
 <template>
-	<view class="search">
+	<view class="search" :style="{'height':indexs==0?420+'rpx':168+'rpx'}">
 		<view class="search-inp">
 			<view class="search-form">
 				<text class="cuIcon-search"></text>
@@ -25,7 +25,7 @@
 	export default{
 		data(){
 			return {
-				
+				indexs:0
 			}
 		},
 		methods:{
@@ -43,6 +43,14 @@
 			// let inp = document.getElementById("inp")
 			// // console.log(inp)
 			// this.$emit("inpblue",inp)
+		},
+		props:["TabCur"],
+		created(){
+			const _this = this
+			this.$watch('TabCur',function(newsTabCur,oldTabCur){
+				// console.log(newsTabCur,oldTabCur)
+				_this.indexs = parseInt(newsTabCur)
+			})
 		}
 	}
 </script>
@@ -50,7 +58,7 @@
 <style lang="less" scoped>
 	.search {
 		// width: 100%;
-		height: 364rpx;
+		// height:420rpx;
 		padding-top: 22rpx;
 		background-color: #e62d28;
 		.seachplaceholder{

@@ -71,6 +71,7 @@
 				success(res) {
 					if(res.data.code==0){
 						_this.pic = res.data.data
+						// console.log(_this.pic)
 						//这和下面没关系 这块处理用户足迹的
 						//从这
 						//当用户点击进来的时候代表已经游览了商品足迹

@@ -167,6 +167,7 @@
 				orderSnArray:[],
 				Orderserialnumber:"",//订单流水号 用于H5支付用
 				freight:"",//商品的运费
+				spec_id:0,
 			}
 		},
 		methods: {
@@ -178,13 +179,15 @@
 			Addressmodification(){
 				//1是购物车过来的
 				//2是详情过来的
+				console.log(this.way)
 				if(this.way==1){
 					uni.navigateTo({
 						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
 					})
 				}else{
+					console.log(this.spec_id)
 					uni.navigateTo({
-						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}&freight=${this.freight}`
+						url:`/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}&freight=${this.freight}&spec_id=${this.spec_id}`
 					})
 				}
 			},
@@ -197,19 +200,180 @@
 			//当用户点击确定支付
 			Determinepayment(){
 				if(this.radio=='radio0'){//微信支付
-					console.log("微信支付")
-					// app端微信支付---开始
-					// #ifdef APP-PLUS
-							//app端 orderInfo支付的数据
+					// console.log("微信支付")
+					const _this = this
+					//当用户选择支付时处理买家留言
+					let Leavemessage = {}
+					let Leavearr = []
+					Leavemessage.sid = this.storeid
+					Leavemessage.msg = this.value
+					Leavearr[0] = Leavemessage
+					console.log(Leavearr)
+					if(this.address_id!==""){
+						if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
 							
-					// #endif
+						}else{//订单详情过来的
+							if(this.coupondetails.length<=0){
+								this.cid = ""
+								this.ctype = ""
+							}else{
+								this.cid = this.coupondetails[0].c_id
+								this.ctype = this.coupondetails[0].c_type
+							}
+							console.log(this.tokey,this.gid,this.data,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
+							uni.request({
+								url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
+								method:"POST",
+								data:{
+									token:this.tokey,
+									gid:this.gid,//商品的id
+									spec:this.data,
+									quantity:this.nums,
+									o_from:this.o_from,//根据用户哪一端进来的
+									address_id:this.address_id,//地址对应的id
+									p_msg:this.value,//用户的留言
+									c_id:this.cid,//这是返回用户选择的那张优惠券
+									c_type:this.ctype?'store':'platform'
+								},
+								success(res) {
+									console.log("走到这1")
+									// console.log(res)
+									// console.log(res.data.data.orderSnArray)//订单编号
+									console.log(res.data.data.swiftNo)//订单流水号
+									//orderSnArray订单的编组 支付的时候用到
+									if(res.data.code==0){//获取到支付前的数据
+									console.log("走到这2")
+										//获取订单流水号
+										// _this.orderSnArray = res.data.data.swiftNo
+										console.log(((_this.price*_this.nums+_this.freight)-(_this.Favorablebalance?_this.Favorablebalance:0)).toFixed(2))
+										console.log(res.data.data.swiftNo)
+										uni.request({
+											url:`${app.globalData.Requestpath}directwxpay/getarrinfo`,
+											header:{
+												'Content-Type':'application/json'
+											},
+											method:"POST",
+											data:{
+												user_id:54,
+												trade_type:"APP",
+												price:((_this.price*_this.nums+_this.freight)-(_this.Favorablebalance?_this.Favorablebalance:0)).toFixed(2),
+												sn:res.data.data.swiftNo
+											},
+											success(respaymentinformation) {
+												console.log(respaymentinformation)
+												if(respaymentinformation.data.code){
+													let orderInfo = JSON.stringify(respaymentinformation.data.data)
+													uni.requestPayment({
+														provider:"wxpay",
+														orderInfo:orderInfo,
+														success(resreturn) {
+															console.log(1)
+															console.log(resreturn)
+														},
+														fail(err){
+															console.log(2)
+															console.log(err)
+														}
+													})
+												}
+											},
+											fail(err){
+												console.log(err)
+											}
+										})
+									}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
+										console.log("走到这3")
+										_this.hideModal()
+										app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
+									}
+								}
+							})
+						}
+					}else{
+						_this.hideModal()
+						app.globalData.showtoastsame("请选择地址进行支付")
+					}
+					// app端微信支付---开始
+					// let obj = {
+					// 	appid:"wx0f9236b57d357dbb",
+					// 	noncestr:"123456789abcdefgh",
+					// 	package:'Sign=WXPay',
+					// 	partnerid:'1565078781',
+					// 	prepayid:'158831190101057374',
+					// 	timestamp:'1591342764',
+					// 	sign:'DEB45B3629C6E3464E9E753E4514B57B'
+					// }
+					// 
+					// console.log(orderInfo)
+							//app端 orderInfo支付的数据
+						// uni.request({
+						// 	url:`${app.globalData.Requestpath}directwxpay/pay`,
+						// 	header:{
+						// 		'Content-Type':'application/json'
+						// 	},
+						// 	data:{
+						// 		user_id:54,
+						// 		trade_type:"APP",
+						// 		price:0.01,
+						// 		sn:5448541664
+						// 	},
+						// 	success(res) {
+						// 		console.log(res)
+						// 	},
+						// 	fail(err){
+						// 		console.log(err)
+						// 	}
+						// })
+						// uni.getProvider({
+						// 	service:'payment',
+						// 	success(res) {
+						// 		console.log(res.provider[1])
+						// 		uni.requestPayment({
+						// 			provider:res.provider[1],
+									
+						// 		})
+						// 	}
+						// })
+						
+
 					//app端微信端---结束
 					
 					//H5端支付---开始
 					//H5端支付---结束
 				}else if(this.radio=='radio1'){//支付宝支付
 					console.log("支付宝支付")
-					//app端支付宝支付---开始
+					uni.request({
+						url:`${app.globalData.Requestpath}directalipay/getarrinfo`,
+						header:{
+							'Content-Type':'application/json'
+						},
+						method:"POST",
+						data:{
+							user_id:54,
+							trade_type:"APP",
+							price:0.01,
+							sn:'343444456'
+						},
+						success(reszhifubao) {
+							if(reszhifubao.data.code==0){
+								
+								let {app_id,biz_content,charse,method,out_trade_no,sign_type,subject,timestamp,total_amount,version,sign} = reszhifubao.data.msg
+								//console.log(app_id,biz_content,charse,method,out_trade_no,sign_type,subject,timestamp,total_amount,version,sign)
+								let orderInfo = `app_id=${app_id}&biz_content=${biz_content}&charset=utf-8&method=${method}&notify_url=''&out_trade_no=${out_trade_no}&sign_type=${sign_type}&subject=${subject}&timestamp=${timestamp}&total_amount=${total_amount}&version=${version}&sign=${sign}`
+								uni.requestPayment({
+									provider:'alipay',
+									orderInfo:orderInfo,
+									success(resdata){
+										console.log(resdata)
+									},
+									fail(err){
+										console.log(err)
+									}
+								})
+							}
+						},
+					})
+					//app端支付宝支付---开始&product_code='' &notify_url=''
 					//app端支付宝支付---结束
 				}else{
 					// console.log(this.tokey)					
@@ -266,14 +430,14 @@
 							this.cid = this.coupondetails[0].c_id
 							this.ctype = this.coupondetails[0].c_type
 						}
-						console.log(this.tokey,this.gid,this.data,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
+						console.log(this.tokey,this.gid,this.spec_id,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
 						uni.request({
 							url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
 							method:"POST",
 							data:{
 								token:this.tokey,
 								gid:this.gid,//商品的id
-								spec:this.data,
+								spec_id:this.spec_id,
 								quantity:this.nums,
 								o_from:this.o_from,//根据用户哪一端进来的
 								address_id:this.address_id,//地址对应的id
@@ -437,7 +601,7 @@
 			//1是购物车过来的
 			//2是详情过来的
 			//把公共的提出来
-			let {gid,num,img,storename,price,goodtitle,storeid,freight} = opction
+			let {gid,num,img,storename,price,goodtitle,storeid,freight,spec_id} = opction
 			// console.log(opction)
 			if(way=="1"){
 				// console.log("购物车过来的")
@@ -452,6 +616,7 @@
 			this.gid = gid
 			this.img = JSON.parse(img)
 			this.nums = num
+			this.spec_id = spec_id
 			this.storename = storename
 			this.price = price
 			this.goodtitle = goodtitle

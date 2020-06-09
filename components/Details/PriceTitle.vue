@@ -3,7 +3,7 @@
 		<view class="PriceTitle-top">
 			<view class="price">
 				<!-- 商品的价格 -->
-				<text>¥{{pic.good_price}}</text>
+				<text>¥{{pic.good_promotion_price}}</text>
 			</view>
 			<view class="CommodityTitle">
 				<!-- 商品的标题 -->

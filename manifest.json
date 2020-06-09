@@ -172,6 +172,7 @@
     "h5" : {
         "router" : {
             "mode" : "history"
-        }
+        },
+        "title" : "惠播客"
     }
 }

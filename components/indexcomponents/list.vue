@@ -8,7 +8,7 @@
 					<view class="cu-item-left" @tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)">
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
 						<!-- :style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"> -->
-						<view class="cu-avatar round lg"
+						<view class="cu-avatar round lg cu-item-left-bg"
 							:style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"
 						> 
 							
@@ -90,11 +90,11 @@
 
 <style lang="less" scoped>
 	.list{
-	  
+	  background-color: #fff;
 	  .shopping-title{
 	   //由于背景图片没高度 给来一个高度
 	   height:70rpx;
-	   background-color:deeppink ;//背景图片没有 先用颜色替代
+	   // background-color:deeppink ;//背景图片没有 先用颜色替代
 	   // background-image:url() //这里背景图片到时候有图片在渲染  先把图片的其他属性写上
 	   // background:no-repeat 0 0;
 	   // background-size: 100% 100%;
@@ -104,20 +104,20 @@
 	   display: flex;
 	   flex-wrap:wrap;
 	   justify-content:space-between;
-	   padding: 0 36rpx;
+	   padding: 0 20rpx;
 	   
 	   
 	  }
 	  .cu-list.menu-avatar>.cu-item{
 	   display:block;
 	   height:490rpx;
-	   width: 332rpx;
+	   width: 340rpx;
 	   // border: 2rpx solid red;
 	   margin-bottom: 18rpx;
 	   border-radius: 20rpx;
 	   overflow: hidden;
 	   box-shadow: 4rpx 4rpx 12rpx #C0C0C0;
-	   
+	   padding:0;
 	   // box-shadow: 0rpx 0rpx 0rpx 5rpx;
 	   // align-items: center;
 	   // margin-bottom:20rpx;
@@ -128,12 +128,16 @@
 	    position: static !important;
 	   }
 	   .cu-item-left{
-	    
+	    .cu-item-left-bg{
+			width:100%;
+			// background-size: 100% 100%;
+		}
 	   }
 	   .cu-item-right{
 	    margin-top:18rpx;
 	    // background-color: ;
 	     // width:100%;
+		 padding-right:10rpx;
 	     .content{
 	      position: static !important;
 	      width: 100% !important;

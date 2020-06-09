@@ -22,12 +22,18 @@
 		methods:{
 			returnsmy(e){
 				let url = e.currentTarget.dataset.url
-				uni.switchTab({
-					url
-				})
+				if(this.Jumpchoose){
+					uni.redirectTo({
+						url
+					})
+				}else{
+					uni.switchTab({
+						url
+					})
+				}
 			}
 		},
-		props:["url","message","bg","textcolor"]
+		props:["url","message","bg","textcolor",'Jumpchoose']
 	}
 </script>
 

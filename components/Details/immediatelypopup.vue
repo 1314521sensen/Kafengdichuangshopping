@@ -3,7 +3,7 @@
 		<view class="cu-dialog">
 			<view class="immediately-top">
 				<view class="immediately-top-image">
-					<!-- <image :src="'http://hbk.huiboke.com'+pic.good_pic"></image> -->
+					<image :src="'http://hbk.huiboke.com'+pic.good_pic"></image>
 				</view>
 				<view class="immediately-top-describe">
 					<view class="price">
@@ -21,13 +21,11 @@
 							<view class="item-text">
 								{{item.spec_name}}
 							</view>
-							<view class="item-specifications">
-								<text 
-									v-for="(items,indexs) in item.spec_value" 
+							<!-- v-for="(items,indexs) in item.spec_value" 
 									:key="indexs" :style="{'color':color}"  
-									@tap="choose(items,index,indexs,item)"
-									class="test"
-								>{{items}}</text>  
+									@tap="choose(items,index,indexs,item)"items,index,indexs,item -->
+							<view class="item-specifications" @tap="choose" :data-specid="item.id" :data-index="index">
+								<text class="test" :class="index==indexs?'active':''">{{item.spec_value}}</text>  
 							</view>
 						</view>
 					</view>
@@ -62,36 +60,40 @@
 				text:"",
 				datalist:[],
 				price:"",
+				specid:0,
+				indexs:-1,
 			}
 		},
 		methods:{
-			//这是当用户点击规格
-			choose(items,index,indexs,item){
+			//这是当用户点击规格items,index,indexs,item
+			choose(e){
+				this.specid = e.currentTarget.dataset.specid
+				this.indexs = e.currentTarget.dataset.index
 				//这是存储用户点击规格的值
-				this.selectedlist[index] = items
-				//这是用来存储用户的规格的名称
-				this.selectedlistnamelist[index]=item.spec_name
-				//用来保存用户选择的规格方便传给后台----开始
-				this.datalist[index] = {spec_name:item.spec_name,spec_value:items}
-				// this.selectedlistindex.push({"spec_name":`${this.selectedlistnamelist[index]}`,"spec_value":`${this.selectedlist[index]}`})
-				//用来保存用户选择的规格方便传给后台----结束
-				// console.log(items)
-				let str = ""
-				this.selectedlist.forEach((itemsitem,indexsindex)=>{
-					str += itemsitem+"&nbsp;&nbsp;&nbsp;"
-				})
-				this.text = str
-				//去请求每个商品规格的对应的数据
+				// this.selectedlist[index] = items
+				// //这是用来存储用户的规格的名称
+				// this.selectedlistnamelist[index]=item.spec_name
+				// //用来保存用户选择的规格方便传给后台----开始
+				// this.datalist[index] = {spec_name:item.spec_name,spec_value:items}
+				// // this.selectedlistindex.push({"spec_name":`${this.selectedlistnamelist[index]}`,"spec_value":`${this.selectedlist[index]}`})
+				// //用来保存用户选择的规格方便传给后台----结束
+				// // console.log(items)
+				// let str = ""
+				// this.selectedlist.forEach((itemsitem,indexsindex)=>{
+				// 	str += itemsitem+"&nbsp;&nbsp;&nbsp;"
+				// })
+				// this.text = str
+				// //去请求每个商品规格的对应的数据
 				uni.request({
-					url:"http://hbk.huiboke.com/api/good/getSelectedGoodSpecInfo",
-					method:"POST",
+					url:`${app.globalData.Requestpath}good/getGoodSpecInfoOneLeval`,
 					data:{
-						gid:this.gid,
-						spec:this.datalist
+						spec_id:e.currentTarget.dataset.specid,
 					},
 					success:(res)=>{
+						// console.log(res)
 						if(res.data.code==0){
-							this.price = res.data.data.price
+							this.text = res.data.data.spec_value
+							this.price = res.data.data.spec_price
 						}
 					}
 				})
@@ -117,32 +119,41 @@
 						app.globalData.Detectionupdatetokey(res.data)
 					}
 				})
-				if(this.selectedlist.length<this.immediatelylist.length){
-					app.globalData.showtoastsame("请选择完整规格")
-				}else{
-					if(this.bool){
-						let arr = []
-						for(let i=0;i<this.selectedlist.length;i++){
-							//将每个值进行字符串拼接 这样就可以传给后端了
-							arr.push({"spec_name":`${this.selectedlistnamelist[i]}`,"spec_value":`${this.selectedlist[i]}`})
-						}
-						this.$emit("guigedata",arr)
-						this.$emit("hiddends",null)
-					}else{
-						// console.log(this.pic.good_freight)
-						//跳转到购买页面
-						uni.navigateTo({
-							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
-						})
-					}
+				if(this.text!==""){
+					// console.log(this.specid)
+					// console.log(this.gid,this.datalist,this.num)
+					uni.navigateTo({
+						url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=${this.specid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
+					})
 				}
+				//这些先留着 为后期用
+				// if(this.selectedlist.length<this.immediatelylist.length){
+				// 	app.globalData.showtoastsame("请选择完整规格")
+				// }else{
+				// 	if(this.bool){
+				// 		let arr = []
+				// 		for(let i=0;i<this.selectedlist.length;i++){
+				// 			//将每个值进行字符串拼接 这样就可以传给后端了
+				// 			arr.push({"spec_name":`${this.selectedlistnamelist[i]}`,"spec_value":`${this.selectedlist[i]}`})
+				// 		}
+				// 		this.$emit("guigedata",arr)
+				// 		this.$emit("hiddends",null)
+				// 	}else{
+				// 		// console.log(this.pic.good_freight)
+				// 		//跳转到购买页面
+				
+				// 	}
+				// }
 			},
 			//当用户点击了×
 			Shutdown(){
 				this.$emit("hiddends",null)
 			}
 		},
-		props:["immediatelylist","bool","gid","pic","storeid"]
+		props:["immediatelylist","bool","gid","pic","storeid"],
+		created() {
+			// console.log(this.immediatelylist)
+		}
 	}
 </script>
 
@@ -223,6 +234,10 @@
 								border:2rpx solid #ccc;
 								border-radius:16rpx;
 								margin:0 22rpx 10rpx 0;
+							}
+							.active{
+								border-color:red;
+								color:red;
 							}
 						}
 					}

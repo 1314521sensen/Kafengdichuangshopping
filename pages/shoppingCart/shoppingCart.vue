@@ -126,7 +126,7 @@
 					key:"bindtokey",
 					success(res){
 						_this.tokey = res.data
-						uni.startPullDownRefresh()
+						// uni.startPullDownRefresh()
 						app.globalData.Detectionupdatetokey(res.data)
 						uni.request({
 							url:`${app.globalData.Requestpath}shopping_cart/getShoppingCartList`,
@@ -142,7 +142,7 @@
 										_this.shopinglist = res.data.data
 										// console.log(res.data.data[0])
 										uni.stopPullDownRefresh();//关闭下拉刷新
-										// console.log(_this.shopinglist)
+										console.log(_this.shopinglist)
 								}else{
 									console.log("重新登录")
 								}

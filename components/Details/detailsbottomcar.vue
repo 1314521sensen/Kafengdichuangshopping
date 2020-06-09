@@ -60,7 +60,7 @@
 			showModal(e) {
 				if(this.collectionbool){
 					uni.request({
-						url:"http://hbk.huiboke.com/api/user/deleteFavoriteInfo",
+						url:`${app.globalData.Requestpath}user/deleteFavoriteInfo`,
 						method:"POST",
 						data:{
 							token:this.tokey,
@@ -94,8 +94,9 @@
 			Addcart(obj,img){
 				app.globalData.Detectionupdatetokey(this.tokey)
 				let {store_name,good_title,good_price,good_pic} = obj
+				// console.log(store_name,good_title,good_price,good_pic,this.storeid,this.gid)
 				uni.request({
-					url:"http://hbk.huiboke.com/api/shopping_cart/addShoppingCartInfo",
+					url:`${app.globalData.Requestpath}shopping_cart/addShoppingCartInfo`,
 					method:"POST",
 					data:{
 						token:this.tokey,//tokey值
@@ -103,10 +104,10 @@
 						s_name:store_name,
 						gid:this.gid,
 						g_name:good_title,
-						g_price:good_price,
 						g_pic:good_pic
 					},
 					success(res) {
+						console.log(res)
 						if(res.data.code==0){
 							uni.switchTab({
 								url:"/pages/shoppingCart/shoppingCart"
@@ -173,7 +174,19 @@
 			},
 			Skiporder(e){
 				app.globalData.Detectionupdatetokey(this.tokey)
-				this.modalName = e.currentTarget.dataset.target
+				// console.log(this.immediatelylist.length)
+				/*
+					当用户点击立即购买的时候  
+						1.如果有规格就让框弹出来 数量也可以自己选择 
+						2.如果没有规格 就不让框弹出来 直接跳转订单 数量默认的就是1 规格默认的就是0
+				*/
+				if(this.immediatelylist.length>0){
+					this.modalName = e.currentTarget.dataset.target
+				}else{
+					uni.navigateTo({
+						url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=0&num=1&way=2&&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.pic.good_promotion_price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
+					})
+				}
 			},
 			//当用户点击了 子组件里面的x
 			hiddends(e){
@@ -206,12 +219,15 @@
 			})
 			//购物车弹窗数据
 			uni.request({
-				url:"http://hbk.huiboke.com/api/good/getGoodSpecList",
+				url:`${app.globalData.Requestpath}good/getGoodSpecListOneLever`,
 				data:{
+					sid:_this.storeid,
 					gid:_this.gid
 				},
 				success(res) {
+					// console.log(res)
 					if(res.data.code==0){
+						// console.log(res.data.data)
 						_this.immediatelylist = res.data.data
 					}
 				}

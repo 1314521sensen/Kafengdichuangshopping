@@ -49,10 +49,26 @@
 					<text class="textcolorwrite text-weight">开始直播</text>
 				</button>
 			</cover-view>
-			<!-- <cover-view class="slider parent-padding-leftAndright" :style="{width:windowWidth+'px',top:(windowHeight/2)+'px'}">
-				<cover-view class="sliderborder border-Size-fith border-styles"></cover-view>
-				<cover-view class="Slidinground border-radiusthirty"></cover-view>
-			</cover-view> -->
+			<cover-view class="slider" :style="{top:(windowHeight/2)+'px'}"  v-if="Skincare">
+				<text class="textcolorwrite font-size-thirty slidertitletext">美颜</text>
+				<button class="sliderbtn bg-btn-red" @click="Increaseskin" data-indextext="1">
+					<text class="textcolorwrite font-size-forty">+</text>
+				</button>
+				<input type="text" class="sliderinp textcolorwrite text-center font-size-thirty border-styles border-Size" v-model="beauty" :disabled="true" />
+				<button class="sliderbtn bg-btn-red textcolorwrite" @click="Reduceskin" data-indextext="1">
+					<text class="textcolorwrite font-size-forty">-</text>
+				</button>
+			</cover-view>
+			<cover-view class="slider" :style="{top:(windowHeight/2)+'px',right:0}" v-if="Skincare">
+				<text class="textcolorwrite font-size-thirty slidertitletext">美白</text>
+				<button class="sliderbtn bg-btn-red" @click="Increaseskin" data-indextext="2">
+					<text class="textcolorwrite font-size-forty">+</text>
+				</button>
+				<input type="text" class="sliderinp textcolorwrite text-center font-size-thirty border-styles border-Size" v-model="whiteness" :disabled="true" />
+				<button class="sliderbtn bg-btn-red textcolorwrite" @click="Reduceskin" data-indextext="2">
+					<text class="textcolorwrite font-size-forty">-</text>
+				</button>
+			</cover-view>
 		</cover-view>
 	</view>
 	<!-- #endif -->
@@ -68,8 +84,8 @@
 			return {
 				windowWidth:0,//可使用屏幕的宽度
 				windowHeight:0,//克数用屏幕的高度
-				beauty:9,//美颜，取值范围 0-9（iOS取值范围为1） ，0 表示关闭
-				whiteness:9,//	美白，取值范围 0-9（iOS取值范围为1） ，0 表示关闭。
+				beauty:5,//美颜，取值范围 0-9（iOS取值范围为1） ，0 表示关闭
+				whiteness:5,//	美白，取值范围 0-9（iOS取值范围为1） ，0 表示关闭。
 				statusBarHeight:0,//拿到状态栏高度
 				windowBottom:0,//距离底部的距离
 				Backcoverurl:"",//这是传回来的图片
@@ -82,6 +98,7 @@
 					// 	url:"/static/Pushflow/Cameratransformation.png"
 					// }
 				],
+				Skincare:false
 			}
 		},
 		methods: {
@@ -90,9 +107,14 @@
 			},
 			cameraimgs(e){
 				let indexs = e.currentTarget.dataset.index
-				// if(indexs==0){//代表点击了美颜
-					
-				// }
+				// console.log(indexs)
+				if(indexs==0){//代表点击了美颜
+					if(this.Skincare){
+						this.Skincare = false
+					}else{
+						this.Skincare = true
+					}
+				}
 			},
 			covermodel(msgtitle,msgcotent){
 				const _this = this
@@ -173,6 +195,40 @@
 			},
 			inpvalue(e){
 				this.Backinpvalue = e
+			},
+			//增加美颜
+			Increaseskin(e){
+				let indexs = parseInt( e.currentTarget.dataset.indextext)
+				if(indexs==1){//代表美颜
+					this.beauty++
+					if(this.beauty>=9){
+						this.beauty = 9
+						app.globalData.showtoastsame("美颜取值0~9,9代表最高美颜")
+					}
+				}else{//代表美白
+					this.whiteness++
+					if(this.whiteness>=9){
+						this.whiteness = 9
+						app.globalData.showtoastsame("美白取值0~9,9代表最高美白")
+					}
+				}
+			},
+			//减少美颜
+			Reduceskin(e){
+				let indexs = parseInt( e.currentTarget.dataset.indextext)
+				if(indexs==1){//代表美颜
+					this.beauty--
+					if(this.beauty<=0){
+						this.beauty = 0
+						app.globalData.showtoastsame("美颜取值0~9,0代表无美颜")
+					}
+				}else{//代表美白
+					this.whiteness--
+					if(this.whiteness<=0){
+						this.whiteness = 0
+						app.globalData.showtoastsame("美白取值0~9,0代表无美白")
+					}
+				}
 			}
 		},
 		created() {
@@ -278,23 +334,28 @@
 		border-width:0;
 	}
 	.slider{
+		align-items: center;
 		position: absolute;
-		height:60rpx;
-		background-color:red;
+		width: 100rpx;
+		/* height:60rpx; */
+		/* background-color:red; */
 		justify-content: center;
 	}
-	.sliderborder{
-		/* height:3rpx; */
-		border-color:yellow;
-		
+	.slidertitletext{
+		margin-bottom:10rpx;
 	}
-	.Slidinground{
-		position:absolute;
-		top:0;
-		left:40rpx;
-		width:60rpx;
-		height:60rpx;
-		background-color:pink;
+	.sliderbtn{
+		width:80rpx;
+		height:50rpx;
+		border-width:0;
+		border-radius: 20rpx;
+	}
+	.sliderinp{
+		width: 100rpx;
+		height:40rpx;
+		border-color:#de4758;
+		margin:15rpx 0;
+		border-radius:20rpx;
 	}
 	/* #endif */
 </style>

@@ -47,7 +47,8 @@
 				specname:"",
 				storeid:"",
 				cids:"",
-				freight:""
+				freight:"",
+				spec_id:0
 			}
 		},
 		methods: {
@@ -69,7 +70,7 @@
 						// console.log("执行这里详情")
 						// console.log(this.freight)
 						uni.reLaunch({
-							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}&freight=${this.freight}`
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}&freight=${this.freight}&spec_id=${this.spec_id}`
 						})
 					}
 				}
@@ -81,7 +82,7 @@
 					})
 				}else if(this.way==2){
 					uni.navigateTo({
-						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}&freight=${this.freight}`
+						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}&freight=${this.freight}&spec_id=${this.spec_id}`
 					})
 				}else{
 					uni.navigateTo({
@@ -113,7 +114,7 @@
 					// console.log()
 				}else if(this.way==2){
 					uni.navigateTo({
-						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}`
+						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}&spec_id=${this.spec_id}`
 					})
 				}else{
 					uni.navigateTo({
@@ -161,7 +162,7 @@
 			//1是购物车过来的
 			//2是详情过来的
 			if(this.titleparameter=='orderaddress'){
-				let {way,gid,img,num,storename,price,goodtitle,storeid,freight} = opction
+				let {way,gid,img,num,storename,price,goodtitle,storeid,freight,spec_id} = opction
 				this.way = way
 				if(this.way==1){//这是购物车过来的
 					let {cids} = opction
@@ -173,6 +174,7 @@
 				this.gid = gid
 				this.num = num
 				this.img = img
+				this.spec_id = spec_id
 				this.storename = storename
 				this.price = price
 				this.goodtitle = goodtitle

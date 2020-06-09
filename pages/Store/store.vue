@@ -72,7 +72,6 @@
 		},
 		methods: {
 			getChildnav(e){
-				console.log(e)
 				this.items = e
 				// console.log(this.items)
 			}

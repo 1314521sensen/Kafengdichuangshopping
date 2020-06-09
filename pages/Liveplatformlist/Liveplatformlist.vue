@@ -29,7 +29,7 @@
 		<view class="Liveplatformlistbanner">
 			<view class="Liveplatformbanner">
 				<!-- :autoplay="true" interval="5000" duration="500" -->
-				<swiper class="card-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
+				<swiper class="card-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :autoplay="true" interval="5000" duration="500" :circular="true"
 				  @change="cardSwiper" indicator-color="#8799a3"
 				 indicator-active-color="#0081ff">
 					<swiper-item v-for="(item,index) in swiperList" :key="index" :class="cardCur==index?'cur':''">
@@ -97,31 +97,31 @@
 				{
 					id: 0,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big84000.jpg'
+					url: '/static/Liveplatformlist/banner1.png'
 				}, {
 					id: 1,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
+					url: '/static/Liveplatformlist/banner1.png',
 				}, {
 					id: 2,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big39000.jpg'
+					url: '/static/Liveplatformlist/banner1.png'
 				}, {
 					id: 3,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
+					url: '/static/Liveplatformlist/banner1.png'
 				}, {
 					id: 4,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25011.jpg'
+					url: '/static/Liveplatformlist/banner1.png'
 				}, {
 					id: 5,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big21016.jpg'
+					url: '/static/Liveplatformlist/banner1.png'
 				}, {
 					id: 6,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg'
+					url: '/static/Liveplatformlist/banner1.png'
 				}],
 				list:[
 					{
@@ -158,18 +158,6 @@
 			}
 		},
 		methods: {
-			//拉流
-			bofang(){
-				uni.navigateTo({
-					url:`/pages/Liveplatform/Liveplatform`
-				})
-			},
-			// zhibo(){
-			// 	uni.navigateTo({
-			// 		url:`/pages/Livecover/Livecover`
-			// 	})
-			// },
-			//结束
 			jieshu(){
 				uni.navigateTo({
 					url:`/pages/Closeby/Closeby`
@@ -227,7 +215,7 @@
 			}
 			.region-right{
 				flex:1;
-				background-color:#ff97b7;
+				background-color:#ff98b1;
 				border-radius:30rpx;
 				color:#fff;
 				font-size: 26rpx;
@@ -267,15 +255,15 @@
 		display:flex;
 		justify-content: center;
 		.Liveplatformbanner{
-			width: 90%;
+			width: 100%;
 			// height:200rpx;
 			// background-color:red;
 			.card-swiper{
-				height:284rpx !important;
+				height:260rpx !important;
 			}
 			.card-swiper swiper-item{
 				padding:0;
-				width: 548rpx !important;
+				width: 600rpx !important;
 			}
 		}
 	}
@@ -384,4 +372,5 @@
 			}
 		}
 	}
+	.uni-swiper-dot-active{}
 </style>
