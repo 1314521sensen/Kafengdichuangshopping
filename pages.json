@@ -193,6 +193,10 @@
 		{
 		    "path" : "pages/signin/signin",
 		    "style" : {}
+		},
+		{
+		    "path" : "pages/myspelllist/myspelllist",
+		    "style" : {}
 		}
     ],
 	

@@ -32,7 +32,8 @@
 					badge: 0,
 					name: '我的拼单',
 					imgs:"/static/Settheicon/Myspelllist.png",
-					Routinghopname:"userMyspelllist"
+					Routinghopname:"userMyspelllist",
+					url:"/pages/myspelllist/myspelllist"
 				}, {
 					badge: 0,
 					name: '我的收藏',
