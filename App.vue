@@ -84,6 +84,13 @@
 				// console.log(plus.runtime.appid)//这是appid
 				// console.log(plus.os.name)//这是Android
 			// #endif
+			//接下来启动页---开始
+				//通过缓存来控制是否显示启动页
+				uni.setStorage({
+					key:"Startpagebool",
+					data:true
+				})
+			//启动页结束
 		},
 		onShow: function() {
 			

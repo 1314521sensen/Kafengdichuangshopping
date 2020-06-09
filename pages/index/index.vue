@@ -256,6 +256,11 @@
 			// #endif
 			// console.log(app.globalData)
 			this.statusBar = app.globalData.statusBar
+			//启动页更改缓存中的值
+			uni.setStorage({
+				key:"Startpagebool",
+				data:false
+			})
 		},
 		components:{
 			search,

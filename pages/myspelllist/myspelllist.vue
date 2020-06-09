@@ -3,16 +3,12 @@
 		<pageheight :statusBar="statusBar"></pageheight>
 		<!-- 返回 -->
 		<actionbar message="我的拼单" url="/pages/PersonalMy/PersonalMy"></actionbar>
-			
 		<!-- 我的拼单 -->	
 		<sharethebill></sharethebill>
 		<!-- 精品推荐  -->
-		
 		<Recommend title="精选推荐"  bg="#f2f2f2"></Recommend>
 		<!-- // 直播中  立即拼团 -->
 		<liveintroduced></liveintroduced>
-		
-		
 	</view>
 </template>
 
