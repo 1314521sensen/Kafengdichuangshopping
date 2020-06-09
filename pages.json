@@ -189,6 +189,10 @@
 		{
 		    "path" : "pages/giftdetails/giftdetails",
 		    "style" : {}
+		},
+		{
+		    "path" : "pages/signin/signin",
+		    "style" : {}
 		}
     ],
 	

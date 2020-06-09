@@ -20,7 +20,8 @@
 					badge: 1,
 					name: '签到',
 					imgs:"/static/Settheicon/Signin.png",
-					Routinghopname:"Signin"
+					Routinghopname:"Signin",
+					url:"/pages/signin/signin"
 				}, {
 					badge: 22,
 					name: '收货地址',
