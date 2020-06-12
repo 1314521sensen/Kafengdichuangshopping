@@ -5,7 +5,7 @@
 			<!-- 装商品的盒子 -->
 			<view class="merchandiseBox">
 				<!-- 单个商品  -->
-				<view class="particularCom" v-for="(item,index) in particularComS" :key='index'>
+				<view class="particularCom" v-for="(item,index) in particularComS" :key='index' @tap="grouplongshopinfo" :data-index="index">
 					<view class="par_left">
 						<image class="parImg" :src="item.urls" mode=""></image>
 						<view class="operable">{{item.parText}}</view>
@@ -18,33 +18,52 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data() {
 			return {
 				// 商品等
 				particularComS:[
 					{
-						urls:"/static/headearning/belle.png",
+						urls:"/static/headearning/Canpush.png",
 						parText:"可推商品"
 					},
 					{
-						urls:"/static/headearning/belle.png",
+						urls:"/static/headearning/historyshop.png",
 						parText:"历史产品"
 					},
 					{
-						urls:"/static/headearning/belle.png",
+						urls:"/static/headearning/shopdetails.png",
 						parText:"商品详细"
 					},
 					{
-						urls:"/static/headearning/belle.png",
+						urls:"/static/headearning/withdrawal.png",
 						parText:"提现"
-					},
-					
+					}	
 				]
 			}
 		},
 		methods: {
-			
+			grouplongshopinfo(e){
+				let {index} = e.currentTarget.dataset
+				// console.log(index)
+				let indexs = parseInt(index)
+				if(indexs==0){
+					console.log(1)
+				}else if(indexs==1){
+					uni.navigateTo({
+						url:"/pages/historyofgoods/historyofgoods"
+					})
+				}else if(indexs==2){
+					uni.navigateTo({
+						url:"/pages/commoditydetails/commoditydetails"
+					})
+				}else if(indexs==3){
+					uni.navigateTo({
+						url:"/pages/withdrawdeposit/withdrawdeposit"
+					})
+				}
+			}
 		}
 	}
 </script>
@@ -57,7 +76,7 @@
 		.merchandiseBox{
 			margin-top: 15rpx;
 			width: 690rpx;
-			height: 400rpx;
+			// height: 400rpx;
 			background-color: #FFFFFF;
 			box-shadow: 5rpx 5rpx 15rpx #ccc;
 			border-radius: 20rpx;

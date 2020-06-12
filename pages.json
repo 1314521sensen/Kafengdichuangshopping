@@ -215,6 +215,18 @@
 		{
 		    "path" : "pages/headearnings/headearnings",
 		    "style" : {}
+		},
+		{
+		    "path" : "pages/commoditydetails/commoditydetails",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/withdrawdeposit/withdrawdeposit",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/historyofgoods/historyofgoods",
+		    "style" : {}
 		}
     ],
 	

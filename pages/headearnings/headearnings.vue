@@ -1,9 +1,9 @@
 <template>
 	<view class="headeadnings">
 		<!-- 头部 -->
-		<view class="witder" style="background-image: url(/static/headearning/headnav_bg.png)">
+		<view class="witder" style="background-image: url(/static/headearning/headnav_bg.png)" :style="{'padding-top':statusBar+'rpx'}">
 			<view class="header_nav">
-				<view class="lg text-gray cuIcon-back"></view>
+				<text class="lg text-gray cuIcon-back" @tap="returnmypeoby"></text>
 			</view>
 		</view>
 		<!-- 头像和名字 -->
@@ -48,15 +48,23 @@
 					   Thetext:'RMB200',
 					   Theearnings:'积累佣金'
 				    }],
+					statusBar:0
 			   } 
 		 },
 		methods: {
-			
+			returnmypeoby(){
+				uni.switchTab({
+					url:"/pages/PersonalMy/PersonalMy"
+				})
+			}
 		},
 		components:{
 			elaborate,
 			productlist,
 			
+		},
+		onLoad() {
+			this.statusBar = app.globalData.statusBar
 		}
 	}
 </script>
@@ -64,7 +72,7 @@
 <style lang="less" scoped>
 	.headeadnings{
 		.witder{
-			height: 380rpx;
+			height: 440rpx;
 			background-size: 100% 100%;
 			overflow: hidden;
 			.header_nav{
