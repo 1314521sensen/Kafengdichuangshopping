@@ -1,16 +1,30 @@
 <template>
 	<view class="content">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<search  @inpblue="inpblue" :TabCur="TabCur"></search>
-		<scroll-view scroll-x class="text-white nav nav_top" scroll-with-animation :scroll-left="scrollLeft">
+		<search  
+			@inpblue="inpblue" 
+			:TabCur="TabCur" 
+			:style="{'height':seachheight+'rpx','position':seachstatic,'top':'0','z-index':zIndex,'padding-top':paddingtop+'rpx','width':'100%'}"
+		>
+		</search>
+		<scroll-view 
+			scroll-x 
+			class="text-white nav nav_top" 
+			scroll-with-animation 
+			:scroll-left="scrollLeft" 
+			:style="{
+				'z-index':zIndex,
+				'top':navtop+'rpx',
+				'position':navposition
+			}">
 		   <view class="cu-item nav" :class="index==TabCur?'text-yellow':''" v-for="(item,index) in nanlist" :key="index" @tap="tabSelect" :data-id="index">
 		    {{item.name}}
 		   </view>
 		  </scroll-view>
 		  <view v-if="TabCur==0">
-			  <banner height="260"></banner>
-			  <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
-			  	<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68"></ScratchableLatex>
+			  <banner :height="bannheight" :style="{'height':bannheight+'rpx'}"></banner>
+			  <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom" @scroll="realtime" @scrolltoupper="scrotop">
+			  	<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68" :style="{'margin-top':ScratchableLatextop+'rpx'}"></ScratchableLatex>
 			  	<product></product>
 			  	<coupons></coupons>
 				<bgbanner :swiperList='swiperList' :isRounddot="swiperList.length>1?true:false"></bgbanner>
@@ -27,9 +41,11 @@
 		  </view>
 		  <!-- 这是未选中的 -->
 		  <view v-if="TabCur!==0">
-			  <ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68" :style="{'margin-top':0}"></ScratchableLatex>
-			  <bgbanner :swiperList='swiperList' :isRounddot="swiperList.length>1?true:false"></bgbanner>
-			  <shoppinglist class="setmarginTop"></shoppinglist>
+			  <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom" @scroll="realtime" @scrolltoupper="scrotop">
+				  <ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68" :style="{'margin-top':ScratchableLatextop+'rpx'}"></ScratchableLatex>
+				  <bgbanner :swiperList='swiperList' :isRounddot="swiperList.length>1?true:false"></bgbanner>
+				  <shoppinglist class="setmarginTop"></shoppinglist>
+			  </scroll-view>
 		  </view>
 	</view>
 </template>
@@ -166,7 +182,21 @@
 				     id: 0,
 				     type: 'image',
 				     url: '/static/index/indexDailygood/activitybanner.gif'
-				}]
+				}],
+				//接下来都是处理一个老板要求的特效,
+				bannheight:260,//这两个高度是老板提出的意见 必须这么做 这个是banner的高度
+				seachheight:420,//这两个高度是老板提出的意见 必须这么做 这个是seachheight
+				seachstatic:'static',
+				zIndex:0,
+				paddingtop:22,
+				// #ifdef H5
+					navtop:80,
+				// #endif
+				// #ifdef APP-PLUS
+					navtop:140,
+				// #endif
+				navposition:'absolute',
+				ScratchableLatextop:68
 			}
 		},
 		methods: {
@@ -179,10 +209,61 @@
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+				if(parseInt(this.TabCur)!==0){
+					this.seachheight = 228
+				}else{
+					this.seachheight=420
+				}
 			 },
 			//监控scroll-view 滚动标签是否滚动到底部
 			scrollbottom(){
-				console.log(22)
+				//当用户一下子滚动到底部的时候 改变banner 和seach的高度
+			},
+			//当用户滚动到顶部的时候
+			scrotop(){
+				this.bannheight=260
+				if(parseInt(this.TabCur)==0){
+					this.seachheight=420
+				}else{
+					this.seachheight = 228
+				}
+			},
+			//这是实时滚动
+			realtime(e){
+				// console.log("实时滚动",e)
+				//原来的210px
+				//原来的banner 130px
+				// seach 200rpx
+				//banner0
+				let {deltaY} = e.detail
+				// console.log(deltaY)
+				if(deltaY<0){
+					//当用户滚动时 改变banner的高度
+					// console.log("向下滚动")
+					this.bannheight=0
+					this.seachheight=220
+					this.seachstatic = 'fixed'
+					this.zIndex = 1
+					this.paddingtop = 64
+					this.navtop = 120
+					this.navposition = 'fixed'
+					this.ScratchableLatextop = 268
+				}else{
+					// console.log("向上滚动")
+					// this.bannheight=260
+					// this.seachheight=420
+					this.seachstatic = 'static'
+					this.zIndex = 1
+					this.paddingtop = 22
+					// #ifdef H5
+					this.navtop = 80
+					// #endif
+					// #ifdef APP-PLUS
+					this.navtop = 140
+					// #endif
+					this.navposition = 'absolute'
+					this.ScratchableLatextop = 68
+				}
 			},
 			//这是用户登录的提示框
 			showloginstate(){
@@ -302,7 +383,7 @@
 		},
 		//页面滚动到底部的事件
 		onReachBottom(){
-			console.log(1)
+			console.log("移到底部")
 		},
 		// 封装一个是否要弹出弹窗的方法
 		
@@ -323,7 +404,7 @@
 		line-height: 102rpx;
 	}
 	.nav_top{
-	   position: absolute;
+	   position:absolute;
 	   /* #ifdef H5 */
 		top: 80rpx;
 	   /* #endif */

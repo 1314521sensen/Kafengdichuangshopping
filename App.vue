@@ -86,11 +86,23 @@
 			// #endif
 			//接下来启动页---开始
 				//通过缓存来控制是否显示启动页
+				// #ifdef APP-PLUS
 				uni.setStorage({
 					key:"Startpagebool",
 					data:true
 				})
+				// #endif
 			//启动页结束
+			//app热更新---开始
+			// #ifdef APP-PLUS
+			// console.log(plus.runtime.version)//这是版本名称号
+			// console.log(plus.runtime.versionCode)
+			// let Applicationnum = plus.runtime.version.split('.').join('')
+			// console.log(Applicationnum)
+			// console.log(plus.runtime.appid)//这是appid
+			// console.log(plus.os.name)//这是Android
+			// #endif
+			//app热跟新---结束
 		},
 		onShow: function() {
 			

@@ -12,9 +12,10 @@
 				cuIconList: [
 					{
 					badge: 120,
-					name: '推广/分销',
+					name: '团长申请',
 					imgs:"/static/Settheicon/Promotedistribution.png",
-					Routinghopname:"Promotedistribution"
+					Routinghopname:"Promotedistribution",
+					url:"/pages/applygroup/applygroup"
 				},
 				{
 					badge: 1,

@@ -204,6 +204,18 @@
 		    "path" : "pages/myspelllist/myspelllist",
 		    "style" : {}
 		}
+        ,{
+            "path" : "pages/applygroup/applygroup",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/groupinformation/groupinformation",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/headearnings/headearnings",
+		    "style" : {}
+		}
     ],
 	
 	"globalStyle": {
