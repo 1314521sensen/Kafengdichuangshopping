@@ -7,6 +7,9 @@
 			</view>
 			<view class="CommodityTitle">
 				<!-- 商品的标题 -->
+				<view class="liveicon">
+					<image src="/static/Details/broadcast.gif"></image>
+				</view>
 				<text v-text="pic.good_title"></text>
 			</view>
 			<view class="sales">
@@ -62,6 +65,17 @@
 			text{
 				font-size: 30rpx;
 				font-weight: bold;
+			}
+			.liveicon{
+				display: inline-block;
+				vertical-align: middle;
+				width: 120rpx;
+				height:35rpx;
+				background-color: red;
+				image{
+					width: 100%;
+					height:100%;
+				}
 			}
 		}
 		.sales{

@@ -15,6 +15,9 @@
 	//这是详情图
 	import imgs from "@/components/Details/detailsimgs.vue"
 	import bottomcar from "@/components/Details/detailsbottomcar.vue"
+	//引入活动组件
+	import NewactivityTop from "@/components/Details/NewactivityTop.vue"
+	import NewSpellgrouplist from "@/components/Details/NewSpellgrouplist.vue"
 	const app = getApp()
 	export default {
 		data() {
@@ -42,6 +45,8 @@
 			pricetitle,
 			imgs,
 			bottomcar,
+			NewactivityTop,
+			NewSpellgrouplist
 		},
 		onLoad(opction){
 			const _this = this

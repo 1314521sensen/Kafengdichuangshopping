@@ -64,6 +64,13 @@
 					url:"/components/setcenter/setcenter",
 					imgs:"/static/Settheicon/shezhi.png",
 					Routinghopname:"userset"
+				},
+				{
+					badge: 0,
+					name: '店铺入驻',
+					url:"/pages/merchant/merchant",
+					imgs:"/static/Settheicon/shezhi.png",
+					Routinghopname:"userset"
 				}
 				],
 				gridCol: 5,//这是格数

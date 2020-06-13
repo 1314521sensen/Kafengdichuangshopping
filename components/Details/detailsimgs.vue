@@ -22,7 +22,7 @@
 	.detailsimgs{
 		width: 100%;
 		.imgs{
-			width: 80%;
+			width: 100%;
 			margin:20rpx auto 0;
 			image{
 				width: 100%;

@@ -5,7 +5,7 @@
 			<!-- <view class="my-balance">
 				我的余额
 			</view> -->
-			<actionbar message="我的余额" bg="#c42c21" url="/pages/PersonalMy/PersonalMy" textcolor="#fff"></actionbar>
+			<actionbar message="我的余额" bg="#c42c21" url="/pages/PersonalMy/PersonalMy" textcolor="#fff" :Jumpchoose="false"></actionbar>
 			<view class="cny">
 				<view class="cny-left">
 					<text class="cny-one">总资产（CNY）</text>
@@ -44,7 +44,6 @@
 				accountlist:[]
 			}
 		},
-		components:["actionbar"],
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
 		},
@@ -83,7 +82,10 @@
 					})
 				}
 			})
-		}
+		},
+		components:[
+			actionbar
+		],
 	}
 </script>
 

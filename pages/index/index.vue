@@ -106,7 +106,8 @@
 					color: 'purple',
 					badge: 0,
 					name: '品牌',
-					imgs:"/static/index/Scratchablelatexicon/brand.png"
+					imgs:"/static/index/Scratchablelatexicon/brand.png",
+					url:"/pages/digitallist/digitallist"
 				},
 				{
 					cuIcon: 'questionfill',

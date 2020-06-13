@@ -227,6 +227,14 @@
 		{
 		    "path" : "pages/historyofgoods/historyofgoods",
 		    "style" : {}
+		},
+		{
+		    "path" : "pages/merchant/merchant",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/digitallist/digitallist",
+		    "style" : {}
 		}
     ],
 	

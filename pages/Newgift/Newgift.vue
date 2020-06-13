@@ -1,99 +1,102 @@
 <template>
-	<view class="new" style="background-image: url(/static/Newgift/bg.png);">
-		<pageheight :statusBar="statusBar"></pageheight>
-		<scroll-view class="fa-new" scroll-y="true" >
-			<view class="new-top-img" style="background-image: url(/static/Newgift/bgtitle.png);"></view>
-			<view class="new-bottom">
-				<NewPeople></NewPeople>
-				<scroll-view :scroll-x="true" >
-					<view class="fa-discounts">
-						<view class="discounts-list">
-							<view class="discounts">
-								<view class="discounts-left">
-									<text class="left-text-one">￥</text>
-									<text class="left-text-two">5</text>
-								</view>
-								<view class="discounts-right">
-									<view class="right-left">
-										<text class="right-left-textone">优惠券</text>
-										<text class="right-left-texttwo">无限制使用</text>
+	<view class="Startingdiagrambox">
+		<view class="Startingdiagram" :style="{'background-image':'url(/static/Newgift/Presentscar.gif)','height':Newgiftheight+'vh'}"></view>
+		<view class="new" style="background-image: url(/static/Newgift/bg.png);">
+			<pageheight :statusBar="statusBar"></pageheight>
+			<scroll-view class="fa-new" scroll-y="true" >
+				<view class="new-top-img" style="background-image: url(/static/Newgift/bgtitle.png);"></view>
+				<view class="new-bottom">
+					<NewPeople></NewPeople>
+					<scroll-view :scroll-x="true">
+						<view class="fa-discounts">
+							<view class="discounts-list">
+								<view class="discounts">
+									<view class="discounts-left">
+										<text class="left-text-one">￥</text>
+										<text class="left-text-two">5</text>
 									</view>
-									<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
-										<button class="cu-btn">领取</button>
-									</view>
-								</view>
-							</view>
-							<view class="discounts">
-								<view class="discounts-left">
-									<text class="left-text-one">￥</text>
-									<text class="left-text-two">5</text>
-								</view>
-								<view class="discounts-right">
-									<view class="right-left">
-										<text class="right-left-textone">优惠券</text>
-										<text class="right-left-texttwo">无限制使用</text>
-									</view>
-									<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
-										<button class="cu-btn">领取</button>
+									<view class="discounts-right">
+										<view class="right-left">
+											<text class="right-left-textone">优惠券</text>
+											<text class="right-left-texttwo">无限制使用</text>
+										</view>
+										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
+											<button class="cu-btn">领取</button>
+										</view>
 									</view>
 								</view>
-							</view>
-							<view class="discounts">
-								<view class="discounts-left">
-									<text class="left-text-one">￥</text>
-									<text class="left-text-two">5</text>
-								</view>
-								<view class="discounts-right">
-									<view class="right-left">
-										<text class="right-left-textone">优惠券</text>
-										<text class="right-left-texttwo">无限制使用</text>
+								<view class="discounts">
+									<view class="discounts-left">
+										<text class="left-text-one">￥</text>
+										<text class="left-text-two">5</text>
 									</view>
-									<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
-										<button class="cu-btn">领取</button>
+									<view class="discounts-right">
+										<view class="right-left">
+											<text class="right-left-textone">优惠券</text>
+											<text class="right-left-texttwo">无限制使用</text>
+										</view>
+										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
+											<button class="cu-btn">领取</button>
+										</view>
 									</view>
 								</view>
-							</view>
-							<view class="discounts">
-								<view class="discounts-left">
-									<text class="left-text-one">￥</text>
-									<text class="left-text-two">5</text>
-								</view>
-								<view class="discounts-right">
-									<view class="right-left">
-										<text class="right-left-textone">优惠券</text>
-										<text class="right-left-texttwo">无限制使用</text>
+								<view class="discounts">
+									<view class="discounts-left">
+										<text class="left-text-one">￥</text>
+										<text class="left-text-two">5</text>
 									</view>
-									<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
-										<button class="cu-btn">领取</button>
+									<view class="discounts-right">
+										<view class="right-left">
+											<text class="right-left-textone">优惠券</text>
+											<text class="right-left-texttwo">无限制使用</text>
+										</view>
+										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
+											<button class="cu-btn">领取</button>
+										</view>
+									</view>
+								</view>
+								<view class="discounts">
+									<view class="discounts-left">
+										<text class="left-text-one">￥</text>
+										<text class="left-text-two">5</text>
+									</view>
+									<view class="discounts-right">
+										<view class="right-left">
+											<text class="right-left-textone">优惠券</text>
+											<text class="right-left-texttwo">无限制使用</text>
+										</view>
+										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
+											<button class="cu-btn">领取</button>
+										</view>
 									</view>
 								</view>
 							</view>
 						</view>
-					</view>
-				</scroll-view>
-				<NewPeople></NewPeople>
-				<!-- <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom"> -->
-				<view class="commodity-list">
-					<view class="commodity" v-for="(item,index) in list" :key="index">
-						<view class="commodity-img">
-							<!-- 这里放的图片 -->
-						</view>
-						<view class="commodity-bottom">
-							<view class="">
-								<text class="text-one">RMB:</text><text class="text-two">{{item}}</text>
+					</scroll-view>
+					<NewPeople></NewPeople>
+					<!-- <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom"> -->
+					<view class="commodity-list">
+						<view class="commodity" v-for="(item,index) in list" :key="index">
+							<view class="commodity-img">
+								<!-- 这里放的图片 -->
 							</view>
-							<button class="cu-btn">领取</button>
+							<view class="commodity-bottom">
+								<view class="">
+									<text class="text-one">RMB:</text><text class="text-two">{{item}}</text>
+								</view>
+								<button class="cu-btn">领取</button>
+							</view>
 						</view>
 					</view>
 				</view>
-			</view>
-		</scroll-view>
-		
-		
-		<view class="new-bottom-bottom cu-dialog">
-			<view class="bottom-midden">
-				<view class="log-left" style="background-image: url(/static/logo.png);"></view>
-				<view class="log-right" style="background-image: url(/static/Newgift/bottomlogo.png);"></view>
+			</scroll-view>
+			
+			
+			<view class="new-bottom-bottom cu-dialog">
+				<view class="bottom-midden">
+					<view class="log-left" style="background-image: url(/static/logo.png);"></view>
+					<view class="log-right" style="background-image: url(/static/Newgift/bottomlogo.png);"></view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -106,19 +109,33 @@
 		data() {
 			return {
 				list:[10,20,30,40,50,60,70,80,90],
-				statusBar:""
+				statusBar:"",
+				Newgiftheight:100,
 			}
 		},
 		components:{
 			NewPeople
 		},
 		onLoad() {
-			this.statusBar = app.globalData.statusBar
+			const _this = this
+			_this.statusBar = app.globalData.statusBar
+			// setInterval(()=>{
+			// 	_this.Newgiftheight-20
+			// },1000)
 		}
 	}
 </script>
 
 <style lang="less" scoped>
+	.Startingdiagrambox{
+		height:100vh;
+		overflow: hidden;
+	}
+	.Startingdiagram{
+		// background-color:red;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+	}
 	.new{
 		overflow: hidden;
 		width: 100%;
