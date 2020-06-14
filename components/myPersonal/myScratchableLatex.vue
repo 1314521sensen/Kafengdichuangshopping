@@ -69,7 +69,7 @@
 					badge: 0,
 					name: '店铺入驻',
 					url:"/pages/merchant/merchant",
-					imgs:"/static/Settheicon/shezhi.png",
+					imgs:"/static/Settheicon/storehouse.png",
 					Routinghopname:"userset"
 				}
 				],

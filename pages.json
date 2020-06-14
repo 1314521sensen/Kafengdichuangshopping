@@ -236,6 +236,14 @@
 		    "path" : "pages/digitallist/digitallist",
 		    "style" : {}
 		}
+        ,{
+            "path" : "pages/choosing/choosing",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/agreementtext/agreementtext",
+            "style" : {}
+        }
     ],
 	
 	"globalStyle": {
