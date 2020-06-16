@@ -107,7 +107,7 @@
 					badge: 0,
 					name: '品牌',
 					imgs:"/static/index/Scratchablelatexicon/brand.png",
-					url:"/pages/digitallist/digitallist"
+					url:"/pages/brand/brand"
 				},
 				{
 					cuIcon: 'questionfill',

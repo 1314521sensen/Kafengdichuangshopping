@@ -1,11 +1,46 @@
 <template>
 	<view class="securitiesbottom">
-		<view v-for="(item,index) in couponslist" :key="index">
+		<!-- v-for="(item,index) in couponslist" :key="index" -->
+		<view >
 			<!-- {{item}} -->
 			<view class="couponstitle">
-				<view class="couponstitletext">{{item.couponstitle}}</view>
+				<view 
+					class="couponstitletext" 
+					v-for="(item,index) in couponstitlelist" 
+					:key="index"
+					:class="couponstindex==index?'couponstitletextactive':''"
+					@tap="CouponClassification"
+					:data-indexs="index"
+				>{{item}}</view>
 			</view>
-			<view class="securitiesbottomitem" v-for="(items,indexs) in item.list" :key="indexs">
+			<view class="discount_coupon">
+				<scroll-view scroll-y="true" class="scroll-Y">
+						<view class="discount_coupon_demo" v-for="(item,index) in couponslist" :key="index">
+							<view class="demo_left">
+								<view class="demo_left_price">
+									<text class="price_left" v-text="item.money"></text>
+									<text class="price_right">元</text>
+								</view>
+								<view class="demo_left_time">
+									<view class="right_top">
+										<text>有效期至</text>
+										<text>{{item.stop_time}}</text>
+									</view>
+									<view class="right_bottom">
+										<!-- 这里在判断是0元还是必须满多少钱使用 如果是0元===无限制 -->
+										<text v-text="item.at_full!=='0.00'?'满'+item.at_full+'使用':'无门槛使用'"></text>
+									</view>
+								</view>
+							</view>
+							<view class="demo_right">
+								<text class="right_center">
+									立即使用
+								</text>
+							</view>
+						</view>
+				</scroll-view>
+			</view>
+			<!-- <view class="securitiesbottomitem" v-for="(items,indexs) in item.list" :key="indexs">
 				<view class="securities">
 					<view class="securities-left">
 						<view class="securities-left-imgs">
@@ -30,7 +65,7 @@
 						<button class="cu-btn round bg-red" @tap="receive" :data-storeid="items.store_id">立即使用</button>
 					</view>
 				</view>
-		</view>
+			</view> -->
 		</view> 
 	</view>
 </template>
@@ -41,6 +76,11 @@
 		//这是卷的下面
 		data(){
 			return {
+				couponstitlelist:[
+					"店铺优惠券",
+					"平台优惠券"
+				],
+				couponstindex:0,
 			}
 		},
 		methods:{
@@ -71,6 +111,11 @@
 			// 		icon:"none"
 			// 	})
 			// },
+			CouponClassification(e){
+				let indexs = e.currentTarget.dataset.indexs
+				this.couponstindex = indexs
+				this.$emit("indexs",this.couponstindex)
+			}
 		},
 		props:["couponslist"]
 	}
@@ -78,15 +123,87 @@
 
 <style lang="less" scoped>
 	.securitiesbottom{
-	  
-	  margin-top:15rpx;
-	  padding-bottom:20rpx;
+		background-color: white;
+	 width: 100%;
+	  // margin-top:15rpx;
+	  // padding-bottom:20rpx;
 	  .couponstitle{
+		  width: 100%;
+		display: flex;
+		justify-content: space-between;
+		text-align: center;
 		  .couponstitletext{
+			  background-color: #EEEEEE;
+			  width: 50% ;
+			  height: 100rpx;
+			  line-height: 100rpx;
 			  text-align:center;
 			  font-weight: bold;
 			  font-size: 32rpx;
-			  color:#c20e22;
+			  color:#999;
+		  }
+		  .couponstitletextactive{
+			  color:#f9734d;
+		  }
+	  }
+	.scroll-Y{
+		height: 78vh;
+	}
+	  .discount_coupon_demo{
+		  
+		  width: 95%;
+		  height: 175rpx;
+		  // background-color: red;
+		  margin: 20rpx auto 0;
+		  display: flex;
+		  justify-content: space-between;
+		  background: linear-gradient(to left,#eb480e,#f1952b,#ec661c);
+		  .demo_left{
+				width: 80%;
+				height: 175rpx;
+				display: flex;
+				justify-content: space-between;
+				.demo_left_price{
+					height: 100%;
+					width: 40%;
+					line-height: 175rpx;
+					text-align: center;
+					color: white;
+					font-weight: bold;
+					.price_left{
+						text-align: center;
+						font-size: 80rpx;
+					}
+				}
+				.demo_left_time{
+					color: white;
+					width: 60%;
+					height: 100%;
+					.right_top{
+						font-size:12rpx;
+						height: 40%;
+						line-height: 87rpx;
+					}
+					.right_bottom{
+						font-size: 40rpx;
+						font-weight: bold;
+					}
+				}
+		  }
+		  .demo_right{
+			  width: 20%;
+			  height: 175rpx;
+			  border-left: 2rpx dashed #EEEEEE;
+			  text-align: center;
+			  .right_center{
+				  -webkit-writing-mode: vertical-rl;
+				  writing-mode: vertical-rl;
+				  margin-top: 26rpx;
+				  color: white;
+				  font-weight: bold;
+				  font-size: 30rpx;
+			  }
+			  // background: linear-gradient(to left,#ed6117,#eb480e);
 		  }
 	  }
 	  .securitiesbottomitem{

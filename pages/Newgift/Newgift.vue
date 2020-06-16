@@ -1,6 +1,6 @@
 <template>
 	<view class="Startingdiagrambox">
-		<view class="Startingdiagram" :style="{'background-image':'url(/static/Newgift/Presentscar.gif)','height':Newgiftheight+'vh'}"></view>
+		<!-- <view class="Startingdiagram" :style="{'background-image':'url(/static/Newgift/Presentscar.gif)','height':Newgiftheight+'vh'}" v-if="Newgiftbool"></view> -->
 		<view class="new" style="background-image: url(/static/Newgift/bg.png);">
 			<pageheight :statusBar="statusBar"></pageheight>
 			<scroll-view class="fa-new" scroll-y="true" >
@@ -10,63 +10,23 @@
 					<scroll-view :scroll-x="true">
 						<view class="fa-discounts">
 							<view class="discounts-list">
-								<view class="discounts">
+								<view class="discounts" v-for="(item,index) in couponslist" :key="index">
 									<view class="discounts-left">
 										<text class="left-text-one">￥</text>
-										<text class="left-text-two">5</text>
+										<text class="left-text-two" v-text="item.money"></text>
 									</view>
 									<view class="discounts-right">
 										<view class="right-left">
 											<text class="right-left-textone">优惠券</text>
-											<text class="right-left-texttwo">无限制使用</text>
+											<text class="right-left-texttwo">{{parseInt(item.at_full)?'满'+item.at_full+'可用':'无门槛'}}</text>
 										</view>
 										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
-											<button class="cu-btn">领取</button>
-										</view>
-									</view>
-								</view>
-								<view class="discounts">
-									<view class="discounts-left">
-										<text class="left-text-one">￥</text>
-										<text class="left-text-two">5</text>
-									</view>
-									<view class="discounts-right">
-										<view class="right-left">
-											<text class="right-left-textone">优惠券</text>
-											<text class="right-left-texttwo">无限制使用</text>
-										</view>
-										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
-											<button class="cu-btn">领取</button>
-										</view>
-									</view>
-								</view>
-								<view class="discounts">
-									<view class="discounts-left">
-										<text class="left-text-one">￥</text>
-										<text class="left-text-two">5</text>
-									</view>
-									<view class="discounts-right">
-										<view class="right-left">
-											<text class="right-left-textone">优惠券</text>
-											<text class="right-left-texttwo">无限制使用</text>
-										</view>
-										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
-											<button class="cu-btn">领取</button>
-										</view>
-									</view>
-								</view>
-								<view class="discounts">
-									<view class="discounts-left">
-										<text class="left-text-one">￥</text>
-										<text class="left-text-two">5</text>
-									</view>
-									<view class="discounts-right">
-										<view class="right-left">
-											<text class="right-left-textone">优惠券</text>
-											<text class="right-left-texttwo">无限制使用</text>
-										</view>
-										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
-											<button class="cu-btn">领取</button>
+											<button 
+												class="cu-btn"
+												:data-coupon_id="item.coupon_type_id"
+												:data-storeid="item.store_id"
+												@tap="Getnew"
+											>领取</button>
 										</view>
 									</view>
 								</view>
@@ -111,6 +71,34 @@
 				list:[10,20,30,40,50,60,70,80,90],
 				statusBar:"",
 				Newgiftheight:100,
+				Newgiftbool:true,
+				couponspages:1,
+				couponspagesize:10,
+				couponslist:[],
+				tokey:""
+			}
+		},
+		methods:{
+			Getnew(e){
+				// console.log(e)
+				let {coupon_id,storeid} = e.currentTarget.dataset
+				uni.request({
+					url:`${app.globalData.Requestpath}activity/userGetNewPeopleCoupon`,
+					method:"POST",
+					data:{
+						token:this.tokey,
+						sid:storeid,
+						cid:coupon_id
+					},
+					success(res) {
+						console.log(res)
+						if(res.data.code==0){
+							//暂时先留位
+						}else{
+							app.globalData.showtoastsame(res.data.msg)
+						}
+					}
+				})
 			}
 		},
 		components:{
@@ -119,9 +107,40 @@
 		onLoad() {
 			const _this = this
 			_this.statusBar = app.globalData.statusBar
-			// setInterval(()=>{
-			// 	_this.Newgiftheight-20
-			// },1000)
+			console.log(_this.Newgiftheight)
+			//应该是平滑的往上移动
+			// setInterval(function(){
+			// 	// console.log(11)
+			// 	_this.Newgiftheight-=10
+			// },500)
+			//等小火车 先丢完礼物的那一刻 才能执行定时器的执行(在保证兼容)这块可以用es6的new promise
+			
+		},
+		created(){
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					// console.log(res)
+					_this.tokey = res.data
+					uni.request({
+						url:`${app.globalData.Requestpath}activity/getNewUserCouponTypeList`,
+						method:"POST",
+						data:{
+							token:res.data,
+							page:_this.couponspages,
+							pageSize:_this.couponspagesize
+						},
+						success(rescoupons) {
+							if(rescoupons.data.code==0){
+								_this.couponslist = rescoupons.data.data.list
+							}
+							// _this.couponslist
+						}
+					})
+				}
+			})
+			
 		}
 	}
 </script>
@@ -130,6 +149,7 @@
 	.Startingdiagrambox{
 		height:100vh;
 		overflow: hidden;
+		transition: .5s;
 	}
 	.Startingdiagram{
 		// background-color:red;

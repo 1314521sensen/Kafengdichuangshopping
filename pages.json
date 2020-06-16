@@ -233,7 +233,7 @@
 		    "style" : {}
 		},
 		{
-		    "path" : "pages/digitallist/digitallist",
+		    "path" : "pages/brand/brand",
 		    "style" : {}
 		}
         ,{
@@ -242,6 +242,34 @@
         }
         ,{
             "path" : "pages/agreementtext/agreementtext",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Qualificationinformation/Qualificationinformation",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Businessinformation/Businessinformation",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/contractsigning/contractsigning",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Successfulopening/Successfulopening",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/Guidepage/Guidepage",
+		    "style" : {}
+		}
+        ,{
+            "path" : "pages/commodityshop/commodityshop",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Dailygood/Dailygood",
             "style" : {}
         }
     ],

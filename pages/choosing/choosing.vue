@@ -5,7 +5,7 @@
 			<view class="imgsbox" :style="{'background-image':'url(/static/logo.png)'}"></view>
 		</view>
 		<view class="choosing-btn">
-			<button class="cu-btn round text-white" v-for="(item,index) in btnlist" :key="index" @tap="enterinto">{{item}}</button>
+			<button class="cu-btn round text-white" v-for="(item,index) in btnlist" :key="index" @tap="enterinto" :data-indexs="index">{{item}}</button>
 		</view>
 		<view class="agreementchoose">
 			<radio-group @change="RadioChange">
@@ -48,8 +48,17 @@
 					url:`/pages/agreementtext/agreementtext`
 				})
 			},
-			enterinto(){
-				console.log(111)
+			enterinto(e){
+				let indexs = e.currentTarget.dataset.indexs
+				if(parseInt(indexs)==0){
+					uni.navigateTo({
+						url:`/pages/Qualificationinformation/Qualificationinformation?titlename=Individuals`
+					})
+				}else{
+					uni.navigateTo({
+						url:`/pages/Qualificationinformation/Qualificationinformation?titlename=enterprises`
+					})
+				}
 			}
 		},
 		comments:{

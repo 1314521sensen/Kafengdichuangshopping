@@ -46,10 +46,11 @@
 		methods: {
 			grouplongshopinfo(e){
 				let {index} = e.currentTarget.dataset
-				// console.log(index)
 				let indexs = parseInt(index)
 				if(indexs==0){
-					console.log(1)
+					uni.navigateTo({
+						url:"/pages/commodityshop/commodityshop"
+					})
 				}else if(indexs==1){
 					uni.navigateTo({
 						url:"/pages/historyofgoods/historyofgoods"

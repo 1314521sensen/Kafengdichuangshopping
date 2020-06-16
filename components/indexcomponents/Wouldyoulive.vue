@@ -10,7 +10,7 @@
 		
 		<view class="shanpin">
 		<!-- 每日好货 -->
-		<view class="dailyGood" v-for="(item,index) in dailyGoodlist" :key="index">
+		<view class="dailyGood" v-for="(item,index) in dailyGoodlist" :key="index" @tap="Dailygood">
 			<view class="tle">{{item.titlename}}</view>
 			<view class="Box">
 				<view v-for="(items,indexs) in item.imgs" :key="indexs">
@@ -49,7 +49,11 @@
 			}
 		},
 		methods: {
-			
+			Dailygood(){
+				uni.navigateTo({
+					url:"/pages/Dailygood/Dailygood"
+				})
+			}
 		}
 	}
 </script>

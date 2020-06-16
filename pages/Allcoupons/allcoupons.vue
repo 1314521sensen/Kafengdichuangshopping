@@ -1,7 +1,7 @@
 <template>
 	<view class="facoupons">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<view class="allcoupons">
+		<!-- <view class="allcoupons"> -->
 			<actionbar url="/pages/PersonalMy/PersonalMy" message="优惠券"></actionbar>
 			<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
 				<view class="nav-text">
@@ -9,9 +9,10 @@
 						{{item}}
 					</view>
 				</view>
-			<securitiesbottom v-if="items==coupons[TabCur]" :couponslist="couponslist"></securitiesbottom>
+				<!--  v-if="items==coupons[TabCur]" :couponslist="couponslist" -->
+			<securitiesbottom @indexs="couponstindex" :couponslist="couponslist"></securitiesbottom>
 			</scroll-view>
-		</view>
+		<!-- </view> -->
 	</view>
 </template>
 
@@ -33,23 +34,13 @@
 					"已过期"
 				],
 				getchildlistdata:[],
-				couponslist:[
-					{
-						couponstitle:"店铺优惠券",
-						list:[]
-					},
-					{
-						couponstitle:"平台优惠券",
-						list:[]
-					}
-				],
-				tokey:0
+				couponslist:[],
+				tokey:0,
+				couponstindexs:0
 			}
 		},
 		methods:{
-			tabSelect(e) {
-				// console.log(e.currentTarget.dataset)
-				// console.log(this.coupons[this.TabCur+1])
+			tabSelect(e) {//当上面的三个点击时候触发
 				let {id,items} = e.currentTarget.dataset
 				this.items = items
 				this.TabCur = id;
@@ -60,71 +51,129 @@
 			//封装个函数用于请求优惠券的数据
 			platformcouponsdata(_this){
 				//这个是获取平台优惠券的接口
-				uni.request({
-					url:`${app.globalData.Requestpath}activity/getUserPlatformCouponList`,
-					method:"POST",
-					data:{
-						token:this.tokey,
-						page:1,
-						pageSize:5
-					},
-					success(Storecoupon){
-						if(Storecoupon.data.code==0){
-							Storecoupon.data.data.list .forEach((item,index)=>{
-								item.coupon_img = app.globalData.imgyuming+item.coupon_img
-								console.log(item)
-								if(item.status==1){//未使用
+				// console.log(this.couponstindexs)
+				if(parseInt(this.couponstindexs)==1){
+					uni.request({
+						url:`${app.globalData.Requestpath}activity/getUserPlatformCouponList`,
+						method:"POST",
+						data:{
+							token:_this.tokey,
+							page:1,
+							pageSize:5
+						},
+						success(Storecoupon){
+							if(Storecoupon.data.code==0){
+								let arr = []
+								Storecoupon.data.data.list .forEach((item,index)=>{
+									//这是处理的图片
+									item.coupon_img = app.globalData.imgyuming+item.coupon_img
+									//当用户点击的未使用的
+									// console.log(item.status,typeof item.status)
 									if(_this.TabCur==0){
-										_this.couponslist[1].list = Storecoupon.data.data.list
+										//未使用
+										//当状态为1的时候 证明未使用
+										if(item.status==1){
+											console.log(item,"未使用")
+											// _this.couponslist = item
+											
+											arr.push(item)
+											_this.couponslist = arr
+										}else{
+											//如果不等于1 那么请求回来的肯定为空
+											_this.couponslist = []
+										}
+									}else if(_this.TabCur==1){
+										console.log("已使用")
+										//已使用
+										if(item.status==2){
+											//已使用的语句没进来
+											// console.log(Storecoupon.data.data.list)
+											// let arr = []
+											arr.push(item)
+											_this.couponslist = arr
+										}else{
+											_this.couponslist = []
+										}
+									}else if(_this.TabCur==2){
+										//已过期
+										if(item.status==3){
+											// let arr = []
+											arr.push(item)
+											_this.couponslist = arr
+										}else{
+											_this.couponslist = []
+										}
 									}
-								}else if(item.status==2){//已使用
-									if(_this.TabCur==1){
-										_this.couponslist[1].list = Storecoupon.data.data.list
-									}
-								}else{//已过期
-									if(_this.TabCur==2){
-										_this.couponslist[1].list = Storecoupon.data.data.list
-									}
-								}
-							})
+								})
+							}
 						}
-					}
-				})
+					})
+				}
 			},
 			storecouponsdata(_this){
 				//获取店铺优惠券
-				uni.request({
-					url:`${app.globalData.Requestpath}activity/getUserStoreCouponList`,
-					method:"POST",
-					data:{
-						token:this.tokey,
-						sid:-2,	
-						page:1,
-						pageSize:10
-					},
-					success(resDiscountstores) {
-						if(resDiscountstores.data.code==0){
-							// console.log(resDiscountstores)
-							// _this.couponslist[0].list = resDiscountstores.data.data.lists
-							resDiscountstores.data.data.list .forEach((item,index)=>{
-								item.coupon_img = app.globalData.imgyuming+item.coupon_img
-								if(item.status==1){//未使用
+				if(parseInt(_this.couponstindexs)==0){
+					uni.request({
+						url:`${app.globalData.Requestpath}activity/getUserStoreCouponList`,
+						method:"POST",
+						data:{
+							token:_this.tokey,
+							sid:-2,	
+							page:1,
+							pageSize:10
+						},
+						success(resDiscountstores) {
+							if(resDiscountstores.data.code==0){
+								let arr = []
+								// console.log(resDiscountstores)
+								// _this.couponslist[0].list = resDiscountstores.data.data.lists
+								resDiscountstores.data.data.list .forEach((item,index)=>{
+									item.coupon_img = app.globalData.imgyuming+item.coupon_img
 									if(_this.TabCur==0){
-										_this.couponslist[0].list = resDiscountstores.data.data.list
+										//未使用
+										if(item.status==1){
+											// console.log(item,"未使用")
+											
+											arr.push(item)
+											// console.log(arr)
+											_this.couponslist = arr
+											// console.log(_this.couponslist)
+										}else{
+											_this.couponslist = []
+										}
+									}else if(_this.TabCur==1){
+										console.log("已使用")
+										if(item.status==2){
+											arr = []
+											arr.push(item)
+											// console.log(arr)
+											_this.couponslist = arr
+										}else{
+											_this.couponslist = []
+										}
+									}else if(_this.TabCur==2){
+										console.log("已过期")
+										if(item.status==3){
+											arr = []
+											arr.push(item)
+											// console.log(arr)
+											_this.couponslist = arr
+										}else{
+											_this.couponslist = []
+										}
 									}
-								}else if(item.status==2){//已使用
-									if(_this.TabCur==1){
-										_this.couponslist[0].list = resDiscountstores.data.data.list
-									}
-								}else{//已过期
-									if(_this.TabCur==2){
-										_this.couponslist[0].list = resDiscountstores.data.data.list
-									}
-								}
-							})
+								})
+							}
 						}
-					}
-				})
+					})
+				}
+				
+			},
+			//者握手
+			couponstindex(e){
+				this.couponstindexs = e
+				this.platformcouponsdata(this)
+				this.storecouponsdata(this)
 			}
 		},
 		onLoad(){
@@ -149,6 +198,10 @@
 </script>
 
 <style lang="less" scoped>
+	.facoupons{
+		height: 100vh;
+		background-color: white;
+	}
 	 .allcoupons{
 	  margin: 0 auto;
 	  background: linear-gradient(to bottom,#fe3217,#fc8c62);
@@ -156,24 +209,30 @@
 	  border-radius: 0 0 40rpx 40rpx;
 	  }
 	 .bg-white{
-	  width: 90%;
+	  width: 100%;
 	  margin: 0 auto;
-	  margin-top: 10rpx;
-	  border-radius: 20rpx;
+	  // border-radius: 20rpx;
 	 }
 	 .nav-text{
-	  display:flex;
-	  justify-content: space-around;
-	  border-bottom: 2rpx solid #f6dad2;
+		background-color: #d2d2d2;
+		display:flex;
+		justify-content: space-around;
+		border-bottom: 2rpx solid #f6dad2;
+		.cu-item{
+		  width: 34%;
+		  line-height: 49rpx;
+		  margin: 0;
+		  padding: 15px 25px 15px 25px;
+		  text-align: center;
+		  font-weight: bold;
+		}
+		.nav-bg{
+				
+				background-color: #f1952b;
+				color:#fff;
+		}
 	 }
-	 .nav .cu-item{
-	   height:56rpx;
-	   line-height: 56rpx;
-	 }
-	 .nav-bg{
-	  background-color: #eb9078;
-	  color:#fff;
-	 }
+
 	 .nav .cu-item.cur{
 	  border-bottom: 0;
 	 }
