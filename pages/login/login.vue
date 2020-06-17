@@ -25,6 +25,7 @@
 							<!-- #ifdef APP-PLUS || H5 -->
 								<button class="cu-btn  round login-one" @tap="smslogin('/pages/Freeregistration/Freeregistration')">注册</button>	
 							<!--#endif -->
+							<button class="cu-btn bg-gradual-green round login-one" @tap="returnindex">返回首页</button>
 						</view>
 					</form>
 				</view>
@@ -51,6 +52,12 @@
 			smslogin(url){
 				uni.navigateTo({
 					url
+				})
+			},
+			//用户没有登录的情况下 返回首页
+			returnindex(){
+				uni.switchTab({
+					url:"/pages/index/index"
 				})
 			},
 			//封装一个提示框的方法
