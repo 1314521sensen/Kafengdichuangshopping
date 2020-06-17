@@ -272,6 +272,10 @@
             "path" : "pages/Dailygood/Dailygood",
             "style" : {}
         }
+        ,{
+            "path" : "pages/Littlebee/Littlebee",
+            "style" : {}
+        }
     ],
 	
 	"globalStyle": {

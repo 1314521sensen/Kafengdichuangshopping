@@ -54,9 +54,10 @@
 					Routinghopname:"userMyinquiry"
 				}, {
 					badge: 0,
-					name: '充值/提现',
-					imgs:"/static/Settheicon/withdrawal.png",
-					Routinghopname:"userTopupwithdrawal"
+					name: '小蜜蜂',
+					imgs:"/static/index/Scratchablelatexicon/Littlebee.gif",
+					Routinghopname:"userTopupwithdrawal",
+					url:"/pages/Littlebee/Littlebee"
 				},
 				{
 					badge: 0,

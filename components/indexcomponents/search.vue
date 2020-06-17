@@ -58,7 +58,6 @@
 <style lang="less" scoped>
 	.search {
 		// width: 100%;
-		// height:420rpx;
 		padding-top: 22rpx;
 		background-color: #e62d28;
 		.seachplaceholder{

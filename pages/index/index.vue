@@ -1,10 +1,10 @@
 <template>
 	<view class="content">
-		<pageheight :statusBar="statusBar"></pageheight>
+		<!-- <pageheight :statusBar="statusBar"></pageheight> -->
 		<search  
 			@inpblue="inpblue" 
-			:TabCur="TabCur" 
-			:style="{'height':seachheight+'rpx','position':seachstatic,'top':'0','z-index':zIndex,'padding-top':paddingtop+'rpx','width':'100%'}"
+			:statusBar="statusBar"
+			:style="{'height':seachheight+'rpx','position':seachstatic,'top':'0','z-index':zIndex,'padding-top':statusBar+'px','width':'100%'}"
 		>
 		</search>
 		<scroll-view 
@@ -186,7 +186,7 @@
 				}],
 				//接下来都是处理一个老板要求的特效,
 				bannheight:260,//这两个高度是老板提出的意见 必须这么做 这个是banner的高度
-				seachheight:420,//这两个高度是老板提出的意见 必须这么做 这个是seachheight
+				seachheight:470,//这两个高度是老板提出的意见 必须这么做 这个是seachheight
 				seachstatic:'static',
 				zIndex:0,
 				paddingtop:22,
@@ -211,9 +211,15 @@
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 				if(parseInt(this.TabCur)!==0){
+					this.seachheight = 280
+					// #ifdef H5
 					this.seachheight = 228
+					// #endif
 				}else{
+					this.seachheight=470
+					// #ifdef H5
 					this.seachheight=420
+					// #endif
 				}
 			 },
 			//监控scroll-view 滚动标签是否滚动到底部
@@ -224,9 +230,12 @@
 			scrotop(){
 				this.bannheight=260
 				if(parseInt(this.TabCur)==0){
+					this.seachheight=470
+					// #ifdef H5
 					this.seachheight=420
+					// #endif
 				}else{
-					this.seachheight = 228
+					this.seachheight = 280
 				}
 			},
 			//这是实时滚动
@@ -243,19 +252,26 @@
 					// console.log("向下滚动")
 					this.bannheight=0
 					this.seachheight=220
+					// #ifdef H5
+					this.seachheight=160
+					// #endif
 					this.seachstatic = 'fixed'
 					this.zIndex = 1
-					this.paddingtop = 64
+					// this.paddingtop = 64
 					this.navtop = 120
+					// #ifdef H5
+					this.navtop = 80
+					// #endif
 					this.navposition = 'fixed'
 					this.ScratchableLatextop = 268
 				}else{
 					// console.log("向上滚动")
 					// this.bannheight=260
 					// this.seachheight=420
+					// this.seachheight=228
 					this.seachstatic = 'static'
 					this.zIndex = 1
-					this.paddingtop = 22
+					// this.paddingtop = 22
 					// #ifdef H5
 					this.navtop = 80
 					// #endif
@@ -338,6 +354,10 @@
 			// #endif
 			// console.log(app.globalData)
 			this.statusBar = app.globalData.statusBar
+			// #ifdef H5
+				this.statusBar = 12
+				this.seachheight=420
+			// #endif
 			//启动页更改缓存中的值
 			uni.setStorage({
 				key:"Startpagebool",

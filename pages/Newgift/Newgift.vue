@@ -6,7 +6,7 @@
 			<scroll-view class="fa-new" scroll-y="true" >
 				<view class="new-top-img" style="background-image: url(/static/Newgift/bgtitle.png);"></view>
 				<view class="new-bottom">
-					<NewPeople></NewPeople>
+					<NewPeople v-if="couponslist.length>0"></NewPeople>
 					<scroll-view :scroll-x="true">
 						<view class="fa-discounts">
 							<view class="discounts-list">
@@ -48,6 +48,7 @@
 							</view>
 						</view>
 					</view>
+					<view class="batch" @tap="batch">换一批</view>
 				</view>
 			</scroll-view>
 			
@@ -99,6 +100,9 @@
 						}
 					}
 				})
+			},
+			batch(){
+				console.log(111)
 			}
 		},
 		components:{
@@ -326,6 +330,11 @@
 			 }
 		}
 	}
-	
+	.batch{
+		text-align:center;
+		font-size: 32rpx;
+		color:#ccc;
+		padding-bottom:20rpx;
+	}
 	
 </style>
