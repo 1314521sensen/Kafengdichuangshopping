@@ -9,7 +9,7 @@
 					<view class="cu-bar search bg-white">
 						<view class="search-form round">
 							<text class="cuIcon-search"></text>
-							<input :value="value?value:value3" @confirm="Enter" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" :placeholder="value2" confirm-type="search"></input>
+							<input :value="value?value:value3" :focus="focusbool" @confirm="Enter" @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" :placeholder="value2" confirm-type="search"></input>
 						</view>
 						<!-- #ifdef APP-PLUS || H5 -->
 							<view class="action">
@@ -41,16 +41,19 @@
 			return {
 				list:[],
 				value:"",
-				value2:"请搜索你的商品"
+				value2:"请搜索你的商品",
+				focusbool:true
 			}
 		},
 		methods:{
 			InputFocus(e) {
-				this.InputBottom = e.detail.height	
+				this.InputBottom = e.detail.height
+				// this.focusbool = true
 			},
 			InputBlur(e) {
 				this.InputBottom = 0
 				this.value = e.detail.value
+				// this.focusbool = false
 				//仅微信端调用 不加的话 手机端 会重复搜索
 				// #ifdef MP-WEIXIN
 					this.Enter()
@@ -73,6 +76,7 @@
 				}
 				//如果文本不为空就往下执行
 				this.list.unshift(this.value)
+				// this.focusbool = false
 				if(this.list.length==8){
 					let arr = this.list.pop()
 					this.list = this.list
@@ -92,7 +96,10 @@
 				this.value=item;
 			}
 		},
-		props:["value3"]
+		props:["value3"],
+		created() {
+			
+		}
 	}
 </script>
 

@@ -1,7 +1,7 @@
 <template>
 	<view class="securitiesbottom">
 		<!-- v-for="(item,index) in couponslist" :key="index" -->
-		<view >
+		
 			<!-- {{item}} -->
 			<view class="couponstitle">
 				<view 
@@ -15,22 +15,30 @@
 			</view>
 			<view class="discount_coupon">
 				<scroll-view scroll-y="true" class="scroll-Y">
-						<view class="discount_coupon_demo" v-for="(item,index) in couponslist" :key="index">
+					<view class="demo_fa" v-for="(item,index) in couponslist" :key="index">
+						<view class="discount_coupon_demo">
 							<view class="demo_left">
 								<view class="demo_left_price">
 									<text class="price_left" v-text="item.money"></text>
 									<text class="price_right">元</text>
 								</view>
-								<view class="demo_left_time">
-									<view class="right_top">
-										<text>有效期至</text>
+								
+									<view class="demo_left_time">
+										<view class="left_indate ">
+											<text>有效期至:</text>
 										<text>{{item.stop_time}}</text>
+										</view>
+										
+										<view class="right_bottom">
+											<!-- 这里在判断是0元还是必须满多少钱使用 如果是0元===无限制 -->
+											<text v-text="item.at_full!=='0.00'?'满'+item.at_full+'使用':'无门槛使用'"></text>
+										</view>
+										<view class="arrows">
+											<text class="arrows-text" @tap="particularsClick" :data-indexs="index">▼</text>
+										</view>
 									</view>
-									<view class="right_bottom">
-										<!-- 这里在判断是0元还是必须满多少钱使用 如果是0元===无限制 -->
-										<text v-text="item.at_full!=='0.00'?'满'+item.at_full+'使用':'无门槛使用'"></text>
-									</view>
-								</view>
+									
+								
 							</view>
 							<view class="demo_right">
 								<text class="right_center">
@@ -38,35 +46,14 @@
 								</text>
 							</view>
 						</view>
+						<view class="particulars" v-if="index==tabcurindex">
+							<p><text>优惠券用途:</text><text>卡时间来得及法拉盛京东</text></p>
+							<p><text>优惠券号：</text><text>asdfaasdf</text></p>
+						</view>
+					</view>
 				</scroll-view>
 			</view>
-			<!-- <view class="securitiesbottomitem" v-for="(items,indexs) in item.list" :key="indexs">
-				<view class="securities">
-					<view class="securities-left">
-						<view class="securities-left-imgs">
-							<image :src="items.coupon_img"></image>
-						</view>
-						<view class="securities-left-right">
-							<view class="securities-left-right-top">
-								<text>{{items.store_name}}</text>
-								<text>{{items.rules?items.rules:'平台自主提供'}}</text>
-							</view>
-							<view class="securities-left-right-bottom">
-								<text>¥{{items.coupon_name}}</text>
-							</view>
-						</view>
-					</view>
-					<view class="securities-right">
-						<view class="securities-right-top">
-							<text>¥</text>
-							<text v-text="items.money"></text>
-						</view>
-						<text>{{items.at_full=='0.00'?'无门槛':'满'+items.at_full}}使用</text>
-						<button class="cu-btn round bg-red" @tap="receive" :data-storeid="items.store_id">立即使用</button>
-					</view>
-				</view>
-			</view> -->
-		</view> 
+		
 	</view>
 </template>
 
@@ -81,6 +68,8 @@
 					"平台优惠券"
 				],
 				couponstindex:0,
+				show:false,
+				tabcurindex:-1
 			}
 		},
 		methods:{
@@ -115,6 +104,13 @@
 				let indexs = e.currentTarget.dataset.indexs
 				this.couponstindex = indexs
 				this.$emit("indexs",this.couponstindex)
+			},
+			particularsClick(e){
+				// let indexs = e.currentTarget.dataset.indexs
+				this.tabcurindex = e.currentTarget.dataset.indexs
+				this.show = !this.show
+				console.log(this.show)
+				
 			}
 		},
 		props:["couponslist"]
@@ -122,6 +118,7 @@
 </script>
 
 <style lang="less" scoped>
+	
 	.securitiesbottom{
 		background-color: white;
 	 width: 100%;
@@ -179,6 +176,11 @@
 					color: white;
 					width: 60%;
 					height: 100%;
+					margin-left: 10rpx;
+					.left_indate {
+						font-size: 24rpx;
+						margin-top: 40rpx;
+					}
 					.right_top{
 						font-size:12rpx;
 						height: 40%;
@@ -187,6 +189,11 @@
 					.right_bottom{
 						font-size: 40rpx;
 						font-weight: bold;
+					}
+					.arrows{
+						width: 100%;
+						text-align: center;
+						margin-top: 10rpx;
 					}
 				}
 		  }
@@ -206,6 +213,27 @@
 			  // background: linear-gradient(to left,#ed6117,#eb480e);
 		  }
 	  }
+		.particulars{
+			// border: 1rpx solid #CCCCCC;
+			// border-top: 1rpx dashed #CCCCCC;
+			width: 95%;
+			margin: 0 auto ;
+			padding: 4rpx;
+			overflow: hidden;
+		  	animation:mymove .5s ;
+		  	/*Safari 和 Chrome:*/
+		  	-webkit-animation:mymove .5s ;
+		  }
+		  
+		  @keyframes mymove{
+		  	from {height: 0rpx;}
+		  	to {height: 76rpx;}
+		  }
+		  p{
+			  font-size: 24rpx;
+			  color: #9c9c9c;
+		  }
+		 
 	  .securitiesbottomitem{
 	   
 	   margin: 0 auto;

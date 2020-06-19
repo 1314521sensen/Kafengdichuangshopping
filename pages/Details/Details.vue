@@ -107,15 +107,17 @@
 						
 						//在这里请求店家的地址信息
 						let arr = []
-						let url = "http://hbk.huiboke.com/api/common/getAreas"
+						let url = `${app.globalData.Requestpath}common/getAreas`
 						uni.request({//地址这块还是有些问题
 							url,
 							data:{
 								parent_id:res.data.data.area_id2
 							},
 							success(resprovince) {
-								arr.push(resprovince.data.data[0].area_name)
-								_this.region = arr
+								if(resprovince.data.code==0){
+									arr.push(resprovince.data.data[0].area_name)
+									_this.region = arr
+								}
 							}
 						})
 					}

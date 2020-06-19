@@ -11,6 +11,10 @@
 		    "path" : "pages/Startpage/Startpage",
 		    "style" : {}
 		},
+		{
+		    "path" : "pages/Guidepage/Guidepage",
+		    "style" : {}
+		},
 		// #endif
 		{
 			"path": "pages/index/index",
@@ -259,11 +263,7 @@
         ,{
             "path" : "pages/Successfulopening/Successfulopening",
             "style" : {}
-        },
-		{
-		    "path" : "pages/Guidepage/Guidepage",
-		    "style" : {}
-		}
+        }
         ,{
             "path" : "pages/commodityshop/commodityshop",
             "style" : {}

@@ -7,21 +7,23 @@
 				<button class="cu-btn bg-red lg">新建</button>
 			</view>
 		</view>
-		<view class="cu-list menu-avatar">
-			<view class="cu-item" v-for="(item,index) in addaddresslist" :key="index" :class="addressselectedindex==index?'bg-itemcolor':''" @tap="selecteditem(index,item)">
-				<view class="cu-avatar" :class="addressselectedindex==index?'bg-itemcolor':''">{{item.consignee_name}}</view>
-				<view class="content" @tap="setaddress(item.address_id)">
-					<view class="text-grey" :class="addressselectedindex==index?'bg-itemcolor':''">{{item.consignee_phone}}</view>
-					<view class="text-gray text-sm flex">
-						<view class="text-cut" :class="addressselectedindex==index?'bg-itemcolor':''">
-							{{item.street_number}}
-						</view> </view>
-				</view>
-				<view class="action">
-					<text class="lg text-gray text-red cuIcon-delete" @tap="Deleteaddress(index,item.address_id)"></text>
+		<scroll-view class="scroll-view" :scroll-y="true" @scrolltolower="scrolltolower">
+			<view class="cu-list menu-avatar">
+				<view class="cu-item" v-for="(item,index) in addaddresslist" :key="index" :class="addressselectedindex==index?'bg-itemcolor':''" @tap="selecteditem(index,item)">
+					<view class="cu-avatar" :class="addressselectedindex==index?'bg-itemcolor':''">{{item.consignee_name}}</view>
+					<view class="content" @tap="setaddress(item.address_id)">
+						<view class="text-grey" :class="addressselectedindex==index?'bg-itemcolor':''">{{item.consignee_phone}}</view>
+						<view class="text-gray text-sm flex">
+							<view class="text-cut" :class="addressselectedindex==index?'bg-itemcolor':''">
+								{{item.street_number}}
+							</view> </view>
+					</view>
+					<view class="action">
+						<text class="lg text-gray text-red cuIcon-delete" @tap="Deleteaddress(index,item.address_id)"></text>
+					</view>
 				</view>
 			</view>
-		</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -48,7 +50,8 @@
 				storeid:"",
 				cids:"",
 				freight:"",
-				spec_id:0
+				spec_id:0,
+				pageye:1,//上拉加载的页数
 			}
 		},
 		methods: {
@@ -101,7 +104,7 @@
 						address_id:address_id
 					},
 					success(res){
-						_this.getShippingAddressList(_this.tokey,1,10,_this)
+						_this.getShippingAddressList(_this.pageye,9)
 					}
 				})
 			},
@@ -123,20 +126,37 @@
 				}
 			},
 			//封装一个获取用户收货地址的功能
-			getShippingAddressList(tokey,page,pages,_this){
-				uni.request({
-					url:`${app.globalData.Requestpath}user/getShippingAddressList`,
-					method:"POST",
-					data:{
-						token:tokey,
-						page:page,
-						pageSize:pages
-					},
-					success(res) {
-						_this.addaddresslist = res.data.data
-						uni.stopPullDownRefresh()
+			getShippingAddressList(page,pages){
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey) {
+						uni.request({
+							url:`${app.globalData.Requestpath}user/getShippingAddressList`,
+							method:"POST",
+							data:{
+								token:restokey.data,
+								page:page,
+								pageSize:pages
+							},
+							success(res) {
+								if(res.data.code==0){
+									if(_this.pageye>1){
+										_this.addaddresslist = _this.addaddresslist.concat(res.data.data)
+									}else{
+										_this.addaddresslist = res.data.data
+										uni.stopPullDownRefresh()
+									}
+								}
+							}
+						})
 					}
 				})
+			},
+			//当用户上拉的时候
+			scrolltolower(){
+				this.pageye++
+				this.getShippingAddressList(this.pageye,9)
 			}
 		},
 		components:{
@@ -152,7 +172,7 @@
 				key:"bindtokey",
 				success(res) {//获取到用户的tokey值
 					_this.tokey = res.data
-					_this.getShippingAddressList(res.data,1,10,_this)
+					_this.getShippingAddressList(_this.pageye,9)
 				}
 			})
 		},
@@ -226,5 +246,13 @@
 				color:#fff !important;
 			}
 		}
+	}
+	.scroll-view{
+		overflow: hidden;
+		height:87vh;
+		/* #ifdef APP-PLUS */
+		height:79vh;
+		/* #endif */
+		// background-color:red
 	}
 </style>

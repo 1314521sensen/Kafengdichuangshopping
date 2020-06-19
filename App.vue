@@ -5,6 +5,7 @@
 			Requestpath:"http://hbk.huiboke.com/api/",
 			imgyuming:"http://hbk.huiboke.com",
 			logintokeybool:false,
+			Guidepagebool:false,//这是用于判断 用户的引导页
 			VerificationCode(json){//封装一个方法来获取验证码
 				console.log(json)
 				uni.request({
@@ -66,7 +67,7 @@
 				}else{
 					// console.log("tokey没过期")
 				}
-			}
+			},
 		},
 		//此生命周期只会app打开时 只会触发一次
 		onLaunch: function() {
@@ -103,6 +104,32 @@
 			// console.log(plus.os.name)//这是Android
 			// #endif
 			//app热跟新---结束
+			//引导页---开始
+			// #ifdef APP-PLUS
+				
+				uni.getStorage({
+					key:"Guidepagebool",
+					success(res){
+						console.log(res)
+						_this.globalData.Guidepagebool = true
+						uni.redirectTo({
+							url:"/pages/Startpage/Startpage"
+						})
+					},
+					fail(err){
+						console.log(err)
+						_this.globalData.Guidepagebool = false
+						uni.redirectTo({
+							url:"/pages/Guidepage/Guidepage"
+						})
+						uni.setStorage({
+							key:"Guidepagebool",
+							data:true,
+						})
+					}
+				})
+			// #endif
+			//引导页---结束
 		},
 		onShow: function() {
 			

@@ -1,6 +1,6 @@
 <template>
 	<!-- #ifdef APP-PLUS -->
-	<view class="Startpage" :style="{'background-image':'url(/static/Startpage/Startpage.gif)'}" v-if="Startpagebool">
+	<view class="Startpage" :style="{'background-image':'url(/static/Startpage/Startpage.gif)'}" v-if="Guidepagebools">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<view class="seconds">
 			<view class="Numbers" @tap="Stoptimer">
@@ -19,7 +19,8 @@
 				statusBar:0,
 				nums:10,
 				Startpagebool:true,
-				time:null
+				time:null,
+				Guidepagebools:false
 			}
 		},
 		methods: {
@@ -32,12 +33,13 @@
 		},
 		created(){
 			const _this = this
-			uni.getStorage({
-				key:"Startpagebool",
-				success(res) {
-					_this.Startpagebool = res.data
-				}
-			})
+			// uni.getStorage({
+			// 	key:"Startpagebool",
+			// 	success(res) {
+			// 		cons
+			// 		_this.Startpagebool = res.data
+			// 	}
+			// })
 			_this.time = setInterval(()=>{
 				_this.nums--
 				if(_this.nums<0){
@@ -51,6 +53,7 @@
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+			this.Guidepagebools = app.globalData.Guidepagebool
 		}
 	}
 </script>

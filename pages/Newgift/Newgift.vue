@@ -1,14 +1,18 @@
 <template>
 	<view class="Startingdiagrambox">
-		<!-- <view class="Startingdiagram" :style="{'background-image':'url(/static/Newgift/Presentscar.gif)','height':Newgiftheight+'vh'}" v-if="Newgiftbool"></view> -->
-		<view class="new" style="background-image: url(/static/Newgift/bg.png);">
+		<view 
+			class="Startingdiagram" 
+			:style="{'background-image':'url(/static/Newgift/Presentscar.gif)','height':Newgiftheight+'vh','width':Newgiftwidth+'%'}" 
+			v-if="Newgiftbool">
+		</view>
+		<view class="new" :style="{'background-image':'url('+yuming+'Newgift/bg.png'+')'}">
 			<pageheight :statusBar="statusBar"></pageheight>
 			<scroll-view class="fa-new" scroll-y="true" >
-				<view class="new-top-img" style="background-image: url(/static/Newgift/bgtitle.png);"></view>
+				<view class="new-top-img" :style="{'background-image':'url('+yuming+'Newgift/bgtitle.png'+')'}"></view>
 				<view class="new-bottom">
 					<NewPeople v-if="couponslist.length>0"></NewPeople>
-					<scroll-view :scroll-x="true">
-						<view class="fa-discounts">
+					<scroll-view :scroll-x="true" @scrolltolower="scrolltolower">
+						<view class="fa-discounts" :style="{'width':(countswidth*2+10)*couponslist.length+'rpx'}">
 							<view class="discounts-list">
 								<view class="discounts" v-for="(item,index) in couponslist" :key="index">
 									<view class="discounts-left">
@@ -20,7 +24,7 @@
 											<text class="right-left-textone">优惠券</text>
 											<text class="right-left-texttwo">{{parseInt(item.at_full)?'满'+item.at_full+'可用':'无门槛'}}</text>
 										</view>
-										<view class="right-right" style="background-image: url(/static/Newgift/Rightcouponimg.png);">
+										<view class="right-right" :style="{'background-image':'url('+yuming+'Newgift/Rightcouponimg.png'+')'}">
 											<button 
 												class="cu-btn"
 												:data-coupon_id="item.coupon_type_id"
@@ -39,24 +43,35 @@
 						<view class="commodity" v-for="(item,index) in list" :key="index">
 							<view class="commodity-img">
 								<!-- 这里放的图片 -->
+								<image :src="'http://hbk.huiboke.com'+item.good_pic" class="imgs"></image>
 							</view>
 							<view class="commodity-bottom">
-								<view class="">
-									<text class="text-one">RMB:</text><text class="text-two">{{item}}</text>
+								<view class="commodity-bottom-title">
+									{{item.good_title}}
 								</view>
-								<button class="cu-btn">领取</button>
+								<!-- 这是商品的价格 -->
+								<view class="commodity-bottom-plice">
+									<view>
+										<text class="text-two">{{item.special_price}}</text>
+									</view>
+									<button 
+										class="cu-btn" 
+										@tap="Snapped"
+										:data-id="item.good_id"
+										:data-storeid="item.store_id"
+										:data-specialtype="item.special_type_id"
+									>立即抢购</button>
+								</view>
 							</view>
 						</view>
 					</view>
 					<view class="batch" @tap="batch">换一批</view>
 				</view>
 			</scroll-view>
-			
-			
 			<view class="new-bottom-bottom cu-dialog">
 				<view class="bottom-midden">
-					<view class="log-left" style="background-image: url(/static/logo.png);"></view>
-					<view class="log-right" style="background-image: url(/static/Newgift/bottomlogo.png);"></view>
+					<view class="log-left" :style="{'background-image':'url('+yuming+'logo.png'+')'}"></view>
+					<view class="log-right" :style="{'background-image':'url('+yuming+'Newgift/bottomlogo.png'+')'}"></view>
 				</view>
 			</view>
 		</view>
@@ -69,40 +84,110 @@
 	export default {
 		data() {
 			return {
-				list:[10,20,30,40,50,60,70,80,90],
+				list:[],
 				statusBar:"",
 				Newgiftheight:100,
+				Newgiftwidth:100,
 				Newgiftbool:true,
 				couponspages:1,
-				couponspagesize:10,
+				couponspagesize:5,
 				couponslist:[],
-				tokey:""
+				yuming:"http://hbk.huiboke.com/uploads/app/image/",
+				timenum:5000,
+				countswidth:168
 			}
 		},
 		methods:{
+			//领取优惠券
 			Getnew(e){
-				// console.log(e)
 				let {coupon_id,storeid} = e.currentTarget.dataset
-				uni.request({
-					url:`${app.globalData.Requestpath}activity/userGetNewPeopleCoupon`,
-					method:"POST",
-					data:{
-						token:this.tokey,
-						sid:storeid,
-						cid:coupon_id
-					},
+				uni.getStorage({
+					key:"bindtokey",
 					success(res) {
-						console.log(res)
-						if(res.data.code==0){
-							//暂时先留位
-						}else{
-							app.globalData.showtoastsame(res.data.msg)
+						uni.request({
+							url:`${app.globalData.Requestpath}activity/userGetNewPeopleCoupon`,
+							method:"POST",
+							data:{
+								token:res.data,
+								sid:storeid,
+								cid:coupon_id
+							},
+							success(res) {
+								if(res.data.code==0){
+									app.globalData.showtoastsame(res.data.msg)
+								}else{
+									if(res.data.msg=="令牌错误"){
+										app.globalData.Requestmethod(res.data.code,res.data.msg)
+									}else{
+										app.globalData.showtoastsame(res.data.msg)
+									}
+								}
+							}
+						})
+					}
+				})
+			},
+			//这是换一批事件
+			batch(){
+				this.giftlist(10)
+			},
+			giftlist(nums){
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						// 礼品的数据
+						uni.request({
+							url:`${app.globalData.Requestpath}activity/getNewUserGoodsList`,
+						    method:"GET",
+							data:{
+								limit:nums
+							},
+							success(res){
+								if(res.data.code==0){
+									_this.list = res.data.data
+								}else{
+									//这是检测tokey
+									// app.globalData.Requestmethod(res.data.code,res.data.msg)
+								}
+							}
+						})
+					}
+				})
+			},
+			//获取优惠卷列表
+			CouponTypeList(couponspagesize){
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}activity/getNewUserCouponTypeList`,
+					method:"GET",
+					data:{
+						page:couponspagesize,
+						pageSize:5
+					},
+					success(rescoupons) {
+						// console.log(rescoupons)
+						if(rescoupons.data.code==0){
+							if(_this.couponspages>1){
+								_this.couponslist = _this.couponslist.concat(rescoupons.data.data.list)
+							}else{
+								_this.couponslist = rescoupons.data.data.list
+							}
 						}
 					}
 				})
 			},
-			batch(){
-				console.log(111)
+			//点击立即抢购的礼品 跳到商品详情里面
+			Snapped(e){
+				let {id,storeid,specialtype} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${id}&storeid=${storeid}&specialtype=${specialtype}`
+				})
+			},
+			//滚动加载的事件
+			scrolltolower(){
+				this.couponspages++
+				this.CouponTypeList(this.couponspages)
 			}
 		},
 		components:{
@@ -111,40 +196,19 @@
 		onLoad() {
 			const _this = this
 			_this.statusBar = app.globalData.statusBar
-			console.log(_this.Newgiftheight)
 			//应该是平滑的往上移动
-			// setInterval(function(){
-			// 	// console.log(11)
-			// 	_this.Newgiftheight-=10
-			// },500)
-			//等小火车 先丢完礼物的那一刻 才能执行定时器的执行(在保证兼容)这块可以用es6的new promise
-			
+			let time = null
+			 time = setInterval(function(){
+				_this.Newgiftheight = 0
+				_this.Newgiftwidth = 0
+				clearInterval(time)
+			},_this.timenum)
 		},
 		created(){
 			const _this = this
-			uni.getStorage({
-				key:"bindtokey",
-				success(res){
-					// console.log(res)
-					_this.tokey = res.data
-					uni.request({
-						url:`${app.globalData.Requestpath}activity/getNewUserCouponTypeList`,
-						method:"POST",
-						data:{
-							token:res.data,
-							page:_this.couponspages,
-							pageSize:_this.couponspagesize
-						},
-						success(rescoupons) {
-							if(rescoupons.data.code==0){
-								_this.couponslist = rescoupons.data.data.list
-							}
-							// _this.couponslist
-						}
-					})
-				}
-			})
-			
+			_this.CouponTypeList(5)
+			//调用礼品的接口
+			_this.giftlist(1)
 		}
 	}
 </script>
@@ -153,12 +217,12 @@
 	.Startingdiagrambox{
 		height:100vh;
 		overflow: hidden;
-		transition: .5s;
 	}
 	.Startingdiagram{
 		// background-color:red;
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
+		transition: 1.3s;
 	}
 	.new{
 		overflow: hidden;
@@ -185,15 +249,16 @@
 			border-radius: 20rpx 20rpx 0 0;
 			margin: 0 auto ;
 			.fa-discounts{
-				width: 1000%;
+				// width: 1000%;
 				.discounts-list{
-					width: 10%;
+					// width: 10%;
 					display: flex;
 					justify-content: space-around;
-					flex-wrap: wrap;
+					// flex-wrap: wrap;
 					.discounts{
 						overflow: hidden;
-						margin-top: 20rpx;
+						// margin-top: 20rpx;
+						margin:20rpx 20rpx 0 0;
 						width: 336rpx;
 						height: 110rpx;
 						border-radius: 15rpx;
@@ -271,20 +336,33 @@
 				.commodity{
 					width: 340rpx;
 					margin: 15rpx 0 15rpx 0 ;
+					box-shadow: 4rpx 4rpx 20rpx #ccc;
 					.commodity-img{
 						width: 340rpx;
 						height: 340rpx;
-						background-color: red;
-						img{
+						// background-color: red;
+						.imgs{
 							width: 100%;
 							height: 100%;
 						}
 					}
 					.commodity-bottom{
-						
-						display: flex;
-						justify-content: space-between;
-						line-height: 80rpx;
+						// 这是商品的
+						.commodity-bottom-title{
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
+							-webkit-line-clamp: 2;
+							overflow: hidden;
+							padding:0 10rpx;
+							font-size: 26rpx;
+							margin:10rpx 0;
+						}
+						.commodity-bottom-plice{
+							display:flex;
+							justify-content: space-between;
+							padding:10rpx;
+							align-items: center;
+						}
 						.text-one{
 							font-size: 24rpx;
 						}
@@ -296,7 +374,7 @@
 						.cu-btn{
 							height: 40rpx;
 							background-color: #f30000;
-							margin-top:20rpx;
+							// margin-top:20rpx;
 							color: white;
 						}
 					}
@@ -333,7 +411,7 @@
 	.batch{
 		text-align:center;
 		font-size: 32rpx;
-		color:#ccc;
+		color:#999;
 		padding-bottom:20rpx;
 	}
 	

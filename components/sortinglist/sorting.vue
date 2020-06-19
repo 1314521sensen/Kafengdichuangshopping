@@ -11,6 +11,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	//这是排序导航
 	export default{
 		data(){
@@ -44,8 +45,10 @@
 		methods: {
 			//封装个排序的函数方法
 			sortinglistshop(kind,way){
+				// console.log(this.value)
+				// console.log(`${app.globalData.Requestpath}good/getGoodList?g_name=${this.value}&o_type=${kind}&o_rule=${way}`)
 				uni.request({
-					url:`http://hbk.huiboke.com/api/good/getGoodList?o_type=${kind}&o_rule=${way}`,
+					url:`${app.globalData.Requestpath}good/getGoodList?g_name=${this.value}&o_type=${kind}&o_rule=${way}`,
 					success:(res)=>{
 						if(res.data.code==0){
 							this.$emit("sortingshoplist",res.data.data.list)
@@ -65,6 +68,7 @@
 					case 1:
 						//这是销量
 						this.sortinglistshop(0,0)
+						console.log("这是销量")
 						break;
 					
 					case 2:

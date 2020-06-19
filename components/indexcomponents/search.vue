@@ -1,17 +1,16 @@
 <template>
 	<view class="search" :style="{'height':indexs==0?420+'rpx':168+'rpx'}">
 		<view class="search-inp">
-			<view class="search-form">
+			<view class="search-form" @tap="InputFocus">
 				<text class="cuIcon-search"></text>
 				<input 
-				@focus="InputFocus" 
-				@blur="InputBlur" 
 				:adjust-position="false" 
 				type="text" 
 				placeholder="搜索你想要的商品"
 				placeholder-class="seachplaceholder"
 				placeholder-style="color:#fff"
 				confirm-type="search" id="inp"
+				disabled="true"
 				 ></input>
 			</view>
 			<view class="action">
@@ -30,14 +29,14 @@
 		},
 		methods:{
 			InputFocus(e) {
-				this.InputBottom = e.detail.height
+				// this.InputBottom = e.detail.height
 				uni.navigateTo({
 					url:"/pages/SearchTo/SearchTo"
 				})
 			},
-			InputBlur(e) {
-				this.InputBottom = 0
-			}
+			// InputBlur(e) {
+			// 	this.InputBottom = 0
+			// }
 		},
 		mounted(){
 			// let inp = document.getElementById("inp")

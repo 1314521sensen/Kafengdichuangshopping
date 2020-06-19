@@ -75,7 +75,7 @@
 					color: 'red',
 					badge: 120,
 					name: '拼团',
-					imgs:"/static/index/Scratchablelatexicon/Spellgroup.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/Spellgroup.png",
 					url:"/pages/groupbooking/groupbooking"
 				},
 				{
@@ -83,21 +83,21 @@
 					color: 'orange',
 					badge: 1,
 					name: '团购',
-					imgs:"/static/index/Scratchablelatexicon/bulk.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/bulk.png",
 					url:"/pages/grouppurchase/grouppurchase"
 				}, {
 					cuIcon: 'picfill',
 					color: 'yellow',
 					badge: 0,
 					name: '折扣',
-					imgs:"/static/index/Scratchablelatexicon/discount.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/discount.png",
 					url:"/pages/discount/discount"
 				}, {
 					cuIcon: 'noticefill',
 					color: 'olive',
 					badge: 22,
-					name: '新人礼',
-					imgs:"/static/index/Scratchablelatexicon/Ledsecurities.gif",
+					name: '新人专区',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/Ledsecurities.gif",
 					url:"/pages/Newgift/Newgift",
 					Routinghopname:"Newgift"
 				}, 
@@ -106,7 +106,7 @@
 					color: 'purple',
 					badge: 0,
 					name: '品牌',
-					imgs:"/static/index/Scratchablelatexicon/brand.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/brand.png",
 					url:"/pages/brand/brand"
 				},
 				{
@@ -114,7 +114,7 @@
 					color: 'mauve',
 					badge: 0,
 					name: '限时秒杀',
-					imgs:"/static/index/Scratchablelatexicon/Secondskill.gif",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/Secondskill.gif",
 					url:"/pages/limitedtimesecondskill/limitedtimesecondskill"
 				},
 				{
@@ -122,7 +122,7 @@
 					color: 'blue',
 					badge: 0,
 					name: '专题',
-					imgs:"/static/index/Scratchablelatexicon/project.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/project.png",
 					url:"/pages/topicpage/topicpage"
 				}, 
 				{
@@ -130,7 +130,7 @@
 					color: 'cyan',
 					badge: 0,
 					name: '积分',
-					imgs:"/static/index/Scratchablelatexicon/integral.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/integral.png",
 					url:"/pages/integralstore/integralstore"
 				},
 				{
@@ -138,7 +138,7 @@
 					color: 'mauve',
 					badge: 0,
 					name: '自营',
-					imgs:"/static/index/Scratchablelatexicon/proprietary.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/proprietary.png",
 					url:"/pages/autotrophy/autotrophy"
 				},
 				{
@@ -146,7 +146,7 @@
 					color: 'mauve',
 					badge: 0,
 					name: '帮助',
-					imgs:"/static/index/Scratchablelatexicon/help.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/help.png",
 					url:"/pages/help/help"
 				}
 				],
