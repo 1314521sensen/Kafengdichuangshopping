@@ -12,7 +12,7 @@
 					:data-index="index"
 					:data-indexs="indexs"
 					:data-id="items.good_id"
-					:data-unitprice="items.good_price"
+					:data-unitprice="items.spec_price"
 					:data-num="numlistxiabiao[index][indexs].good_num"
 					:data-carid="items.cart_id"
 					:data-storeid="item.store_id"
@@ -42,15 +42,15 @@
 						<text>{{items.spec_value}}</text>
 					</view>
 					<view class="price-box">
-						<text>¥{{items.good_price}}</text>
+						<text>¥{{items.spec_price}}</text>
 						<view class="numbers">
-							<button @tap="Adddeletepublic(items.good_id,index,indexs,false,items.good_price)" :data-id="items.good_id">-</button>
+							<button @tap="Adddeletepublic(items.good_id,index,indexs,false,items.spec_price)" :data-id="items.good_id">-</button>
 							<input type="text" 
 								:value="numlistxiabiao[index][indexs].good_num?numlistxiabiao[index][indexs].good_num:'1'" 
 								placeholder-class="inp" 
 								disabled="true"
 							></input>
-							<button @tap="Adddeletepublic(items.good_id,index,indexs,true,items.good_price)">+</button>
+							<button @tap="Adddeletepublic(items.good_id,index,indexs,true,items.spec_price)">+</button>
 						</view>
 					</view>
 				</view>
@@ -65,6 +65,8 @@
 				@hiddends="hiddends"
 				@guigedata="guigedata"
 				@updataimmediatelylist="updataimmediatelylist"
+				@numprice="numprice"
+				:remotaicent='remotaicent'
 			></immediatelypopup>
 			<!-- 这是cart-item-bottom小列表结束 -->
 		</view>
@@ -97,13 +99,17 @@
 				mark:false,
 				good_gid:0,//这是商品id
 				good_sid:0,//这是店铺id
-				imgs:""
+				imgs:"",
+				totalprice:0,
+				remotaicent:''
 			}
 		},
 		onShow() {
 			// console.log(this.good)
+			console.log(this.immediatelylist)
 		},
 		methods:{
+			
 			//封装一个数量增加 减少功能
 			Adddeletepublic(getid,index,indexs,adddeletebool,unitprice){
 				if(adddeletebool){
@@ -121,7 +127,7 @@
 						app.globalData.showtoastsame("数量不能小于1")
 					}else{
 						--this.numlistxiabiao[index][indexs].good_num
-						//当用户选中是时 点击-号时 用来减
+						//当用户选中是时 点击-号时 用来减  
 						if(this.numlistxiabiao[index][indexs].checked){
 							this.$emit("Purchasequantity",this.numlistxiabiao[index][indexs].good_num)
 							this.totals(unitprice,this.numlistxiabiao[index][indexs].good_num)
@@ -132,13 +138,18 @@
 				}
 			},
 			//封装个总价
-			totals(unitprice,num){//unitprice单价  num数量
+			totals(unitprice,num){//unitprice单价  num数量  num.
 				// 单价*数量
-				this.toals = unitprice*num
+				this.toals =  (unitprice*num).toFixed(2);
 				this.$emit("price",this.toals)
 			},
 			CheckboxChange(e){
+				// 给购物车一个总计状态为true
+				this.$emit("amountprice",1)
+				// this.$emit("countismarkbool",true)
+				console.log(e)
 				let {index,indexs,id,unitprice,num,carid,storeid} = e.currentTarget.dataset
+				console.log(e.currentTarget)
 				this.idbool = id
 				// //开始先让他们都为false
 				this.numlistxiabiao.forEach((item,itemindex)=>{
@@ -147,8 +158,9 @@
 						this.checkbool = false
 					})
 				})
+				
 				if(this.idbool==id){
-					//如果当前的没有为true 在点击其他的 就让他为false
+					//如果当前的没有为true 在点击其他的 就让他为false    
 					if(this.checkbool){
 						this.numlistxiabiao[index][indexs].checked = false
 						this.checkbool = false
@@ -157,13 +169,13 @@
 						this.checkbool = true
 						//把选中的数组发送过去
 						
-						let {good_id,store_name,good_name,good_pic,good_price,good_freight} = this.numlistxiabiao[index][indexs]
+						let {good_id,store_name,good_name,good_pic,spec_price,good_freight} = this.numlistxiabiao[index][indexs]
 						//向父组件传递 用于结算用---开始  这么写后期改小程序用
 						this.$emit("datagoodid",good_id)//商品的id
-						this.$emit("datastorename",store_name)//店铺名称
+						this.$emit("datastorename",store_name)//店铺名称  
 						this.$emit("datagoodname",good_name)//商品的标题
 						this.$emit("datagoodimg",good_pic)//商品的图片
-						this.$emit("datagoodprice",good_price)//商品的单价
+						this.$emit("datagoodprice",spec_price)//商品的单价  
 						this.$emit("Purchasequantity",this.numlistxiabiao[index][indexs].good_num)//商品的数量
 						this.$emit("freight",good_freight)//商品运费
 						//向父组件传递 用于结算用---结束
@@ -172,19 +184,23 @@
 						this.$emit("datacarid",carid)
 						this.$emit("datastoreid",storeid)
 						this.totals(unitprice,num)
+						// this.$emit("mark_deleteTotalpic",true)
 					}
 				}
 				
 			},
 			showModal(e) {
-				let {target,storeid,goodid,img} = e.currentTarget.dataset
-				//获取id值用来获取商品的规格 
+				let {target,storeid,goodid,img,num} = e.currentTarget.dataset
+				//获取id值用来获取商品的规格  
 				this.id = goodid
 				this.good_gid = goodid
 				this.good_sid = storeid
 				this.modalName = target
 				this.imgs = img
-				// console.log(goodid,storeid)
+				this.num = num
+				// console.log(e.currentTarget.dataset)
+				console.log(123)
+				console.log()
 				const _this = this
 				uni.request({
 					url:`${app.globalData.Requestpath}good/getGoodSpecListOneLever`,
@@ -193,10 +209,11 @@
 						gid:this.good_gid
 					},
 					success(res) {
-						// console.log(res)
+						// console.log(res) 
 						if(res.data.code==0){
 							_this.immediatelylist = res.data.data
-							return 
+							// console.log( res.data.data)   
+							return 	
 						}
 						_this.immediatelylist=[]
 					}
@@ -237,8 +254,62 @@
 				})
 			},
 			updataimmediatelylist(e){
+				
+				// this.immediatelylist = e   
+				
+				console.log(e)	
+				this.shopinglists = e
+				this.$forceUpdate()
+			},
+			// 计算总价
+			numprice(e,index){
+				const _this = this
+				
+				// 关闭规格执行的事件
+				
+				this.numlistxiabiao.forEach((item,itemindex)=>{
+					item.forEach((itemitem,itemsindexs)=>{
+						// console.log(_this.numlistxiabiao)
+						// console.log(itemitem.good_num)
+						// console.log(_this.numlistxiabiao[itemindex][itemsindexs].checked)  
+						console.log(_this.numlistxiabiao[itemindex][itemsindexs].good_id )
+					})
+				})
+				// for(var i=0 ;i<_this.numlistxiabiao.length;i++){
+				// 	for(var j=0 ; j<_this.numlistxiabiao[i].length;j++){
+				// 		console.log(_this.numlistxiabiao[i][j].good_id)
+				// 	}
+				// }
 				console.log(e)
-				this.immediatelylist = e
+				// this.totapgood_id = 
+				console.log(this.good_gid)
+				this.totalprice = e * this.numlistxiabiao[0][0].good_num
+				// console.log(this.numlistxiabiao)
+				
+				// console.log(_this.numlistxiabiao)  
+				// console.log(_this.numlistxiabiao[1][0].good_num)  
+				// console.log(this.numlistxiabiao[0][0].good_num)   
+				// 把所有input是否选中循环出来   
+				
+				this.numlistxiabiao.forEach((item,itemindex)=>{
+					item.forEach((itemitem,itemsindexs)=>{
+						 console.log(_this.numlistxiabiao[itemindex][itemsindexs].checked) 
+						// this.checkbool = false   
+						
+						// 判断是否所有的都为true 
+						
+					if(_this.numlistxiabiao[itemindex][itemsindexs].checked == true && _this.numlistxiabiao[itemindex][itemsindexs].good_id == _this.good_gid){
+							this.$emit('totalgrprice',this.totalprice)  
+							// return false  
+							console.log(_this.numlistxiabiao[itemindex][itemsindexs].user_id)
+							
+						}else{
+							return false
+						}
+					})
+				})
+			
+				
 			}
 		},
 		components:{
@@ -263,12 +334,14 @@
 				
 			  _this.shopinglists = newVal;
 			  // console.log(_this.shopinglists)
-			    //判断数组是否为空值
+			  this.$forceUpdate();
+			    //判断数组是否为空值  
 			     if(_this.shopinglists){
 					 _this.mark = true
 					 _this.shopinglists.forEach((item,index)=>{
 					 	_this.numlistxiabiao[index] = item.sub
 					 })
+					  this.$forceUpdate();
 				 }else{
 					  _this.mark = false
 				 }

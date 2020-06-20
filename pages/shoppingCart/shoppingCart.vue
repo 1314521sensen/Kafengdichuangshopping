@@ -27,11 +27,14 @@
 				@freight="freight"
 				:shopinglist="shopinglist"
 				:delatestaticbool="delatestaticbool"
+				@totalgrprice='totalgrprice'
+				@amountprice="amountprice"
+				:remotaicent="remotaicent"
 			></shoppingcatlist>
 		</view>
 		<!-- 从bool值往后 是 shoppingcartlist子组件数据 传给父组件 再由这个组件传过去 -->
 		<!--  @deteindexdata="deteindexdata" -->
-		<!-- 这是购物车底部的底部的组件 -->
+		<!-- 这是购物车底部的底部的组件  -->
 		<shopingbottompay 
 			:totalpic="totalpic" 
 			:bool="bool" 
@@ -49,6 +52,10 @@
 			:goodprice="goodprice"
 			:storeid="storeid"
 			:freightnum="freightnum"
+			@change='fun2'
+			:isamountprice="isamountprice"
+			@clearprice = 'clearprice'
+			@removedetailedcenter = 'removedetailedcenter'
 		></shopingbottompay>
 	</view>
 </template>
@@ -76,7 +83,10 @@
 				goodimg:"",
 				goodprice:"",
 				storeid:"",
-				freightnum:""
+				freightnum:"",
+				isamountprice:0,
+				remotaicent:"",
+				
 			}
 		},
 		 onPullDownRefresh() {
@@ -86,6 +96,9 @@
 				}, 2000);
 			},
 		methods: {
+			fun2:function(val){
+				this.totalpic = val
+			},
 			//这是传过来的价格
 			price(e){
 				if(e){//判断传过来的价格有没有 有的话 就采用 没有的话就赋值0
@@ -94,6 +107,7 @@
 					this.totalpic = 0
 				}
 			},
+			
 			//这是传过来的数组
 			datalist(e){
 				this.zizujianlist = e
@@ -109,10 +123,20 @@
 			datastoreid(e){
 				this.storeid = e
 			},
+			clearprice(e){
+				this.totalpic = e
+				console.log(e)
+			},
+			removedetailedcenter(e){
+				this.remotaicent = e
+				
+				console.log(e)
+			},
 			//这是shopingbottompay组件传过来的删除后的数组  在将下标返回去删除
 				// console.log(this.totalpic)
 			//这是管理
 			showmanagement(){
+				console.log(this.shopinglist)
 				if(this.bool){
 					this.bool = false
 				}else{
@@ -141,7 +165,7 @@
 								if(res.data.code==0){//代表获取成功
 										_this.shopinglist = res.data.data
 										// console.log(res.data.data[0])
-										uni.stopPullDownRefresh();//关闭下拉刷新
+										uni.stopPullDownRefresh();//关闭下拉刷新  
 										console.log(_this.shopinglist)
 								}else{
 									console.log("重新登录")
@@ -167,6 +191,7 @@
 			Purchasequantity(e){//购买的数量
 				// console.log(e)
 				this.num  = e
+				console.log(e)
 			},
 			datagoodid(e){//商品id
 				this.goodid = e
@@ -188,7 +213,15 @@
 			//用户点击购买的数量发送过来  父组件进行接收 用于结算---结束
 			freight(e){//这是子组件传过来的 运费价
 				this.freightnum = e
-			}
+			},
+			totalgrprice(e){
+				this.totalpic = e
+				// console.log(e)
+			},
+			amountprice(e){
+				this.isamountprice = e
+				console.log(e)
+			},
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
@@ -196,7 +229,7 @@
 		onShow(){
 			//在购物车每次显示的时候 获取用户的tokey值  
 			const _this = this
-			 
+			
 			_this.UpdateShoppingCartlist()
 			this.$forceUpdate();   //强制刷新
 		},

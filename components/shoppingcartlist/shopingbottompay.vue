@@ -6,9 +6,13 @@
 				<view class="same-right">
 						<view class="same-right-text">
 							<text>合计:</text>
-							<!-- 如果传过来的数组里面的checked为false的时候就为0否则就用本身的值 -->
+							<!-- 如果传过来的数组里面的checked为false的时候就为0否则就用本身的值 	 -->
 							<!-- 这里报错的原因是因为 父组件给子组件传值的时候异步传 开始的时候 传过来的是[](一个空数组) 导致的里面没有checked -->
-							<text>¥{{totalpic}}</text>
+							<!-- {{mark_deleteTotalpic}} -->
+							<!-- <text>¥{{mark_deleteTotalpic?totalpic:0}}</text> -->
+							<text>
+								{{totalpic}}
+							</text>
 						</view>
 					<button class="cu-btn round bg-orange" @tap="settlement">结算</button>
 				</view>
@@ -29,6 +33,7 @@
 	export default{
 		data(){
 			return {
+				// mark_deleteTotalpic:true,
 			}
 		},
 		onShow() {
@@ -45,7 +50,7 @@
 								url:`/pages/Purchasepage/Purchasepage?gid=${this.goodid}&num=${this.num}&way=1&img=${JSON.stringify(this.goodimg)}&storename=${this.storename}&price=${this.goodprice}&goodtitle=${this.goodname}&cids=${this.carid}&storeid=${this.storeid}&freight=${this.freightnum}`
 							})
 						}
-					}
+					}  
 					catch(err){
 						throw err
 					}
@@ -56,14 +61,32 @@
 					})
 				}
 			},
-			//删除
+			//删除  
 			detele(){
+				const _this = this
+				
+				uni.showModal({
+				    title: '删除',
+				    content: '您确定删除该商品吗?',
+				    success: function (res) {
+				        if (res.confirm) {
+				           // 确定删除
+							_this.Confirmdeletion()
+							_this.$emit('clearprice',0)
+							_this.$emit('removedetailedcenter','谢钦')
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			
+			},
+			Confirmdeletion(){
+				const _this = this
+				
 				//每次点击删除强制刷新
 				this.$forceUpdate();
-				//该方法会改变原数组 返回被删除的数据
-				//第一个参数 是下标 第二个参数 删除几个
-				const _this = this
-				//这里一定要注意 虽然null是假值 传过来的下标0也是
+				//这里一定要注意 虽然null是假值 传过来的下标0也是 
 				if(this.xiabiao!==null){
 					try{
 						//判断你是否选中商品进行删除
@@ -71,7 +94,7 @@
 							//调用删除的功能接口
 							uni.startPullDownRefresh();
 							uni.request({
-								url:"http://hbk.huiboke.com/api/shopping_cart/deleteShoppingCartInfo",
+								url:`${app.globalData.Requestpath}shopping_cart/deleteShoppingCartInfo`,
 								method:"POST",
 								data:{
 									token:this.tokey,
@@ -79,10 +102,11 @@
 								},
 								success(res) {
 									if(res.data.code==0){
+										// _this.mark_deleteTotalpic = false
 										//实时刷新 
-										//请求数据  
+										//请求数据 
 										uni.request({
-											url:"http://hbk.huiboke.com/api/shopping_cart/getShoppingCartList",
+											url:`${app.globalData.Requestpath}shopping_cart/getShoppingCartList`,
 											method:"POST",
 											data:{
 												token:_this.tokey,
@@ -90,22 +114,35 @@
 												pageSize:10,
 											},
 											success(res) {
-													uni.stopPullDownRefresh();
-													//将请求的数据传到父组件
-													_this.$emit("deleteData",res.data.data)
-													//当用户删除成功了，将状态改成false 为了修复bug     
-													_this.$emit("deletestatic",false)
+												uni.stopPullDownRefresh({
+													success(){
+														console.log(1,"停止下拉加载")
+														
+														// setTimeout(function(){
+														// 	// _this.mark_deleteTotalpic = true
+														// },2000)
+														
+														// console.log(_this.mark_deleteTotalpic)
+														
+													}
+												});	
+												//将请求的数据传到父组件
+												_this.$emit("deleteData",res.data.data)
+												//当用户删除成功了，将状态改成false 为了修复bug      
+												_this.$emit("deletestatic",false)
 											}
 										})
 									}else{
 										app.globalData.showtoastsame("删除失败")
 										_this.$forceUpdate();
+										// _this.mark_deleteTotalpic = true
 									}
 								}
 							})
 							//在这里删除	
 						}else{
 							app.globalData.showtoastsame("请选择你要删除的商品")
+							// _this.mark_deleteTotalpic = true
 						}
 					}
 					catch(err){
@@ -113,8 +150,25 @@
 					}
 				}else{
 					app.globalData.showtoastsame("请选择你要删除的商品")
+					// _this.mark_deleteTotalpic = true
 				}
 			}
+		},
+		computed:{
+			// totalpic
+		},
+		created() {
+			const _this = this
+		
+		// 	_this.$watch("isamountprice",function(newval,oldval){
+				 
+		// 		 setInterval(function(){
+		// 			_this.ttt = newval
+		// 		 },4000)
+				
+		// 		 console.log(123)
+		// 		 console.log(_this.ttt)
+			// })
 		},
 		props:[
 				"totalpic",
@@ -131,8 +185,7 @@
 				"goodprice",
 				"storeid",
 				"freightnum",
-		],
-		
+		]
 	}
 </script>
 

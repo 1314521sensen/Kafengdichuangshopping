@@ -6,6 +6,7 @@
 		<sorting :value="value" @sortingshoplist="sortingshoplist"></sorting>
 		<scroll-view :scroll-y="true"  @scrolltolower="scrolltolower" class="scrolltolower-list">
 			<horizontallylist :horizontallylist="horizontallylist"></horizontallylist>
+			
 		</scroll-view>
 		
 	</view>
@@ -30,24 +31,28 @@
 		},
 		methods: {
 			sortingshoplist(e){
+				this.page = 1
 				this.horizontallylist = e
 			},
 			sortinglist(page){
 				const _this = this
 				uni.request({
-					url:`${app.globalData.Requestpath}good/getGoodList`,
+					url:"http://hbk.huiboke.com/api/good/getGoodList",
 					data:{
 						page:page,
-						pageSize:6,
+						pageSize:10,
 						g_name:_this.value
 					},
-					success(res){
+					success:(res)=>{
 						if(res.data.code==0){
 							if(_this.page>1){
 								_this.horizontallylist = _this.horizontallylist.concat(res.data.data.list)
+								// console.log()
 							}else{
 								_this.horizontallylist = res.data.data.list
 							}
+						}else{
+			
 						}
 					}
 				})
@@ -65,6 +70,7 @@
 		onLoad(opctry){
 			this.value = opctry.value
 			this.statusBar = app.globalData.statusBar
+			// console.log(this.value)
 			this.sortinglist(1)
 		}
 	}
@@ -72,6 +78,6 @@
 
 <style lang="less" scoped>
 	.scrolltolower-list{
-		height: 90vh;
+		height: 87vh;
 	}
 </style>

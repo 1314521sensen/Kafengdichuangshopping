@@ -24,11 +24,13 @@
 							</view>
 							<view class="item-specifications">
 								<text 
+								    
 									@tap="choose"
 									class="test"
 									:data-specvalue="item.spec_value"
 									:data-prices="item.spec_price"
 									:data-specid="item.id"
+									:data-numa="item.good_num"
 								>{{item.spec_value}}</text>  
 							</view>
 						</view>
@@ -47,28 +49,34 @@
 				color:"#000",
 				selectedlist:[],
 				selectedlistnamelist:{},
-				text:"",
+				text:"",//规格里面的商品名字
 				datalist:[],
 				price:"",
 				good_sids:0,
 				good_gids:0,
 				img:"",
 				shopinglist:[],
-				
+				totalpic:'',
+				// remotaicent:''
 			}
 		},
 		methods:{
 			//这是当用户点击规格
 			choose(e){
-				let {specvalue,prices,specid}= e.currentTarget.dataset
+				console.log(111)
+				let {specvalue,prices,specid,numa}= e.currentTarget.dataset
 				// console.log(prices)
 				this.price = prices
 				this.text = specvalue
 				this.selectedlist
-				// uni.startPullDownRefresh()//开启下拉刷新
+				console.log(this.selectedlist)
+				// uni.startPullDownRefresh()//开启下拉刷新   
 				// console.log(this.good_sids)
-				// console.log(this.good_gids)
 				const _this = this
+				console.log(e)
+				// 合计	
+				_this.$emit('numprice',this.price)
+				
 				uni.getStorage({
 					key:"bindtokey",
 					success(res) {
@@ -95,9 +103,10 @@
 										},
 										success(resjiazai) {
 											if(resjiazai.data.code==0){
-												console.log(1)
 												_this.$emit("updataimmediatelylist",resjiazai.data.data)
-												
+												// 返回的数据
+												// console.log(resjiazai.data.data)
+												// 合计的功能 
 											}
 										}
 									})
@@ -121,20 +130,24 @@
 					this.num--
 				}
 			},
-			//这是当用户点击了立即购买的按钮
+			//这是当用户点击了立即购买的按钮   
 			buy(){
 				
 			},
-			//当用户点击了×
+			//当用户点击了×   
 			Shutdown(){
 				this.$emit("hiddends",null)
 			}
 		},
-		props:['good_sid','good_gid','imgs',"immediatelylist"],
+		props:['good_sid','good_gid','imgs',"immediatelylist","remotaicent"],
 		created() {
 			const _this = this
-			// console.log(this.good_sid)
-			// console.log(this.good_gid)
+			
+			_this.$watch("remotaicent",function(newval,oldval){
+				_this.goods = newval
+			})
+			// console.log(this.good_sid)  
+			// console.log(this.good_gid)  
 			_this.$watch("good_sid",function(newval,oldval){
 				_this.good_sids = newval
 			})
@@ -142,13 +155,12 @@
 				_this.good_gids = newval
 			})
 			_this.$watch('imgs',function(newval,oldval){
-				// console.log(newval)
+				// console.log(newval)  
 				_this.img = newval
 			})
 			_this.$watch('immediatelylist',function(newval,oldval){
-				// console.log(newval)
+				// console.log(newval)  
 				_this.shopinglist = newval
-				// console.log(_this.shopinglist)
 			})
 		},
 	}

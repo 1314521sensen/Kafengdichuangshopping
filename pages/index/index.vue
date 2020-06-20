@@ -1,6 +1,5 @@
 <template>
 	<view class="content">
-		<!-- <pageheight :statusBar="statusBar"></pageheight> -->
 		<search  
 			@inpblue="inpblue" 
 			:statusBar="statusBar"

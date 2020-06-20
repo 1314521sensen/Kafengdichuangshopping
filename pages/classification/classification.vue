@@ -1,272 +1,155 @@
 <template>
-	<view class="category">
-		<view class="category-wrapper" v-if="catrgoryList.length>0" :style="{'padding-top':statusBar+'px'}">
-			<!-- 左边导航 -->
-			<scroll-view scroll-y="true" class="left-wrapper" scroll-with-animation="true" :scroll-top="left_scroll">
-				<view class="left-content">
-					<view class="title-content" :class="select_index === index?'onSelected':''" v-for="(title,index) in catrgoryList"
-					 :key="title.gc_id" @tap="choose(index)">{{title.gc_title}}</view>
+	<view class="classificastion" :style="{'padding-top':statusBar+20+'rpx'}">
+		<view class="left-box" v-if="showbool">
+			<scroll-view class="scroll-view" :scroll-y="true">
+				<view class="scroll-view-item">
+					<view 
+						class="left-li" 
+						v-for="(item,index) in leftlist" 
+						:key="index" 
+						@tap="lefttap" 
+						:class="leftindex==index?'left-li-active':''"
+						:data-index="index"
+					>
+						{{item.gc_short}}
+					</view>
 				</view>
 			</scroll-view>
-			<!-- 右边内容 -->
-			<scroll-view scroll-y="true" class="right-wrapper" scroll-with-animation="true" :scroll-top="right_scroll" @scroll="myscroll">
-				<view class="right-content">
-					<!-- banner区域 -->
-					<view class="banner-wrapper">
-						<swiper class="swiper-content" :autoplay="true" :interval="3000" :circular="true">
-							<swiper-item class="swiper-item" v-for="imgs in swiperList" :key="imgs.adv_id">
-								<image class="swiper-img" :src="yuming+imgs.adv_thumb"></image>
-							</swiper-item>
-						</swiper>
+		</view>
+		<view class="right-box" v-if="showbool">
+			<scroll-view class="scroll-view" :scroll-y="true">
+				<!--  -->
+				<!-- {{leftlist[leftindex]}} -->
+				<view class="scroll-view-item" v-for="(items,indexs) in [leftlist[leftindex]]" :key="indexs">
+					<view class="right-title">
+						{{items.gc_title}}
 					</view>
-					<!-- 产品区 -->
-					<view class="product-wrapper">
-						<view class="category-item" :id="'list'+c_index" v-for="(c_item,c_index) in catrgoryList" :key="c_index">
-							<view class="category-content" v-for="(d_item,d_index) in catrgoryList[c_index].children" :key="d_index">
-								<view class="product-item">
-									<image class="product-img" :src='yuming+d_item.pic'></image>
-									<view class="category-title">{{d_item.gc_title}}</view>
-								</view>
+					<view class="right-list-box">
+						<view class="right-list" v-for="(item,index) in items.children" :key="index">
+							<image :src="'http://hbk.huiboke.com'+item.pic" class="imgs"></image>
+							<view class="right-list-text">
+								{{item.gc_short}}
 							</view>
 						</view>
 					</view>
 				</view>
 			</scroll-view>
 		</view>
-		<loading v-if="iconbool"></loading>
+		<loading v-if="showbool==false"></loading>
 	</view>
 </template>
-
 <script>
 	const app = getApp()
-	export default {
-		data() {
+	export default{
+		data(){
 			return {
+				leftlist:[],
+				leftindex:0,
 				statusBar:0,
-				windows_height: 0, //屏幕高度
-				swiperList: [],
-				catrgoryList: [],
-				select_index: 0,
-				right_height: [], //右侧每个内容的高度集合
-				right_scroll: 0, //右侧的滑动值
-				left_height: 0, //左侧总高度
-				left_scroll: 0, //左侧滑动值
-				last: 0,
-				childlist:[],
-				yuming:"http://hbk.huiboke.com",//以防万一给个默认值
-				iconbool:true,
+				showbool:false,
 			}
 		},
-		onLoad() {
-			this.init();
-			this.windows_height = uni.getSystemInfoSync().windowHeight;
-			//这是出路高度的
-			this.statusBar = app.globalData.statusBar
-			// console.log(this.statusBar)
+		methods:{
+			//点击左侧的时候
+			lefttap(e){
+				let {index} = e.currentTarget.dataset
+				this.leftindex = index
+			}
 		},
 		created() {
-			this.yuming = app.globalData.imgyuming
 			const _this = this
 			uni.request({
-				url:`${app.globalData.Requestpath}platform_config/getThumbSlideshow`,
-				method:"POST",
-				data:{
-					limit:5
-				},
-				success:(res)=>{
+				url:`${app.globalData.Requestpath}common/getCategoryListTwoLevel`,
+				success(res) {
+					// console.log(res)
 					if(res.data.code==0){
-						_this.swiperList = res.data.data
+						_this.leftlist = res.data.data
+						console.log([_this.leftlist[0]])
+						_this.showbool = true
 					}
 				}
 			})
 		},
-		methods: {
-			init() {
-				uni.request({
-					url: `${app.globalData.Requestpath}common/getCategoryListTwoLevel`,
-					method: 'GET',
-					success: (res) => {
-						if (res.data.code == 0) {
-							this.catrgoryList = res.data.data;
-						// 	this.swiperList = res.data.data.banner;
-							this.iconbool = false
-							this.$nextTick(() => {
-								this.getHeightList();
-							})
-						}
-					}
-				});
-			},
-			getHeightList() {
-				let _this = this;
-				let selectorQuery = uni.createSelectorQuery();
-				selectorQuery.select('.left-content').boundingClientRect(function(rects) {
-					_this.left_height = rects.height;
-				});
-				selectorQuery.selectAll('.category-item').boundingClientRect(function(rects) {
-					_this.right_height = rects.map((item) => item.top);
-				}).exec();
-			},
-			choose(index) {
-				if (this.select_index === index) {
-					return;
-				}
-				this.select_index = index;
-				// 加入防抖
-				if (this.timeout) {
-					clearTimeout(this.timeout); //清除计时器				
-				}
-				this.timeout = setTimeout(() => {
-					this.right_scroll = this.right_height[index] - 110;
-				}, 300)
-			}, 
-			myscroll(e) {
-				//引入节流	
-				let right_content_height = e.detail.scrollHeight - this.windows_height;
-				if (right_content_height == e.detail.scrollTop) {
-					return;
-				}
-				let scroll_top = e.detail.scrollTop + 110; //110是banner图的高度
-				//判断当前的scrollTop在哪个区间内;
-				let now = +new Date();
-				if (now - this.last > 100) {		
-					this.last = now;
-					let active_index = this.right_height.findIndex((value, index, arr) => value <= scroll_top && scroll_top < arr[index + 1]);
-					this.select_index = active_index;
-					if (this.left_height - this.windows_height) {
-						//如果有超出部分
-						let diff = this.left_height - this.windows_height
-						this.left_scroll = Math.round((active_index * diff) / (this.catrgoryList.length - 1))
-					}
-				}
-			}
+		onLoad() {
+			this.statusBar = app.globalData.statusBar
 		}
 	}
 </script>
-
-<style lang="less">
-	.category {
-
-		.category-wrapper {
-			width: 100%;
-			display: flex;
-			flex-direction: row;
-			position: absolute;
-			top: 0;
-			bottom: 0;
-
-			.left-wrapper {
-				width: 200rpx;
-				flex: 0 0 200rpx;
-				background-color: #f6f6f6;
-
-				.left-content {
-
-					.title-content {
-						width: 100%;
-						height: 100rpx;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						font-size: 25rpx;
-						border-bottom: 1px solid #dedede;
-						cursor: pointer;
-
-						&:last-child {
-							border-bottom: 0;
-						}
-
-						&.onSelected {
-							background-color: #fff;
-							position: relative;
-							color: #feb436;
-
-							&::before {
-								content: '';
-								position: absolute;
-								left: 0;
-								top: 0;
-								width: 10rpx;
-								height: 100%;
-								background: linear-gradient(124deg, #feb436 0%, #fb7c22 100%);
-							}
-						}
+<style lang="less" scoped>
+	.classificastion{
+		overflow: hidden;
+		display:flex;
+		height:100vh;
+		.left-box{
+			width:26%;
+			background-color: #eee;
+			// background-color:red;
+			.scroll-view{
+				overflow: hidden;
+				height:100vh;
+				.scroll-view-item{
+					.left-li{
+						font-size:28rpx;
+						text-align:center;
+						background-color:#eee;
+						color:#999;
+						padding:20rpx 0rpx;
 					}
-				}
-			}
-
-			.right-wrapper {
-				flex: 1;
-				
-				.right-content {
-					width: 100%;
-					padding: 20rpx 0;
-					border-left: 1rpx solid #efefef;
-					box-sizing: border-box;
-					background-color: #fff;
-					.banner-wrapper {
-						padding: 0 20rpx;
-
-						.swiper-content {
-							width: 100%;
-							height: 180rpx;
-							margin-bottom: 20rpx;
-
-							.swiper-item {
-								.swiper-img {
-									width: 100%;
-									height: 180rpx;
-								}
-							}
-						}
-					}
-
-					.product-wrapper {
-						.category-item {
-							display: flex;
-							flex-wrap: wrap;
-							margin-top:30rpx;
-							.category-title {
-								height: 60rpx;
-								font-size: 26rpx;
-								line-height: 60rpx;
-								font-weight: 500;
-								// background-color: #f6f6f6;
-								padding-left: 20rpx;
-								color: #000;
-							}
-
-							.category-content {
-								display: flex;
-								flex-direction: row;
-								flex-flow: wrap;
-								padding: 20rpx 20rpx 0;
-
-
-								.product-item {
-									width: 100%;
-									display: flex;
-									flex-direction: column;
-									justify-content: center;
-									align-items: center;
-									margin-bottom: 20rpx;
-
-									.product-img {
-										width: 120rpx;
-										height: 120rpx;
-										margin-bottom: 10rpx;
-									}
-
-									.product-title {
-										font-size: 23rpx;
-									}
-								}
-							}
-						}
+					.left-li-active{
+						color:#000;
+						background-color: #fff;
+						font-size: 30rpx;
+						font-weight: bold;
 					}
 				}
 			}
 		}
-
+		.right-box{
+			flex:1;
+			background-color:#fff;
+			padding-left:20rpx;
+			.scroll-view{
+				overflow: hidden;
+				height:100vh;
+				.scroll-view-item{
+					.right-title{
+						font-size: 28rpx;
+						font-weight: bold;
+						line-height:80rpx;
+					}
+					.right-list-box{
+						display:flex;
+						flex-wrap: wrap;
+						// justify-content:space-between;
+						background-color: #fff;
+						padding:20rpx;
+						box-shadow: 0rpx 6rpx 12rpx #ccc;
+						// margin-top:40rpx;
+						// padding-right:20rpx;
+						.right-list{
+							width: 112rpx;
+							// height:100rpx;
+							// background-color: red;
+							padding-bottom:10rpx;
+							margin:10rpx 72rpx 0 0;
+							&:nth-child(3n){
+								margin-right:0;
+							}
+							.imgs{
+								width: 100%;
+								height:108rpx;
+								border-radius:50%;
+							}
+							.right-list-text{
+								text-align:center;
+								font-size: 24rpx;
+								font-weight: bold;
+							}
+						}
+					}
+					
+				}
+			}
+		}
 	}
 </style>
