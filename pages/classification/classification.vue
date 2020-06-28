@@ -25,7 +25,15 @@
 						{{items.gc_title}}
 					</view>
 					<view class="right-list-box">
-						<view class="right-list" v-for="(item,index) in items.children" :key="index">
+						<view 
+							class="right-list" 
+							v-for="(item,index) in items.children" 
+							:key="index" 
+							@tap="seach"
+							:data-gc_short="item.gc_short"
+							:data-gc_id="item.gc_id"
+							:data-gc_level="item.gc_level"
+						>
 							<image :src="'http://hbk.huiboke.com'+item.pic" class="imgs"></image>
 							<view class="right-list-text">
 								{{item.gc_short}}
@@ -54,6 +62,12 @@
 			lefttap(e){
 				let {index} = e.currentTarget.dataset
 				this.leftindex = index
+			},
+			seach(e){
+				let {gc_short,gc_id,gc_level} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Sortinglist/Sortinglist?value=${gc_short}&gcid=${gc_id}&gclevel=${gc_level}`
+				})
 			}
 		},
 		created() {
@@ -64,7 +78,6 @@
 					// console.log(res)
 					if(res.data.code==0){
 						_this.leftlist = res.data.data
-						console.log([_this.leftlist[0]])
 						_this.showbool = true
 					}
 				}
@@ -122,7 +135,7 @@
 						flex-wrap: wrap;
 						// justify-content:space-between;
 						background-color: #fff;
-						padding:20rpx;
+						padding:20rpx 20rpx 40rpx 20rpx;
 						box-shadow: 0rpx 6rpx 12rpx #ccc;
 						// margin-top:40rpx;
 						// padding-right:20rpx;

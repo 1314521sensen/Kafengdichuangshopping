@@ -94,30 +94,7 @@
 			Addcart(obj,img){
 				app.globalData.Detectionupdatetokey(this.tokey)
 				let {store_name,good_title,good_price,good_pic} = obj
-				// console.log(store_name,good_title,good_price,good_pic,this.storeid,this.gid)
-				uni.request({
-					url:`${app.globalData.Requestpath}shopping_cart/addShoppingCartInfo`,
-					method:"POST",
-					data:{
-						token:this.tokey,//tokey值
-						sid:this.storeid,//店铺id
-						s_name:store_name,
-						gid:this.gid,
-						g_name:good_title,
-						g_pic:good_pic
-					},
-					success(res) {
-						console.log(res)
-						if(res.data.code==0){
-							uni.switchTab({
-								url:"/pages/shoppingCart/shoppingCart"
-							})
-						}else{
-							//这个函数 如果用户的tokey过期了 那么就跳转到登录页
-							app.globalData.Logback(res.data.msg)
-						}
-					}
-				})
+				this.$store.commit("Addcart",{s_name:store_name,g_name:good_title,g_pic:good_pic,gid:this.gid,sid:this.storeid})
 			},
 			//这是点击弹窗的确定是否确定添加收藏
 			collectionwork(){
@@ -183,9 +160,24 @@
 				if(this.immediatelylist.length>0){
 					this.modalName = e.currentTarget.dataset.target
 				}else{
-					uni.navigateTo({
-						url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=0&num=1&way=2&&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.pic.good_promotion_price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
-					})
+					// uni.navigateTo({
+					// 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=0&num=1&way=2&&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.pic.good_promotion_price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
+					// })
+					// console.log(this.pic.good_freight)
+					let SpecificationShopdetails = {
+						good_id:this.gid,
+						spec_id:0,
+						good_num:1,
+						way:2,
+						good_pic:this.pic.good_pic,
+						store_name:this.pic.store_name,
+						good_price:this.pic.good_promotion_price,
+						good_name:this.pic.good_title,
+						store_id:this.storeid,
+						good_freight:this.pic.good_freight
+					}
+					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
+					
 				}
 			},
 			//当用户点击了 子组件里面的x

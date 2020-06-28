@@ -104,7 +104,9 @@
 						address_id:address_id
 					},
 					success(res){
-						_this.getShippingAddressList(_this.pageye,9)
+						if(res.data.code==0){
+							_this.getShippingAddressList(_this.pageye,9)
+						}
 					}
 				})
 			},
@@ -147,6 +149,9 @@
 										_this.addaddresslist = res.data.data
 										uni.stopPullDownRefresh()
 									}
+								}else if(res.data.code==1){
+									_this.addaddresslist = []
+									uni.stopPullDownRefresh()
 								}
 							}
 						})

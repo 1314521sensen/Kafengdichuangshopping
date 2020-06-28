@@ -6,7 +6,6 @@
 		<sorting :value="value" @sortingshoplist="sortingshoplist"></sorting>
 		<scroll-view :scroll-y="true"  @scrolltolower="scrolltolower" class="scrolltolower-list">
 			<horizontallylist :horizontallylist="horizontallylist"></horizontallylist>
-			
 		</scroll-view>
 		
 	</view>
@@ -26,7 +25,9 @@
 				statusBar:0,
 				//这是横排的显示数据
 				horizontallylist:[],
-				page:1
+				page:1,
+				gcid:"",
+				gclevel:""
 			}
 		},
 		methods: {
@@ -36,26 +37,48 @@
 			},
 			sortinglist(page){
 				const _this = this
-				uni.request({
-					url:"http://hbk.huiboke.com/api/good/getGoodList",
-					data:{
-						page:page,
-						pageSize:10,
-						g_name:_this.value
-					},
-					success:(res)=>{
-						if(res.data.code==0){
-							if(_this.page>1){
-								_this.horizontallylist = _this.horizontallylist.concat(res.data.data.list)
-								// console.log()
+				if(this.gcid==undefined){
+					uni.request({
+						url:`${app.globalData.Requestpath}good/getGoodList`,
+						data:{
+							page:page,
+							pageSize:10,
+							g_name:_this.value
+						},
+						success:(res)=>{
+							if(res.data.code==0){
+								if(_this.page>1){
+									_this.horizontallylist = _this.horizontallylist.concat(res.data.data.list)
+								}else{
+									_this.horizontallylist = res.data.data.list
+								}
 							}else{
-								_this.horizontallylist = res.data.data.list
+								
 							}
-						}else{
-			
 						}
-					}
-				})
+					})
+				}else{
+					uni.request({
+						url:`${app.globalData.Requestpath}good/getGoodList`,
+						data:{
+							page:page,
+							c_level:this.gclevel,
+							c_id:this.gcid,
+							pageSize:10
+						},
+						success:(res)=>{
+							if(res.data.code==0){
+								if(_this.page>1){
+									_this.horizontallylist = _this.horizontallylist.concat(res.data.data.list)
+								}else{
+									_this.horizontallylist = res.data.data.list
+								}
+							}else{
+								
+							}
+						}
+					})
+				}
 			},
 			scrolltolower(){
 				this.page++
@@ -69,9 +92,11 @@
 		},
 		onLoad(opctry){
 			this.value = opctry.value
-			this.statusBar = app.globalData.statusBar
+			this.gcid = opctry.gcid
+			this.gclevel = opctry.gclevel
 			// console.log(this.value)
 			this.sortinglist(1)
+			this.statusBar = app.globalData.statusBar
 		}
 	}
 </script>

@@ -77,24 +77,26 @@
 			</view>
 		</view>
 		<!-- 判断用户点击的哪个按钮 -->
-		<view class="navshowitem" v-if="parseInt(TabCur)==0">
-			<!-- 直播间  小广告 -->
-			<adlet></adlet>
-			<!-- 新品活动xxx等  可能是轮播图 -->
-			<storebanner></storebanner>
-			<!-- 优惠券 -->
-			<discountcoupon></discountcoupon>
-			<!-- 新品开业 -->
-			<storenewArrival></storenewArrival>
-			<!-- 精品大卖 -->
-			<boutiqueBarley msg="精品大卖" :horizontallylist="horizontallylist"></boutiqueBarley>
-		</view>
-		<view class="navshowitem" v-if="parseInt(TabCur)==1">
-			<boutiqueBarley msg="推荐宝贝" :horizontallylist='bodylist'></boutiqueBarley>
-		</view>
-		<view class="navshowitem" v-if="parseInt(TabCur)==2">
-			<boutiqueBarley msg="推荐新品" :horizontallylist="newslist"></boutiqueBarley>
-		</view>
+		<scroll-view :scroll-y="true" class="scroll-view" @scrolltolower="scrolltolower">
+			<view class="navshowitem" v-if="parseInt(TabCur)==0">
+				<!-- 直播间  小广告 -->
+				<adlet></adlet>
+				<!-- 新品活动xxx等  可能是轮播图 -->
+				<storebanner></storebanner>
+				<!-- 优惠券 -->
+				<discountcoupon></discountcoupon>
+				<!-- 新品开业 -->
+				<storenewArrival></storenewArrival>
+				<!-- 精品大卖 -->
+				<boutiqueBarley msg="精品大卖" :horizontallylist="horizontallylist"></boutiqueBarley>
+			</view>
+			<view class="navshowitem" v-if="parseInt(TabCur)==1">
+				<boutiqueBarley msg="推荐宝贝" :horizontallylist='bodylist'></boutiqueBarley>
+			</view>
+			<view class="navshowitem" v-if="parseInt(TabCur)==2">
+				<boutiqueBarley msg="推荐新品" :horizontallylist="newslist"></boutiqueBarley>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -140,7 +142,8 @@
 				itemss:"",
 				TabCur: 0,
 				scrollLeft: 0,
-				navlist:["推荐","宝贝","新品"]//"视频"
+				navlist:["推荐","宝贝","新品"],//"视频"
+				page:1
 			}
 		},
 		methods: {
@@ -164,7 +167,57 @@
 			},
 			returnshopdefailt(){
 				uni.navigateBack()
+			},
+			//封装三个 请求不同的数据
+			getrecommended(page){
+				const _this = this
+				//获取推荐
+				uni.request({
+					url:`${app.globalData.Requestpath}store/getStoreRecommendGoodList`,
+					data:{
+						sid:_this.storeid,
+						page:page,
+						pageSize:10
+					},
+					success(res) {
+						if(res.data.code==0){
+							if(_this.page>1){
+								_this.horizontallylist = _this.horizontallylist.concat(res.data.data.list)
+							}else{
+								_this.horizontallylist = res.data.data.list
+							}
+						}
+					}
+				})
+			},
+			getbabylist(page){
+				const _this = this
+				//获取宝贝信息
+				uni.request({
+					url:`${app.globalData.Requestpath}store/getStoreGoodList`,
+					data:{
+						sid:_this.storeid,
+						page:page,
+						limit:10
+					},
+					success(res) {
+						if(res.data.code==0){
+							if(_this.page>1){
+								_this.bodylist = _this.bodylist.concat(res.data.data.list)
+							}else{
+								_this.bodylist = res.data.data.list
+							}
+						}
+					}
+				})
+			},
+			//用户滑到底部的时候触发
+			scrolltolower(){
+				this.page++
+				this.getrecommended(this.page)
+				this.getbabylist(this.page)
 			}
+			
 		},
 		onLoad(opction){
 			const _this = this
@@ -198,29 +251,8 @@
 				}
 			})
 			//获取推荐
-			uni.request({
-				url:`${app.globalData.Requestpath}store/getStoreRecommendGoodList`,
-				data:{
-					sid:_this.storeid,
-					page:1,
-					pageSize:10
-				},
-				success(res) {
-					_this.horizontallylist = res.data.data.list
-				}
-			})
-			//获取宝贝信息
-			uni.request({
-				url:`${app.globalData.Requestpath}store/getStoreGoodList`,
-				data:{
-					sid:_this.storeid,
-					page:1,
-					limit:10
-				},
-				success(res) {
-					_this.bodylist = res.data.data.list
-				}
-			})
+			_this.getrecommended(1)
+			_this.getbabylist(1)
 			//获取商品的新品信息系
 			uni.request({
 				url:`${app.globalData.Requestpath}store/getNewStoreGoodList`,
@@ -286,6 +318,7 @@
 			// background-color: red;
 			// 左边部分
 			.store_presentationLeft{
+				width: 68%;
 				display: flex;
 				padding-left: 30rpx;
 				align-items: center;
@@ -296,9 +329,12 @@
 				.store_nameBox{
 					padding-left: 20rpx;
 					.storeName_text{
+						// overflow:hidden;
 						color: #FFFFFF;
 						font-size: 32rpx;
 						font-weight: bold;
+						 // white-space:nowrap;
+						 // text-overflow:ellipsis;
 					}
 					.Storequality{
 						display: flex;
@@ -351,5 +387,8 @@
 	}
 	.nav .cu-item{
 		height: 86rpx;
+	}
+	.scroll-view{
+		height:70vh;
 	}
 </style>

@@ -1,11 +1,10 @@
 <template>
 	<view class="horizontallylist">
-		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom">
 			<view class="horizontally">
 				<view class="list" v-for="(item,index) in horizontallylist" :key="index" @tap="horizontallydetails(item.good_id,item.store_id)">
 					<image :src="'http://hbk.huiboke.com'+item.good_pic"></image>
 					<view class="list-titile">
-						<text>{{item.good_title}}</text>
+						<view class="item-title">{{item.good_title}}</view>
 						<text class="horizontallyprice">¥{{item.good_price}}</text>
 					</view>
 				</view>
@@ -13,7 +12,6 @@
 			<view class="bottomline" v-if="horizontallylist.length>=10">
 				<text>{{bottomlinetext}}</text>
 			</view>
-		</scroll-view>
 	</view>
 </template>
 
@@ -33,9 +31,6 @@
 				})
 			},
 			//监控scroll-view 滚动标签是否滚动到底部
-			scrollbottom(){
-				
-			},
 		},
 		props:["horizontallylist"]
 	}
@@ -59,6 +54,7 @@
 				background-color: #fff;
 				margin-bottom:10rpx;
 				overflow: hidden;
+				padding-bottom:20rpx;
 				&:last-child{
 					margin-bottom:0;
 				}
@@ -68,6 +64,15 @@
 				}
 				.list-titile{
 					padding:0 10rpx;
+					.item-title{
+						display:-webkit-box;
+						-webkit-box-orient:vertical;
+						-webkit-line-clamp:2;
+						overflow: hidden;
+						font-weight: bold;
+						font-size: 30rpx;
+						margin-top:8rpx;
+					}
 					text{
 						display: block;
 						font-size: 30rpx;

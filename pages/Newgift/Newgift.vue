@@ -52,7 +52,7 @@
 								<!-- 这是商品的价格 -->
 								<view class="commodity-bottom-plice">
 									<view>
-										<text class="text-two">{{item.special_price}}</text>
+										<text class="text-two">{{item.good_promotion_price}}</text>
 									</view>
 									<button 
 										class="cu-btn" 
@@ -129,7 +129,7 @@
 			},
 			//这是换一批事件
 			batch(){
-				this.giftlist(10)
+				this.giftlist(8)
 			},
 			giftlist(nums){
 				const _this = this
@@ -206,9 +206,9 @@
 		},
 		created(){
 			const _this = this
-			_this.CouponTypeList(5)
+			_this.CouponTypeList(1)
 			//调用礼品的接口
-			_this.giftlist(1)
+			_this.giftlist(4)
 		}
 	}
 </script>

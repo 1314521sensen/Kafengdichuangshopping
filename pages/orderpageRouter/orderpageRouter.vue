@@ -9,7 +9,11 @@
 				</view>
 			</view>
 		</scroll-view>
-		<list :list="list" v-if="items==Myorder[TabCur].title && refundindex!=='5'" url="/pages/Temporarynonpayment/Temporarynonpayment" :display="display" :tokey="tokey"></list>
+		<scroll-view class="scroll-view" scroll-y @scrolltolower="scrolltolower">
+			<view class="scroll-view-item">
+				<list :list="list" v-if="items==Myorder[TabCur].title && refundindex!=='5'" url="/pages/Temporarynonpayment/Temporarynonpayment" :display="display" :tokey="tokey"></list>
+			</view>
+		</scroll-view>
 		<ReturntheMoneylist :list="refundlist" v-if="refundindex=='5'"></ReturntheMoneylist>
 	</view>
 </template>
@@ -48,13 +52,18 @@
 				list:[],
 				tokey:0,
 				refundindex:"",
-				refundlist:[]
+				refundlist:[],
+				page:1,//这是页数
+				navurl:"",
+				arrorder:[]
 			}
 		},
 		methods: {
 			tabSelect(e) {
+				this.page = 0
 				// console.log(orderindex)
 				let {id,items,url} = e.currentTarget.dataset
+				this.navurl = url
 				// console.log(id,items,url)
 				// console.log(url)
 				this.items = items
@@ -65,6 +74,7 @@
 			//封装一个用户点击不同的选项 显示不同状态的订单
 			statusorder(_this,item){
 				// console.log(_this.TabCur)
+				this.arrorder = []
 				switch(parseInt(_this.TabCur)){
 					case 1:
 						if(item.status==0){//当状态等于0的时候 代表未付款
@@ -94,14 +104,21 @@
 					method:"POST",
 					data:{
 						token:tokey,
-						page:1,
+						page:_this.page,
 						pageSize:10
 					},
 					success(res){
 						// console.log(res)
 						if(res.data.code==0){
 							if(_this.TabCur=='0'){//如果等于0的话就代表 点击了全部 赋值 直接return 出去
-								_this.list = res.data.data.list
+								// console.log(res.data.data.list)
+								// console.log(_this.page)
+								if(_this.page>1){
+									_this.list = _this.list.concat(res.data.data.list)
+								}else{
+									_this.list = res.data.data.list
+								}
+								// console.log(_this.list)
 								_this.display = "block"
 								return 
 							}
@@ -113,6 +130,18 @@
 						app.globalData.Requestmethod(_this.tokey,res.data.msg)
 					}
 				})
+			},
+			//滚动到底部的时候
+			scrolltolower(){
+				const _this = this
+				_this.page++
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey){
+						_this.getorderinfoAppAndPc(_this,restokey.data,_this.navurl)
+					}
+				})
+				// this.getorderinfoAppAndPc(this,_this.tokey)
 			},
 			//封装一个获取订单的方法
 			Allorders(url){
@@ -195,13 +224,14 @@
 			let orderindex = option.index
 			// console.log(orderindex)//如果全部的话 就undefined
 			let url = null
-			
+			console.log(orderindex)
 			if(orderindex){
 				// console.log(orderindex)
 				if(orderindex!=='5'){
 					this.TabCur = orderindex
 					this.items = this.Myorder[orderindex].title
 					url = this.Myorder[orderindex].url
+					this.navurl = url
 					this.Allorders(url)
 				}else{
 					//将退货的按钮下标赋值
@@ -213,6 +243,7 @@
 				this.TabCur = 0;
 				this.items = this.Myorder[0].title
 				url =  this.Myorder[0].url
+				this.navurl = url
 				this.Allorders(url)
 			}
 			this.statusBar = app.globalData.statusBar
@@ -226,5 +257,10 @@
 			display:flex;
 			justify-content: space-around;
 		}
+	}
+	.scroll-view{
+		overflow: hidden;
+		height:91vh;
+		// background-color:red;
 	}
 </style>

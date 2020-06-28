@@ -25,6 +25,7 @@
 							v-for="(item,index) in selectionlistareindex[TabCur]" 
 							:key="index"
 							@tap="selectedaoto(item,item.area_id,index)"
+							:class="index==bgindex?'Selectareashiactive':''"
 						>
 							{{item.area_name}}
 						</view>
@@ -51,12 +52,14 @@
 				],
 				//当用户选择完以后添加到数组中
 				Haschosen:[],
-				selectionlistareindex:[[],[],[]]
+				selectionlistareindex:[[],[],[]],
+				bgindex:-1
 			}
 		},
 		methods:{
 			//这个是显示
 			showModal(e) {
+				this.bgindex = -1
 				this.modalName = e.currentTarget.dataset.target
 			},
 			//这个是隐藏
@@ -86,6 +89,8 @@
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
 			selectedaoto(item,area_id,index){
+				this.bgindex = -1
+				this.bgindex = index
 				if(this.TabCur==0){
 					this.Haschosen[0] = [item]
 					uni.request({
@@ -110,7 +115,7 @@
 						success:(res)=>{
 							this.selectionlistareindex[2] = res.data.data
 							this.TabCur = 2
-							
+							this.bgindex = -1
 						}
 					})
 				}else if(this.TabCur==2){
@@ -152,6 +157,10 @@
 				height:30vh;
 				.Selectareashi{
 					line-height:66rpx;
+				}
+				.Selectareashiactive{
+					background-color:red;
+					color:#fff;
 				}
 			}
 		}

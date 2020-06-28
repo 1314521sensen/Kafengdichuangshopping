@@ -27,6 +27,8 @@
 			Stoptimer(){
 				clearInterval(this.time)
 				uni.switchTab({
+					//pages/Activitiesindex/Activitiesindex
+					//pages/index/index
 					url:`/pages/index/index`
 				})
 			}
@@ -45,6 +47,8 @@
 				if(_this.nums<0){
 					_this.nums = 0
 					clearInterval(_this.time)
+					//pages/Activitiesindex/Activitiesindex
+					//pages/index/index
 					uni.switchTab({
 						url:`/pages/index/index`
 					})

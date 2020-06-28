@@ -110,7 +110,7 @@
 				uni.getStorage({
 					key:"Guidepagebool",
 					success(res){
-						console.log(res)
+						// console.log(res)
 						_this.globalData.Guidepagebool = true
 						uni.redirectTo({
 							url:"/pages/Startpage/Startpage"
@@ -130,6 +130,31 @@
 				})
 			// #endif
 			//引导页---结束
+			//强制竖屏---开始
+			// #ifdef APP-PLUS
+				plus.screen.lockOrientation('portrait-primary');
+			// #endif
+			//轻质竖屏--结束
+			//获取用户当前的位置---开始
+			// #ifdef APP-PLUS
+				plus.geolocation.getCurrentPosition(function(position){
+					// console.log(position)
+				},function(e){
+					// console.log(e,'111')
+				})
+			// #endif
+			//获取用户当前的位置----结束
+			
+			// push推送---开始
+			// #ifdef APP-PLUS
+				// console.log(222)
+				//将消息添加到系统通知栏中
+				// plus.push.createMessage("您有一条新消息");
+				//当用户点击系统消息 监听
+				plus.push.addEventListener('click',function(msg){
+				},false);
+			// #endif
+			//push推送结束---结束
 		},
 		onShow: function() {
 			
@@ -153,6 +178,12 @@
 		}
 	/* #endif */
 	@import "/static/stylenvue/stylenvue.css";
+	/* #ifndef APP-PLUS-NVUE*/
+		/* 这是活动首页的背景颜色 */
+		.activityindexbg{
+			background-color:red;
+		}
+	/* #endif */
 	/* checkbox .uni-checkbox-input{
 		border-radius:50%;
 		width: 34rpx;

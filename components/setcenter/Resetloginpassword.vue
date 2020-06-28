@@ -45,6 +45,14 @@
 					{
 						name:"通过邮箱登录密码",
 					}
+				],
+				useremail_is_null_list:[
+					{
+						name:"修改登录密码",
+					},
+					{
+						name:"通过手机重置登录密码",
+					}
 				]
 			}
 		},
@@ -52,10 +60,11 @@
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 				//这个判断是判断用户有没有邮箱绑定
+				// console.log(this.useremail)
 				if(this.useremail){
 					this.list = this.list
 				}else{
-					this.list.pop()
+					this.list = this.useremail_is_null_list
 				}
 			},
 			hideModal(e) {

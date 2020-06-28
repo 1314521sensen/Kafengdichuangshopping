@@ -1,155 +1,46 @@
 <template>
-	<view class="content">
-		<search  
-			@inpblue="inpblue" 
-			:statusBar="statusBar"
-			:style="{'height':seachheight+'rpx','position':seachstatic,'top':'0','z-index':zIndex,'padding-top':statusBar+'px','width':'100%'}"
-		>
-		</search>
-		<scroll-view 
-			scroll-x 
-			class="text-white nav nav_top" 
-			scroll-with-animation 
-			:scroll-left="scrollLeft" 
-			:style="{
-				'z-index':zIndex,
-				'top':navtop+'rpx',
-				'position':navposition
-			}">
-		   <view class="cu-item nav" :class="index==TabCur?'text-yellow':''" v-for="(item,index) in nanlist" :key="index" @tap="tabSelect" :data-id="index">
-		    {{item.name}}
-		   </view>
-		  </scroll-view>
-		  <view v-if="TabCur==0">
-			  <banner :height="bannheight" :style="{'height':bannheight+'rpx'}"></banner>
-			  <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom" @scroll="realtime" @scrolltoupper="scrotop">
-			  	<ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68" :style="{'margin-top':ScratchableLatextop+'rpx'}"></ScratchableLatex>
-			  	<product></product>
-			  	<coupons></coupons>
-				<bgbanner :swiperList='swiperList' :isRounddot="swiperList.length>1?true:false"></bgbanner>
-			  	<Wouldyoulive></Wouldyoulive>
-			  	<Recommend title="特色购" height="60" bordercolor="#000"></Recommend>
-			  	<purchasing></purchasing>
-			  	<view class="father-two">
-			  	    <view class="father-one">
-			  			<Recommend title="热门推荐" bg="#f5f5f5"></Recommend>
-			  			<shoppinglist class="setmarginTop"></shoppinglist>
-			  		</view>
-			  	</view>
-			  </scroll-view>
-		  </view>
-		  <!-- 这是未选中的 -->
-		  <view v-if="TabCur!==0">
-			  <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom" @scroll="realtime" @scrolltoupper="scrotop">
-				  <ScratchableLatex :cuIconList="cuIconList" :gridCol="gridCol" Scratchableheight="68" :style="{'margin-top':ScratchableLatextop+'rpx'}"></ScratchableLatex>
-				  <bgbanner :swiperList='swiperList' :isRounddot="swiperList.length>1?true:false"></bgbanner>
-				  <shoppinglist class="setmarginTop"></shoppinglist>
-			  </scroll-view>
-		  </view>
+	<view class="index-bg" :style="{'padding-top':statusBar+10+'rpx'}">
+		<search :showbtn="true"></search>
+		<scroll-view :scroll-y="true" class="top" @scrolltolower="scrolltolower">
+				<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
+					<view class="cu-item" :class="index==TabCur?'nav-color cur':''" v-for="(item,index) in nanlist" :key="index" @tap="tabSelect" :data-id="index">
+						{{item.name}}
+					</view>
+				</scroll-view>
+				<banner v-if="TabCur<1" :swiperList="swiperList"></banner>
+				<ScratchableLatex :cuIconList="cuIconList"></ScratchableLatex>
+				<faddish></faddish>
+				<activity></activity>
+				<feature></feature>
+				<featuredCommodity></featuredCommodity>
+				<exhibitionBanner></exhibitionBanner>
+			<view class="shopingList">
+				<listNav></listNav>
+				<list :list='list' :page='page' style="background-color: transparent" display="none"></list>
+				<view class="bottom-text" v-if="textbool">
+					<text>我也是有底线的</text>
+				</view>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
 <script>
-	import search from "@/components/indexcomponents/search.vue"
-	import banner from "@/components/indexcomponents/indexbanner.vue"
-	import ScratchableLatex from "@/components/indexcomponents/ScratchableLatex.vue"
-	import coupons from "@/components/indexcomponents/coupons.vue"
-	import Recommend from '@/components/indexcomponents/Recommend.vue'
-	import shoppinglist from "@/components/indexcomponents/shoppinglist.vue"
-	import product from "@/components/indexcomponents/product.vue"
-	import Wouldyoulive from "@/components/indexcomponents/Wouldyoulive.vue"
-	import purchasing from "@/components/indexcomponents/purchasing.vue"
-	import bgbanner from "@/components/indexcomponents/menswearaaner.vue"
-	const app = getApp();
+	const app = getApp()
+	import search from "@/components/Activitesindindex/search.vue"
+	import banner from "@/components/indexOneComponents/banner.vue"
+	import ScratchableLatex from "@/components/indexOneComponents/ScratchableLatex.vue"
+	import faddish from "@/components/indexOneComponents/faddish.vue"
+	import activity from "@/components/indexOneComponents/activity.vue"
+	import feature from "@/components/indexOneComponents/feature.vue"
+	import featuredCommodity from "@/components/indexOneComponents/featuredCommodity.vue"
+	import exhibitionBanner from "@/components/indexOneComponents/exhibitionBanner.vue"
+	import listNav from "@/components/indexOneComponents/listNav.vue"
+	
+	import list from "@/components/indexOneComponents/list.vue"
 	export default {
-		//这是首页
 		data() {
 			return {
-				//这是首页的高度
-				statusBar:0,
-				modalName: null,
-				//这是九宫格的数据通过父子组件传递
-				cuIconList: [{
-					cuIcon: 'cardboardfill',
-					color: 'red',
-					badge: 120,
-					name: '拼团',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/Spellgroup.png",
-					url:"/pages/groupbooking/groupbooking"
-				},
-				{
-					cuIcon: 'recordfill',
-					color: 'orange',
-					badge: 1,
-					name: '团购',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/bulk.png",
-					url:"/pages/grouppurchase/grouppurchase"
-				}, {
-					cuIcon: 'picfill',
-					color: 'yellow',
-					badge: 0,
-					name: '折扣',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/discount.png",
-					url:"/pages/discount/discount"
-				}, {
-					cuIcon: 'noticefill',
-					color: 'olive',
-					badge: 22,
-					name: '新人专区',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/Ledsecurities.gif",
-					url:"/pages/Newgift/Newgift",
-					Routinghopname:"Newgift"
-				}, 
-				{
-					cuIcon: 'discoverfill',
-					color: 'purple',
-					badge: 0,
-					name: '品牌',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/brand.png",
-					url:"/pages/brand/brand"
-				},
-				{
-					cuIcon: 'questionfill',
-					color: 'mauve',
-					badge: 0,
-					name: '限时秒杀',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/Secondskill.gif",
-					url:"/pages/limitedtimesecondskill/limitedtimesecondskill"
-				},
-				{
-					cuIcon: 'clothesfill',
-					color: 'blue',
-					badge: 0,
-					name: '专题',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/project.png",
-					url:"/pages/topicpage/topicpage"
-				}, 
-				{
-					cuIcon: 'upstagefill',
-					color: 'cyan',
-					badge: 0,
-					name: '积分',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/integral.png",
-					url:"/pages/integralstore/integralstore"
-				},
-				{
-					cuIcon: 'questionfill',
-					color: 'mauve',
-					badge: 0,
-					name: '自营',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/proprietary.png",
-					url:"/pages/autotrophy/autotrophy"
-				},
-				{
-					cuIcon: 'questionfill',
-					color: 'mauve',
-					badge: 0,
-					name: '帮助',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/indexScratchable/help.png",
-					url:"/pages/help/help"
-				}
-				],
-				gridCol: 5,//这是格数
 				nanlist:[
 				     {
 				      name:"首页"
@@ -175,111 +66,144 @@
 				     {
 				      name:'女装'
 				     }
-				    ],
-				scrollLeft:0,
+				],
 				TabCur: 0,
-				swiperList: [{
-				     id: 0,
-				     type: 'image',
-				     url: '/static/index/indexDailygood/activitybanner.gif'
-				}],
-				//接下来都是处理一个老板要求的特效,
-				bannheight:260,//这两个高度是老板提出的意见 必须这么做 这个是banner的高度
-				seachheight:470,//这两个高度是老板提出的意见 必须这么做 这个是seachheight
-				seachstatic:'static',
-				zIndex:0,
-				paddingtop:22,
-				// #ifdef H5
-					navtop:80,
-				// #endif
-				// #ifdef APP-PLUS
-					navtop:140,
-				// #endif
-				navposition:'absolute',
-				ScratchableLatextop:68
+				scrollLeft: 0,
+				statusBar:0,
+				list:[],
+				iconbool:true,
+				page:1,
+				textbool:false,
+				//这是九宫格的数据通过父子组件传递
+				cuIconList: [{
+					cuIcon: 'cardboardfill',
+					color: 'red',
+					badge: 120,
+					name: '休闲零食',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Leisuresnacks.png",
+					url:"/pages/groupbooking/groupbooking"
+				},
+				{
+					cuIcon: 'recordfill',
+					color: 'orange',
+					badge: 1,
+					name: '应季水果',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Seasonalfruit.png",
+					url:"/pages/grouppurchase/grouppurchase"
+				}, {
+					cuIcon: 'picfill',
+					color: 'yellow',
+					badge: 0,
+					name: '地方美食',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Localdelicacies.png",
+					url:"/pages/discount/discount"
+				}, 
+				{
+					cuIcon: 'discoverfill',
+					color: 'purple',
+					badge: 0,
+					name: '牛奶饮品',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Milkdrinks.png",
+					url:"/pages/brand/brand"
+				},
+				{
+					cuIcon: 'questionfill',
+					color: 'mauve',
+					badge: 0,
+					name: '生鲜速食',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Freshvegetarian.png",
+					url:"/pages/limitedtimesecondskill/limitedtimesecondskill"
+				},
+				{
+					cuIcon: 'clothesfill',
+					color: 'blue',
+					badge: 0,
+					name: '老字号',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/old.png",
+					url:"/pages/topicpage/topicpage"
+				}, 
+				{
+					cuIcon: 'upstagefill',
+					color: 'cyan',
+					badge: 0,
+					name: '进品食品',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Importedfood.png",
+					url:"/pages/integralstore/integralstore"
+				},
+				{
+					cuIcon: 'questionfill',
+					color: 'mauve',
+					badge: 0,
+					name: '粮油米面',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Grain.png",
+					url:"/pages/autotrophy/autotrophy"
+				},
+				{
+					cuIcon: 'noticefill',
+					color: 'olive',
+					badge: 22,
+					name: '新人专区',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Newgift.gif",
+					url:"/pages/Newgift/Newgift",
+					Routinghopname:"Newgift"
+				},
+				{
+					cuIcon: 'questionfill',
+					color: 'mauve',
+					badge: 0,
+					name: '帮助',
+					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/help.png",
+					url:"/pages/help/help"
+				}
+				],
+				swiperList:[]
 			}
 		},
-		methods: {
-			inpblue(e){
-				if(e){
-					e.blur()
-				}
-				
-			},
+		components:{
+			search,
+			banner,
+			ScratchableLatex,
+			faddish,
+			activity,
+			feature,
+			featuredCommodity,
+			exhibitionBanner,
+			listNav,
+			list
+		},
+		methods:{
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-				if(parseInt(this.TabCur)!==0){
-					this.seachheight = 280
-					// #ifdef H5
-					this.seachheight = 228
-					// #endif
-				}else{
-					this.seachheight=470
-					// #ifdef H5
-					this.seachheight=420
-					// #endif
-				}
-			 },
-			//监控scroll-view 滚动标签是否滚动到底部
-			scrollbottom(){
-				//当用户一下子滚动到底部的时候 改变banner 和seach的高度
+				
 			},
-			//当用户滚动到顶部的时候
-			scrotop(){
-				this.bannheight=260
-				if(parseInt(this.TabCur)==0){
-					this.seachheight=470
-					// #ifdef H5
-					this.seachheight=420
-					// #endif
-				}else{
-					this.seachheight = 280
-				}
+			indexshoplist(page){
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}good/getRecommendGoodsList`,
+					data:{
+						page:_this.page,
+						pageSize:10
+					},
+					success(res) {
+						if(res.data.code==0){
+							if(_this.page>1){
+								_this.list = _this.list.concat(res.data.data.list)
+								// console.log(_this.list)
+							}else{
+								_this.list = res.data.data.list
+							}
+						}else{
+							// app.globalData.showtoastsame("数据暂无")
+							_this.textbool = true
+						}
+						_this.iconbool = false
+					}
+				})
 			},
-			//这是实时滚动
-			realtime(e){
-				// console.log("实时滚动",e)
-				//原来的210px
-				//原来的banner 130px
-				// seach 200rpx
-				//banner0
-				let {deltaY} = e.detail
-				// console.log(deltaY)
-				if(deltaY<0){
-					//当用户滚动时 改变banner的高度
-					// console.log("向下滚动")
-					this.bannheight=0
-					this.seachheight=220
-					// #ifdef H5
-					this.seachheight=160
-					// #endif
-					this.seachstatic = 'fixed'
-					this.zIndex = 1
-					// this.paddingtop = 64
-					this.navtop = 120
-					// #ifdef H5
-					this.navtop = 80
-					// #endif
-					this.navposition = 'fixed'
-					this.ScratchableLatextop = 268
-				}else{
-					// console.log("向上滚动")
-					// this.bannheight=260
-					// this.seachheight=420
-					// this.seachheight=228
-					this.seachstatic = 'static'
-					this.zIndex = 1
-					// this.paddingtop = 22
-					// #ifdef H5
-					this.navtop = 80
-					// #endif
-					// #ifdef APP-PLUS
-					this.navtop = 140
-					// #endif
-					this.navposition = 'absolute'
-					this.ScratchableLatextop = 68
-				}
+			scrolltolower(){
+				this.page+=1
+				this.indexshoplist(this.page)
 			},
 			//这是用户登录的提示框
 			showloginstate(){
@@ -318,10 +242,8 @@
 									opened:res.data
 								},
 								success(reslogintokey) {
-									console.log(reslogintokey.data)
 									if(reslogintokey.data.code==0){//证明用户已经在数据里 在数据里面就弹出绑定的弹窗
 										//在这里取出用户时候进行微信绑定登录了
-										console.log()
 										uni.getStorage({
 											key:"loginstate",
 											success(resbindloginstate){//如果取出来证明用户已经登录了
@@ -337,7 +259,6 @@
 											}
 										})
 									}else{//证明用户没有在数据里面 没有在数据库里面 就弹出登录的弹窗
-										console.log(this)
 										this.showloginstate()
 									}
 								}
@@ -347,115 +268,72 @@
 				// #endif
 			},
 		},
-		onLoad(){
+		onLoad() {
 			// #ifdef MP-WEIXIN
 				this.booltanchuang()
 			// #endif
-			// console.log(app.globalData)
 			this.statusBar = app.globalData.statusBar
-			// #ifdef H5
-				this.statusBar = 12
-				this.seachheight=420
-			// #endif
 			//启动页更改缓存中的值
 			uni.setStorage({
 				key:"Startpagebool",
 				data:false
 			})
 		},
-		components:{
-			search,
-			banner,
-			ScratchableLatex,
-			coupons,
-			shoppinglist,
-			Recommend,
-			product,
-			Wouldyoulive,
-			purchasing,
-			bgbanner
-			// pageheight
-		},
-		onShow(){
-			this.inpblue()
-			this.booltanchuang()
-			//获取tokey值 为了小程序考虑
-			// uni.getStorage({
-			// 	key:"bindtokey",
-			// 	success(res){
-			// 		uni.request({
-			// 			url:`${app.globalData.Requestpath}common/refreshToken`,
-			// 			method:"POST",
-			// 			data:{
-			// 				token:res.data,
-			// 				v_minute:30
-			// 			},
-			// 			success(res) {
-			// 				if(res.data.code==1){
-			// 					uni.reLaunch({
-			// 						url:"/pages/login/login"
-			// 					})
-			// 				}
-			// 			}
-			// 		})
-			// 	}
-			// })
-		},
-		//页面滚动到底部的事件
-		onReachBottom(){
-			console.log("移到底部")
-		},
-		// 封装一个是否要弹出弹窗的方法
-		
 		created(){
-			// #ifdef MP-WEIXIN
-				this.booltanchuang()
-			// #endif
 			const _this = this
-			
+			_this.indexshoplist(1)
+			uni.request({
+				url:`${app.globalData.Requestpath}platform_config/getThumbSlideshow`,
+				data:{
+					limit:5
+				},
+				success(res) {
+					if(res.data.code==0){
+						_this.swiperList = res.data.data
+					}
+				}
+			})
 		}
 	}
 </script>
 
 <style lang="less" scoped>
-	.nav{
-		font-weight: bold;
-		font-size: 30rpx;
-		line-height: 102rpx;
+	.index-bg{
+		// background-color: #ffffff;
+		background-image: linear-gradient(#ee0a79, #ff6a03);
+		// background-size: 100% 327rpx;
+		// background-repeat:no-repeat;
+		.top{
+				
+			height: 100vh;
+			.bg-white{
+				color: #FFFFFF;
+			}
+		}
+		.nav{
+			font-weight: bold;
+			font-size: 30rpx;
+			background-color:transparent;
+			.cu-item{
+				color: #f2f2f2;
+				font-weight: bold;
+				height:50rpx;
+				line-height:50rpx;
+			}
+			
+			// line-height: 102rpx;
+		}
+		.shopingList{
+			background-color: #f2f2f2;
+			.bottom-text{
+				text-align: center;
+				color: #CCCCCC;
+			}
+		}
 	}
-	.nav_top{
-	   position:absolute;
-	   /* #ifdef H5 */
-		top: 80rpx;
-	   /* #endif */
-	   /* #ifdef APP-PLUS */
-		top:140rpx;
-	   /* #endif */
+	.nav-color{
+		color: #FFFFFF;
+		font-size: 36rpx;
+		border: 0 !important;
 	}
-	.scroll-view{
-	  overflow: hidden;
-	  height: 100vh;
-	  margin-top: 100rpx;
-	  background-color: #fff;
-	  border-top-left-radius: 40rpx;
-	  border-top-right-radius: 40rpx;
-	  margin-top:-60rpx;
-	  
-	 }
-	 .Popup-tanchuang{
-	  .action{
-	   width: 100%;
-	   display:flex;
-	   justify-content: space-between;
-	   button{
-	    width: 49%;
-	   }
-	  }
-	 }
-	 .setmarginTop{
-	  // margin-top:100rpx;
-	 }
-	 .father-one{
-		width: 100%;
-	 }
 </style>

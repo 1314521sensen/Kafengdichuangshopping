@@ -131,12 +131,26 @@
 				},500)
 			},
 			sharezhibo(){
-				uni.shareWithSystem({
-					type:"image",
-					summary:"正在测试",
-					href:"https://uniapp.dcloud.io",
-					imageUrl:"/static/logo.png",
-				})
+				// uni.shareWithSystem({
+				// 	type:"image",
+				// 	summary:"正在测试",
+				// 	href:"https://uniapp.dcloud.io",
+				// 	imageUrl:"/static/logo.png",
+				// })
+				// #ifdef APP-PLUS
+					uni.share({
+					    provider: "weixin",
+					    scene: "WXSceneSession",
+					    type: 1,
+					    summary: "我正在使用HBuilderX开发uni-app，赶紧跟我一起来体验！",
+					    success: function (res) {
+					        console.log("success:" + JSON.stringify(res));
+					    },
+					    fail: function (err) {
+					        console.log("fail:" + JSON.stringify(err));
+					    }
+					});
+				// #endif
 			}
 		},
 		components:{

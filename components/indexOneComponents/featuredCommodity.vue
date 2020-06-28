@@ -1,0 +1,186 @@
+<template>
+	<view class="featuredCommodity">
+		<view class="featuredCommodity-top">
+			<view class="hot-sale ">
+				<view class="hot-top">
+					<text class="hot-top-one">爆款潮品</text>
+					<text class="hot-top-two">购好货</text>
+				</view>
+				<view class="hot-center">
+					<text>国际潮牌,限时折扣</text>
+				</view>
+				<view class="hot-bottom">
+					<view class="bottom-img" v-for="(item,index) in 3" :key="index">
+						<image src="../../static/indexOne/watches.png" mode=""></image>
+					</view>
+				</view>
+			</view>
+			<view class="fruits">
+				<view class="fruits-top">
+					<text class="fruits-top-one">零食大派送</text>
+					<text class="fruits-top-two">5折起</text>
+				</view>
+				<view class="fruits-center">
+					<text>亿款零食,商家直供</text>
+				</view>
+				<view class="fruits-bottom">
+					<view class="bottom-img" v-for="(item,index) in 2" :key="index">
+						<image src="../../static/indexOne/watches.png" mode=""></image>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="featuredCommodity-bottom">
+			<view class="purchase" v-for="(item,index) in purchaseList " :key="index">
+				<h4 :style="{'color':item.color}">{{item.text}}</h4>
+				<image src="../../static/indexOne/watches.png" mode=""></image>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				purchaseList:[
+					{
+						text:"美食",
+						color:"#ffc96b"
+					},
+					{
+						text:"服饰",
+						color:"#94ff60"
+					},
+					{
+						text:"家电",
+						color:"#ff6464"
+					},
+					{
+						text:"美妆",
+						color:"#6589ff"
+					},
+					{
+						text:"母婴",
+						color:"#ff669f"
+					}
+				]
+			};
+		}
+	}
+</script>
+
+<style lang="less" scoped>
+	.featuredCommodity{
+		height: 404rpx;
+		width: 95%;
+		
+		margin: 0 auto;
+		border-top-left-radius: 30rpx;
+		border-bottom-right-radius: 30rpx;
+		overflow:hidden;
+		.featuredCommodity-top{
+			display: flex;
+			justify-content: space-between;
+			.hot-sale{
+				padding: 10rpx;
+				height: 197rpx;
+				width: 55%;
+				background-color: #FFFFFF;
+				.hot-top{
+					height: 40rpx;
+					// line-height:40rpx;
+					.hot-top-one{
+						font-size: 28rpx;
+						font-weight: bold;
+					}
+					.hot-top-two{
+						margin-left: 20rpx;
+						font-size: 24rpx;
+						padding: 2rpx 10rpx;
+						background-image: linear-gradient(#ffb063, #ff6202);
+						border-radius: 10rpx;
+						color: #FFFFFF;
+					}
+				}
+				.hot-center{
+					margin-top: 6rpx;
+					color: #999999;
+					font-size: 24rpx;
+				}
+				.hot-bottom{
+					display: flex;
+					justify-content: space-around;
+					margin-top: 20rpx;
+					.bottom-img{
+						width: 33%;
+						height: 100rpx;
+					}
+					image{
+						width: 100rpx;
+						height: 70rpx;
+					}
+				}
+			}
+			.fruits{
+				width: 44%;
+				padding: 10rpx;
+				height: 197rpx;
+				background-color: #FFFFFF;
+				.fruits-top{
+					.fruits-top-one{
+						font-size: 28rpx;
+						font-weight: bold;
+					}
+					.fruits-top-two{
+						margin-left: 20rpx;
+						font-size: 24rpx;
+						padding: 2rpx 10rpx;
+						background-image: linear-gradient(#8fff63, #2dca29);
+						border-radius: 10rpx;
+						color: #FFFFFF;
+					}
+				}
+				.fruits-center{
+					margin-top: 6rpx;
+					color: #999999;
+					font-size: 24rpx;
+				}
+				.fruits-bottom{
+					display: flex;
+					justify-content: space-around;
+					margin-top: 20rpx;
+					.bottom-img{
+						width: 33%;
+						height: 100rpx;
+					}
+					image{
+						width: 100rpx;
+						height: 70rpx;
+					}
+				}
+			}
+		}
+		.featuredCommodity-bottom{
+			height: 197rpx;
+			width: 100%;
+			display: flex;
+			justify-content: left;
+			margin-top: 8rpx;
+			background-color: #FFFFFF;
+			.purchase{
+				width: 25%;
+				height: 197rpx;
+				// background-color: red;
+				border-right: 1rpx solid #CCCCCC;
+				text-align: center;
+				padding-top: 20rpx;
+				image{
+					width: 100rpx;
+					height: 70rpx;
+					margin-top: 40rpx;
+				}
+			}
+		}
+	}
+</style>

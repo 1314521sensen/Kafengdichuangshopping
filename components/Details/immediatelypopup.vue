@@ -122,9 +122,24 @@
 				if(this.text!==""){
 					// console.log(this.specid)
 					// console.log(this.gid,this.datalist,this.num)
-					uni.navigateTo({
-						url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=${this.specid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
-					})
+					// uni.navigateTo({
+					// 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=${this.specid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
+					// })
+					// console.log(this.datalist)
+					let SpecificationShopdetails = {
+						good_id:this.gid,
+						spec_id:this.specid,
+						good_num:this.num,
+						way:2,
+						good_pic:this.pic.good_pic,
+						store_name:this.pic.store_name,
+						good_price:this.price,
+						good_name:this.pic.good_title,
+						store_id:this.storeid,
+						good_freight:this.pic.good_freight
+					}
+					
+					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
 				}
 				//这些先留着 为后期用
 				// if(this.selectedlist.length<this.immediatelylist.length){

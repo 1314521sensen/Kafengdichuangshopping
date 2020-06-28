@@ -25,21 +25,21 @@
 		</view>
 		<view class="Buycontent purchase-order">
 			<!-- 到时候循环这个order就可以 -->
-			<view class="order">
+			<view class="order" v-for="(item,index) in orderinfolist" :key="index">
 				<view class="order-title">
-					{{storename}}
+					{{item.store_name}}
 				</view>
 				<view class="shopgoosorder">
 					<view class="shopgoosorder-left">
-						<image :src="'http://hbk.huiboke.com'+img"></image>
+						<image :src="'http://hbk.huiboke.com'+item.good_pic"></image>
 					</view>
 					<view class="shopgoosorder-right">
 						<view class="shopgoosorder-title">
-							{{goodtitle}}
+							{{item.good_name}}
 						</view>
 						<view class="shopgoosorder-pic">
-							<text>¥{{price}}</text>
-							<text>×{{nums}}</text>
+							<text>¥{{item.good_price}}</text>
+							<text>×{{item.good_num}}</text>
 						</view>
 					</view>
 				</view>
@@ -50,7 +50,8 @@
 							<text>普通配送</text>
 						</view>
 						<view class="distribution-right">
-							<text>{{freight?freight+'元':'包邮配送'}}</text>
+							<!-- {{parseInt(item.good_freight)}} -->
+							<text>{{parseInt(item.good_freight)?item.good_freight+'元':'包邮配送'}}</text>
 						</view>
 					</view>
 					<!-- 这是优惠券的组件 -->
@@ -58,10 +59,11 @@
 						msg="使用" 
 						titlemsg="使用优惠券" 
 						:tokey="tokey" 
-						:storeid="storeid" 
+						:storeid="item.store_id" 
 						Whatcoupon="1" 
-						:Orderpaymentamount="this.price*this.nums"
+						:Orderpaymentamount="item.good_price*item.good_num"
 						@dingdancoupon="dingdancoupon"
+						v-if="orderinfolist.length<=1"
 					></storecoupon>
 					<view class="distribution note">
 						<view class="cu-form-group">
@@ -70,19 +72,24 @@
 						</view>
 					</view>
 					<view class="Payprice">
-						<text>共{{nums}}件</text>
+						<text>共{{item.good_num}}件</text>
 						<text>小计:</text>
 						<!-- Favorablebalance优惠卷的面额 有值的时候采用有值 没值的时候采用0 -->
-						<text class="text-yellow" v-text="'¥'+((price*nums+freight)-(Favorablebalance?Favorablebalance:0))"></text>
+						<!--  -->
+						<text 
+							class="text-yellow" 
+							v-text="'¥'+(Number((item.good_price*item.good_num+Number(item.good_freight))-(Favorablebalance?Favorablebalance:0)).toFixed(2))">
+						</text>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="detailscar">
 			<view class="detailscar-pic">
-				<text>共{{nums}}件,</text>
+				<text>共{{totalnumber}}件,</text>
 				<text>合计</text>
-				<text v-text="'¥'+((price*nums+freight)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"></text>
+				<!-- v-text="'¥'+((price*nums+freight)-(Favorablebalance?Favorablebalance:0)).toFixed(2)" -->
+				<text>{{Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2)}}</text>
 				<!-- @tap="priceorder showModal" -->
 				<button class="cu-btn round bg-orange" @tap="showModal" data-target="bottomModal">提交订单</button>
 			</view>
@@ -113,7 +120,7 @@
 			:show="passwordzhifutanchuang" 
 			:isIphoneX="isIphoneX" 
 			@Enterpasswordcompletepayment="Enterpasswordcompletepayment" 
-			:balancetext="((price*nums+freight)-(Favorablebalance?Favorablebalance:0)).toFixed(2)"
+			:balancetext="String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2))"
 			@close="close"
 			></passkeyborad>
 	</view>
@@ -168,13 +175,15 @@
 				Orderserialnumber:"",//订单流水号 用于H5支付用
 				freight:"",//商品的运费
 				spec_id:0,
+				orderinfolist:[],
+				totalnumber:0,//总数量
+				totalprice:0,//总价格
+				ordergidlist:""//购物车过来的全部id
 			}
 		},
 		methods: {
 			RadioChange(e) {
 				this.radio = e.detail.value
-				// console.log(e.detail.value)
-				// console.log(this.radio)
 			},
 			Addressmodification(){
 				//1是购物车过来的
@@ -396,33 +405,36 @@
 				// console.log(this.way)
 				if(this.address_id!==""){//判断新用户有没有地址
 					if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
+					let str = _this.ordergidlist.substr(0,_this.ordergidlist.length-1)
 						uni.request({
 							url:`${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
 							method:"POST",
 							data:{
 								token:this.tokey,
-								c_ids:this.cids,//购物车选中的购物商品的id
+								c_ids:str,//购物车选中的购物商品的id   _this.ordergidlist
 								o_from:this.o_from,//根据用户哪一端进来的
 								address_id:this.address_id,//地址对应的id
 								coupon_ids:this.coupondetails,//这是返回用户选择的那张优惠券
 								p_msg:Leavearr//用户的留言
 							},
 							success(res) {
-								console.log(res)
+								// console.log(res)
 								if(res.data.code==0){
 									//获取订单编号数组
 									_this.orderSnArray = res.data.data.orderSnArray
-									
 									//选择支付的框隐藏
 									_this.hideModal()
 									_this.Detectionpaymentpassword(_this)
 								}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
 									_this.hideModal()
 									app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
+								}else{
+									
 								}
 							}
 						})
 					}else{//订单详情过来的
+					// console.log(this.orderinfolist)
 						if(this.coupondetails.length<=0){
 							this.cid = ""
 							this.ctype = ""
@@ -430,15 +442,14 @@
 							this.cid = this.coupondetails[0].c_id
 							this.ctype = this.coupondetails[0].c_type
 						}
-						console.log(this.tokey,this.gid,this.spec_id,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
 						uni.request({
 							url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
 							method:"POST",
 							data:{
 								token:this.tokey,
-								gid:this.gid,//商品的id
-								spec_id:this.spec_id,
-								quantity:this.nums,
+								gid:_this.orderinfolist[0].good_id,//商品的id
+								spec_id:_this.orderinfolist[0].spec_id,
+								quantity:_this.orderinfolist[0].good_num,
 								o_from:this.o_from,//根据用户哪一端进来的
 								address_id:this.address_id,//地址对应的id
 								p_msg:this.value,//用户的留言
@@ -446,7 +457,7 @@
 								c_type:this.ctype?'store':'platform'
 							},
 							success(res) {
-								console.log(res)
+								// console.log(res)
 								// console.log(res.data.data.orderSnArray)//订单编号
 								// console.log(res.data.data.swiftNo)//订单流水号
 								//orderSnArray订单的编组 支付的时候用到
@@ -525,7 +536,7 @@
 				const _this = this
 				this.zhifumimatext = e
 				//当用户输入完执行下面的请求 密码正确
-				console.log(this.orderSnArray)
+				// console.log(this.orderSnArray)
 				uni.request({
 					url:`${app.globalData.Requestpath}balance_pay/payOrdersNew`,
 					method:"POST",
@@ -543,6 +554,9 @@
 							app.globalData.showtoastsame(res.data.msg)
 							_this.passwordzhifutanchuang = null
 							_this.isIphoneX = null
+							uni.reLaunch({
+								url:`/pages/Temporarynonpayment/Temporarynonpayment?ordersnSerial=${btoa(_this.orderSnArray)}`
+							})
 						}
 					}
 				})
@@ -550,6 +564,7 @@
 			close(e){//这是点击×以后
 				this.passwordzhifutanchuang = e
 				this.isIphoneX = e
+				console.log(this.orderSnArray)
 				uni.reLaunch({
 					url:`/pages/Temporarynonpayment/Temporarynonpayment?ordersnSerial=${btoa(this.orderSnArray)}`
 				})
@@ -560,9 +575,9 @@
 		},
 		onLoad(opction){
 			// console.log("onload先执行")
-			let {way} = opction
-			this.way = way//判断是从购物车来的 还是详情来的
-			
+			// let {way} = opction
+			// this.way = way//判断是从购物车来的 还是详情来的
+			const _this = this
 			if(opction.selectitem){
 				let {consignee_name,consignee_phone,street_number,address_id} = JSON.parse(decodeURI(opction.selectitem))
 				this.Username = consignee_name
@@ -571,7 +586,6 @@
 				this.address_id = address_id
 			}else{
 				// console.log(opction.selectitem)
-				const _this = this
 				uni.getStorage({
 					key:"bindtokey",
 					success(res) {
@@ -597,32 +611,32 @@
 					}
 				})
 			}
-			// console.log(way)
-			//1是购物车过来的
-			//2是详情过来的
-			//把公共的提出来
-			let {gid,num,img,storename,price,goodtitle,storeid,freight,spec_id} = opction
-			// console.log(opction)
-			if(way=="1"){
-				// console.log("购物车过来的")
-				let {cids} = opction
-				this.cids = cids
-			}else{
-				// console.log("详情过来的")
-				//使用eval方法 将字符串数组 转换为 真数组
-				this.data = eval(opction.specname)
-			}
-			//把公共的提出来
-			this.gid = gid
-			this.img = JSON.parse(img)
-			this.nums = num
-			this.spec_id = spec_id
-			this.storename = storename
-			this.price = price
-			this.goodtitle = goodtitle
-			this.storeid = storeid
-			this.freight = parseFloat(freight)
-			// console.log(storeid)
+			uni.getStorage({
+				key:"orderinfo",
+				success(res) {
+					// console.log(res)
+					_this.orderinfolist = res.data
+					_this.orderinfolist.forEach((item,index)=>{
+						_this.totalnumber += item.good_num
+						_this.totalprice += (item.good_price*item.good_num)+Number(item.good_freight)
+						// console.log(item.way)
+						if(item.way){
+							_this.way = 2
+						}else{
+							_this.way = 1
+							// console.log(item.good_id)
+							_this.ordergidlist += item.cart_id+','
+						}
+					})
+					let arr = String(_this.totalprice).split('.')
+					if(Boolean(arr[1])){
+						let strtow = arr[1].substr(0,2)
+						_this.totalprice = arr[0]+'.'+strtow
+					}else{
+						_this.totalprice = _this.totalprice
+					}
+				}
+			})
 			// #ifdef H5
 				this.o_from = 1,
 			// #endif

@@ -229,7 +229,9 @@
 			font-weight: bold;
 		}
 		.agreementtext-text{
+			display:inline-block;
 			font-size: 24rpx;
+			padding:0 20rpx;
 		}
 	}
 </style>

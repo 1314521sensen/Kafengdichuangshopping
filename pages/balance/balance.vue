@@ -21,7 +21,7 @@
 			<view class="detail-top">
 				余额明细
 			</view>
-			<scroll-view :scroll-y="true">
+			<scroll-view :scroll-y="true" class="scroll-view" @scrolltolower="scrolltolower">
 				<view class="detail-bottom" v-for="(item,index) in accountlist" :key="index">
 					<text class="dtail-text-left">{{item.create_time}}</text>
 					<text class="dtail-text-right">{{Number(item.recharge).toFixed(2)}}</text>
@@ -41,7 +41,43 @@
 			return {
 				statusBar:"",
 				accounttext:"",
-				accountlist:[]
+				accountlist:[],
+				page:1
+			}
+		},
+		methods:{
+			scrolltolower(){
+				// console.log(111)
+				const _this = this
+				_this.page++
+				uni.getStorage({
+					key:"bindtokey",
+					success(res) {
+						_this.getBalanceLogList(res.data,_this.page)
+					}
+				})
+				
+			},
+			getBalanceLogList(token,page){
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}user/getBalanceLogList`,
+					method:"POST",
+					data:{
+						token:token,
+						page:page,
+						pageSize:10
+					},
+					success(resbalance) {
+						if(resbalance.data.code==0){
+							if(_this.page>1){
+								_this.accountlist = _this.accountlist.concat(resbalance.data.data.list)
+							}else{
+								_this.accountlist = resbalance.data.data.list
+							}
+						}
+					}
+				})
 			}
 		},
 		onLoad(){
@@ -65,21 +101,7 @@
 							}
 						}
 					})
-					uni.request({
-						url:`${app.globalData.Requestpath}user/getBalanceLogList`,
-						method:"POST",
-						data:{
-							token:res.data,
-							page:1,
-							pageSize:10
-						},
-						success(resbalance) {
-							if(resbalance.data.code==0){
-								_this.accountlist = resbalance.data.data.list
-								console.log(_this.accountlist)
-							}
-						}
-					})
+					_this.getBalanceLogList(res.data,1)
 				}
 			})
 		},
@@ -160,6 +182,9 @@
 				font-size: 30rpx;
 				font-weight: bold;
 			}
+		}
+		.scroll-view{
+			height:720rpx;
 		}
 	}
 </style>

@@ -9,11 +9,15 @@
 				<form @submit="smslogin">
 					<view class="cu-form-group margin-top inp">
 						<view class="title">账号:</view>
-						<input placeholder="注册账号至少五位最多20位" v-model="username" name="username" type="text"></input>
+						<input placeholder="注册账号至少5位最多20位" v-model="username" name="username" type="text"></input>
 					</view>
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<view class="title">密码:</view>
 						<input  placeholder="密码最小设置6位,包含单词数字_" name="password" type="password"></input>
+					</view>
+					<view class="cu-form-group margin-top inp inp-bottom">
+						<view class="title">确认密码:</view>
+						<input  placeholder="请输入确认密码" name="Confirmpassword" type="password"></input>
 					</view>
 					<view class="cu-form-group inp">
 						<view class="title">+86</view>
@@ -108,7 +112,7 @@
 			smslogin(e){
 				// console.log(e)
 				//获取里面的每一个值
-				let {username,password,phone,phonecode} = e.detail.value
+				let {username,password,Confirmpassword,phone,phonecode} = e.detail.value
 				//写两个正则
 				//来匹配账号
 				//账号必须为5到100位
@@ -116,127 +120,132 @@
 				//密码为6-16位 单词，数字加_
 				let userpassword = /^\w{6,16}$/;
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
-				if(username.match(regname) && password.match(userpassword) && phone.match(userphone) && phonecode!==""){
-					console.log("验证通过")
-					//如果都通过了 发起请求 就可以跳转到登录页面
-					//这里是要传给后台的信息
-					//这是app端的数据
-					let registeredjson = {
-						username:username,
-						password:password,
-						mobile_phone:phone,
-						code:phonecode
-					}
-					//将用户微信与微信绑定的参数
-					let bingjson = {
-						login_type:"weixin",
-						bind_type:"account",
-						username:username,
-						password:password
-					}
-					//这块来获取缓存中的微信的code码  拿code码去后端换取openid
-					// #ifdef MP-WEIXIN
-						//取缓存中值
-						uni.getStorage({
-							key:"wxcodekey",
-							success(res){
-								console.log(res.data)
-								//成功了 就把openid的码 给对象新增加了属性
-								registeredjson.openid = res.data
-								bingjson.opened = res.data
-								console.log(bingjson)
-								uni.request({
-									url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
-									method:"POST",
-									data:registeredjson,
-									success(ress){//请求成功的时候
-										console.log(ress)
-										if(ress.data.code==0){
-												uni.request({
-													url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
-													method:"POST",
-													data:bingjson,
-													success(resquicklogin) {
-														console.log(resquicklogin)//当用户注册和绑定成功了 把tokey值存一下 把状态存一下
-														if(resquicklogin.data.code==0){
-															//设置用户绑定的tokey
-														// #ifdef APP-PLUS || H5 || MP-WEIXIN
-															uni.setStorage({
-																key:"bindtokey",
-																data:resquicklogin.data.data.token
-															})
-														// #endif
-															//这里设置用户的登录状态码 为1
-															uni.setStorage({
-																key:"loginstate",
-																data:1
-															})
-															uni.setStorage({
-																key:"userbindstate",
-																data:1,
-																success() {
-																	uni.switchTab({
-																		url:"/pages/index/index"
-																	})
-																}
-															})
-														}else{
-															uni.setStorage({
-																key:"loginstate",
-																data:0
-															})
+				if(password==Confirmpassword){
+					if(username.match(regname) && password.match(userpassword) && phone.match(userphone) && phonecode!==""){
+						// console.log("验证通过")
+						// console.log()
+						//如果都通过了 发起请求 就可以跳转到登录页面
+						//这里是要传给后台的信息
+						//这是app端的数据
+						let registeredjson = {
+							username:username,
+							password:password,
+							mobile_phone:phone,
+							code:phonecode
+						}
+						//将用户微信与微信绑定的参数
+						let bingjson = {
+							login_type:"weixin",
+							bind_type:"account",
+							username:username,
+							password:password
+						}
+						//这块来获取缓存中的微信的code码  拿code码去后端换取openid
+						// #ifdef MP-WEIXIN
+							//取缓存中值
+							uni.getStorage({
+								key:"wxcodekey",
+								success(res){
+									// console.log(res.data)
+									//成功了 就把openid的码 给对象新增加了属性
+									registeredjson.openid = res.data
+									bingjson.opened = res.data
+									// console.log(bingjson)
+									uni.request({
+										url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
+										method:"POST",
+										data:registeredjson,
+										success(ress){//请求成功的时候
+											// console.log(ress)
+											if(ress.data.code==0){
+													uni.request({
+														url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
+														method:"POST",
+														data:bingjson,
+														success(resquicklogin) {
+															// console.log(resquicklogin)//当用户注册和绑定成功了 把tokey值存一下 把状态存一下
+															if(resquicklogin.data.code==0){
+																//设置用户绑定的tokey
+															// #ifdef APP-PLUS || H5 || MP-WEIXIN
+																uni.setStorage({
+																	key:"bindtokey",
+																	data:resquicklogin.data.data.token
+																})
+															// #endif
+																//这里设置用户的登录状态码 为1
+																uni.setStorage({
+																	key:"loginstate",
+																	data:1
+																})
+																uni.setStorage({
+																	key:"userbindstate",
+																	data:1,
+																	success() {
+																		uni.switchTab({
+																			url:"/pages/index/index"
+																		})
+																	}
+																})
+															}else{
+																uni.setStorage({
+																	key:"loginstate",
+																	data:0
+																})
+															}
 														}
-													}
-												})
-										}else{
-											app.globalData.showtoastsame(ress.data.msg)
+													})
+											}else{
+												app.globalData.showtoastsame(ress.data.msg)
+											}
+										},
+										fail(){//请求失败的时候
+											uni.showToast({
+												title:"注册失败",
+												icon:"none"
+											})
 										}
-									},
-									fail(){//请求失败的时候
-										uni.showToast({
-											title:"注册失败",
-											icon:"none"
-										})
-									}
-								})
-							}
-						})
-					// #endif
-					//这里进行请求
-					// #ifdef APP-PLUS || H5
-					uni.request({
-						url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
-						method:"POST",
-						data:registeredjson,
-						success(res){//请求成功的时候
-							if(res.data.code==0){
-								// #ifdef APP-PLUS || H5
-									//app直接跳转不用绑定
-									uni.reLaunch({
-										url:"/pages/login/login"
 									})
-								// #endif
-							}else{
+								}
+							})
+						// #endif
+						//这里进行请求
+						// #ifdef APP-PLUS || H5
+						uni.request({
+							url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
+							method:"POST",
+							data:registeredjson,
+							success(res){//请求成功的时候
+								if(res.data.code==0){
+									// #ifdef APP-PLUS || H5
+										//app直接跳转不用绑定
+										uni.reLaunch({
+											url:"/pages/login/login"
+										})
+									// #endif
+								}else{
+									uni.showToast({
+										title:"该用户已经注册过了",
+										icon:"none"
+									})
+								}
+							},
+							fail(){//请求失败的时候
 								uni.showToast({
-									title:"该用户已经注册过了",
+									title:"注册失败",
 									icon:"none"
 								})
 							}
-						},
-						fail(){//请求失败的时候
-							uni.showToast({
-								title:"注册失败",
-								icon:"none"
-							})
-						}
-					})
-					// #endif
-				}else{
-					uni.showToast({
-						title:"您填写的信息不正确",
-						icon:"none"
-					})
-				}
+						})
+						// #endif
+					}else{
+						uni.showToast({
+							title:"您填写的信息不正确",
+							icon:"none"
+						})
+					}
+			}else{
+				app.globalData.showtoastsame("请保持和前面的密码一致")
+			}
 			}
 		}
 	}

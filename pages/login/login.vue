@@ -18,6 +18,7 @@
 							<!-- 这里的app和微信显示暂时先注释 -->
 							<!--#ifdef APP-PLUS || MP-WEIXIN || H5 -->
 								<text @tap="smslogin('/pages/SMSlogin/SMSlogin')">短信验证码登录</text>
+								<text  @tap="returnindex">回到首页</text>
 							<!-- #endif -->
 						</view>
 						<view class="loginButton">
@@ -25,7 +26,6 @@
 							<!-- #ifdef APP-PLUS || H5 -->
 								<button class="cu-btn  round login-one" @tap="smslogin('/pages/Freeregistration/Freeregistration')">注册</button>	
 							<!--#endif -->
-							<button class="cu-btn bg-gradual-green round login-one" @tap="returnindex">返回首页</button>
 						</view>
 					</form>
 				</view>

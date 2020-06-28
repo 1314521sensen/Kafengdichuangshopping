@@ -19,7 +19,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				// "navigationBarTitleText": "uni-app"
 			}
 		},
 		{
@@ -274,6 +274,10 @@
         }
         ,{
             "path" : "pages/Littlebee/Littlebee",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Activitiesindex/Activitiesindex",
             "style" : {}
         }
     ],

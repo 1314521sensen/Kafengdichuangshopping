@@ -70,9 +70,7 @@
 							cid:coupontypeid
 						},
 						success(res){
-							// console.log(res)
 							if(res.data.code==0){
-								
 								app.globalData.showtoastsame("领取成功...")
 							}else{
 								app.globalData.showtoastsame(res.data.msg)
@@ -84,27 +82,27 @@
 					})
 				}else{//否则就是订单详情里面的使用优惠卷
 					//传给订单那个组件
-					// console.log("这是订单详情过来的")
-					_this.modalName = null
-					_this.changetitlemsgtext = dingdanitem.coupon_name
-					let obj = {}
-					let arr = []
-					// console.log(dingdanitem)
-					obj.sid = dingdanitem.store_id
-					obj.c_id = dingdanitem.id
-					obj.c_type = dingdanitem.coupon_type
-					obj.money = dingdanitem.money
-					// console.log([obj])
-					arr[0] = obj
-					// console.log(arr)
-					this.$emit("dingdancoupon",arr)
+					// console.log(coupontypeid,dingdanitem)
+						// console.log("这是订单详情过来的")
+						_this.modalName = null
+						// //这是拿到使用的文本
+						_this.changetitlemsgtext = dingdanitem.coupon_name
+						let obj = {}
+						let arr = []
+						obj.sid = dingdanitem.store_id
+						obj.c_id = dingdanitem.id
+						obj.c_type = dingdanitem.coupon_type
+						obj.money = dingdanitem.money
+						// console.log([obj])
+						arr[0] = obj
+						// console.log(arr)
+						this.$emit("dingdancoupon",arr)
+						// dingdanitem.checked = true
 				}
 			}
 		},
 		created() {
-			// console.log(this.Orderpaymentamount)
 			const _this  = this
-			// console.log(_this.tokey,_this.storeid)
 			if(_this.Whatcoupon=='0'){//在详情的优惠券
 				uni.request({
 					url:`${app.globalData.Requestpath}activity/getStoreCouponTypeList`,
@@ -128,7 +126,7 @@
 				let newcouponboollist = []
 				newcouponboollist[0] = parseInt(_this.storeid)
 				newcouponboollist[1] = 0
-				// console.log(_this.Orderpaymentamount)
+				// console.log(newcouponboollist)
 				uni.request({
 					url:`${app.globalData.Requestpath}activity/getUserValidCouponList`,
 					method:"POST",
@@ -138,7 +136,6 @@
 						t_price:_this.Orderpaymentamount
 					},
 					success(res) {
-							// console.log(res)
 						if(res.data.code==0){
 							_this.list = res.data.data
 							// console.log(_this.list)
