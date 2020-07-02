@@ -2,11 +2,10 @@
 	<view>
 		<scroll-view class="evaluate" scroll-y="true" >
 			<view class="order-evaluation" 
-				v-for="(item,index) in evaluatelist" 
+				v-for="(item,index) in this.$store.state.evaluationlist" 
 				:key="index" 
-				v-if="TabCur==(item.iscomment==2?item.iscomment-1:item.iscomment)"
 			>
-				<view v-for="(items,indexs) in shopinglist[index]" :key="indexs">
+				<view v-for="(items,indexs) in $store.state.evaluationlistitem[index]" :key="indexs">
 					<!-- {{yuming+items.good_pic}} -->
 					<view class="company-top">
 						{{item.store_name}}
@@ -14,7 +13,7 @@
 					<view class="company-bottom">
 						<view class="bottom-left">
 							<view class="bottom-img">
-								<img :src='yuming+items.good_pic' alt="">
+								<img :src="'http://hbk.huiboke.com'+items.good_pic" alt="">
 							</view>
 						</view>
 						<view class="bottom-right">
@@ -42,22 +41,13 @@
 				</view>
 		</view>
 		</scroll-view>
-		<loading v-if="loadingbool"></loading>
+		<!-- <loading v-if="loadingbool"></loading> -->
 	</view>
 </template>
 
 <script>
 	const app = getApp()
 	export default {
-		data() {
-			return {
-				// tokey:"",
-				// evaluatelist:[],//这是几个订单
-				// loadingbool:true,
-				// shopinglist:[],//这是这个订单下的几个商品 类似购物车一样
-				// yuming:"",
-			};
-		},
 		methods:{
 			changevaluation(e){
 				let ordersnbianhao =  e.currentTarget.dataset.ordersn
@@ -69,8 +59,6 @@
 				})
 			},
 		},
-		props:["TabCur","tokey","evaluatelist","loadingbool","shopinglist","yuming"]
-		
 	}
 </script>
 

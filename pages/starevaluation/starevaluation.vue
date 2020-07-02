@@ -3,7 +3,6 @@
 		<pageheight :statusBar="statusBar"></pageheight>
 		<view class="commodity">
 			<view class="father-one">
-				<!-- {{img}} -->
 				<view class="commodity-img">
 					<image :src="yuming+img" mode=""></image>
 				</view>
@@ -37,7 +36,7 @@
 								<text class='cuIcon-close'></text>
 							</view>
 						</view>
-						<view class="solids" @tap="ChooseImage" v-if="imgList.length<4">
+						<view class="solids" @tap="ChooseImage" v-if="imgList.length<=4">
 							<view class="bg">
 								
 							</view>
@@ -76,7 +75,7 @@
 				<Star class="star"  active-color="#ca234e"  :value="Number(Logisticsvalue)" @change="Logisticsvalueselect"></Star>
 			</view>
 			<view class="service-bottom">
-				<text>服务态度</text>
+				<text>店家服务</text>
 				<Star class="star"  active-color="#ca234e"  :value="Number(attitudevaluevalue)" @change="attitudevaluevalueselect"></Star>
 			</view>
 		</view>
@@ -108,7 +107,8 @@
 				img:"",
 				goodname:"",
 				yuming:"",
-				neirongtext:""
+				neirongtext:"",
+				imgreturnlist:[],//后台返回的图片数组
 			}
 		},
 		components:{
@@ -116,6 +116,7 @@
 		},
 		methods:{
 			ChooseImage() {
+				const _this = this
 				uni.chooseImage({
 					count: 4, //默认9
 					sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
@@ -123,8 +124,36 @@
 					success: (res) => {
 						if (this.imgList.length != 0) {
 							this.imgList = this.imgList.concat(res.tempFilePaths)
+							// console.log(this.imgList,"多张")
+							let str = ""
+							this.imgList.forEach((item,index)=>{
+								str += item+','
+							})
+							str = str.substring(str.length-1,1)
+							console.log(str)
+							uni.uploadFile({
+								url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
+								filePath:str,
+								name:"file",
+								fileType:"image",
+								success(res){
+									
+								}
+							})
 						} else {
 							this.imgList = res.tempFilePaths
+							console.log(this.imgList)
+							uni.uploadFile({
+								url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
+								filePath:this.imgList[0],
+								name:"file",
+								fileType:"image",
+								success(res){
+									if(JSON.parse(res.data).code==0){
+										_this.imgreturnlist.push(JSON.parse(res.data).data.src)
+									}
+								}
+							})
 						}
 					}
 				});
@@ -156,10 +185,10 @@
 			//这选择相册中的图片然后删除
 			DelImg(e) {
 				uni.showModal({
-					title: '召唤师',
-					content: '确定要删除这段回忆吗？',
+					title: '亲',
+					content: '确定要删除这张图片吗？',
 					cancelText: '再看看',
-					confirmText: '再见',
+					confirmText: '确定',
 					success: res => {
 						if (res.confirm) {
 							this.imgList.splice(e.currentTarget.dataset.index, 1)
@@ -169,8 +198,11 @@
 			},
 			//将评价提交到后台
 			submitevaluation(){
-				let {topvalue,imgList,neirongtext} = this.$data
-				if(topvalue==0 || imgList.length==0 || neirongtext==""){
+				const _this = this
+				let {topvalue,imgreturnlist,neirongtext,Logisticsvalue,attitudevaluevalue} = this.$data
+				console.log(topvalue,imgreturnlist,neirongtext,Logisticsvalue,attitudevaluevalue)
+				//  开始对商品评价
+				if(topvalue==0 || imgreturnlist.length==0 || neirongtext==""){
 					app.globalData.showtoastsame("请填写完整信息")
 				}else{
 					uni.request({
@@ -180,18 +212,28 @@
 							token:this.tokey,
 							o_sn:this.bianhao,
 							gid:this.gid,
-							e_scores:topvalue,
+							desccredit:topvalue,
+							servicecredit:attitudevaluevalue,
+							deliverycredit:Logisticsvalue,
 							e_content:neirongtext,
-							e_pic:imgList
+							e_pic:imgreturnlist
 						},
 						success(res) {
 							console.log(res)
 							if(res.data.code==0){
 								//请求成功跳到评价的页面
+								_this.$store.commit("getevaluationlist",{url:'order/getConfirmPayOrderList'})
 								uni.redirectTo({
 									url:`/pages/evaluate/evaluate`
 								})
 							}else{
+								if(res.data.code==1 && res.data.msg=="无效的商品"){
+									app.globalData.showtoastsame(res.data.msg)
+									uni.redirectTo({
+										url:`/pages/evaluate/evaluate`
+									})
+									return
+								}
 								app.globalData.Requestmethod(res.data.code,res.data.msg)
 							}
 						}

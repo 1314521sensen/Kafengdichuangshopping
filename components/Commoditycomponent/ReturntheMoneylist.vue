@@ -4,7 +4,7 @@
 				<!-- 这是背景图片 -->
 				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
 				<!-- <button class="cu-btn bg-red margin-tb-sm lg" :style="{'display':display}">删除你不想要的商品</button> -->
-				<view class="cu-item" v-for="(item,index) in list" :key="index">
+				<view class="cu-item" v-for="(item,index) in this.$store.state.refundreturnlist" :key="index">
 					
 					<!-- @tap="linkDetails(item.order_id,item.order_sn)" -->
 					
@@ -81,7 +81,10 @@
 			// 	})
 			// }
 		},
-		props:["list","display","deleteurl","tokey","deletelist"]
+		// props:["list","display","deleteurl","tokey","deletelist"],
+		created() {
+			this.$store.commit("getrefundreturn")
+		}
 	}
 </script>
 

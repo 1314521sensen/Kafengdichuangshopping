@@ -30,6 +30,7 @@
 				:gid="gid"
 				:pic="pic"
 				:storeid="storeid"
+				:couplebool="couplebool"
 			></immediatelypopup>
 		</view>
 </template>
@@ -94,7 +95,7 @@
 			Addcart(obj,img){
 				app.globalData.Detectionupdatetokey(this.tokey)
 				let {store_name,good_title,good_price,good_pic} = obj
-				this.$store.commit("Addcart",{s_name:store_name,g_name:good_title,g_pic:good_pic,gid:this.gid,sid:this.storeid})
+				this.$store.commit("Addcart",{s_name:store_name,g_name:good_title,g_pic:good_pic,gid:this.gid,sid:this.storeid,couplebool:this.couplebool})
 			},
 			//这是点击弹窗的确定是否确定添加收藏
 			collectionwork(){
@@ -174,7 +175,8 @@
 						good_price:this.pic.good_promotion_price,
 						good_name:this.pic.good_title,
 						store_id:this.storeid,
-						good_freight:this.pic.good_freight
+						good_freight:this.pic.good_freight,
+						good_type:this.couplebool
 					}
 					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
 					
@@ -185,7 +187,7 @@
 				this.modalName = e
 			}
 		},
-		props:["pic","imgs","gid","storeid"],
+		props:["pic","imgs","gid","storeid","couplebool"],
 		created(){
 			const _this = this
 			uni.getStorage({

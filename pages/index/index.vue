@@ -15,7 +15,7 @@
 				<featuredCommodity></featuredCommodity>
 				<exhibitionBanner></exhibitionBanner>
 			<view class="shopingList">
-				<listNav></listNav>
+				<!-- <listNav></listNav> -->
 				<list :list='list' :page='page' style="background-color: transparent" display="none"></list>
 				<view class="bottom-text" v-if="textbool">
 					<text>我也是有底线的</text>
@@ -35,7 +35,8 @@
 	import feature from "@/components/indexOneComponents/feature.vue"
 	import featuredCommodity from "@/components/indexOneComponents/featuredCommodity.vue"
 	import exhibitionBanner from "@/components/indexOneComponents/exhibitionBanner.vue"
-	import listNav from "@/components/indexOneComponents/listNav.vue"
+	//后期加这
+	// import listNav from "@/components/indexOneComponents/listNav.vue"
 	
 	import list from "@/components/indexOneComponents/list.vue"
 	export default {
@@ -168,7 +169,7 @@
 			feature,
 			featuredCommodity,
 			exhibitionBanner,
-			listNav,
+			// listNav,
 			list
 		},
 		methods:{
@@ -180,7 +181,7 @@
 			indexshoplist(page){
 				const _this = this
 				uni.request({
-					url:`${app.globalData.Requestpath}good/getRecommendGoodsList`,
+					url:`${app.globalData.Requestpath}good/getGoodList`,
 					data:{
 						page:_this.page,
 						pageSize:10

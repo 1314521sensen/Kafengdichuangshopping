@@ -1,7 +1,7 @@
 <template>
 	<view class="contractsingbox">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<actionbar message="合同签订及缴费" :Jumpchoose="true"></actionbar>
+		<actionbar message="合同签订及缴费" :Jumpchoose="true" url="/pages/choosing/choosing"></actionbar>
 		<view class="contractsing">
 			<view class="contractsingTop">
 				<view class="contractsingtitle">
@@ -10,7 +10,7 @@
 				<view class="cu-form-group" v-for="(item,index) in contractsingToplist" :key="index">
 					<view class="title">{{item.titlename}}</view>
 					<view class="inp" :style="{width:item.widthpx+'rpx'}">
-						<input :placeholder="item.placeholdername" name="input" placeholder-class="placeholdername"></input>
+						<input :placeholder="item.placeholdername" disabled="true" name="input" placeholder-class="placeholdername" :value="item.plaValue"></input>
 					</view>
 				</view>
 				<view class="Uploadinformation">
@@ -18,15 +18,7 @@
 						<view class="informationitem-text">{{itemcard.itemname}}</view>
 						<view class="cu-form-group">
 							<view class="grid col-4 grid-square flex-sub">
-								<view class="bg-img" v-for="(item,index) in imgList" :key="index" @tap="ViewImage" :data-url="imgList[index]">
-								 <image :src="imgList[index]" mode="aspectFill"></image>
-									<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="index">
-										<text class='cuIcon-close'></text>
-									</view>
-								</view>
-								<view class="solids" @tap="ChooseImage" v-if="imgList.length<1">
-									<text :style="{'background-image':'url('+itemcard.bgurl+')'}"></text>
-								</view>
+								<image class="identityPir" :src="'http://hbk.huiboke.com'+itemcard.bgurl" mode="aspectFill"></image>
 							</view>
 						</view>
 					</view>
@@ -39,7 +31,7 @@
 				<view class="cu-form-group margin-group" v-for="(item,index) in middenlist" :key="index">
 					<view class="title">{{item.titlename}}</view>
 					<view class="inp inps">
-						<input :placeholder="item.placeholdername" name="input" placeholder-class="placeholdername"></input>
+						<input :placeholder="item.placeholdername" disabled="true" :value="item.storeText" name="input" placeholder-class="placeholdername"></input>
 					</view>
 				</view>
 			</view>
@@ -50,9 +42,9 @@
 					</view>
 					<view class="Where-right">
 						<text>开户行:德州银行股份有限公司</text>
-						<text>账户:88888888888888888888</text>
+						<text>账户:80901040101421061198</text>
 						<text>公司名称:山东卡风迪创信息科技有限公司</text>
-						<text>客服电话:0534-7058558</text>
+						<text>客服电话:0534-7063000</text>
 					</view>
 				</view>
 				<view class="Uploaddocuments">
@@ -62,20 +54,20 @@
 					<view class="Uploaddocuments-right">
 						<view class="cu-form-group">
 							<view class="grid col-4 grid-square flex-sub">
-								<view class="bg-img" v-for="(item,index) in Uploaddocumentslist" :key="index" @tap="ViewImage" :data-url="Uploaddocumentslist[index]">
-								 <image :src="Uploaddocumentslist[index]" mode="aspectFill"></image>
+								<view class="bg-img" v-for="(item,index) in imgList" :key="index" @tap="ViewImage" :data-url="imgList[index]">
+								 <image :src="imgList[index]" mode="aspectFill"></image>
 									<view class="cu-tag bg-red" @tap.stop="DelImg" :data-index="index">
 										<text class='cuIcon-close'></text>
 									</view>
 								</view>
-								<view class="solids" @tap="ChooseImage" v-if="Uploaddocumentslist.length<1">
+								<view class="solids" @tap="ChooseImage" v-if="imgList.length<1">
 									<text class='cuIcon-cameraadd'></text>
 								</view>
 							</view>
 						</view>
 						<view class="beizhu">
 							<text>备注:</text>
-							<input type="text" class="beizhuinp" />
+							<textarea type="text" class="beizhuinp" placeholder="凭证留言" v-model="pay_desc" :maxlength="-1"/>
 						</view>
 					</view>
 				</view>
@@ -92,68 +84,86 @@
 		data() {
 			return {
 				statusBar:0,
+				alldata:[
+					
+				],
 				contractsingToplist:[
 					{
 						titlename:"姓名:",
 						placeholdername:"请输入姓名",
+						plaValue:'',
 						widthpx:200
 					},
 					{
 						titlename:"身份证:",
 						placeholdername:"请输入身份证号",
+						plaValue:'',
 						widthpx:400
 					}
 				],
 				cardlist:[
 					{
 						itemname:"身份证正面",
-						bgurl:"/static/carddianpu/cardzheng.png"
+						bgurl:""
 					},
 					{
 						itemname:"身份证反面",
-						bgurl:"/static/carddianpu/cardfan.png"
+						bgurl:"/static/carddianpu/cardzheng.png"
 					}
 				],
 				middenlist:[
 					{
 						titlename:"卖家账号:",
-						placeholdername:"请输入卖家账号"
+						placeholdername:"卖家账号",
+						storeText:''
 					},
 					{
 						titlename:"店铺名称:",
-						placeholdername:"请输入店铺名称"
+						placeholdername:"店铺名称",
+						storeText:''
 					},
 					{
 						titlename:"店铺等级:",
-						placeholdername:"请输入店铺等级"
-					},
-					{
-						titlename:"开店时长:",
-						placeholdername:"请输入开店时长"
+						placeholdername:"店铺等级",
+						storeText:''
 					},
 					{
 						titlename:"店铺分类:",
-						placeholdername:"请输入店铺分类"
+						placeholdername:"店铺分类",
+						storeText:''
 					},
 					{
 						titlename:"应付总金额:",
-						placeholdername:"0元"
+						placeholdername:"0元",
+						storeText:''
 					},
 					{
 						titlename:"经营类目:",
-						placeholdername:"请输入经营类目"
+						placeholdername:"经营类目",
+						storeText:''
 					},
 					{
 						titlename:"审核状态:",
-						placeholdername:"请输入审核状态"
+						placeholdername:"审核状态",
+						storeText:''
 					},
 					{
 						titlename:"审核意见:",
-						placeholdername:"请输入审核意见"
+						placeholdername:"审核意见",
+						storeText:''
 					},
 				],
-				imgList:[],//上传身份证的数组
+				imgList:[],//上传凭证的数组 
 				Uploaddocumentslist:[],//上传凭证的数组
+				national:''   ,//身份证号
+				pay_desc:'',//备注
+				updataimg:"",//上传的支付的凭证
+				Individualcompanies:"",//判断是个人还是企业
+				store_area:"",//县区id
+				store_addr:"",//详细地址
+				contacts_name:"",//联系人姓名
+				store_mobile:"",//联系人电话
+				contacts_email:"",//联系人邮箱
 			}
 		},
 		methods: {
@@ -165,18 +175,20 @@
 			},
 			DelImg(e) {
 				uni.showModal({
-					title: '召唤师',
-					content: '确定要删除这段回忆吗？',
+					title: '尊敬的用户',
+					content: '确定要删除要删除这张图片吗？',
 					cancelText: '再看看',
 					confirmText: '再见',
 					success: res => {
 						if (res.confirm) {
 							this.imgList.splice(e.currentTarget.dataset.index, 1)
+							_this.updataimg=""
 						}
 					}
 				})
 			},
 			ChooseImage() {
+				const _this = this
 				uni.chooseImage({
 					count: 1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
@@ -184,23 +196,142 @@
 					success: (res) => {
 						if (this.imgList.length != 0) {
 							this.imgList = this.imgList.concat(res.tempFilePaths)
+							console.log(2)
 						} else {
 							this.imgList = res.tempFilePaths
+							uni.uploadFile({
+								url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
+								method:"POST",
+								filePath:this.imgList[0],
+								name:"file",
+								fileType:"image",
+								success(res) {
+									_this.updataimg = JSON.parse(res.data).data.src
+								}
+							})
 						}
 					}
 				});
 			},
 			Submitapplication(){
-				uni.redirectTo({
-					url:"/pages/Successfulopening/Successfulopening"
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						if(_this.imgList.length>0){
+							uni.request({
+								url:`${app.globalData.Requestpath}store/addMerchantJoinInfo`,
+								method:"POST",
+								data:{
+									token:res.data,
+									store_type:_this.Individualcompanies,
+									store_name:_this.middenlist[1].storeText,
+									store_area:_this.store_area,
+									store_addr:_this.store_addr,
+									contacts_name:_this.contacts_name,
+									store_mobile:_this.store_mobile,
+									contacts_email:_this.contacts_email
+								},
+								success(res) {
+									if(res.data.code==0){
+										uni.redirectTo({
+											url:"/pages/Successfulopening/Successfulopening"
+										})
+									}else{
+										app.globalData.showtoastsame(res.data.msg)
+									}
+								}
+							})
+						}else{
+							app.globalData.showtoastsame("请上传支付凭证")
+						}
+					}
 				})
+				
 			}
+		},
+		created(){
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					//先获取用户实名认证信息
+					uni.request({
+						url:`${app.globalData.Requestpath}user/getRealNameAuthentication`,
+						method:"POST",
+						data:{
+							token:res.data
+						},
+						success(resauthentication) {
+							if(resauthentication.data.code==0){
+								let {real_name,idcard,idcard_fphoto,idcard_rphoto} = resauthentication.data.data
+								_this.contractsingToplist[0].plaValue = real_name
+								_this.contractsingToplist[1].plaValue =  idcard
+								_this.cardlist[0].bgurl = idcard_fphoto
+								_this.cardlist[1].bgurl = idcard_rphoto
+							}else{
+								app.globalData.Logback(resauthentication.data.msg)
+							}
+						}
+					})
+					uni.request({
+						url:`${app.globalData.Requestpath}store/getMerchantJoinInfo`,
+						method:"POST",
+						data:{
+							token:res.data
+						},
+						success(resinfo) {
+							//contractsingToplist
+							if(resinfo.data.code==0){
+								// console.log(resinfo)
+								let {user_name,store_name,grade_name,gc_name1,gc_names,gc_margin,store_state,store_verify_info,store_area,store_addr,contacts_name,store_mobile,contacts_email} = resinfo.data.data
+								_this.store_area = store_area
+								_this.store_addr = store_addr
+								_this.contacts_name = contacts_name
+								_this.store_mobile = store_mobile
+								_this.contacts_email = contacts_email
+								_this.middenlist[0].storeText = user_name
+								_this.middenlist[1].storeText = store_name
+								_this.middenlist[2].storeText = grade_name
+								_this.middenlist[3].storeText = gc_name1
+								_this.middenlist[4].storeText = gc_margin
+								_this.middenlist[5].storeText = gc_names
+								_this.middenlist[7].storeText = store_verify_info?store_verify_info:''
+								let stateText = ""
+								switch(store_state){
+									case -1:
+										stateText = "未通过"
+									break;
+									case 0:
+										stateText = "关闭"
+									break;
+									case 1:
+										stateText = "开启"
+									break;
+									case 2:
+										stateText = "审核中"
+									break;
+									case null:
+										stateText = "未申请审核"
+									break;
+								}
+								_this.middenlist[6].storeText = stateText
+							}
+						}
+					})
+				}
+			})
 		},
 		components:{
 			actionbar,
 		},
-		onLoad() {
+		onLoad(opction) {
 			this.statusBar = app.globalData.statusBar
+			if(opction.titlename=='enterprises'){
+				this.Individualcompanies = 1
+			}else{
+				this.Individualcompanies = 0
+			}
 		}
 	}
 </script>
@@ -225,6 +356,9 @@
 					.informationitem-text{
 						text-align: center;
 						margin-bottom:20rpx;
+					}
+					.identityPir{
+						height: 200rpx;
 					}
 					.bg-img{
 						width: 100%;
@@ -275,8 +409,8 @@
 					.beizhu{
 						display:flex;
 						.beizhuinp{
-							flex:1;
-							border-bottom:2rpx solid #ccc;
+							width:496rpx;
+							border:2rpx solid #ccc;
 						}
 					}
 				}

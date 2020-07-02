@@ -257,6 +257,7 @@
 								},
 								success(ordershopinglist) {
 									if(ordershopinglist.data.code==0){
+										console.log(ordershopinglist)
 										_this.ordershopinglist = ordershopinglist.data.data.list[0]
 										_this.$emit("orderNotpayingdefault",_this.ordershopinglist.good_pay_price)
 										_this.$emit("orderNotpayingnums",_this.ordershopinglist.good_num)

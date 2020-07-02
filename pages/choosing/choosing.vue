@@ -37,6 +37,7 @@
 					"企业入驻"
 				],
 				radio:'A',
+				store_state:""
 			}
 		},
 		methods: {
@@ -49,16 +50,36 @@
 				})
 			},
 			enterinto(e){
+				///pages/contractsigning/contractsigning
 				let indexs = e.currentTarget.dataset.indexs
-				if(parseInt(indexs)==0){
-					uni.navigateTo({
-						url:`/pages/Qualificationinformation/Qualificationinformation?titlename=Individuals`
-					})
+				if(this.radio=='B'){
+					//如果店铺的状态未通过 或者为null,让用户从新开通 否则 状态为1或者为2直接跳到最后
+					if(this.store_state == -1 || this.store_state==null){
+						if(parseInt(indexs)==0){
+							uni.navigateTo({
+								url:`/pages/Qualificationinformation/Qualificationinformation?titlename=Individuals`
+							})
+						}else{
+							uni.navigateTo({
+								url:`/pages/Qualificationinformation/Qualificationinformation?titlename=enterprises`
+							})
+						}
+					}else if(this.store_state == 1 || this.store_state == 2){
+						if(parseInt(indexs)==0){
+							uni.navigateTo({
+								url:`/pages/contractsigning/contractsigning?titlename=Individuals`
+							})
+						}else{
+							uni.navigateTo({
+								url:`/pages/contractsigning/contractsigning?titlename=enterprises`
+							})
+						}
+					}
+					
 				}else{
-					uni.navigateTo({
-						url:`/pages/Qualificationinformation/Qualificationinformation?titlename=enterprises`
-					})
+					app.globalData.showtoastsame("未选中协议")
 				}
+				
 			}
 		},
 		comments:{
@@ -66,6 +87,26 @@
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		created() {
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					uni.request({
+						url:`${app.globalData.Requestpath}store/getMerchantJoinInfo`,
+						method:"POST",
+						data:{
+							token:res.data
+						},
+						success(res) {
+							if(res.data.code==0){
+								_this.store_state = res.data.data.store_state
+							}
+						}
+					})
+				}
+			})
 		}
 	}
 </script>

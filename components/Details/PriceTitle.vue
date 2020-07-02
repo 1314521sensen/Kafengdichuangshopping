@@ -7,6 +7,7 @@
 			</view>
 			<view class="CommodityTitle">
 				<!-- 商品的标题 -->
+				<text class="Whethernew" v-if="couplebool=='npt'">新人</text>
 				<view class="liveicon">
 					<image src="/static/Details/broadcast.gif"></image>
 				</view>
@@ -44,7 +45,7 @@
 			evaluation,
 			storecoupon
 		},
-		props:["pic","region","tokey","storeid"],
+		props:["pic","region","tokey","storeid","couplebool"],
 	}
 </script>
 
@@ -62,6 +63,16 @@
 			}
 		}
 		.CommodityTitle{
+			.Whethernew{
+				display:block;
+				width: 90rpx;
+				padding:5rpx 3rpx;
+				background-color:red;
+				text-align:center;
+				color:#fff;
+				border-radius:16rpx;
+				font-size: 24rpx;
+			}
 			text{
 				font-size: 30rpx;
 				font-weight: bold;

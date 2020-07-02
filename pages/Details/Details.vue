@@ -1,9 +1,9 @@
 <template>
 	<view class="Details">
 		<detailsbanner :swiperList="swiperList" height="720"></detailsbanner>
-		<pricetitle :pic="pic" :region="region" :storeid="storeid" :tokey="tokey"></pricetitle>
-		<imgs :imglist="imgs"></imgs>
-		<bottomcar :pic="pic" imgs="/static/cart/01.webp" :tokey="tokey" :gid="gid" :storeid="storeid"></bottomcar>
+		<pricetitle :pic="pic" :region="region" :storeid="storeid" :tokey="tokey" :couplebool="couplebool"></pricetitle>
+		<imgs :imglist="good_content_images"></imgs>
+		<bottomcar :pic="pic" imgs="/static/cart/01.webp" :tokey="tokey" :gid="gid" :storeid="storeid" :couplebool="couplebool"></bottomcar>
 	</view>
 </template>
 
@@ -25,16 +25,14 @@
 				//这是轮播图的数据
 				swiperList:[],
 				//这是详情页的图片的数据
-				imgs:[
-					"/static/Details/O1CN01UuLYnf1KPwpca0wIK_!!2399641157.jpg_640x0q80_.webp",
-					"/static/Details/dfb5cbd7-556a-43a1-9e7b-c485e7b550dc.jpg"
-				],
 				//这是标题和价格数据
 				pic:{},
 				region:[],
 				tokey:"",
 				gid:"",
-				storeid:""
+				storeid:"",
+				good_content_images:[],//这是商品详情页的内容
+				couplebool:"",
 			}
 		},
 		methods: {
@@ -49,24 +47,19 @@
 			NewSpellgrouplist
 		},
 		onLoad(opction){
+			// couplebool
+			// console.log(opction)
 			const _this = this
 			//这是商品的id
 			this.gid = opction.id
 			//店铺id
 			this.storeid = opction.storeid
-			//先去请求详情页的轮播数据图片
-			uni.request({
-				url	:`${app.globalData.Requestpath}good/getGoodImageList`,
-				data:{
-					gid:opction.id,
-					lt:5,
-				},
-				success(res) {
-					if(res.data.code==0){
-						_this.swiperList = res.data.data
-					}
-				}
-			})
+			//判断是不是新人
+			if(opction.goodtype=="npt"){
+				this.couplebool = "npt"
+			}else{
+				this.couplebool = "nt"
+			}
 			//在去请求详情页的其他数据
 			uni.request({
 				url:`${app.globalData.Requestpath}good/getGoodInfo`,
@@ -74,14 +67,17 @@
 					gid:opction.id
 				},
 				success(res) {
+					// console.log(res.data.data.good_content_images)
 					if(res.data.code==0){
+						_this.swiperList = JSON.parse(res.data.data.good_images)
 						_this.pic = res.data.data
+						_this.good_content_images = res.data.data.good_content_images
 						// console.log(_this.pic)
 						//这和下面没关系 这块处理用户足迹的
 						//从这
 						//当用户点击进来的时候代表已经游览了商品足迹
 						uni.request({
-							url:"http://hbk.huiboke.com/api/user/addTrackInfo",
+							url:`${app.globalData.Requestpath}user/addTrackInfo`,
 							method:"POST",
 							data:{
 								token:_this.tokey,
@@ -132,17 +128,7 @@
 					_this.tokey = res.data
 				},
 			})
-		},
-		// created() {
-		// 	const _this = this
-		// 	uni.getStorage({
-		// 		key:"bindtokey",
-		// 		success(res) {
-		// 			_this.tokey = res.data
-		// 			app.globalData.Detectionupdatetokey(res.data)
-		// 		}
-		// 	})
-		// }
+		}
 	}
 </script>
 

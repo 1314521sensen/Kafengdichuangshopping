@@ -60,6 +60,7 @@
 						titlemsg="使用优惠券" 
 						:tokey="tokey" 
 						:storeid="item.store_id" 
+						:couplebooltext="couplebooltext"
 						Whatcoupon="1" 
 						:Orderpaymentamount="item.good_price*item.good_num"
 						@dingdancoupon="dingdancoupon"
@@ -178,7 +179,8 @@
 				orderinfolist:[],
 				totalnumber:0,//总数量
 				totalprice:0,//总价格
-				ordergidlist:""//购物车过来的全部id
+				ordergidlist:"",//购物车过来的全部id
+				couplebooltext:"",//判断是不是新人 新人只能使用新人优惠券
 			}
 		},
 		methods: {
@@ -210,182 +212,15 @@
 			Determinepayment(){
 				if(this.radio=='radio0'){//微信支付
 					// console.log("微信支付")
-					const _this = this
-					//当用户选择支付时处理买家留言
-					let Leavemessage = {}
-					let Leavearr = []
-					Leavemessage.sid = this.storeid
-					Leavemessage.msg = this.value
-					Leavearr[0] = Leavemessage
-					console.log(Leavearr)
-					if(this.address_id!==""){
-						if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
-							
-						}else{//订单详情过来的
-							if(this.coupondetails.length<=0){
-								this.cid = ""
-								this.ctype = ""
-							}else{
-								this.cid = this.coupondetails[0].c_id
-								this.ctype = this.coupondetails[0].c_type
-							}
-							console.log(this.tokey,this.gid,this.data,this.nums,this.o_from,this.address_id,this.value,this.cid,this.ctype)
-							uni.request({
-								url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
-								method:"POST",
-								data:{
-									token:this.tokey,
-									gid:this.gid,//商品的id
-									spec:this.data,
-									quantity:this.nums,
-									o_from:this.o_from,//根据用户哪一端进来的
-									address_id:this.address_id,//地址对应的id
-									p_msg:this.value,//用户的留言
-									c_id:this.cid,//这是返回用户选择的那张优惠券
-									c_type:this.ctype?'store':'platform'
-								},
-								success(res) {
-									console.log("走到这1")
-									// console.log(res)
-									// console.log(res.data.data.orderSnArray)//订单编号
-									console.log(res.data.data.swiftNo)//订单流水号
-									//orderSnArray订单的编组 支付的时候用到
-									if(res.data.code==0){//获取到支付前的数据
-									console.log("走到这2")
-										//获取订单流水号
-										// _this.orderSnArray = res.data.data.swiftNo
-										console.log(((_this.price*_this.nums+_this.freight)-(_this.Favorablebalance?_this.Favorablebalance:0)).toFixed(2))
-										console.log(res.data.data.swiftNo)
-										uni.request({
-											url:`${app.globalData.Requestpath}directwxpay/getarrinfo`,
-											header:{
-												'Content-Type':'application/json'
-											},
-											method:"POST",
-											data:{
-												user_id:54,
-												trade_type:"APP",
-												price:((_this.price*_this.nums+_this.freight)-(_this.Favorablebalance?_this.Favorablebalance:0)).toFixed(2),
-												sn:res.data.data.swiftNo
-											},
-											success(respaymentinformation) {
-												console.log(respaymentinformation)
-												if(respaymentinformation.data.code){
-													let orderInfo = JSON.stringify(respaymentinformation.data.data)
-													uni.requestPayment({
-														provider:"wxpay",
-														orderInfo:orderInfo,
-														success(resreturn) {
-															console.log(1)
-															console.log(resreturn)
-														},
-														fail(err){
-															console.log(2)
-															console.log(err)
-														}
-													})
-												}
-											},
-											fail(err){
-												console.log(err)
-											}
-										})
-									}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
-										console.log("走到这3")
-										_this.hideModal()
-										app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
-									}
-								}
-							})
-						}
-					}else{
-						_this.hideModal()
-						app.globalData.showtoastsame("请选择地址进行支付")
-					}
-					// app端微信支付---开始
-					// let obj = {
-					// 	appid:"wx0f9236b57d357dbb",
-					// 	noncestr:"123456789abcdefgh",
-					// 	package:'Sign=WXPay',
-					// 	partnerid:'1565078781',
-					// 	prepayid:'158831190101057374',
-					// 	timestamp:'1591342764',
-					// 	sign:'DEB45B3629C6E3464E9E753E4514B57B'
-					// }
-					// 
-					// console.log(orderInfo)
-							//app端 orderInfo支付的数据
-						// uni.request({
-						// 	url:`${app.globalData.Requestpath}directwxpay/pay`,
-						// 	header:{
-						// 		'Content-Type':'application/json'
-						// 	},
-						// 	data:{
-						// 		user_id:54,
-						// 		trade_type:"APP",
-						// 		price:0.01,
-						// 		sn:5448541664
-						// 	},
-						// 	success(res) {
-						// 		console.log(res)
-						// 	},
-						// 	fail(err){
-						// 		console.log(err)
-						// 	}
-						// })
-						// uni.getProvider({
-						// 	service:'payment',
-						// 	success(res) {
-						// 		console.log(res.provider[1])
-						// 		uni.requestPayment({
-						// 			provider:res.provider[1],
-									
-						// 		})
-						// 	}
-						// })
-						
-
 					//app端微信端---结束
 					
 					//H5端支付---开始
 					//H5端支付---结束
 				}else if(this.radio=='radio1'){//支付宝支付
 					console.log("支付宝支付")
-					uni.request({
-						url:`${app.globalData.Requestpath}directalipay/getarrinfo`,
-						header:{
-							'Content-Type':'application/json'
-						},
-						method:"POST",
-						data:{
-							user_id:54,
-							trade_type:"APP",
-							price:0.01,
-							sn:'343444456'
-						},
-						success(reszhifubao) {
-							if(reszhifubao.data.code==0){
-								
-								let {app_id,biz_content,charse,method,out_trade_no,sign_type,subject,timestamp,total_amount,version,sign} = reszhifubao.data.msg
-								//console.log(app_id,biz_content,charse,method,out_trade_no,sign_type,subject,timestamp,total_amount,version,sign)
-								let orderInfo = `app_id=${app_id}&biz_content=${biz_content}&charset=utf-8&method=${method}&notify_url=''&out_trade_no=${out_trade_no}&sign_type=${sign_type}&subject=${subject}&timestamp=${timestamp}&total_amount=${total_amount}&version=${version}&sign=${sign}`
-								uni.requestPayment({
-									provider:'alipay',
-									orderInfo:orderInfo,
-									success(resdata){
-										console.log(resdata)
-									},
-									fail(err){
-										console.log(err)
-									}
-								})
-							}
-						},
-					})
 					//app端支付宝支付---开始&product_code='' &notify_url=''
 					//app端支付宝支付---结束
 				}else{
-					// console.log(this.tokey)					
 					this.GetorderdetailsData()
 				}
 				
@@ -562,12 +397,13 @@
 				})
 			},
 			close(e){//这是点击×以后
+				const _this = this
 				this.passwordzhifutanchuang = e
 				this.isIphoneX = e
-				console.log(this.orderSnArray)
-				uni.reLaunch({
-					url:`/pages/Temporarynonpayment/Temporarynonpayment?ordersnSerial=${btoa(this.orderSnArray)}`
-				})
+				// console.log(this.orderSnArray[0])
+				// uni.reLaunch({
+				// 	url:`/pages/Temporarynonpayment/Temporarynonpayment?ordersnSerial=${btoa(_this.orderSnArray[0])}`
+				// })
 			},
 			//封装个 进来订单的这个页面就开始加载的订单的页面
 			Orderrender(){
@@ -611,12 +447,14 @@
 					}
 				})
 			}
+			//couplebooltext
 			uni.getStorage({
 				key:"orderinfo",
 				success(res) {
 					// console.log(res)
 					_this.orderinfolist = res.data
 					_this.orderinfolist.forEach((item,index)=>{
+						console.log(item)
 						_this.totalnumber += item.good_num
 						_this.totalprice += (item.good_price*item.good_num)+Number(item.good_freight)
 						// console.log(item.way)
@@ -626,6 +464,12 @@
 							_this.way = 1
 							// console.log(item.good_id)
 							_this.ordergidlist += item.cart_id+','
+						}
+						//这块的判断是不是新人  新人的话 就是1 否则就是0
+						if(item.good_type=='npt' || item.good_type==1){
+							_this.couplebooltext = 1
+						}else{
+							_this.couplebooltext = 0
 						}
 					})
 					let arr = String(_this.totalprice).split('.')

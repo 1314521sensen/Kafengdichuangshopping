@@ -60,6 +60,7 @@
 										:data-id="item.good_id"
 										:data-storeid="item.store_id"
 										:data-specialtype="item.special_type_id"
+										:data-good_type="item.good_type"
 									>立即抢购</button>
 								</view>
 							</view>
@@ -129,29 +130,27 @@
 			},
 			//这是换一批事件
 			batch(){
+				console.log(111)
 				this.giftlist(8)
 			},
 			giftlist(nums){
+				console.log("这一步")
 				const _this = this
-				uni.getStorage({
-					key:"bindtokey",
+				// 礼品的数据
+				uni.request({
+					url:`${app.globalData.Requestpath}activity/getNewUserGoodsList`,
+					method:"GET",
+					data:{
+						limit:nums
+					},
 					success(res){
-						// 礼品的数据
-						uni.request({
-							url:`${app.globalData.Requestpath}activity/getNewUserGoodsList`,
-						    method:"GET",
-							data:{
-								limit:nums
-							},
-							success(res){
-								if(res.data.code==0){
-									_this.list = res.data.data
-								}else{
-									//这是检测tokey
-									// app.globalData.Requestmethod(res.data.code,res.data.msg)
-								}
-							}
-						})
+						console.log(res)
+						if(res.data.code==0){
+							_this.list = res.data.data
+						}else{
+							//这是检测tokey
+							// app.globalData.Requestmethod(res.data.code,res.data.msg)
+						}
 					}
 				})
 			},
@@ -166,7 +165,6 @@
 						pageSize:5
 					},
 					success(rescoupons) {
-						// console.log(rescoupons)
 						if(rescoupons.data.code==0){
 							if(_this.couponspages>1){
 								_this.couponslist = _this.couponslist.concat(rescoupons.data.data.list)
@@ -179,9 +177,10 @@
 			},
 			//点击立即抢购的礼品 跳到商品详情里面
 			Snapped(e){
-				let {id,storeid,specialtype} = e.currentTarget.dataset
+				let {id,storeid,specialtype,good_type} = e.currentTarget.dataset
+				//npt 新人 nt普通
 				uni.navigateTo({
-					url:`/pages/Details/Details?id=${id}&storeid=${storeid}&specialtype=${specialtype}`
+					url:`/pages/Details/Details?id=${id}&storeid=${storeid}&specialtype=${specialtype}&goodtype=${good_type}`
 				})
 			},
 			//滚动加载的事件

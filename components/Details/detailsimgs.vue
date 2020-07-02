@@ -1,7 +1,7 @@
 <template>
 	<view class="detailsimgs">
 		<view class="imgs" v-for="(item,index) in imglist" :key="index">
-			<image :src="item"></image>
+			<image :src="'http://hbk.huiboke.com'+item" mode="widthFix"></image>
 		</view>
 	</view>
 </template>

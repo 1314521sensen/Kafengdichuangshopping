@@ -93,6 +93,7 @@
 						obj.c_id = dingdanitem.id
 						obj.c_type = dingdanitem.coupon_type
 						obj.money = dingdanitem.money
+						console.log(obj)
 						// console.log([obj])
 						arr[0] = obj
 						// console.log(arr)
@@ -126,16 +127,17 @@
 				let newcouponboollist = []
 				newcouponboollist[0] = parseInt(_this.storeid)
 				newcouponboollist[1] = 0
-				// console.log(newcouponboollist)
 				uni.request({
 					url:`${app.globalData.Requestpath}activity/getUserValidCouponList`,
 					method:"POST",
 					data:{
 						token:_this.tokey,
 						sid:newcouponboollist,
-						t_price:_this.Orderpaymentamount
+						t_price:_this.Orderpaymentamount,
+						c_category:_this.couplebooltext
 					},
 					success(res) {
+						console.log(res)
 						if(res.data.code==0){
 							_this.list = res.data.data
 							// console.log(_this.list)
@@ -149,7 +151,7 @@
 			}
 			
 		},
-		props:["tokey","storeid","msg","Whatcoupon","Orderpaymentamount","titlemsg"]
+		props:["tokey","storeid","msg","Whatcoupon","Orderpaymentamount","titlemsg","couplebooltext"]
 	}
 </script>
 

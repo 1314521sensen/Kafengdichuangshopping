@@ -126,6 +126,7 @@
 					// 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=${this.specid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
 					// })
 					// console.log(this.datalist)
+					console.log(this.couplebool)
 					let SpecificationShopdetails = {
 						good_id:this.gid,
 						spec_id:this.specid,
@@ -136,7 +137,8 @@
 						good_price:this.price,
 						good_name:this.pic.good_title,
 						store_id:this.storeid,
-						good_freight:this.pic.good_freight
+						good_freight:this.pic.good_freight,
+						good_type:this.couplebool
 					}
 					
 					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
@@ -165,7 +167,7 @@
 				this.$emit("hiddends",null)
 			}
 		},
-		props:["immediatelylist","bool","gid","pic","storeid"],
+		props:["immediatelylist","bool","gid","pic","storeid","couplebool"],
 		created() {
 			// console.log(this.immediatelylist)
 		}
