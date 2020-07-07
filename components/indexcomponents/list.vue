@@ -35,6 +35,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data(){
 			return {
@@ -50,8 +51,28 @@
 					})
 			},
 			deletescollectionAndfootprint(e){
+				const _this = this
 				let index = e.currentTarget.dataset.index
 				let deleteid = this.deletelist[index].fav_id?this.deletelist[index].fav_id:this.deletelist[index].track_id
+				// console.log(deleteid)
+				// console.log(this.deleteurl)
+				// console.log(this.requesturl)
+				// uni.request({
+				// 	url:this.requesturl,
+				// 	method:"POST",
+				// 	data:{
+				// 		token:_this.tokey,
+				// 		page:1,
+				// 		pageSize:10
+				// 	},
+				// 	success(res) {
+				// 		if(res.data.code==0){
+				// 			// console.log(res)
+				// 			_this.list = res.data.data.list
+							
+				// 		}
+				// 	}
+				// })
 				uni.showModal({
 					title:"确定要在收藏中删除该商品吗",
 					content:"删除以后不影响在次添加",
@@ -84,7 +105,7 @@
 				})
 			}
 		},
-		props:["list","display","deleteurl","tokey","deletelist"]
+		props:["list","display","deleteurl","tokey","deletelist","requesturl"]
 	}
 </script>
 
@@ -165,7 +186,7 @@
 	       line-height:28rpx;
 	       color:#000;
 	       font-size: 22rpx;
-	       height: 50rpx;
+	       // height: 50rpx;
 	       overflow: hidden;
 	       text-overflow:ellipsis;
 	       white-space: nowrap;

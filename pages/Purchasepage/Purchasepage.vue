@@ -181,6 +181,7 @@
 				totalprice:0,//总价格
 				ordergidlist:"",//购物车过来的全部id
 				couplebooltext:"",//判断是不是新人 新人只能使用新人优惠券
+				c_ids:"",//判断余额支付的时候使用的哪张优惠券的id
 			}
 		},
 		methods: {
@@ -237,7 +238,6 @@
 				Leavearr[0] = Leavemessage
 				//1是购物车过来的
 				//2是详情过来的
-				// console.log(this.way)
 				if(this.address_id!==""){//判断新用户有没有地址
 					if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
 					let str = _this.ordergidlist.substr(0,_this.ordergidlist.length-1)
@@ -288,7 +288,7 @@
 								o_from:this.o_from,//根据用户哪一端进来的
 								address_id:this.address_id,//地址对应的id
 								p_msg:this.value,//用户的留言
-								c_id:this.cid,//这是返回用户选择的那张优惠券
+								c_id:this.c_ids,//这是返回用户选择的那张优惠券
 								c_type:this.ctype?'store':'platform'
 							},
 							success(res) {
@@ -356,10 +356,20 @@
 			},
 			//这是用来接收子组件传过来的订单数据
 			dingdancoupon(e){
+				const _this = this
 				// console.log(e)
 				//这是用户选择优惠券后 原价减去优惠卷的价格
 				this.Favorablebalance = e[0].money
 				this.coupondetails = e
+				//为了商品详情过来的商品判断有没有使用优惠券有的话就赋值 没有的话 就为空
+				if(this.coupondetails.length>=1){
+					this.coupondetails.forEach((item,index)=>{
+						//c_ids
+						_this.c_ids = item.c_id
+					})
+				}else{
+					_this.c_ids = ""
+				}
 			},
 			//封装一个使用余额支付的方法
 			Paywithbalance(_this){
@@ -389,8 +399,9 @@
 							app.globalData.showtoastsame(res.data.msg)
 							_this.passwordzhifutanchuang = null
 							_this.isIphoneX = null
+							//如果用户输入密码错误 就让他跳到订单列表
 							uni.reLaunch({
-								url:`/pages/Temporarynonpayment/Temporarynonpayment?ordersnSerial=${btoa(_this.orderSnArray)}`
+								url:`/pages/orderpageRouter/orderpageRouter`
 							})
 						}
 					}
@@ -401,9 +412,9 @@
 				this.passwordzhifutanchuang = e
 				this.isIphoneX = e
 				// console.log(this.orderSnArray[0])
-				// uni.reLaunch({
-				// 	url:`/pages/Temporarynonpayment/Temporarynonpayment?ordersnSerial=${btoa(_this.orderSnArray[0])}`
-				// })
+				uni.reLaunch({
+					url:`/pages/orderpageRouter/orderpageRouter`
+				})
 			},
 			//封装个 进来订单的这个页面就开始加载的订单的页面
 			Orderrender(){

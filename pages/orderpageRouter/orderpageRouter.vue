@@ -31,6 +31,9 @@
 							:data-address_id="item.address_id"
 							:data-buyer_name="item.buyer_name"
 							:data-price="item.price"
+							:data-create_time="item.create_time"
+							:date-send_time="item.send_time"
+							:data-finish_time="item.finish_time"
 						>
 							<image :src="'http://hbk.huiboke.com'+item.store_logo" mode=""></image>
 						</view>
@@ -98,8 +101,10 @@
 			},
 			linkDetails(e){
 				// console.log(e.currentTarget.dataset.order_sn)title
-				let {order_sn,title,dispatch_price,swift_no,address_id,buyer_name,price} = e.currentTarget.dataset
-				this.$store.commit("linkDetails",{order_sn:order_sn,title:title,dispatch_price:dispatch_price,swift_no:swift_no,address_id:address_id,buyer_name:buyer_name,price:price})
+				let {order_sn,title,dispatch_price,swift_no,address_id,buyer_name,price,create_time,send_time,finish_time} = e.currentTarget.dataset
+				// console.log(create_time)
+				//这是往vuex里面存东西
+				this.$store.commit("linkDetails",{order_sn:order_sn,title:title,dispatch_price:dispatch_price,swift_no:swift_no,address_id:address_id,buyer_name:buyer_name,price:price,create_time:create_time,send_time:send_time,finish_time:finish_time})
 				
 			},
 			//这是删除

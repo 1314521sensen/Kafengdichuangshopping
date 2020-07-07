@@ -106,7 +106,6 @@
 			//app热跟新---结束
 			//引导页---开始
 			// #ifdef APP-PLUS
-				
 				uni.getStorage({
 					key:"Guidepagebool",
 					success(res){

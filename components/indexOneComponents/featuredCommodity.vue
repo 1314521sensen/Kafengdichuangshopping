@@ -1,7 +1,7 @@
 <template>
 	<view class="featuredCommodity">
 		<view class="featuredCommodity-top">
-			<view class="hot-sale ">
+			<view class="hot-sale">
 				<view class="hot-top">
 					<text class="hot-top-one">爆款潮品</text>
 					<text class="hot-top-two">购好货</text>
@@ -10,8 +10,8 @@
 					<text>国际潮牌,限时折扣</text>
 				</view>
 				<view class="hot-bottom">
-					<view class="bottom-img" v-for="(item,index) in 3" :key="index">
-						<image src="../../static/indexOne/watches.png" mode=""></image>
+					<view class="bottom-img" v-for="(item,index) in Popularimglist" :key="index">
+						<image :src="'http://hbk.huiboke.com'+item[2]" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -24,25 +24,33 @@
 					<text>亿款零食,商家直供</text>
 				</view>
 				<view class="fruits-bottom">
-					<view class="bottom-img" v-for="(item,index) in 2" :key="index">
-						<image src="../../static/indexOne/watches.png" mode=""></image>
+					<view class="bottom-img" v-for="(item,index) in Tosend" :key="index">
+						<image :src="'http://hbk.huiboke.com'+item[2]" mode=""></image>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="featuredCommodity-bottom">
-			<view class="purchase" v-for="(item,index) in purchaseList " :key="index">
+			<view class="purchase" v-for="(item,index) in purchaseListSum " :key="index">
 				<h4 :style="{'color':item.color}">{{item.text}}</h4>
-				<image src="../../static/indexOne/watches.png" mode=""></image>
+				<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data() {
 			return {
+				// 总数组
+				totalnumber:[],
+				totalnumberArr:[],
+				// 潮牌
+				Popularimglist:[],
+				// 派送
+				Tosend:[],
 				purchaseList:[
 					{
 						text:"美食",
@@ -60,13 +68,58 @@
 						text:"美妆",
 						color:"#6589ff"
 					},
-					{
+					{  
 						text:"母婴",
 						color:"#ff669f"
 					}
-				]
-			};
-		}
+				],
+				purchaseListSum:[
+					
+				],
+			}
+		},
+		created(){
+			const _this = this
+			uni.request({
+				url:`${app.globalData.Requestpath}good/getAllGoodRankingList`,
+				data:{
+					limit:5
+				},
+				success(res){
+					if(res.data.code==0){
+						_this.totalnumber = res.data.data
+						// console.log(_this.totalnumber)
+						for(var i = 0;i<res.data.data.length;i++){
+							// 对象切割成一个数组
+							 _this.totalnumberArr.push(Object.values(_this.totalnumber[i])) 
+						}
+						 // 潮牌
+						 _this.Popularimglist = _this.totalnumberArr.slice(0,3)
+						 // console.log(_this.Popularimglist)
+						 //派送  
+						 _this.Tosend = _this.totalnumberArr.slice(3,5)
+					}
+				}
+			})
+			
+			uni.request({
+				url:`${app.globalData.Requestpath}good/getRandomRecommendGoodsList`,
+				data:{
+					limit:5
+				},
+				success(res) {
+					if(res.data.code==0){
+						// console.log(res)
+						_this.purchaseListSum = res.data.data
+						_this.purchaseListSum.forEach((item,index)=>{
+							// purchaseList  旧数据 _this.purchaseList.text
+							item.color = _this.purchaseList[index].color
+							item.text = _this.purchaseList[index].text
+						})
+					}
+				}
+			})
+		},
 	}
 </script>
 

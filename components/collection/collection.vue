@@ -3,7 +3,7 @@
 		<pageheight :statusBar="statusBar"></pageheight>
 		<actionbar url="/pages/PersonalMy/PersonalMy" :message="message"></actionbar>
 		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom" v-if="list.length!==0">
-			<list :list="list" display="block" :deleteurl="deleteurl" :tokey="tokey" :deletelist="deletelist"></list>
+			<list :list="list" display="block" :deleteurl="deleteurl" :tokey="tokey" :deletelist="deletelist" :requesturl="requesturl"></list>
 			<uniLoadMore :iconSize="20" :contentText="{contentdown:text}" v-if="list.length>=10"></uniLoadMore>
 		</scroll-view>
 		<Nopage v-if="list.length==0"></Nopage>
@@ -32,7 +32,8 @@
 				statusBar:0,
 				text:"正在加载...",
 				deleteurl:"",
-				deletelist:[]
+				deletelist:[],
+				requesturl:"",//请求接口
 			}
 		},
 		components:{
@@ -95,6 +96,7 @@
 								}
 								_this.listindex++
 								_this.list = _this.list.concat(reslist.data.data.list)
+								// console.log(_this.list)
 							}
 						})
 					}
@@ -119,6 +121,7 @@
 				//在这里请求渲染数据
 				//这是获取收藏的列表
 				this.mycollection(`${app.globalData.Requestpath}user/getGoodFavoriteList`)
+				this.requesturl = `${app.globalData.Requestpath}user/getGoodFavoriteList`
 				//这是删除收藏的商品
 				this.deleteurl = `${app.globalData.Requestpath}user/deleteFavoriteInfo`
 			}else{
@@ -126,6 +129,7 @@
 					// 在这里请求渲染数据
 					//这是获取我的足迹
 					this.mycollection(`${app.globalData.Requestpath}user/getTrackList`)
+					this.requesturl = `${app.globalData.Requestpath}user/getTrackList`
 					//这是删除我的足迹商品
 					this.deleteurl = `${app.globalData.Requestpath}user/deleteTrackInfo`
 				}

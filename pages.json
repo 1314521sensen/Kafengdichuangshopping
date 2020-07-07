@@ -299,13 +299,13 @@
 				{
 		        "pagePath": "pages/index/index",
 		        "iconPath": "static/tabber/indexwei.png",
-		        "selectedIconPath": "static/tabber/index.png",
+		        "selectedIconPath": "static/tabber/index.gif",
 		        "text": "首页"
 		    }, 
 			{
 			    "pagePath": "pages/classification/classification",
 			    "iconPath": "static/tabber/classificationwei.png",
-			    "selectedIconPath": "static/tabber/classification.png",
+			    "selectedIconPath": "static/tabber/classification.gif",
 			    "text": "分类"
 			}, 
 			{
@@ -317,13 +317,13 @@
 			{
 		        "pagePath": "pages/shoppingCart/shoppingCart",
 		        "iconPath": "static/tabber/carwei.png",
-		        "selectedIconPath": "static/tabber/car.png",
+		        "selectedIconPath": "static/tabber/car.gif",
 		        "text": "购物车"
 		    },
 			{
 			    "pagePath": "pages/PersonalMy/PersonalMy",
 			    "iconPath": "static/tabber/mywei.png",
-			    "selectedIconPath": "static/tabber/my.png",
+			    "selectedIconPath": "static/tabber/my.gif",
 			    "text": "我的"
 			}
 			]

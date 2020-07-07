@@ -8,6 +8,8 @@
 			<view class="CommodityTitle">
 				<!-- 商品的标题 -->
 				<text class="Whethernew" v-if="couplebool=='npt'">新人</text>
+				<!-- v-if这里判断时候为正常的商品 -->
+				<text class="Whethernew" v-if="parseInt(good_state)!==1 && parseInt(good_verify)!==1 || parseInt(good_delete)!==0">下架</text>
 				<view class="liveicon">
 					<image src="/static/Details/broadcast.gif"></image>
 				</view>
@@ -45,7 +47,7 @@
 			evaluation,
 			storecoupon
 		},
-		props:["pic","region","tokey","storeid","couplebool"],
+		props:["pic","region","tokey","storeid","couplebool","good_state","good_verify","good_delete"],
 	}
 </script>
 

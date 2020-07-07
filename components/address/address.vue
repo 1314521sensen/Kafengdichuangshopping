@@ -99,7 +99,7 @@
 								is_default:0
 							},
 							success(res) {
-								console.log(res)
+								// console.log(res)
 								if(res.data.code==0){
 									
 									//pages/addressTo/addressTo?title=收货地址

@@ -13,11 +13,11 @@
 					</view>
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<view class="title">密码:</view>
-						<input  placeholder="密码最小设置6位,包含单词数字_" name="password" type="password"></input>
+						<input  placeholder="密码最小设置6位,包含单词数字_" name="password" type="password" v-model="password"></input>
 					</view>
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<view class="title">确认密码:</view>
-						<input  placeholder="请输入确认密码" name="Confirmpassword" type="password"></input>
+						<input  placeholder="请输入确认密码" name="Confirmpassword" type="password" v-model="Confirmpassword"></input>
 					</view>
 					<view class="cu-form-group inp">
 						<view class="title">+86</view>
@@ -46,26 +46,37 @@
 			return {
 				countdowntext:"验证码",
 				wait:60,
-				disabled:true,
+				disabled:false,
 				username:"",
 				phone:"",
-				times:null
+				times:null,
+				password:"",
+				Confirmpassword:""
 			}
 		},
 		methods: {
 			//验证码
 			countdown(){
-				this.regphone()
-				//在app.vue里面的globalData对象中封装了方法 用来请求信息 用户注册的时候传用户名
-				let json = {
-					mobile:this.phone,
-					type:2,
-					username:this.username
+				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				if(this.password == this.Confirmpassword){
+					this.regphone()
+					if(this.phone.match(userphone)){
+						//在app.vue里面的globalData对象中封装了方法 用来请求信息 用户注册的时候传用户名
+						let json = {
+							mobile:this.phone,
+							type:2,
+							username:this.username
+						}
+						// console.log(json)
+						//在app.vue中封装了函数 用来请求短信验证码
+						app.globalData.VerificationCode(json)
+						this.time()
+					}else{
+						return 
+					}
+				}else{
+					app.globalData.showtoastsame("两次密码不一致")
 				}
-				// console.log(json)
-				//在app.vue中封装了函数 用来请求短信验证码
-				app.globalData.VerificationCode(json)
-				this.time()
 			},
 			//验证手机号
 			validationphone(){

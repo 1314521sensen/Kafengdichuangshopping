@@ -1,14 +1,14 @@
 <template>
 	<!-- 品牌专场 -->
-	<view class="brand" :style="{'padding-top':statusBar+20+'rpx'}">
+	<scroll-view class="brand" :style="{'padding-top':statusBar+20+'rpx'}" :scroll-y="true" @scrolltolower="scrolltolower">
 		<!-- 导航 -->
 		<view class="brand_nav">
 			<view class="Specialspecial">品牌专场</view>
-			<view class="searchBox">
+			<!-- <view class="searchBox">
 				<view class="search" >
 					<view class="lg text-black cuIcon-search"></view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 		<!-- 精品推荐 -->
 		<view class="recommendation" style="background-image: url(/static/brand/recommendation.png);">
@@ -20,74 +20,83 @@
 			<!-- 商品盒子 -->	
 			<view class="GoodsListbox">
 				<!-- 单个商品的盒子  -->
-				<view class="singleGoods" v-for="(item,index) in heeledpumpsListBox" :key='index'>
+				<view 
+					class="singleGoods" 
+					v-for="(item,index) in heeledpumpsListBox" 
+					:key='index'
+					:data-g_id="item.good_id"
+					:data-s_id="item.store_id"
+					@tap="singleGoodshopdefault"
+				>
 					<!-- 装展示图片的盒子 -->
 					<view class="heeledpumpsBox">
-						<image class="" :src="item.image" mode=""></image>
+						<image class="" :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
 					</view>
 					<view class="particular">
-						<view class="genre">{{item.genre}}</view>
-						<view class="Howmany">{{item.Howmany}}</view>
+						<view class="genre">{{item.good_title}}</view>
+						<view class="Howmany">{{'¥'+item.good_price}}</view>
 					</view>
 				</view>
 			</view>
 		</view>
 		<!-- 特卖，数码榜单 -->
 		<digitallist></digitallist>
-		<!-- 商品列表 -->
-		<productlist></productlist>
-	</view>
+	</scroll-view>
 </template>
 
 <script>  
 	import digitallist from "@/components/brand/digitallist.vue"
-	import productlist from "@/components/brand/productlist.vue" 
+	
 	const app = getApp()
 	export default {
 		data() {
 			return {
 				// 精品推荐
-				heeledpumpsListBox:[
-					{
-						image:"/static/brand/heeledpumps.png",
-						genre:'高跟长筒靴',
-						Howmany:'一万人买过'
-					},
-					{
-						image:"/static/brand/heeledpumps.png",
-						genre:'高跟长筒靴',
-						Howmany:'一万人买过'
-					},
-					{
-						image:"/static/brand/heeledpumps.png",
-						genre:'高跟长筒靴',
-						Howmany:'一万人买过'
-					},
-					{
-						image:"/static/brand/heeledpumps.png",
-						genre:'高跟长筒靴',
-						Howmany:'一万人买过'
-					}
-				],
+				heeledpumpsListBox:[],
 				statusBar:0
 			}
 		},
 		methods: {
-			
+			//点击品牌的精品推荐的商品 跳转到商品详情
+			singleGoodshopdefault(e){
+				let {g_id,s_id} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+				})
+			},
+			//滚动到底部的时候触发
+			scrolltolower(){
+				this.$store.commit("scrolltolower",{Brandloadbools:false})
+			}
 		},
 		components:{
-			digitallist,
-			productlist
+			digitallist
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		created() {
+			const _this = this
+			//获取品牌上面的精品推荐
+			uni.request({
+				url:`${app.globalData.Requestpath}brand/getBERDBrandGoodList`,
+				data:{
+					limit:4
+				},
+				success(res) {
+					// console.log(res)
+					if(res.data.code==0){
+						_this.heeledpumpsListBox = res.data.data.list
+					}
+				}
+			})
 		}
 	}
 </script>
 
 <style lang="less" scoped>
    .brand{
-	   // height: 100vh;
+	   height: 100vh;
 	   background-color: #399afb;
 	   // 头部导航  
 	   .brand_nav{
@@ -166,10 +175,16 @@
 					  .genre{
 						  font-size: 26rpx;
 						  margin: 10rpx 0 5rpx 0;
+						  display: -webkit-box;
+						  -webkit-box-orient: vertical;
+						  -webkit-line-clamp: 2;
+						  overflow: hidden;
+						  padding:0 8rpx;
 					  }
 					  .Howmany{
 						  font-size: 24rpx;
 						  color: #ef8920;
+						  text-align: center;
 					  }
 				  }
 			   }

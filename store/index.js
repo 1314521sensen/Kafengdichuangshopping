@@ -11,6 +11,7 @@ let state = {
 	specificationslist:[],//这是规格的数据
 	tokey:"",
 	pages:1,
+	newpages:1,//用于储存pages原来的值 这样去解决购物车实时数据  
 	orderlist:[],//用来存储订单的信息
 	Temporarynonpaymentlist:[],//这是订单的列表
 	orderlistshop:[],//这是用于存储订单内的商品列表
@@ -24,6 +25,13 @@ let state = {
 	evaluationlist:[],//这是用来操作评价的列表
 	evaluationlistitem:[],//用于存放每个评价列表的item
 	refundreturnlist:[],//用于退货退款列表
+	Notcreated:"",//这是未付款开始的毫秒值
+	Notpaying:"",//这是未付款的结束的毫秒值
+	sendTimes:"",//这是发货时间
+	couponslist:[],//这是优惠券的数据
+	BrandList:[],//这是品牌的数据
+	Brandpage:1,//品牌的页数
+	Brandloadbool:false,//用于请求请求活动的加载图标
 }
 //getters 用于计算
 let getters = {
@@ -66,7 +74,77 @@ let mutations = {
 			icon:"none"
 		})
 	},
-	
+	//封装个结束的时间戳
+	getendTime(state,dateobj){
+		// console.log(dateobj)
+		this.commit("gettokey")
+		//根据订单的状态调用不同的完成接口
+		let {startTime,endTime,Completiontime,orderstatus,order_sn} = dateobj
+		uni.request({
+			url:`${Requestpath}order/getOrderOverTimeConfig`,
+			success(res) {
+				// console.log(res)
+				if(res.data.code==0){
+					if(orderstatus==0){
+						//未付款的开始的时间
+						state.Notcreated = startTime
+						//这是未付款的 =  未付款的时间 *1000(得到毫秒)  + 创建时间的秒数
+						state.Notpaying = (res.data.data.buy_close_time * 1000)+startTime
+						let time = null
+						//如果未付款时间等于 取消的时间 就自动取消订单
+						time = setInterval(()=>{
+							state.Notcreated = state.Notcreated++
+							if(state.Notcreated==state.Notpaying){
+								clearInterval(time)
+								uni.request({
+									url:`${Requestpath}order/noPayOrderAutoCancelOrder`,
+									method:"POST",
+									data:{
+										token:state.tokey,
+										o_sns:[order_sn]
+									},
+									success(res) {
+										console.log(res)
+									}
+								})
+							}
+						})
+					}else if(orderstatus==2){
+						//这是发货
+						//这是发货的时间
+						let sendtime = new Date(endTime)
+						state.sendTimes = sendtime.getTime()
+						//这是获取结束时间的毫秒数
+						let completiontime = new Date(Completiontime)
+						let completiontimes = completiontime.getTime()
+						let time = null
+						//发货时间时间的毫秒数 进行加加  当时间与完成时间 一直时 停止定时器
+						time = setInterval(()=>{
+							state.sendTimes = state.sendTimes++
+							if(state.sendTimes==completiontimes){
+								clearInterval(time)
+								//进行请求自动收货时间
+								uni.request({
+									url:`${Requestpath}order/autoConfirmPayOrder`,
+									method:"POST",
+									data:{
+										token:state.tokey,
+										o_sn:order_sn
+									},
+									success(res) {
+										console.log(res)
+									}
+								})
+							}
+						},1000)
+						console.log(sendTimes)
+					}else if(orderstatus==3){
+						//这是完成时间
+					}
+				}
+			}
+		})
+	},
 	
 	
 	
@@ -103,8 +181,6 @@ let mutations = {
 				})
 			}
 		})
-		
-		
 	},
 	getcarlist(){
 		//请求购物车列表的数据
@@ -235,7 +311,7 @@ let mutations = {
 				cids:arr
 			},
 			success(res) {
-				console.log(res)
+				// console.log(res)
 				if(res.data.code==0){
 					//调用mutations里面自身的方法
 					_this.commit("getcarlist")
@@ -272,8 +348,12 @@ let mutations = {
 	},
 	//当滚动底部的时候
 	scrolltolower(){
-		this.state.pages++
-		this.commit("getcarlist")
+		let remainder = this.state.cartList.length / 10
+		if(remainder >= this.state.pages){
+			this.state.pages++
+		}else{
+			this.commit("getcarlist")
+		}
 	},
 	//跳到订单页面获取订单里面的值逻辑
 	Saveorder(state,shopvalue){
@@ -370,8 +450,9 @@ let mutations = {
 	},
 	//点击跳转订单内
 	linkDetails(state,orderinfo){
+		// console.log(orderinfo)
 		// state.order_sn = order_sn
-		let {order_sn,title,dispatch_price,swift_no,address_id,buyer_name,price} = orderinfo
+		let {order_sn,title,dispatch_price,swift_no,address_id,buyer_name,price,create_time,send_time,finish_time} = orderinfo
 		uni.setStorage({
 			key:"ordertitle",
 			data:{
@@ -388,7 +469,13 @@ let mutations = {
 				//用户名称
 				buyer_name,
 				//订单总价
-				price
+				price,
+				//订单创建时间
+				create_time,
+				//发货时间
+				send_time,
+				//完成时间
+				finish_time
 			}
 		})
 		uni.navigateTo({
@@ -566,8 +653,6 @@ let mutations = {
 	},
 	
 	
-	
-	
 	/*----评价---*/
 	//获取外面的待评价和已评价的列表
 	getevaluationlist(state,evaluationobj){
@@ -648,6 +733,136 @@ let mutations = {
 				}
 			}
 		})
+	},
+	
+	
+	
+	/***优惠券***/
+	//请求优惠券的列表
+	getallcouponslist(state,couponsobj){
+		const _this = this
+		_this.commit("gettokey")
+		// console.log(couponsobj)
+		let {topindex,bottomindex} = couponsobj
+		if(bottomindex==0){
+			//这是店铺的
+			uni.request({
+				url:`${Requestpath}activity/getUserStoreCouponList`,
+				method:"POST",
+				data:{
+					token:state.tokey,
+					sid:-2,
+					page:1,
+					pageSize:10
+				},
+				success(res) {
+					if(res.data.code==0){
+						state.couponslist = res.data.data.list
+					}
+				}
+			})
+		}else{
+			//这是平台的
+			uni.request({
+				url:`${Requestpath}activity/getUserPlatformCouponList`,
+				method:"POST",
+				data:{
+					token:state.tokey,
+					page:1,
+					pageSize:10
+				},
+				success(res) {
+					if(res.data.code==0){
+						state.couponslist = res.data.data.list
+					}	
+				}
+			})
+		}
+	},
+	
+	
+	/***品牌***/
+	//获取品牌列表信息
+	getgetBrandList(state,Brandloadobj){
+		let {Brandloadbools} = Brandloadobj
+		const _this = this
+		//这是用于控制 加载的图标是否出来
+		if(Brandloadbools){
+			state.Brandloadbool = false
+		}
+		//这是请求品牌列表的id 通过id 去请求其他的列表
+		uni.request({
+			url:`${Requestpath}brand/getBrandList`,
+			data:{
+				page:state.Brandpage,
+				pageSize:1
+			},
+			success(res) {
+				if(res.data.code==0){
+					//创建 两个变量 arrlist开始的时候等于 在state定义的数组
+					//因为最后的时候 数据都会增加到state.BrandList 这样可以实现分页
+					let arrlist = state.BrandList
+					//新创建一个变量 用于每次存储数据
+					let arr = []
+					//这里是实现分页的效果
+					if(state.Brandpage>1){
+						// console.log(arrlist)
+						arrlist = arrlist.concat(res.data.data.list)
+					}else{
+						arrlist = res.data.data.list
+					}
+					//进行遍历热卖榜单的数据
+					arrlist.forEach((item,index)=>{
+						arr.push(item)
+						//这里请求
+						uni.request({
+							url:`${Requestpath}brand/getBrandGoodSalesTopList`,
+							data:{
+								brand_id:item.brand_id,
+								limit:3
+							},
+							success(res) {
+								//这里的判断为了判断有的数据 没有值
+								if(res.data.code==0){
+									arr[index].Brandonlist = res.data.data.list
+								}else{
+									arr[index].Brandonlist = []
+								}
+								//这里请求下面6个小商品的数据
+								uni.request({
+									url:`${Requestpath}brand/getRandomBrandGoodList`,
+									data:{
+										brand_id:item.brand_id,
+										limit:6
+									},
+									success(reslist) {
+										//这里的判断为了判断有的数据 没有值
+										if(reslist.data.code==0){
+											arr[index].Brandonlists = reslist.data.data.list
+										}else{
+											arr[index].Brandonlists = []
+										}
+										if(Brandloadbools==false){
+											setTimeout(()=>{
+												state.Brandloadbool = true
+											},1500)
+										}else{
+											state.Brandloadbool = true
+										}
+									}
+								})
+							}
+						})
+					})
+					state.BrandList = arr
+				}
+			}
+		})
+	},
+	//当品牌下拉加载的时候
+	scrolltolower(){
+		state.Brandpage++
+		this.commit("getgetBrandList",{Brandloadbools:false})
 	}
 }
 

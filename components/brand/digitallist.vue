@@ -1,108 +1,103 @@
 <template>
-	<view class="wrapBox">
-		<view class="digitallist">
-			<!-- 上面的标题 -->
-			<view>
-				<view class="special">
-					<view class="speTltBox">
-						<view class="speTlt">手机数码</view>
-					</view>
-				</view>
-				<!-- 数码榜单的排名展示 -->	
-				<view class="flex_Digitallistdisplay">
-					<view class="Digitallistdisplay">
-						<view class="headline"> 
-							<view class="headline_text">数码榜单</view>
+	<view>
+		<!-- v-if="this.$store.state.Brandloadbool" -->
+		<view v-if="this.$store.state.Brandloadbool">
+		<view class="wrapBox" 
+			v-for="(item,index) in this.$store.state.BrandList" 
+			:key="index"
+		>
+			<view class="digitallist">
+				<!-- 上面的标题 -->
+				<view>
+					<view class="special">
+						<view class="speTltBox">
+							<view class="speTlt">{{item.brand_name}}</view>
 						</view>
-						<!-- 装所有商品的盒子 -->
-						<view class="details">
-							<!-- 每一个商品 -->
-							<view class="Goody" v-for="(item,index) in Digital" :key='index'>
-								<!-- 展示图片 -->
-								<view class="goodsImg" :style="{backgroundImage:'url('+item.goodUrl+')'}">
-									<image class="plate" :src="item.platImg" mode=""></image>
-								</view>
-								<!-- 详细介绍 -->
-								<view class="minute">
-									<view class="concept">{{item.concept}}</view>
-									<view class="price">￥{{item.price}}</view>
+					</view>
+					<!-- 数码榜单的排名展示 -->	
+					<view class="flex_Digitallistdisplay">
+						<view class="Digitallistdisplay">
+							<view class="headline"> 
+								<view class="headline_text">热卖榜单</view>
+							</view>
+							<!-- 装所有商品的盒子 -->
+							<view class="details">
+								<!-- 每一个商品 -->
+								<view class="Goody"
+									v-for="(itemSales,indexSales) in item.Brandonlist" 
+									:key='indexSales'
+									:data-g_id="itemSales.good_id"
+									:data-s_id="itemSales.store_id"
+									@tap="Brandonlistshopdefault"
+								>
+									<!-- 展示图片 -->
+									<view class="goodsImg" :style="{backgroundImage:'url('+'http://hbk.huiboke.com'+itemSales.good_pic+')'}">
+										<!-- <image class="plate" :src="item.platImg" mode=""></image> -->
+									</view>
+									<!-- 详细介绍 -->
+									<view class="minute">
+										<view class="concept">{{itemSales.good_title}}</view>
+										<view class="price">￥{{itemSales.good_promotion_price}}</view>
+									</view>
 								</view>
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
-		</view>
-		<view class="wrap">
-			<view class="productlist">
-				<!-- 装商品的大盒子 -->
-				<view class="produBox">
-					<!-- 每个商品的盒子 -->
-					<view class="goodsBox" v-for="(item,index) in produGooBox" :key='index'>
-						<image :src="item.proImg" mode=""></image>
-						<view class="Gootext">{{item.protText}}</view>
+			<view class="wrap">
+				<view class="productlist">
+					<!-- 装商品的大盒子 -->
+					<view class="produBox">
+						<!-- 每个商品的盒子 -->
+						<view class="goodsBox" 
+							v-for="(itemlists,indexlists) in item.Brandonlists" 
+							:key='indexlists'
+							:data-g_id="itemlists.good_id"
+							:data-s_id="itemlists.store_id"
+							@tap="Brandonlistsshopdefault"
+						>
+							<image :src="'http://hbk.huiboke.com'+itemlists.good_pic" mode=""></image>
+							<view class="Gootext">{{itemlists.good_title}}</view>
+						</view>
 					</view>
 				</view>
 			</view>
 		</view>
+		</view>
+		<loading v-if="this.$store.state.Brandloadbool==false"></loading>
 	</view>
 </template>
 
 <script>
-	
+	const app = getApp()
 	export default {
 		data() {
 			return {
-				 Digital:[{
-					 goodUrl:"/static/brand/cellphone.png",
-					 platImg:'/static/brand/goldmedal.png',
-					 concept:'华为P40 Pro',
-					 price:7344.00
-				},
-				{
-					 goodUrl:"/static/brand/cellphone.png",
-					 platImg:'/static/brand/silvermedal.png',
-					 concept:'华为P40 Pro',
-					 price:9000.00
-				},
-				{
-					 goodUrl:"/static/brand/cellphone.png",
-					 platImg:'/static/brand/coppermedal.png',
-					 concept:'华为P40 Pro',
-					 price:9541.00
-				}],
-				produGooBox:[
-					{
-						proImg:'/static/brand/phonedisplay.png',
-						protText:'苹果'
-					},
-					{
-						proImg:'/static/brand/phonedisplay.png',
-						protText:'苹果'
-					},
-					{
-						proImg:'/static/brand/phonedisplay.png',
-						protText:'苹果'
-					},
-					{
-						proImg:'/static/brand/phonedisplay.png',
-						protText:'苹果'
-					},
-					{
-						proImg:'/static/brand/phonedisplay.png',
-						protText:'苹果'
-					},
-					{
-						proImg:'/static/brand/phonedisplay.png',
-						protText:'苹果'
-					}
-				]
+				// BrandList:[],
+				// Brandloadbool:false
 			}
 		},
 		methods: {
-			
+			//这是点击热卖榜单
+			Brandonlistshopdefault(e){
+				let {g_id,s_id} = e.currentTarget.dataset
+				// console.log(g_id,s_id)
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+				})
+			},
+			//这是点击热卖榜单下面的6张图
+			Brandonlistsshopdefault(e){
+				let {g_id,s_id} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+				})
+			}
+		},
+		created() {
+			this.$store.commit("getgetBrandList",{Brandloadbools:true})
 		}
-		
 	}
 </script>
 
@@ -179,8 +174,13 @@
 							justify-content: center;
 							flex-wrap: wrap;
 							.concept{
-								font-size: 32rpx;
+								font-size: 24rpx;
 								margin: 18rpx 0 0rpx;
+								display: -webkit-box;
+								-webkit-box-orient: vertical;
+								-webkit-line-clamp: 2;
+								overflow: hidden;
+								padding:0 8rpx;
 							}
 							.price{
 								color: red;
@@ -202,24 +202,35 @@
 			.produBox{
 				width: 710rpx;
 				display: flex;
-				justify-content: space-between;
+				// justify-content: space-between;
 				flex-wrap: wrap;
 				// 每个商品的盒子
 				.goodsBox{
 					width: 235rpx;
-					height: 290rpx;
+					// height: 290rpx;
 					background-color: #fff;
 					display: flex;
 					flex-wrap: wrap;
 					margin-top: 10rpx;
 					border-radius: 10rpx;
 					justify-content: center;
+					padding-bottom:10rpx;
+					margin-right:5rpx;
+					&:nth-child(3n){
+						margin-right:0;
+					}
 					image{
 						width: 100%;
 						height: 220rpx;
 					}
 					.Gootext{
 						margin-top: 10rpx;
+						display: -webkit-box;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp: 2;
+						overflow: hidden;
+						padding:0 10rpx;
+						font-size: 24rpx;
 					}
 				}
 			}

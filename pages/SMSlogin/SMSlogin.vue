@@ -38,7 +38,7 @@
 			return {
 				countdowntext:"验证码",
 				wait:60,
-				bool:true,
+				bool:false,
 				phone:"",
 				times:null
 			}
@@ -46,14 +46,21 @@
 		methods: {
 			//点击验证码时
 			countdown(){//
+				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
 				this.regphone()
 				//这个发起请求获取验证码
-				let json = {
-					mobile:this.phone,
-					type:1
+				if(this.phone.match(userphone)){
+					console.log("验证成功")
+					
+					let json = {
+						mobile:this.phone,
+						type:1
+					}
+					app.globalData.VerificationCode(json)
+					this.time()
+				}else{
+					return 
 				}
-				app.globalData.VerificationCode(json)
-				this.time()
 			},
 			//验证手机号
 			validationphone(){
@@ -77,9 +84,7 @@
 			},
 			time(){
 				this.bool = true
-				
 				let {countdowntext,wait} = this.$data
-				// console.log(countdowntext,wait)
 					this.times = setInterval(()=>{
 						wait--
 						// console.log(wait)

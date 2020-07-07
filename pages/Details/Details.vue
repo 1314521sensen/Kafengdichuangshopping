@@ -1,9 +1,28 @@
 <template>
 	<view class="Details">
 		<detailsbanner :swiperList="swiperList" height="720"></detailsbanner>
-		<pricetitle :pic="pic" :region="region" :storeid="storeid" :tokey="tokey" :couplebool="couplebool"></pricetitle>
+		<pricetitle 
+			:pic="pic" 
+			:region="region" 
+			:storeid="storeid" 
+			:tokey="tokey" 
+			:couplebool="couplebool"
+			:good_state="good_state"
+			:good_verify="good_verify"
+			:good_delete="good_delete"
+		></pricetitle>
 		<imgs :imglist="good_content_images"></imgs>
-		<bottomcar :pic="pic" imgs="/static/cart/01.webp" :tokey="tokey" :gid="gid" :storeid="storeid" :couplebool="couplebool"></bottomcar>
+		<bottomcar 
+			:pic="pic" 
+			imgs="/static/cart/01.webp" 
+			:tokey="tokey" 
+			:gid="gid" 
+			:storeid="storeid" 
+			:couplebool="couplebool"
+			:good_state="good_state"
+			:good_verify="good_verify"
+			:good_delete="good_delete"
+		></bottomcar>
 	</view>
 </template>
 
@@ -33,6 +52,9 @@
 				storeid:"",
 				good_content_images:[],//这是商品详情页的内容
 				couplebool:"",
+				good_state:"",//商品的状态 是否下架 
+				good_verify:"",//是否通过
+				good_delete:"",//是否删除
 			}
 		},
 		methods: {
@@ -69,10 +91,14 @@
 				success(res) {
 					// console.log(res.data.data.good_content_images)
 					if(res.data.code==0){
-						_this.swiperList = JSON.parse(res.data.data.good_images)
+						console.log(res)
+						_this.good_state = res.data.data.good_state
+						_this.good_verify = res.data.data.good_verify
+						_this.good_delete = res.data.data.good_delete
+						_this.swiperList = JSON.parse(res.data.data.good_images?res.data.data.good_images:'[]')
 						_this.pic = res.data.data
 						_this.good_content_images = res.data.data.good_content_images
-						// console.log(_this.pic)
+						_this.storeid = res.data.data.store_id
 						//这和下面没关系 这块处理用户足迹的
 						//从这
 						//当用户点击进来的时候代表已经游览了商品足迹

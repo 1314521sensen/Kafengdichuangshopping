@@ -5,8 +5,19 @@
 		<scroll-view scroll-y="true" class="scroll-view">
 			<view class="top">	
 				<view class="bg-title">
-					<text class="non-payment">等待买家付款</text>
-					<text class="timeRemaining">剩余{{min}}分{{miao}}秒自动取消订单</text>
+					<!-- orderstatus -->
+					<text class="non-payment" v-if="orderstatus==-1">订单已取消</text>
+					<text class="non-payment" v-if="orderstatus==0">等待买家付款</text>
+					<text class="non-payment" v-if="orderstatus==1">订单已付款</text>
+					<text class="non-payment" v-if="orderstatus==2">订单已发货</text>
+					<text class="non-payment" v-if="orderstatus==3">订单已完成</text>
+					<text v-if="orderstatus==0">30分钟内自动取消订单</text>
+					<!-- <xqcountdown 
+						:startTime="String(this.$store.state.Notcreated)" 
+						:endTime="String(this.$store.state.Notpaying)"
+						v-if="orderstatus==0"
+						@Endcountdown="Endcountdown"
+					></xqcountdown> -->
 				</view>
 			</view>
 			<view class="contactWay">
@@ -91,6 +102,8 @@
 	import Selectexpresscompany from "@/components/Commoditycomponent/Selectexpresscompany.vue"
 	//引入跳到物流的页面
 	import Deliveryaddressshow from "@/components/Temporarynonpayment/Deliveryaddressshow.vue"
+	//引入倒计时的插件
+	import xqcountdown from "@/components/xq-countdown/xq-countdown.vue"
 	const app = getApp()
 	export default {
 		data() {
@@ -108,14 +121,20 @@
 				rescitys:"",//这是市
 				area:"",//这是县
 				orderstatus:"",
-				price:""
+				price:"",
+				startTime:"",//订单的创建时间
+				endTime:"",//订单的发货时间
+				Completiontime:"",//订单的完成时间
 			}
 		},
 		components:{
 			// actionbar,
 			shopoderbottom,
 			Selectexpresscompany,
-			Deliveryaddressshow
+			Deliveryaddressshow,
+			xqcountdown
+		},
+		methods:{
 		},
 		//后期说
 		onLoad(opction) {
@@ -134,8 +153,15 @@
 					_this.s_title = res.data.title
 					_this.dispatch_price = res.data.dispatch_price
 					_this.order_sn = res.data.order_sn
-					_this.swift_no = res.data.swift_no,
+					_this.swift_no = res.data.swift_no
 					_this.price = res.data.price
+					_this.startTime = res.data.create_time //这是创建时间
+					_this.endTime = res.data.send_time //这是发货时间
+					_this.Completiontime = res.data.finish_time //这是完成时间
+					//拿到创建时间 转换成时间戳 弄个倒计时
+					let date = new Date(_this.startTime)
+					let createdTime = date.getTime()
+					
 					//请求订单详情信息
 					uni.getStorage({
 						key:"bindtokey",
@@ -148,16 +174,18 @@
 									sn:res.data.order_sn
 								},
 								success(resinfo) {
+									// console.log(restokey.data)
+									// console.log(res.data.order_sn)
 									if(resinfo.data.code==0){
 										//获取快递的编码
 										if(resinfo.data.data.express_sn){
-											
 											uni.setStorage({
 												key:"express_sn",
 												data:[resinfo.data.data.express_sn]
 											})
 										}
 										_this.orderstatus = resinfo.data.data.status
+										_this.$store.commit("getendTime",{startTime:createdTime,endTime:_this.endTime,Completiontime:_this.Completiontime,orderstatus:_this.orderstatus,order_sn:_this.order_sn})
 										//通过订单详情的信息获取收货地址的详情
 										uni.request({
 											url:`${app.globalData.Requestpath}user/getShippingAddress`,
@@ -167,7 +195,7 @@
 												address_id:resinfo.data.data.address_id,
 											},
 											success(resaddinfo) {
-												// console.log(resaddinfo)
+												console.log(resaddinfo,"收货地址详情")
 												if(resaddinfo.data.code==0){
 													//这是收货人的名称
 													_this.buyer_name = resaddinfo.data.data.street_number

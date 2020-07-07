@@ -100,7 +100,7 @@
 						},
 						success:(res)=>{
 							if(res.data.code==0){
-								this.selectionlistareindex[1] = res.data.data
+								this.selectionlistareindex[1] = res.data.data								
 								this.TabCur = 1
 							}
 						}

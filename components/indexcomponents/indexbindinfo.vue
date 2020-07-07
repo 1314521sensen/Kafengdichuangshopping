@@ -31,7 +31,12 @@
 						<view class="cu-bar bg-white justify-end">
 							<view class="action btn">
 								<button class="cu-btn line-green text-green" form-type="submit">{{submmit}}</button>
-								<button class="cu-btn line-green text-red" @tap="smsreg(item.value,xiabiao)" :disabled="disabled" :style="{'display':styleregbool}">{{item.righttext}}</button>
+								<button 
+									class="cu-btn line-green text-red"
+									@tap="smsreg(item.value,xiabiao)" 
+									:disabled="disabled" 
+									:style="{'display':styleregbool}"
+								>{{item.righttext}}</button>
 							</view>
 						</view>
 					</view>
@@ -111,6 +116,7 @@
 					if(smsregs!==""){ //如果邮箱号为空的话
 						if(reg.test(smsregs)){
 							this.regbool = true
+							this.disabled = true
 						}else{//如果验证不正确就让 list[0][0].value = smsregs刚才输入的值 引入后面的弹窗被挡住了只能这样 要不然让用户重新输入 用户会很烦
 							this.list[0][0].value = smsregs
 							this.hideModal()//然后进行关闭
@@ -121,6 +127,7 @@
 					}else{
 						this.hideModal()
 						this.showtext("请输入邮箱号")
+						this.disabled = false
 						return 
 					}
 				}else{//下标等于2  验证新邮箱号
@@ -172,8 +179,9 @@
 			},
 			//这是验证码
 			smsreg(smsregs){
+				console.log(smsregs)
 				this.regsms(smsregs)
-				this.disabled = true
+				// this.disabled = true
 				if(this.regbool){//验证全部通过就向用户发送验证码 //http://hbk.huiboke.com/api/common/getEmailCaptcha
 				// console.log(this.id)
 					//这里不管是下标0还是下1都要这行

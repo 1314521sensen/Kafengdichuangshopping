@@ -1,6 +1,7 @@
 <template>
 	<view class="detailscar">
-		<view class="cu-bar bg-white tabbar border shop">
+		<!-- v-if这里判断时候为正常的商品 -->
+		<view class="cu-bar bg-white tabbar border shop" v-if="parseInt(good_state)==1 && parseInt(good_verify)==1 && parseInt(good_delete)==0">
 				<button class="action" open-type="contact" @tap="Enterthestore">
 					<view class="cuIcon-shop text-green">
 						<!-- <view class="cu-tag badge"></view> -->
@@ -187,7 +188,7 @@
 				this.modalName = e
 			}
 		},
-		props:["pic","imgs","gid","storeid","couplebool"],
+		props:["pic","imgs","gid","storeid","couplebool","good_state","good_verify","good_delete"],
 		created(){
 			const _this = this
 			uni.getStorage({

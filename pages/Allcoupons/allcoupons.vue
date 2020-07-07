@@ -10,7 +10,7 @@
 					</view>
 				</view>
 				<!--  v-if="items==coupons[TabCur]" :couponslist="couponslist" -->
-			<securitiesbottom @indexs="couponstindex" :couponslist="couponslist"></securitiesbottom>
+			<securitiesbottom @storeIsStillAndPlatform="storeIsStillAndPlatform" :TabCur="TabCur"></securitiesbottom>
 			</scroll-view>
 		<!-- </view> -->
 	</view>
@@ -33,10 +33,7 @@
 					"已使用",
 					"已过期"
 				],
-				getchildlistdata:[],
-				couponslist:[],
-				tokey:0,
-				couponstindexs:0
+				bottomindex:0,
 			}
 		},
 		methods:{
@@ -45,154 +42,23 @@
 				this.items = items
 				this.TabCur = id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-				this.platformcouponsdata(this)
-				this.storecouponsdata(this)
+				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex)})
 			},
-			//封装个函数用于请求优惠券的数据
-			platformcouponsdata(_this){
-				//这个是获取平台优惠券的接口
-				// console.log(this.couponstindexs)
-				if(parseInt(this.couponstindexs)==1){
-					uni.request({
-						url:`${app.globalData.Requestpath}activity/getUserPlatformCouponList`,
-						method:"POST",
-						data:{
-							token:_this.tokey,
-							page:1,
-							pageSize:5
-						},
-						success(Storecoupon){
-							if(Storecoupon.data.code==0){
-								let arr = []
-								Storecoupon.data.data.list .forEach((item,index)=>{
-									//这是处理的图片
-									item.coupon_img = app.globalData.imgyuming+item.coupon_img
-									//当用户点击的未使用的
-									// console.log(item.status,typeof item.status)
-									if(_this.TabCur==0){
-										//未使用
-										//当状态为1的时候 证明未使用
-										if(item.status==1){
-											console.log(item,"未使用")
-											// _this.couponslist = item
-											
-											arr.push(item)
-											_this.couponslist = arr
-										}else{
-											//如果不等于1 那么请求回来的肯定为空
-											_this.couponslist = []
-										}
-									}else if(_this.TabCur==1){
-										console.log("已使用")
-										//已使用
-										if(item.status==2){
-											//已使用的语句没进来
-											// console.log(Storecoupon.data.data.list)
-											// let arr = []
-											arr.push(item)
-											_this.couponslist = arr
-										}else{
-											_this.couponslist = []
-										}
-									}else if(_this.TabCur==2){
-										//已过期
-										if(item.status==3){
-											// let arr = []
-											arr.push(item)
-											_this.couponslist = arr
-										}else{
-											_this.couponslist = []
-										}
-									}
-								})
-							}
-						}
-					})
-				}
-			},
-			storecouponsdata(_this){
-				//获取店铺优惠券
-				if(parseInt(_this.couponstindexs)==0){
-					uni.request({
-						url:`${app.globalData.Requestpath}activity/getUserStoreCouponList`,
-						method:"POST",
-						data:{
-							token:_this.tokey,
-							sid:-2,	
-							page:1,
-							pageSize:10
-						},
-						success(resDiscountstores) {
-							if(resDiscountstores.data.code==0){
-								let arr = []
-								// console.log(resDiscountstores)
-								// _this.couponslist[0].list = resDiscountstores.data.data.lists
-								resDiscountstores.data.data.list .forEach((item,index)=>{
-									item.coupon_img = app.globalData.imgyuming+item.coupon_img
-									if(_this.TabCur==0){
-										//未使用
-										if(item.status==1){
-											// console.log(item,"未使用")
-											
-											arr.push(item)
-											// console.log(arr)
-											_this.couponslist = arr
-											// console.log(_this.couponslist)
-										}else{
-											_this.couponslist = []
-										}
-									}else if(_this.TabCur==1){
-										console.log("已使用")
-										if(item.status==2){
-											arr = []
-											arr.push(item)
-											// console.log(arr)
-											_this.couponslist = arr
-										}else{
-											_this.couponslist = []
-										}
-									}else if(_this.TabCur==2){
-										console.log("已过期")
-										if(item.status==3){
-											arr = []
-											arr.push(item)
-											// console.log(arr)
-											_this.couponslist = arr
-										}else{
-											_this.couponslist = []
-										}
-									}
-								})
-							}
-						}
-					})
-				}
-				
-			},
-			//者握手
-			couponstindex(e){
-				this.couponstindexs = e
-				this.platformcouponsdata(this)
-				this.storecouponsdata(this)
+			//这是子组件传过来的 判断点击了平台 还是店铺
+			storeIsStillAndPlatform(e){
+				this.bottomindex = e
+				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex)})
 			}
-		},
-		onLoad(){
-			this.statusBar = app.globalData.statusBar
-			
 		},
 		components:{
 			securitiesbottom
 		},
-		created(){
-			const _this = this
-			uni.getStorage({
-				key:"bindtokey",
-				success(res){
-					_this.tokey = res.data
-					_this.platformcouponsdata(_this)
-					_this.storecouponsdata(_this)
-				}
-			})
+		created() {
+			//初始化 优惠券列表
+			this.$store.commit("getallcouponslist",{topindex:0,bottomindex:0})
+		},
+		onLoad() {
+			this.statusBar = app.globalData.statusBar
 		}
 	}
 </script>

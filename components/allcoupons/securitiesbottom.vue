@@ -4,19 +4,20 @@
 		
 			<!-- {{item}} -->
 			<view class="couponstitle">
+				<!-- @tap="CouponClassification" -->
 				<view 
 					class="couponstitletext" 
 					v-for="(item,index) in couponstitlelist" 
 					:key="index"
 					:class="couponstindex==index?'couponstitletextactive':''"
-					@tap="CouponClassification"
 					:data-indexs="index"
+					@tap="CouponClassification"
 				>{{item}}</view>
 			</view>
 			<view class="discount_coupon">
 				<scroll-view scroll-y="true" class="scroll-Y">
-					<view class="demo_fa" v-for="(item,index) in couponslist" :key="index">
-						<view class="discount_coupon_demo">
+					<view class="demo_fa" v-for="(item,index) in this.$store.state.couponslist" :key="index">
+						<view class="discount_coupon_demo" v-if="item.status==parseInt(TabCur)+1">
 							<view class="demo_left">
 								<view class="demo_left_price">
 									<text class="price_left" v-text="item.money"></text>
@@ -24,10 +25,10 @@
 								</view>
 								
 									<view class="demo_left_time">
-										<view class="left_indate ">
+										<!-- <view class="left_indate ">
 											<text>有效期至:</text>
-										<text>{{item.stop_time}}</text>
-										</view>
+											<text>{{item.stop_time}}</text>
+										</view> -->
 										
 										<view class="right_bottom">
 											<!-- 这里在判断是0元还是必须满多少钱使用 如果是0元===无限制 -->
@@ -40,15 +41,15 @@
 									
 								
 							</view>
-							<view class="demo_right">
+							<view class="demo_right" @tap="couponsUse">
 								<text class="right_center">
 									立即使用
 								</text>
 							</view>
 						</view>
 						<view class="particulars" v-if="index==tabcurindex">
-							<p><text>优惠券用途:</text><text>卡时间来得及法拉盛京东</text></p>
-							<p><text>优惠券号：</text><text>asdfaasdf</text></p>
+							<view><text>有效期:</text><text>{{item.stop_time}}</text></view>
+							<!-- <p><text>优惠券号：</text><text>asdfaasdf</text></p> -->
 						</view>
 					</view>
 				</scroll-view>
@@ -69,51 +70,29 @@
 				],
 				couponstindex:0,
 				show:false,
-				tabcurindex:-1
+				tabcurindex:-1,
 			}
 		},
 		methods:{
-			receive(e){
-				let storeid = parseInt(e.currentTarget.dataset.storeid);
-				// console.log(typeof storeid)
-				if(storeid!==0){
-					uni.reLaunch({
-						url:`/pages/Store/store?storeid=${storeid}`
-					})
-				}else{
-					uni.reLaunch({
-						url:`/pages/index/index`
-					})
-				}
-				
-				// this.addlist.push(this.couponslist[this.modalName])
-				// //将数据发送到父级 allcoupons中
-				// this.$emit("getchildlist",this.addlist)
-			},
-			// hideModal(e) {
-			// 	//隐藏窗口
-			// 	//当用户点击了确定 将提示框关闭
-			// 	this.modalName = null;
-			// 	// 关闭以后在来个我文本提示框
-			// 	uni.showToast({
-			// 		title:"优惠券领取成功",
-			// 		icon:"none"
-			// 	})
-			// },
 			CouponClassification(e){
-				let indexs = e.currentTarget.dataset.indexs
+				//判断点击的店铺的  还是平台的
+				// console.log(e)
+				let {indexs} = e.currentTarget.dataset
 				this.couponstindex = indexs
-				this.$emit("indexs",this.couponstindex)
+				this.$emit("storeIsStillAndPlatform",indexs)
+				
+			},
+			couponsUse(){
+				uni.switchTab({
+					url:`/pages/index/index`
+				})
 			},
 			particularsClick(e){
-				// let indexs = e.currentTarget.dataset.indexs
-				this.tabcurindex = e.currentTarget.dataset.indexs
-				this.show = !this.show
-				console.log(this.show)
-				
+				let {indexs,bool} = e.currentTarget.dataset
+			    this.tabcurindex = indexs
 			}
 		},
-		props:["couponslist"]
+		props:["TabCur"]
 	}
 </script>
 
@@ -162,7 +141,8 @@
 				justify-content: space-between;
 				.demo_left_price{
 					height: 100%;
-					width: 40%;
+					// width: 40%;
+					flex:1;
 					line-height: 175rpx;
 					text-align: center;
 					color: white;
@@ -173,8 +153,12 @@
 					}
 				}
 				.demo_left_time{
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					// flex-wrap: wrap;
 					color: white;
-					width: 60%;
+					// width: 60%;
 					height: 100%;
 					margin-left: 10rpx;
 					.left_indate {

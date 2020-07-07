@@ -3,9 +3,16 @@
 		<search :showbtn="true"></search>
 		<scroll-view :scroll-y="true" class="top" @scrolltolower="scrolltolower">
 				<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
-					<view class="cu-item" :class="index==TabCur?'nav-color cur':''" v-for="(item,index) in nanlist" :key="index" @tap="tabSelect" :data-id="index">
-						{{item.name}}
-					</view>
+					<view 
+						class="cu-item" 
+						:class="index==TabCur?'nav-color cur':''" 
+						v-for="(item,index) in nanlist" 
+						:key="index" 
+						@tap="tabSelect" 
+						:data-id="index"
+					>
+					      {{item.gc_short}}
+					     </view>
 				</scroll-view>
 				<banner v-if="TabCur<1" :swiperList="swiperList"></banner>
 				<ScratchableLatex :cuIconList="cuIconList"></ScratchableLatex>
@@ -43,30 +50,7 @@
 		data() {
 			return {
 				nanlist:[
-				     {
-				      name:"首页"
-				     },
-				     {
-				      name:"运动"
-				     },
-				     {
-				      name:"男装"
-				     },
-				     {
-				      name:"鞋靴"
-				     },
-				     {
-				      name:"食品"
-				     },
-				     {
-				      name:"医疗"
-				     },
-				     {
-				      name:"电器"
-				     },
-				     {
-				      name:'女装'
-				     }
+				     
 				],
 				TabCur: 0,
 				scrollLeft: 0,
@@ -292,6 +276,17 @@
 					if(res.data.code==0){
 						_this.swiperList = res.data.data
 					}
+				}
+			})
+			
+			// 头部导航栏的   
+			uni.request({
+				url:`${app.globalData.Requestpath}common/getOneLevelCategoryList`,
+				data:{
+					pid:0
+				},
+				success(res){
+				 _this.nanlist = res.data.data
 				}
 			})
 		}

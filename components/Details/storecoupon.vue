@@ -82,18 +82,19 @@
 					})
 				}else{//否则就是订单详情里面的使用优惠卷
 					//传给订单那个组件
-					// console.log(coupontypeid,dingdanitem)
+					// console.log("这是订单详情里面的")
+						console.log(dingdanitem)
 						// console.log("这是订单详情过来的")
 						_this.modalName = null
 						// //这是拿到使用的文本
 						_this.changetitlemsgtext = dingdanitem.coupon_name
+						console.log(_this.storeid)
 						let obj = {}
 						let arr = []
-						obj.sid = dingdanitem.store_id
+						obj.sid = _this.storeid
 						obj.c_id = dingdanitem.id
 						obj.c_type = dingdanitem.coupon_type
 						obj.money = dingdanitem.money
-						console.log(obj)
 						// console.log([obj])
 						arr[0] = obj
 						// console.log(arr)
@@ -137,7 +138,6 @@
 						c_category:_this.couplebooltext
 					},
 					success(res) {
-						console.log(res)
 						if(res.data.code==0){
 							_this.list = res.data.data
 							// console.log(_this.list)

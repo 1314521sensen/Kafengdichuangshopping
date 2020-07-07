@@ -130,11 +130,9 @@
 			},
 			//这是换一批事件
 			batch(){
-				console.log(111)
 				this.giftlist(8)
 			},
 			giftlist(nums){
-				console.log("这一步")
 				const _this = this
 				// 礼品的数据
 				uni.request({
@@ -144,7 +142,6 @@
 						limit:nums
 					},
 					success(res){
-						console.log(res)
 						if(res.data.code==0){
 							_this.list = res.data.data
 						}else{
@@ -265,12 +262,13 @@
 						display: flex;
 						justify-content: space-between;
 						.discounts-left{
-							width: 25%;
+							// width: 25%;
 							height: 110rpx;
 							// background-color: red;
 							line-height: 90rpx;
 							text-align: center;
 							border-right: 2rpx dotted #FFFFFF;
+							min-width: 30%;
 							.left-text-one{
 								color: white;
 								font-size: 20rpx;		

@@ -23,7 +23,7 @@
 		width: 100%;
 		.imgs{
 			width: 100%;
-			margin:20rpx auto 0;
+			margin:4rpx auto 0;
 			image{
 				width: 100%;
 			}

@@ -13,49 +13,49 @@
 					{
 					badge: 120,
 					name: '团长申请',
-					imgs:"/static/Settheicon/Promotedistribution.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Promotedistribution.png",
 					Routinghopname:"Promotedistribution",
 					url:"/pages/applygroup/applygroup"
 				},
 				{
 					badge: 1,
 					name: '签到',
-					imgs:"/static/Settheicon/Signin.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Signin.png",
 					Routinghopname:"Signin",
 					url:"/pages/signin/signin"
 				}, {
 					badge: 22,
 					name: '收货地址',
 					url:"/pages/addressTo/addressTo",
-					imgs:"/static/Settheicon/Shippingaddress.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Shippingaddress.png",
 					Routinghopname:"userShippingaddress"
 				},  {
 					badge: 0,
 					name: '我的拼单',
-					imgs:"/static/Settheicon/Myspelllist.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Myspelllist.png",
 					Routinghopname:"userMyspelllist",
 					url:"/pages/myspelllist/myspelllist"
 				}, {
 					badge: 0,
 					name: '我的收藏',
 					url:"/components/collection/collection",
-					imgs:"/static/Settheicon/Mycollection.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Mycollection.png",
 					Routinghopname:"userMycollection"
 				}, {
 					badge: 0,
 					name: '我的足迹',
 					url:"/components/collection/collection",
-					imgs:"/static/Settheicon/Myfootprint.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Myfootprint.png",
 					Routinghopname:"userMyfootprint"
 				}, {
 					badge: 0,
 					name: '我的咨询',
-					imgs:"/static/Settheicon/Myadvice.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Myadvice.png",
 					Routinghopname:"userMyinquiry"
 				}, {
 					badge: 0,
 					name: '小蜜蜂',
-					imgs:"/static/index/Scratchablelatexicon/Littlebee.gif",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Littlebee.gif",
 					Routinghopname:"userTopupwithdrawal",
 					url:"/pages/Littlebee/Littlebee"
 				},
@@ -63,14 +63,14 @@
 					badge: 0,
 					name: '设置',
 					url:"/components/setcenter/setcenter",
-					imgs:"/static/Settheicon/shezhi.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/shezhi.png",
 					Routinghopname:"userset"
 				},
 				{
 					badge: 0,
 					name: '店铺入驻',
 					url:"/pages/merchant/merchant",
-					imgs:"/static/Settheicon/storehouse.png",
+					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/storehouse.png",
 					Routinghopname:"userset"
 				}
 				],
