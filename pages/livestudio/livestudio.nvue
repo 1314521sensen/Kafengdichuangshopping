@@ -4,10 +4,10 @@
 		<live-pusher 
 			id='livePusher' 
 			ref="livePusher"
-			url="rtmp://39.100.133.222:1935/hbk/6849214"
+			:url="url"
 			mode="FHD"
 			aspect="3:2"
-			:muted="true"
+			:muted="false"
 			:enable-camera="true"
 			:auto-focus="true"
 			:beauty="9"
@@ -15,12 +15,13 @@
 			orientation="vertical"
 			audio-quality="high"
 			device-position="front"
-			:audio-reverb-type="1"
+			:audio-reverb-type="0"
 			:enable-mic="true"
 			:enable-ans="true"
 			audio-volume-type="media"
 			local-mirror="enable"
 			:style="{width:windowwidth+'px',height:windowheight+'px'}"
+			@netstatus="netstatus"
 		>
 		</live-pusher>
 		<cover-view class="coverfather" :style="{width:windowwidth+'px',height:windowheight+'px','padding-top':statusBarHeight+'px'}" @click="Removeevent">
@@ -28,7 +29,13 @@
 				<liveroomtopinfo :Focusshow="false"></liveroomtopinfo>
 			</cover-view>
 			<!-- 这是商品列表 -->
-			<livemiddengoodshoplist :componentheight="windowheight" :componentwidth="windowwidth" paddingbottom="50" v-if="shopbool"></livemiddengoodshoplist>
+			<livemiddengoodshoplist 
+				:componentheight="windowheight" 
+				:componentwidth="windowwidth" 
+				paddingbottom="50" 
+				v-if="shopbool" 
+				:Immediatelygrabbool="false"
+			></livemiddengoodshoplist>
 			
 			<cover-view class="coverfather-bottom" :style="{width:windowwidth+'px',height:(windowheight/2)+'px','padding-bottom':(windowBottom+40)+'px'}">
 				<conver-view class="coverfather-bottom-bottomlist">
@@ -56,6 +63,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	import liveroomtopinfo from "@/components/liveplice/liveroomtopinfo.nvue"
 	import livechatlist from "@/components/liveplice/livechatlist.nvue"
 	import livemiddengoodshoplist from "@/components/livemiddencomponent/livemiddengoodshoplist.nvue"
@@ -76,7 +84,10 @@
 					"这手速可以大萨达撒大师大多大大大大萨达撒",
 					"这手速可以大萨达撒大师大多大大大大萨达撒"
 				],
-				shopbool:false
+				shopbool:false,
+				//临时的变量
+				url:"",
+				
 			}
 		},
 		methods: {
@@ -91,10 +102,24 @@
 				}
 			},
 			share(){
-				uni.shareWithSystem({
-					type:"image",
-					href:"https://uniapp.dcloud.io",
-					imageUrl:"/static/logo.png"
+				// uni.shareWithSystem({
+				// 	type:"image",
+				// 	href:"https://uniapp.dcloud.io",
+				// 	imageUrl:"/static/logo.png"
+				// })
+				uni.share({
+					provider:"weixin",
+					type:2,
+					title:"正在测试分享",
+					scene:"WXSceneSession",
+					summary:"我正在测试分享",
+					imageUrl:"/static/logo.png",
+					success(res){
+						console.log(res,"成功")
+					},
+					fail(err){
+						console.log(err,"失败")
+					}
 				})
 			},
 			Closeby(){
@@ -104,6 +129,9 @@
 				uni.switchTab({
 					url:"/pages/index/index"
 				})
+			},
+			netstatus(e){
+				console.log(JSON.stringify(e))
 			}
 		},
 		created(){
@@ -119,9 +147,9 @@
 		},
 		onReady(){
 			this.context = uni.createLivePusherContext("livePusher", this);
-			// console.log(this.context)
-			// console.log(this.context)
-			//开启推流
+			// // console.log(this.context)
+			// // console.log(this.context)
+			// //开启推流
 			this.context.start()
 			//开启摄像头预览
 			// this.context.startPreview()
@@ -132,6 +160,20 @@
 			liveroomtopinfo,
 			livechatlist,
 			livemiddengoodshoplist
+		},
+		onLoad(opction) {
+			const _this = this
+			// 临时的
+			console.log(opction)
+			let {index,storeid} = opction
+			_this.url = `rtmp://49.232.153.178:1935/live/live0${parseInt(index)+1}`
+			//获取主播在开播前要直播的商品
+			_this.$store.commit("getliveshoplist")
+			
+		},
+		destroyed(){
+			console.log("组件已销毁")
+			this.context.stop()
 		}
 	}
 </script>

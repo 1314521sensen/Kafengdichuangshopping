@@ -1,23 +1,46 @@
 <template>
 	<cover-view class="shoplist" :style="{width:componentwidth+'px',height:componentheight/2+'px'}">
-		<scroller :show-scrollbar="false" scroll-direction="vertical" class="scrollerlist" :style="{height:componentheight/2+'px','padding-bottom':paddingbottom+'px'}">
-			<cover-view class="list-item border-size border-styles" v-for="(item,index) in list" :key="index">
+		<scroller 
+			:show-scrollbar="false" 
+			scroll-direction="vertical" 
+			class="scrollerlist" 
+			:style="{height:componentheight/2+'px','padding-bottom':paddingbottom+'px'}"
+			@loadmore="loadmore"
+			:loadmoreoffset="10"
+		>
+			<cover-view 
+				class="list-item border-size border-styles" 
+				v-for="(item,index) in this.$store.state.liveshoplist" 
+				:key="index" 
+			>
 				<!-- 上面的是列表 -->
 				<cover-view class="item-top">
-					<cover-view class="item-left-img">
-						<cover-image src="../../static/Details/banner1.png" class="item-imgs"></cover-image>
+					<cover-view 
+						class="item-left-img" 
+						@tap="liveshopdefault"
+						:data-g_id="item.good_id"
+						:data-s_id="item.store_id"
+					>
+						<cover-image :src="'http://hbk.huiboke.com'+item.good_pic" class="item-imgs"></cover-image>
+						<cover-view class="itemshopid bg-write border-radiusthirty">
+							<text class="font-size-thirty">{{item.good_id}}</text>
+						</cover-view>
 					</cover-view>
-					<cover-view class="item-right">
+					<cover-view class="item-right"
+						@tap="liveshopdefault"
+						:data-g_id="item.good_id"
+						:data-s_id="item.store_id"
+					>
 						<cover-view class="item-textinfo">
-							<text class="font-size-thirty">卡西欧手表男G-shcok赛车大黄蜂色石英户外运动手表</text>
+							<text class="font-size-thirty">{{item.good_title}}</text>
 						</cover-view>
 						<cover-view class="item-plice">
-							<text class="font-size-thirty textcolor-red">¥299.00</text>
+							<text class="font-size-thirty textcolor-red">{{'¥'+item.good_price}}</text>
 						</cover-view>
 					</cover-view>
 				</cover-view>
 				<!-- 下面是按钮 -->
-				<cover-view class="item-bottom">
+				<cover-view class="item-bottom" v-if="Immediatelygrabbool">
 					<text class="item-button border-plice border-styles text-center font-size-thirty textcolorwrite">马上抢</text>
 				</cover-view>
 			</cover-view>
@@ -30,16 +53,21 @@
 	export default {
 		data(){
 			return {
-				list:[
-					"1",
-					"2",
-					"3",
-					"4",
-					"5"
-				]
 			}
 		},
-		props:["componentheight","componentwidth","paddingbottom"]
+		methods:{
+			liveshopdefault(e){
+				let {g_id,s_id} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}&liveshopstate=liveshopstate`
+				})
+			},
+			//当滚动到底部的时候
+			loadmore(e){
+				this.$store.commit("loadmore")
+			}
+		},	
+		props:["componentheight","componentwidth","paddingbottom","Immediatelygrabbool"]
 	}
 </script>
 
@@ -64,6 +92,7 @@
 		flex-direction:row;
 	}
 	.item-left-img{
+		position: relative;
 		width: 200rpx;
 		/* height:200rpx; */
 		/* background-color:red; */
@@ -72,6 +101,12 @@
 	.item-imgs{
 		width:200rpx;
 		height:200rpx;
+	}
+	.itemshopid{
+		position: absolute;
+		top:5rpx;
+		left:5rpx;
+		padding:14rpx 10rpx;
 	}
 	.item-right{
 		flex:1;

@@ -4,7 +4,7 @@
 			<view class="activity-left">
 				<view class="left-top">
 					<text class="text-one">{{item.textleft}}</text>
-					<image v-if="item.img" src="../../static/indexOne/live.png" mode=""></image>
+					<image v-if="item.img" :src="imgyuming+'live.png'" mode=""></image>
 					<text class="text-two" :style="{'background-image':'linear-gradient('+item.messageTop+','+item.messageBottom+')'}"></div>{{item.message}}</text>
 				</view>
 				<view class="left-center" :style="{'color':item.textcolorleft}" >
@@ -27,12 +27,12 @@
 				<view class="right-center" :style="{'color':item.textcolorright}">
 					<text>{{item.textRight}}</text>
 				</view>
-				<view class="right-bottom">
+				<view class="right-bottom" @tap="rightImg_activity" :data-indexs="index">
 					<view class="img-right">
-						<image src="../../static/indexOne/computer.png" mode=""></image>
+						<image :src="item.imgright[0]" mode=""></image>
 					</view>
 					<view class="img-right">
-						<image src="../../static/indexOne/computer.png" mode=""></image>
+						<image :src="item.imgright[1]" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -44,6 +44,7 @@
 	export default {
 		data() {
 			return {
+				imgyuming:"http://hbk.huiboke.com/uploads/app/image/index/indexone/",
 				list:[
 					{
 						textleft:"惠播客直播",
@@ -63,7 +64,11 @@
 						imgBgTwoTop:"#FFFFFF",
 						imgBgTwoBottom:"#fff1ed",
 						textLeft:"畅想所爱",
-						textRight:"纵向奢华"
+						textRight:"纵向奢华",
+						imgright:[
+							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_left_shopsign.png",
+							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_right_shopsign.png"
+						]
 					},
 					{
 						textleft:"超强折扣",
@@ -83,7 +88,11 @@
 						imgBgTwoTop:"#FFFFFF",
 						imgBgTwoBottom:"#e6ecff",
 						textLeft:"显示甩卖",
-						textRight:"抢即是赚"
+						textRight:"抢即是赚",
+						imgright:[
+							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_left_shopsign.png",
+							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_right_shopsign.png"
+						]
 					},
 					{
 						textleft:"新品特价",
@@ -103,10 +112,24 @@
 						imgBgTwoTop:"#FFFFFF",
 						imgBgTwoBottom:"#f1e2ff",
 						textLeft:"惊喜优惠",
-						textRight:"好货不断"
+						textRight:"好货不断",
+						imgright:[
+							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_left_shopsign.png",
+							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_right_shopsign.png"
+						]
 					}
 				]
-			};
+			}
+		},
+		methods:{
+			rightImg_activity(e){
+				let {indexs} = e.currentTarget.dataset
+				if(parseInt(indexs)==0){
+					uni.navigateTo({
+						url:`/pages/brand/brand`
+					})
+				}
+			}
 		}
 	}
 </script>

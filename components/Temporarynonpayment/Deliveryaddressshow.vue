@@ -17,6 +17,7 @@
 		},
 		methods:{
 			Logisticsinformation(){
+				console.log(111)
 				uni.navigateTo({
 					url:`/pages/logistics/logistics`
 				})

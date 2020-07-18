@@ -3,7 +3,7 @@
 		<view>
 			 <video 
 				id="myVideo"
-				src="rtmp://39.100.133.222:1935/hbk/6849214" 
+				:src="url" 
 				:style="{width:wdith+'px',height :height+ 'px'}"
 				:autoplay="true" 
 				:page-gesture="true" 
@@ -36,7 +36,9 @@
 				width:0,
 				direction:0,
 				statusheight:0,
-				bottomheight:0
+				bottomheight:0,
+				//临时的路径
+				url:"",
 			}
 		},
 		methods: {
@@ -61,6 +63,10 @@
 					_this.bottomheight = res.windowBottom
 				}
 			})
+		},
+		onLoad(opction){
+			let {indexs} = opction
+			this.url = `rtmp://49.232.153.178:1935/live/live0${parseInt(indexs)+1}`
 		}
 	// #endif
 	}

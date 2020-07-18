@@ -45,7 +45,7 @@
 
 <style lang="less" scoped>
     .myspelllist{
-		background-color: #f2f2f2;
+		background-color: #F8F8F8;;
 		
 		.recommend{
 			display: flex;

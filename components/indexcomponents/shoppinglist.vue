@@ -62,6 +62,9 @@
 </script>
 
 <style lang="less" scoped>
+	 page{
+		background-color: #f8f8f8;
+	  }
 	.scrolltolower-list{
 		height:100vh;
 		.text-bottom{

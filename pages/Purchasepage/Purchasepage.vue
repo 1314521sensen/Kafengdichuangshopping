@@ -156,7 +156,6 @@
 				storeid:"",
 				list:[
 					"微信",
-					"支付宝",
 					"余额"
 				],
 				Username:"",
@@ -182,6 +181,7 @@
 				ordergidlist:"",//购物车过来的全部id
 				couplebooltext:"",//判断是不是新人 新人只能使用新人优惠券
 				c_ids:"",//判断余额支付的时候使用的哪张优惠券的id
+				passwordindex:0,//用于判断用户输入错几次密码
 			}
 		},
 		methods: {
@@ -211,23 +211,29 @@
 			},
 			//当用户点击确定支付
 			Determinepayment(){
+				const _this = this
+				//处理买家留言
+				
+				let payid = "";//给后端进行返回
 				if(this.radio=='radio0'){//微信支付
-					// console.log("微信支付")
+					payid = "wxpay"
+					this.GetorderdetailsData(payid)
 					//app端微信端---结束
 					
 					//H5端支付---开始
 					//H5端支付---结束
-				}else if(this.radio=='radio1'){//支付宝支付
+				}else if(this.radio=='radio5'){//支付宝支付
 					console.log("支付宝支付")
 					//app端支付宝支付---开始&product_code='' &notify_url=''
 					//app端支付宝支付---结束
 				}else{
-					this.GetorderdetailsData()
+					payid = "YUE"
+					this.GetorderdetailsData(payid)
 				}
 				
 			},
 			//封装个根据购物车进来的还是订单进来的请求数据
-			GetorderdetailsData(){
+			GetorderdetailsData(payid){
 				// console.log(this.address_id)
 				const _this = this
 				//当用户选择支付时处理买家留言
@@ -238,84 +244,108 @@
 				Leavearr[0] = Leavemessage
 				//1是购物车过来的
 				//2是详情过来的
-				if(this.address_id!==""){//判断新用户有没有地址
-					if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
-					let str = _this.ordergidlist.substr(0,_this.ordergidlist.length-1)
-						uni.request({
-							url:`${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
-							method:"POST",
-							data:{
-								token:this.tokey,
-								c_ids:str,//购物车选中的购物商品的id   _this.ordergidlist
-								o_from:this.o_from,//根据用户哪一端进来的
-								address_id:this.address_id,//地址对应的id
-								coupon_ids:this.coupondetails,//这是返回用户选择的那张优惠券
-								p_msg:Leavearr//用户的留言
-							},
-							success(res) {
-								// console.log(res)
-								if(res.data.code==0){
-									//获取订单编号数组
-									_this.orderSnArray = res.data.data.orderSnArray
-									//选择支付的框隐藏
-									_this.hideModal()
-									_this.Detectionpaymentpassword(_this)
-								}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
-									_this.hideModal()
-									app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
-								}else{
-									
-								}
-							}
-						})
-					}else{//订单详情过来的
-					// console.log(this.orderinfolist)
-						if(this.coupondetails.length<=0){
-							this.cid = ""
-							this.ctype = ""
-						}else{
-							this.cid = this.coupondetails[0].c_id
-							this.ctype = this.coupondetails[0].c_type
-						}
-						uni.request({
-							url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
-							method:"POST",
-							data:{
-								token:this.tokey,
-								gid:_this.orderinfolist[0].good_id,//商品的id
-								spec_id:_this.orderinfolist[0].spec_id,
-								quantity:_this.orderinfolist[0].good_num,
-								o_from:this.o_from,//根据用户哪一端进来的
-								address_id:this.address_id,//地址对应的id
-								p_msg:this.value,//用户的留言
-								c_id:this.c_ids,//这是返回用户选择的那张优惠券
-								c_type:this.ctype?'store':'platform'
-							},
-							success(res) {
-								// console.log(res)
-								// console.log(res.data.data.orderSnArray)//订单编号
-								// console.log(res.data.data.swiftNo)//订单流水号
-								//orderSnArray订单的编组 支付的时候用到
-								if(res.data.code==0){//获取到支付前的数据
-									//获取订单编号数组
-									_this.orderSnArray = res.data.data.orderSnArray
-									//选择支付的框隐藏
-									_this.hideModal()
-									//检测是否设置了支付密码
-										_this.Detectionpaymentpassword(_this)
+				let addresslength = ""
+				//取出缓存中的数据的地址的长度
+				uni.getStorage({
+					key:"addresslength",
+					success(resaddress){
+						addresslength = resaddress.data
+					}
+				})
+				//判断用户地址中有没有
+				if(parseInt(addresslength)!==0){
+					if(this.address_id!==""){//判断新用户有没有地址
+						if(this.way==1){//购物车过来的时候发起的请求 购物车商品生成待付款订单
+						let str = _this.ordergidlist.substr(0,_this.ordergidlist.length-1)
+							uni.request({
+								url:`${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
+								method:"POST",
+								data:{
+									token:this.tokey,
+									c_ids:str,//购物车选中的购物商品的id   _this.ordergidlist
+									o_from:this.o_from,//根据用户哪一端进来的
+									address_id:this.address_id,//地址对应的id
+									coupon_ids:this.coupondetails,//这是返回用户选择的那张优惠券
+									p_msg:Leavearr//用户的留言
+								},
+								success(res) {
+									// console.log(res)
+									if(res.data.code==0){
+										//获取订单编号数组
+										_this.orderSnArray = res.data.data.orderSnArray
+										//选择支付的框隐藏
+										if(payid=="wxpay"){
+											//拿到订单流水号 用于微信支付 传给后台
+											console.log(res.data.data.swiftNo)
+											_this.payweixin(res.data.data.swiftNo)
+										}else if(payid=="YUE"){
+											_this.hideModal()
+											_this.Detectionpaymentpassword(_this)
+										}
+									}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
+										_this.hideModal()
+										app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
+									}else{
 										
-								}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
-									_this.hideModal()
-									app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
+									}
 								}
+							})
+						}else{//订单详情过来的
+						// console.log(this.orderinfolist)
+							if(this.coupondetails.length<=0){
+								this.cid = ""
+								this.ctype = ""
+							}else{
+								this.cid = this.coupondetails[0].c_id
+								this.ctype = this.coupondetails[0].c_type
 							}
-						})
+							uni.request({
+								url:`${app.globalData.Requestpath}order/createUnPayOrderInfo`,
+								method:"POST",
+								data:{
+									token:this.tokey,
+									gid:_this.orderinfolist[0].good_id,//商品的id
+									spec_id:_this.orderinfolist[0].spec_id,
+									quantity:_this.orderinfolist[0].good_num,
+									o_from:this.o_from,//根据用户哪一端进来的
+									address_id:this.address_id,//地址对应的id
+									p_msg:this.value,//用户的留言
+									c_id:this.c_ids,//这是返回用户选择的那张优惠券
+									c_type:this.ctype?'store':'platform'
+								},
+								success(res) {
+									// console.log(res)
+									// console.log(res.data.data.orderSnArray)//订单编号
+									// console.log(res.data.data.swiftNo)//订单流水号
+									//orderSnArray订单的编组 支付的时候用到
+									if(res.data.code==0){//获取到支付前的数据
+										//获取订单编号数组
+										_this.orderSnArray = res.data.data.orderSnArray
+										if(payid=="wxpay"){
+											//拿到订单流水号 用于微信支付 传给后台
+											console.log(res.data.data.swiftNo)
+											_this.payweixin(res.data.data.swiftNo)
+										}else if(payid=="YUE"){
+											//选择支付的框隐藏
+											_this.hideModal()
+											//检测是否设置了支付密码
+											_this.Detectionpaymentpassword(_this)
+										}
+									}else if(res.data.code==1 && res.data.msg=="无效的商品,返回上一步"){//当用户结算的时候 看看商品有没有问题
+										_this.hideModal()
+										app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
+									}
+								}
+							})
+						}
+					}else{
+						_this.hideModal()
+						app.globalData.showtoastsame("请选择地址进行支付")
 					}
 				}else{
 					_this.hideModal()
-					app.globalData.showtoastsame("请选择地址进行支付")
+					app.globalData.showtoastsame("请到地址栏中添加地址")
 				}
-				
 			},
 			//封装一个检测用户是否设置支付密码的方法
 			Detectionpaymentpassword(_this){
@@ -397,12 +427,16 @@
 							})
 						}else{
 							app.globalData.showtoastsame(res.data.msg)
-							_this.passwordzhifutanchuang = null
-							_this.isIphoneX = null
 							//如果用户输入密码错误 就让他跳到订单列表
-							uni.reLaunch({
-								url:`/pages/orderpageRouter/orderpageRouter`
-							})
+							_this.passwordindex++
+							//如果用户输错3次密码就跳到订单页面
+							if(_this.passwordindex>=3){
+								_this.passwordzhifutanchuang = null
+								_this.isIphoneX = null
+								uni.reLaunch({
+									url:`/pages/orderpageRouter/orderpageRouter`
+								})
+							}
 						}
 					}
 				})
@@ -419,6 +453,42 @@
 			//封装个 进来订单的这个页面就开始加载的订单的页面
 			Orderrender(){
 			},
+			//封装个微信支付
+			payweixin(swiftNo){
+				let appid = 'wx0f9236b57d357dbb';
+				let payId = "wxpay"
+				uni.request({
+					url:`${app.globalData.Requestpath}pay/wechatpay`,
+					method:"POST",
+					data:{
+						payid:payId,
+						appid:appid,
+						swift_id:swiftNo
+					},
+					success(res) {
+						console.log(res)
+						if(res.statusCode==200){
+							uni.requestPayment({
+								provider:'wxpay',
+								orderInfo:res.data,
+								success(e){
+									console.log("success",e);
+									uni.showToast({
+										title:"支付完成"
+									})
+								},
+								fail(e){
+									console.log('fail',e);
+									uni.showModal({
+										content:"支付失败:" + JSON.stringify(e),
+										showCancel:false
+									})
+								}
+							})
+						}
+					}
+				})
+			}
 		},
 		onLoad(opction){
 			// console.log("onload先执行")
@@ -581,6 +651,7 @@
 			}
 		}
 		.purchase-order{
+			margin-bottom: 120rpx;
 			.order{
 				background-color: #fff;
 				margin-top:44rpx;

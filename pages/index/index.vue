@@ -20,7 +20,7 @@
 				<activity></activity>
 				<feature></feature>
 				<featuredCommodity></featuredCommodity>
-				<exhibitionBanner></exhibitionBanner>
+				<!-- <exhibitionBanner></exhibitionBanner> -->
 			<view class="shopingList">
 				<!-- <listNav></listNav> -->
 				<list :list='list' :page='page' style="background-color: transparent" display="none"></list>
@@ -29,6 +29,8 @@
 				</view>
 			</view>
 		</scroll-view>
+		<!-- 这是更新app的组件 -->
+		<Downloadprompt></Downloadprompt>
 	</view>
 </template>
 
@@ -41,11 +43,12 @@
 	import activity from "@/components/indexOneComponents/activity.vue"
 	import feature from "@/components/indexOneComponents/feature.vue"
 	import featuredCommodity from "@/components/indexOneComponents/featuredCommodity.vue"
-	import exhibitionBanner from "@/components/indexOneComponents/exhibitionBanner.vue"
+	// import exhibitionBanner from "@/components/indexOneComponents/exhibitionBanner.vue"
 	//后期加这
 	// import listNav from "@/components/indexOneComponents/listNav.vue"
 	
 	import list from "@/components/indexOneComponents/list.vue"
+	import Downloadprompt from "@/components/indexOneComponents/Downloadprompt.vue"
 	export default {
 		data() {
 			return {
@@ -152,9 +155,11 @@
 			activity,
 			feature,
 			featuredCommodity,
-			exhibitionBanner,
+			// exhibitionBanner,
 			// listNav,
-			list
+			list,
+			//这是更新的组件
+			Downloadprompt
 		},
 		methods:{
 			tabSelect(e) {

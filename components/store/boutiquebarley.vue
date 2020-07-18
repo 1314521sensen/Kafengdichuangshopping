@@ -10,7 +10,13 @@
 			   <scroll-view scroll-y="true">
 				  <view class="scrollBox">
 					   <!-- 单个商品盒子 -->
-					   <view class="goods" v-for="(item,index) in horizontallylist" :key='index'>
+					   <view class="goods" 
+							v-for="(item,index) in horizontallylist" 
+							:key='index'
+							:data-g_id="item.good_id"
+							:data-s_id="item.store_id"
+							@tap="storeshopdefault"
+						>
 						   <view>
 								<image class="shoPrice" :src="'http://hbk.huiboke.com'+item.good_pic"></image>
 						   </view>
@@ -43,7 +49,12 @@
 			}
 		},
 		methods: {
-			
+			storeshopdefault(e){
+				let {g_id,s_id} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+				})
+			}
 		},
 		props:["msg","horizontallylist"]
 	}

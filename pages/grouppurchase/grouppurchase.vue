@@ -31,7 +31,7 @@
 					</view>
 					<!-- 品质保障   -->
 					<view class="qualityGuarantee">
-						<image class="" src="/static/grouppurchase/safeguard.png" mode=""></image>
+						<image class="" :src="this.$store.state.httpUrl+'grouppurchase/safeguard.png'" mode=""></image>
 						<text>品质保障</text>
 						<text>假一赔十</text>
 						<text>100%正品</text>

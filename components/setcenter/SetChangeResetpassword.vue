@@ -35,7 +35,7 @@
 									<view class="cu-form-group">
 										<view class="title">验证码</view>
 										<input placeholder="请输入验证码" v-model="codevalue" name="code"></input>
-										<button class='cu-btn bg-green shadow' :disabled="disabled" @tap="leftcode">{{codetext}}</button>
+										<button class='cu-btn bg-green shadow' :disabled="disabled" @tap="leftcode">{{countdowntext}}</button>
 									</view>
 									<!-- 这是身份证 -->
 									<view class="cu-form-group margin-top" v-for="(item,index) in changelist" :key="index">
@@ -69,6 +69,8 @@
 				codevalue:"",
 				id:"",
 				business:"",
+				countdowntext:"验证码",
+				wait:60,
 				list:[
 					{
 						titlename:"用户登录密码",
@@ -107,6 +109,27 @@
 			}
 		},
 		methods:{
+			time(){
+				this.disabled = true
+				//这块点击反复执行定时器
+				// clearInterval(times)
+				let {countdowntext,wait} = this.$data
+				// console.log(countdowntext,wait)
+					this.times = setInterval(()=>{
+						wait--
+						// console.log(wait)
+						this.countdowntext = wait
+						if(wait==0){
+							this.disabled = false
+							countdowntext = "重新获取"
+							clearInterval(this.times)
+							this.countdowntext = countdowntext
+							this.wait = 60
+						}
+						
+					},1000)
+			},
+
 			//隐藏弹窗
 			hideModal(e) {
 				this.modalName = null
@@ -217,6 +240,7 @@
 					}
 					//一会在这调用发送短信的接口
 					app.globalData.VerificationCode(json)
+					this.time()
 			},
 			//这是左侧弹窗点击确定按钮
 			changeform(e){
@@ -271,5 +295,12 @@
 	}
 </script>
 
-<style>
+<style lang="less" scoped>
+	.SetChangeResetpassword{
+		background-color: #F8F8F8;
+		min-height: 100vh;
+		.item{
+			border: 1px solid rgba(0,0,0,0);
+		}
+	}
 </style>

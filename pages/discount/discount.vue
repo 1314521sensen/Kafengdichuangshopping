@@ -2,7 +2,7 @@
 	<!-- 折扣页面 -->
 	<view class="discounts">
 		<!-- 折扣背景图 -->
-		<view class="discountBack" :style="{'background-image':'url(/static/discount/discountbg.gif)'}">
+		<view class="discountBack" :style="{'background-image':'url('+this.$store.state.httpUrl+'/discount/discountbg.gif'+')'}">
 		
 		</view>
 		<!-- 分类 -->

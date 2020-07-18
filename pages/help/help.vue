@@ -5,7 +5,7 @@
 		<!-- 上面的导航 -->
 		<actionbar message="帮助中心" url="/pages/index/index"></actionbar>
 		 <!-- 联系客服的背景图 -->
-		 <view class="callCenter" :style="{'background-image':'url(/static/help/helpbg.png)'}">
+		 <view class="callCenter" :style="{'background-image':'url('+this.$store.state.httpUrl+'/help/helpbg.png)'}">
 			 <view class="wholeheartedly">竭诚为你服务</view>
 			 <!-- 电话号码 -->
 			 <view class="phone">服务热线:400-8888-888</view>
@@ -47,7 +47,7 @@
 
 <style lang="less" scoped>
 	.help{
-		// height: 667rpx;
+		min-height: 100vh;
 		background-color: #fff;
 	}
 	.callCenter{

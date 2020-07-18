@@ -1,6 +1,6 @@
 <template>
 		<!-- 优惠券 -->
-		<view class="discountCoupon" style="background-image: url(/static/store/striated_bg.png);">
+		<view class="discountCoupon" :style="{'background-image':'url('+this.$store.state.httpUrl+'store/striated_bg.png'+')'}">
 				<!-- 优惠券的总盒子 -->
 				<view class="discountCoupon_box">
 					<scroll-view scroll-x="true" class="Scoeoll_box">
@@ -58,7 +58,7 @@
 			width: 100%;
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
-			background-color: red;
+			// background-color: red;
 			display: flex;
 			align-items: center;
 			// 装所有优惠局的盒子

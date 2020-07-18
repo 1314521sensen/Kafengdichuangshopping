@@ -1,6 +1,7 @@
 <template>
 	<view class="orderForm">
 		<pageheight :statusBar="statusBar"></pageheight>
+		<actionbar  message="订单列表" :Jumpchoose="false" url="/pages/PersonalMy/PersonalMy"></actionbar>
 		<scroll-view scroll-x class="bg-white nav" v-if="indexs!=5">
 			<view class="flex text-center">
 				<view 
@@ -16,7 +17,7 @@
 				</view>
 			</view>
 		</scroll-view>
-		<scroll-view class="scroll-view" scroll-y = "true" v-if="indexs!=5">
+		<scroll-view class="scroll-view" @scrolltolower="scrollBottom" scroll-y = "true" v-if="indexs!=5">
 				<view 
 					class="orderFormList" 
 					v-for="(item,index) in this.$store.state.Temporarynonpaymentlist" 
@@ -32,8 +33,9 @@
 							:data-buyer_name="item.buyer_name"
 							:data-price="item.price"
 							:data-create_time="item.create_time"
-							:date-send_time="item.send_time"
+							:data-send_time="item.send_time"
 							:data-finish_time="item.finish_time"
+							:data-cancel_time="item.cancel_time"
 						>
 							<image :src="'http://hbk.huiboke.com'+item.store_logo" mode=""></image>
 						</view>
@@ -44,7 +46,7 @@
 							<view class="price">
 								<text v-text="'￥'+item.price"></text>
 								<text 
-									class="text-gray cuIcon-delete" 
+									class="text-gray cuIcon-delete deletesize" 
 									@tap="deletescollectionAndfootprint"
 									:data-order_sn="item.order_sn"
 									v-if="item.status==-1 || item.status==3"
@@ -61,6 +63,7 @@
 <script>
 	const app = getApp()
 	import ReturntheMoneylist from "@/components/Commoditycomponent/ReturntheMoneylist.vue"
+	import actionbar from "@/components/actionbar/actionbar.vue"
 	export default {
 		data() {
 			return {
@@ -86,32 +89,52 @@
 				],
 				url:"",
 				indexs:"",
+				page:1,
+				geturls:'',
+				judge:true
 			}
 		},
 		components:{
-			ReturntheMoneylist
+			ReturntheMoneylist,
+			actionbar
 		},
 		methods:{
+			scrollBottom(){
+				console.log("划到底部")	
+				this.page++
+				this.$store.commit("scrollBottom",{pages:parseInt(this.page)})
+				if(this.judge){
+					this.$store.commit("getTemporarynonpayment",{index:parseInt(this.TabCur),geturl:this.url})
+				}else{
+					this.$store.commit("getTemporarynonpayment",{index:parseInt(this.TabCur),geturl:this.geturls})
+				}
+			},
 			tabSelect(e) {
-				// console.log(e)
+				this.$store.state.orderpage = 1
+				this.page = 1
+				this.judge = false
+				this.$store.state.Temporarynonpaymentlist = []
 				let {geturl} = e.currentTarget.dataset
+				this.geturls = geturl
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-				this.$store.commit("getTemporarynonpayment",{index:parseInt(this.TabCur),geturl:geturl})
+				this.$store.commit("getTemporarynonpayment",{index:parseInt(this.TabCur),geturl:this.geturls})
 			},
 			linkDetails(e){
 				// console.log(e.currentTarget.dataset.order_sn)title
-				let {order_sn,title,dispatch_price,swift_no,address_id,buyer_name,price,create_time,send_time,finish_time} = e.currentTarget.dataset
-				// console.log(create_time)
+				let {order_sn,title,dispatch_price,swift_no,address_id,buyer_name,price,create_time,send_time,finish_time,cancel_time} = e.currentTarget.dataset
 				//这是往vuex里面存东西
-				this.$store.commit("linkDetails",{order_sn:order_sn,title:title,dispatch_price:dispatch_price,swift_no:swift_no,address_id:address_id,buyer_name:buyer_name,price:price,create_time:create_time,send_time:send_time,finish_time:finish_time})
-				
+				this.$store.commit("linkDetails",{order_sn:order_sn,title:title,dispatch_price:dispatch_price,swift_no:swift_no,address_id:address_id,buyer_name:buyer_name,price:price,create_time:create_time,send_time:send_time,finish_time:finish_time,cancel_time:cancel_time})
 			},
 			//这是删除
 			deletescollectionAndfootprint(e){
+				this.$store.state.orderpage = this.$store.state.orderpage -1
 				let {order_sn} = e.currentTarget.dataset
 				this.$store.commit("deletescollectionAndfootprint",{order_sn,TabCur:this.TabCur,url:this.url})
 			}
+		},
+		created(){
+			this.$store.state.Temporarynonpaymentlist = []
 		},
 		onLoad(opction){
 			const _this = this
@@ -144,9 +167,13 @@
 </script>
 
 <style lang="less" scoped>
+	.orderForm{
+		background-color: #F8F8F8;
+	}
 	.scroll-view{
 		overflow: hidden;
 		height:91vh;
+		background-color: #F8F8F8;
 		// background-color:red;
 	}
 	.orderFormList{
@@ -179,5 +206,8 @@
 				justify-content: space-between;
 			}
 		}
+	}
+	.deletesize{
+		font-size: 32rpx;
 	}
 </style>

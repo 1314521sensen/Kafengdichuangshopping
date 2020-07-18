@@ -220,7 +220,7 @@
 					success(res){
 						if(_this.imgList.length>0){
 							uni.request({
-								url:`${app.globalData.Requestpath}store/addMerchantJoinInfo`,
+								url:`${app.globalData.Requestpath}store/updateMerchantJoinInfo`,
 								method:"POST",
 								data:{
 									token:res.data,
@@ -230,7 +230,9 @@
 									store_addr:_this.store_addr,
 									contacts_name:_this.contacts_name,
 									store_mobile:_this.store_mobile,
-									contacts_email:_this.contacts_email
+									contacts_email:_this.contacts_email,
+									join_status:2,
+									store_state:2
 								},
 								success(res) {
 									if(res.data.code==0){
@@ -338,7 +340,7 @@
 
 <style lang="less" scoped>
 	.contractsingbox{
-		background-color:#f2f2f2;
+		background-color:#f8f8f8;
 		padding-bottom:40rpx;
 	}
 	.contractsing{

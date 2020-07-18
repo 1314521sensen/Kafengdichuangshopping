@@ -1,5 +1,5 @@
 <template>
-	<view class="groupinfomation" :style="{'background-image':'url(/static/applygrup/groupinfomationbg.png)','padding-top':statusBar+'px'}">
+	<view class="groupinfomation" :style="{'background-image':'url('+this.$store.state.httpUrl+'/applygrup/groupinfomationbg.png)','padding-top':statusBar+'px'}">
 		<view class="groupinfomation-title">
 			<view class="returnicon" @tap="returnicon">
 				<text class="text-gray cuIcon-back"></text>
@@ -12,7 +12,7 @@
 			<view class="infokuang">
 				<view class="infokuang-white">
 					<view class="infokuang-white-top">
-						<view class="infokuang-white-top-title" :style="{'background-image':'url(/static/applygrup/groupinfomationtitle.png)'}">
+						<view class="infokuang-white-top-title" :style="{'background-image':'url('+this.$store.state.httpUrl+'/applygrup/groupinfomationtitle.png)'}">
 							<text>填入信息</text>
 						</view>
 					</view>

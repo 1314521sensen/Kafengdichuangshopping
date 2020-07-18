@@ -1,6 +1,6 @@
 <template>
 	<view class="applygroup" @tap="applygroup">
-		<view class="applygroupbgimg" :style="{'background-image':'url(/static/applygrup/applybg.gif)'}"></view>
+		<view class="applygroupbgimg" :style="{'background-image':'url('+this.$store.state.httpUrl+'/applygrup/applybg.gif)'}"></view>
 	</view>
 </template>
 

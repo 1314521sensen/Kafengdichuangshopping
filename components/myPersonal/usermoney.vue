@@ -51,7 +51,7 @@
 			width: 95%;
 			padding: 28rpx 0;
 			background-color: #fff;
-			box-shadow: 4rpx 6rpx 6rpx #c6c6c6;
+			// box-shadow: 4rpx 6rpx 6rpx #c6c6c6;
 			border-radius:20rpx;
 			.money-list{
 				text{

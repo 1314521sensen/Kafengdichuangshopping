@@ -43,7 +43,7 @@
 
 <style lang="less" scoped>
 	.Selectionrecommended{
-		background-color: #fff;
+		background-color: #f8f8f8;
 		margin-top:30rpx;
 		.title{
 			font-size: 36rpx;

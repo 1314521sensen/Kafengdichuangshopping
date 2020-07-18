@@ -187,6 +187,8 @@
 			this.Addressoption = opction.title
 			this.address = opction.address
 			this.statusBar = app.globalData.statusBar
+			 this.value1 = opction.value1;
+			 this.value2 = opction.value2;
 			//1是购物车过来的
 			//2是详情过来的
 			// console.log(opction.titleparameter)

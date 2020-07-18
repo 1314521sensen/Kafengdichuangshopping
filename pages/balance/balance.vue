@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="detailBox">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<view class="balance" style="background-image: url(/static/balance/1.png);">
 			<!-- <view class="my-balance">
@@ -112,6 +112,9 @@
 </script>
 
 <style lang="less">
+	.detailBox{
+		background-color: #f8f8f8;
+	}
 	.balance{
 		width: 100%;
 		height: 400rpx;

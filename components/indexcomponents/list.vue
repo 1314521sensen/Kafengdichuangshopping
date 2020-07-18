@@ -126,7 +126,8 @@
 	   flex-wrap:wrap;
 	   justify-content:space-between;
 	   padding: 0 20rpx;
-	   
+	   background-color: #F8F8F8;
+	    padding-top: 40rpx;
 	   
 	  }
 	  .cu-list.menu-avatar>.cu-item{

@@ -8,7 +8,7 @@
 			<view class="pleasantSurprise">
 				<view class="plaeas_left">
 					<view class="broadcastImgBox">
-						<image class="broadcastImg" src="/static/store/broadcast.gif" mode=""></image>
+						<image class="broadcastImg" :src="this.$store.state.httpUrl+'/store/broadcast.gif'" mode=""></image>
 					</view>
 					<view class="broad_text">福利不停发,惊喜不间断</view>
 					<view class="broadcasImgS">

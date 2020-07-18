@@ -45,14 +45,15 @@
 			<view 
 				class="Livelist-item" 
 				:style="{'background-image':'url(/static/Liveplatformlist/itembg.png)'}"
-				v-for="(item,index) in list" 
+				v-for="(item,index) in 20" 
 				:key="index"
 				@tap="viewervideo"
+				:data-index="index"
 			>
 				<view class="item-top item-plice">
 					<view class="watchimgs">
 						<image src="/static/Liveplatformlist/liveicon.gif"></image>
-						<text class="watchtext">{{item.nums}}人观看</text>
+						<text class="watchtext">{{100}}人观看</text>
 					</view>
 				</view>
 				<view class="item-bottom item-plice">
@@ -66,11 +67,11 @@
 									<image src="/static/liveplatfrom/dianxin.png"></image>
 									<text class="describedzan">155</text>
 								</view>
-								<text class="shopLivedescribe">{{item.info}}</text>
+								<text class="shopLivedescribe">买一送一,半价</text>
 							</view>
 						</view>
 						<view class="describe-bottom">
-							<text class="describe-price">¥{{item.price}}</text>
+							<text class="describe-price">¥100</text>
 							<text class="describe-shopstore">小熊维尼店</text>
 						</view>
 					</view>
@@ -123,38 +124,7 @@
 					type: 'image',
 					url: '/static/Liveplatformlist/banner1.png'
 				}],
-				list:[
-					{
-						nums:100,
-						info:"买一送一,半价",
-						price:100,
-					},
-					{
-						nums:100,
-						info:"买一送一,半价",
-						price:100,
-					},
-					{
-						nums:100,
-						info:"买一送一,半价",
-						price:100,
-					},
-					{
-						nums:100,
-						info:"买一送一,半价",
-						price:100,
-					},
-					{
-						nums:100,
-						info:"买一送一,半价",
-						price:100,
-					},
-					{
-						nums:100,
-						info:"买一送一,半价",
-						price:100,
-					}
-				]
+				list:[]
 			}
 		},
 		methods: {
@@ -170,9 +140,10 @@
 				this.cardCur = e.detail.current
 			},
 			//点击每一个直播项 跳到不同的主播
-			viewervideo(){
+			viewervideo(e){
+				let {index} = e.currentTarget.dataset
 				uni.navigateTo({
-					url:`/pages/Liveplatform/Liveplatform`
+					url:`/pages/Liveplatform/Liveplatform?indexs=${index}`
 				})
 			}
 		},
@@ -297,12 +268,12 @@
 					}
 					.watchtext{
 						display:inline-block;
-						padding:6rpx 10rpx;
-						background-color:rgba(0,0,0,.5);
-						border-radius:16rpx;
-						color:#fff;
-						margin-left:-10rpx;
-						font-size: 26rpx;
+						 padding:6rpx 26rpx;
+						 background-color:rgba(0,0,0,.5);
+						 border-radius:16rpx;
+						 color:#fff;
+						 margin-left:-20rpx;
+						 font-size: 26rpx;
 					}
 				}
 			}

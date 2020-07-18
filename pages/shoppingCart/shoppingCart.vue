@@ -28,12 +28,22 @@
 								:class="items.checked?'cuIcon-check':''"
 							></view>
 							<!-- 商品的图片 -->
-							<view class="item-imgs">
+							<view 
+								class="item-imgs"
+								@tap="detaisinglepage"
+								:data-g_id="items.good_id"
+								:data-s_id="item.store_id"
+							>
 								<image :src="'http://hbk.huiboke.com'+items.good_pic" class="imgs"></image>
 							</view>
 							<view class="item-info">
 								<!-- 商品的名称 -->
-								<view class="item-info-text">
+								<view 
+									class="item-info-text"
+									@tap="detaisinglepage"
+									:data-g_id="items.good_id"
+									:data-s_id="item.store_id"
+								>
 									{{items.good_name}}
 								</view>
 								<!-- 商品规格值 -->
@@ -77,7 +87,10 @@
 		</view>
 		<view class="shoppingcar-bottom">
 			<view class="same-right" v-if="btnswitchbool">
-				<text class="combinedtext">合计:</text>
+				<!-- <view class="freight">
+				    <text>运费:{{this.$store.state.freight}}</text>
+				</view> -->
+				<text class="combinedtext">(含运费)共合计:</text>
 				<!-- {{this.$store}} -->
 				<text style="color:#ee6c29">{{this.$store.getters.totalprice}}</text>
 				<button class="same-btn cu-btn round bg-orange" @tap="settlement">结算</button>
@@ -142,6 +155,15 @@
 			}
 		},
 		methods:{
+			//点击里面的商品 跳到商品详情
+			detaisinglepage(e){
+			    let {g_id,s_id} = e.currentTarget.dataset
+			    //当点击的时候跳转到详情页
+			    //根据index和我的组件中传过来的url 判断跳到哪里
+			    uni.navigateTo({
+			     url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+			    })
+			   },
 			//管理删除和结算按钮的切换
 			management(){
 				if(this.btnswitchbool){
@@ -202,7 +224,8 @@
 			},
 			//当滚动底部的时候
 			scrolltolower(){
-				this.$store.commit("scrolltolower")
+				console.log("触发了")
+				this.$store.commit("shopcarscrolltolower")
 			}
 		},
 		created(){
@@ -218,6 +241,7 @@
 
 <style lang="less" scoped>
 	.shoppingcarnew{
+		background-color: #F8F8F8;
 		.shoppingcartop{
 			display:flex;
 			justify-content: space-between;
@@ -330,10 +354,17 @@
 			justify-content:flex-end;
 			background-color: #fff;
 			padding:16rpx 20rpx 16rpx 0;
+			.freight{
+				flex-grow: 9;
+				display: flex;
+				align-items: center;
+				padding-left: 60rpx;
+			}
 			.same-right{
 				display:flex;
 				align-items: center;
 				justify-content: flex-end;
+				width: 100%;
 				.same-btn{
 					margin-left:60rpx;
 				}

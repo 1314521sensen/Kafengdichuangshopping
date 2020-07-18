@@ -280,6 +280,22 @@
             "path" : "pages/Activitiesindex/Activitiesindex",
             "style" : {}
         }
+        ,{
+            "path" : "pages/liveaddshoplist/liveaddshoplist",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/commoditypools/commoditypools",
+		    "style" : {}
+		}
+        ,{
+            "path" : "pages/Customerservice/Customerservice",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/Live_commission_end/Live_commission_end",
+		    "style" : {}
+		}
     ],
 	
 	"globalStyle": {

@@ -11,7 +11,7 @@
 			<view class="cu-list menu-avatar">
 				<view class="cu-item" v-for="(item,index) in addaddresslist" :key="index" :class="addressselectedindex==index?'bg-itemcolor':''" @tap="selecteditem(index,item)">
 					<view class="cu-avatar" :class="addressselectedindex==index?'bg-itemcolor':''">{{item.consignee_name}}</view>
-					<view class="content" @tap="setaddress(item.address_id)">
+					<view class="content" @tap="setaddress(item.address_id,item)">
 						<view class="text-grey" :class="addressselectedindex==index?'bg-itemcolor':''">{{item.consignee_phone}}</view>
 						<view class="text-gray text-sm flex">
 							<view class="text-cut" :class="addressselectedindex==index?'bg-itemcolor':''">
@@ -52,6 +52,7 @@
 				freight:"",
 				spec_id:0,
 				pageye:1,//上拉加载的页数
+				addresbool:false
 			}
 		},
 		methods: {
@@ -95,6 +96,7 @@
 			},
 			Deleteaddress(index,address_id){
 				const _this = this
+				_this.addresbool = true
 				uni.startPullDownRefresh()
 				uni.request({
 					url:`${app.globalData.Requestpath}user/deleteShippingAddress`,
@@ -111,7 +113,10 @@
 				})
 			},
 			//点击跳到修改地址
-			setaddress(address_id){
+			setaddress(address_id,item){
+				let itemStr = JSON.parse(JSON.stringify(item));
+				let value1 = itemStr.consignee_name;
+				let value2 = itemStr.consignee_phone;
 				if(this.way==1){
 					uni.navigateTo({
 						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}`
@@ -123,7 +128,7 @@
 					})
 				}else{
 					uni.navigateTo({
-						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}`
+						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&value1=${value1}&value2=${value2}`
 					})
 				}
 			},
@@ -143,15 +148,28 @@
 							},
 							success(res) {
 								if(res.data.code==0){
+									
 									if(_this.pageye>1){
 										_this.addaddresslist = _this.addaddresslist.concat(res.data.data)
 									}else{
 										_this.addaddresslist = res.data.data
 										uni.stopPullDownRefresh()
 									}
+									_this.addresbool = false
+									//将地址中的数据长度加入到缓存中 借用个数去做订单中的地址的判断
+									uni.setStorage({
+										key:"addresslength",
+										data:res.data.data.length
+									})
 								}else if(res.data.code==1){
-									_this.addaddresslist = []
-									uni.stopPullDownRefresh()
+									if(_this.addresbool){
+										_this.addaddresslist = []
+										uni.stopPullDownRefresh()
+										uni.setStorage({
+											key:"addresslength",
+											data:0
+										})
+									}
 								}
 							}
 						})
@@ -212,7 +230,7 @@
 
 <style lang="less" scoped>
 	.addressTo{
-		
+		background-color: #F8F8F8;
 		.newaddressTO-box{
 			.newaddressTO{
 				position: fixed;

@@ -1,6 +1,6 @@
 <template>
 	<view class="merchaWrap">
-		<view class="merchant" :style="{'background-image':'url(/static/merchant/merchant_bg.png)'}">
+		<view class="merchant"  :style="{'background-image':'url('+this.$store.state.httpUrl+'/merchant/merchant_bg.png'}">
 			<!-- 导航 -->
 			<view class="Shop-Check-in-return" :style="{'padding-top':statusBar+20+'rpx'}">
 				<view class="Shop-Check-in-icon" @tap="ShopCheckinreturn">
@@ -10,7 +10,7 @@
 		</view>
 		<!-- 入驻需要几步 -->
 		<view class="enter_imgBox">
-			<image class="enter_img" src="/static/merchant/enter.png" alt="">
+			<image class="enter_img" :src="this.$store.state.httpUrl+'/merchant/enter.png'" alt="">
 		</view>
 		<!-- 入驻步骤 -->
 		<view class="wroldBox">

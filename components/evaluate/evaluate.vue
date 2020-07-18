@@ -12,12 +12,22 @@
 					</view>
 					<view class="company-bottom">
 						<view class="bottom-left">
-							<view class="bottom-img">
+							<view 
+								class="bottom-img" 
+								 :data-g_id="items.good_id"
+								 :data-s_id="item.store_id"
+								  @tap="particulars"
+							>
 								<img :src="'http://hbk.huiboke.com'+items.good_pic" alt="">
 							</view>
 						</view>
 						<view class="bottom-right">
-							<view class="introduce">
+							<view 
+								class="introduce"
+								:data-g_id="items.good_id"
+								:data-s_id="item.store_id"
+								 @tap="particulars"
+							>
 								<text class="introduce-text">{{items.good_name}}</text>
 							</view>
 							<view class="price-number">
@@ -58,6 +68,14 @@
 					url:`/pages/starevaluation/starevaluation?ordersnbianhao=${btoa(ordersnbianhao)}&shopgooid=${btoa(shopgooid)}&img=${imgs}&goodname=${goodname}`
 				})
 			},
+			particulars(e){
+				//当点击的时候跳转到详情页
+				//根据index和我的组件中传过来的url 判断跳到哪里
+				let {g_id,s_id} = e.currentTarget.dataset
+				uni.navigateTo({
+                   url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+               })
+			}
 		},
 	}
 </script>

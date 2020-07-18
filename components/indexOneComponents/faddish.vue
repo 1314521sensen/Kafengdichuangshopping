@@ -1,42 +1,83 @@
 <template>
 	<view>
-		<view class="faddish-banner" style="background-image: url(../../static/indexOne/faddish/faddish-banner.png);">
+		<view class="faddish-banner" :style="{'background-image':'url('+imghttp+'faddish-banner.png'+')'}" v-if="loadbool">
 			<view class="faddish-item">
-				<view class="faddish-left">
-					<image src="../../static/indexOne/faddish/3.png" class="img-rotate"></image>
+				<view 
+					class="faddish-left" 
+					:data-good_id="demonstrating[0].good_id"
+					@tap="shopdefault"
+				>
+					<image 
+						:src="httpurl+demonstrating[0].good_pic" 
+						class="img-rotate">
+					</image>
 					<view class="left-text">
 						<text>新品到货</text>
 					</view>
 				</view>
-				<view class="faddish-center">
-					<image src="../../static/indexOne/faddish/2.png" class="img-rotate"></image>
+				<view 
+					class="faddish-center"
+					:data-good_id="demonstrating[1].good_id"
+					@tap="shopdefault"
+				>
+					<image :src="httpurl+demonstrating[1].good_pic" class="img-rotate"></image>
 					<view class="center-text">
-						<text>美妆专场</text>
-						<image src="../../static/indexOne/go.gif"></image>
+						<text>美妆专场 </text>
+						<image :src="imghttp+'go.png'"></image>
 					</view>
 				</view>
-				<view class="faddish-left">
-					<image src="../../static/indexOne/faddish/1.png" class="img-rotate"></image>
+				<view 
+					class="faddish-left"
+					:data-good_id="demonstrating[2].good_id"
+					@tap="shopdefault"
+				>
+					<image :src="httpurl+demonstrating[2].good_pic" class="img-rotate"></image>
 					<view class="left-text">
 						<text>优惠好货</text>
 					</view>
 				</view>
 			</view>
 		</view>
+		<loading v-if="loadbool==false"></loading>
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data() {
 			return {
-				
+				imghttp:"http://hbk.huiboke.com/uploads/app/image/index/indexone/",
+				demonstrating:[],//这是上面的随机的商品
+				httpurl:"",
+				loadbool:false
 			}
 		},
 		methods:{
-			
+			shopdefault(e){
+				let {good_id} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${good_id}`
+				})
+			}
 		},
-		
+		created() {
+			const _this = this
+			uni.request({
+				url:`${app.globalData.Requestpath}good/getRandomRecommendGoodsList`,
+				data:{
+					c_level:2,
+					limit:3, 
+				},
+				success(res) {
+					if(res.data.code == 0){
+						_this.demonstrating = res.data.data
+						_this.loadbool = true
+					}
+				}
+			})
+			_this.httpurl = app.globalData.imgyuming
+		},
 	}
 </script>
 

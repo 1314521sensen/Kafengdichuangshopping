@@ -2,10 +2,9 @@
 	<!-- #ifdef APP-PLUS -->
 	<view class="banner" v-if="Guidepagebools==false">
 		<!-- 这个动态的设置高度 -->
-		<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
-		 :autoplay="autoplay" interval="3000" duration="500" @change="guidepage">
+		<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true" duration="500" @change="guidepage">
 			<swiper-item v-for="(item,index) in swiperList" :key="index">
-				<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
+				<image :src="'http://hbk.huiboke.com'+item.adv_img"></image>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -18,29 +17,16 @@
 	export default{
 		data(){
 			return {
-				swiperList: [{
-					id: 0,
-					type: 'image',
-					url: '/static/Guidepage/1.jpg'
-				}, {
-					id: 1,
-					type: 'image',
-					url: '/static/Guidepage/2.jpg',
-				}, {
-					id: 2,
-					type: 'image',
-					url: '/static/Guidepage/3.jpg'
-				}],
+				swiperList: [],
 				dotStyle: false,
-				autoplay:true,
 				Guidepagebools:true
 			}
 		},
 		methods:{
 			guidepage(e){
-				// console.log(e.detail.current)
-				if(e.detail.current==2){
-					this.autoplay = false
+				console.log(e.detail.current)
+				if(e.detail.current==this.swiperList.length-1){
+					console.log("到头了")
 					setTimeout(function(){
 						uni.switchTab({
 							url:"/pages/index/index"
@@ -53,6 +39,22 @@
 			console.log(111)
 			this.Guidepagebools = app.globalData.Guidepagebool
 			// console.log(this.Guidepagebools)
+		},
+		created() {
+			const _this = this
+			uni.request({
+				url:`${app.globalData.Requestpath}guider/getGuiderInfo`,
+				method:"POST",
+				data:{
+					type:2
+				},
+				success(res) {
+					console.log(res)
+					if(res.data.code==0){
+						_this.swiperList = res.data.data.data
+					}
+				}
+			})
 		}
 	}
 	// #endif

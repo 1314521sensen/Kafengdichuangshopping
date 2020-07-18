@@ -60,7 +60,7 @@
 			</view>
 		</view>
 		<!-- 热销推荐 -->
-		<view class="sellLike" :style="{'background-image':'url(/static/topicpage/title_top.png)'}">热销推荐</view>
+		<view class="sellLike" :style="{'background-image':'url('+this.$store.state.httpUrl+'/topicpage/title_top.png)'}">热销推荐</view>
 		<!-- 热销商品 -->	
 		<view class="hotSaleProducts">
 			<!-- 单个商品 -->

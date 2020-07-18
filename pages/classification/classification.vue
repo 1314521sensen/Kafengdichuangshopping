@@ -95,7 +95,7 @@
 		height:100vh;
 		.left-box{
 			width:26%;
-			background-color: #eee;
+			background-color: #F8F8F8;
 			// background-color:red;
 			.scroll-view{
 				overflow: hidden;
@@ -104,15 +104,12 @@
 					.left-li{
 						font-size:28rpx;
 						text-align:center;
-						background-color:#eee;
-						color:#999;
+						color:#666;
 						padding:20rpx 0rpx;
 					}
 					.left-li-active{
-						color:#000;
+						color:#fd4c97;
 						background-color: #fff;
-						font-size: 30rpx;
-						font-weight: bold;
 					}
 				}
 			}

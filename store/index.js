@@ -9,6 +9,7 @@ let state = {
 	allSelected:false,//购物车的全选状态
 	count:0,//这是用来存储总价
 	specificationslist:[],//这是规格的数据
+	shopcatdeletandlistbool:false,//判断用户是否下拉还是删除
 	tokey:"",
 	pages:1,
 	newpages:1,//用于储存pages原来的值 这样去解决购物车实时数据  
@@ -28,10 +29,21 @@ let state = {
 	Notcreated:"",//这是未付款开始的毫秒值
 	Notpaying:"",//这是未付款的结束的毫秒值
 	sendTimes:"",//这是发货时间
+	remainingTime:"",//订单剩余时间
 	couponslist:[],//这是优惠券的数据
 	BrandList:[],//这是品牌的数据
 	Brandpage:1,//品牌的页数
 	Brandloadbool:false,//用于请求请求活动的加载图标
+	socketOpen:false,//判断是否链接成功
+	wholeisdownload:false,//整个更新的界面
+	isdownload:false,//更新app的状态是否显示的整包的更新
+	doloadurl:"",//app的下载地址
+	progress:"0%",//下载进度
+	httpUrl:"http://hbk.huiboke.com/uploads/app/image/",
+	Delete:false,
+	orderpage: 1,//订单请求的页数
+	liveshoplist:[],//存放主播开播前需要携带直播的商品
+	livepages:1,//获取直播的商品的页数
 }
 //getters 用于计算
 let getters = {
@@ -62,6 +74,7 @@ let mutations = {
 		uni.getStorage({
 			key:"bindtokey",
 			success(restokey) {
+				console.log(restokey)
 				state.tokey = restokey.data
 			}
 		})
@@ -74,56 +87,193 @@ let mutations = {
 			icon:"none"
 		})
 	},
+	
+	//app整包更新
+	Appwholeupdate(state,wholeobj){
+		const _this = this
+		let {version,modelboll} = wholeobj
+		uni.request({
+			url:`${Requestpath}update/getUpdateInfo`,
+			method:"POST",
+			data:{
+				type:2
+			},
+			success(res) {
+				if(res.data.code==0){
+					let returnApplicationnum = res.data.data.data.version_id.split(".").join("")
+					// console.log(returnApplicationnum > version)
+					if(returnApplicationnum > version){
+						state.isdownload = true
+						state.wholeisdownload = true
+						//将下载地址存放起来
+						state.doloadurl = res.data.data.data.src
+					}else{
+						state.isdownload = false
+						state.wholeisdownload = false
+						_this.commit("getshowmodel",{msg:"已经是最新版本"})
+					}
+				}
+			}
+		})
+	},
+	//app整包更新结束
+	//app热更新--开始
+	AppHotupdate(state,hotobj){
+		// let {version} = hotobj
+		// uni.request({
+		// 	url:`${Requestpath}update/getUpdateInfo`,
+		// 	method:"POST",
+		// 	data:{
+		// 		type:1
+		// 	},
+		// 	success(res) {
+		// 		if(res.data.code==0){
+		// 			let {version_id,src} = res.data.data.data
+		// 			let returnApplicationnum = version_id.split(".").join("")
+		// 			if(returnApplicationnum > version){
+		// 				const downloadTask =  uni.downloadFile({
+		// 					url:`http://hbk.huiboke.com${src}`,
+		// 					success(resfile) {
+		// 						console.log(resfile)
+		// 						//当下载完强制安装
+		// 						plus.runtime.install(resfile.tempFilePath, {
+		// 							force:true
+		// 						},function(){
+		// 							plus.runtime.restart();
+		// 						},function(){
+									
+		// 						});
+		// 					},
+		// 					fail(err){
+								
+		// 					}
+		// 				})
+		// 				//监听下载的进度
+		// 				downloadTask.onProgressUpdate((resjindu)=>{
+		// 					console.log('下载进度' + resjindu.progress);
+		// 					console.log('已经下载的数据长度' + resjindu.totalBytesWritten);
+		// 					// console.log('预期需要下载的数据总长度' + resjindu.totalBytesExpectedToWrite);
+		// 				})
+		// 			}
+		// 		}
+		// 	}
+		// })
+	},
+	//app热更新--结束
+	/****app更新的要执行的函数-----开始***/
+	AppUpdate(state){
+		state.isdownload = false
+		const downloadTask = uni.downloadFile({
+			url:`http://hbk.huiboke.com${state.doloadurl}`,
+			success(wholeupdate){
+				plus.runtime.install(wholeupdate.tempFilePath, {},function(){},function(){});
+			},
+			fail(err){
+				console.log(err)
+			}
+		})
+		downloadTask.onProgressUpdate((resprogress)=>{
+			state.progress = `${resprogress.progress}%`
+			if(parseInt(resprogress.progress)==100){
+				state.wholeisdownload = false
+			}
+		})
+	},
+	Hiddenbox(){
+		state.isdownload = false
+		state.wholeisdownload = false
+	},
+	/****app更新的要执行的函数-----结束****/
+	
+	/***websocket---开始***/
+		//建立链接
+		connect(){
+			uni.connectSocket({
+				url: 'wss://echo.websocket.org',
+				// #ifdef MP
+				header: {
+					'content-type': 'application/json'
+				},
+				// #endif
+				// #ifdef MP-WEIXIN
+				method: 'GET',
+				// #endif
+				success(res) {
+					console.log(res)
+					// 这里是接口调用成功的回调，不是连接成功的回调，请注意
+					// console.log(111)
+				},
+				fail(err) {
+					// 这里是接口调用失败的回调，不是连接失败的回调，请注意
+				}
+			})
+			// 监听WebSocket连接打开事件。
+			uni.onSocketOpen((res) => {
+				state.socketOpen = true
+				// this.connected = true
+				// uni.hideLoading()
+				uni.showToast({
+					icon: 'none',
+					title: '连接成功'
+				})
+				// console.log('onOpen', res);
+			})
+			//监听WebSocket接受到服务器的消息事件。
+			uni.onSocketMessage((res) => {
+				// this.msg = res.data
+				console.log('onMessage这是服务器返回的', res)
+			})
+		},
+	/***websocket----结束***/
+	
+	
+	
 	//封装个结束的时间戳
 	getendTime(state,dateobj){
-		// console.log(dateobj)
-		this.commit("gettokey")
-		//根据订单的状态调用不同的完成接口
-		let {startTime,endTime,Completiontime,orderstatus,order_sn} = dateobj
-		uni.request({
-			url:`${Requestpath}order/getOrderOverTimeConfig`,
-			success(res) {
-				// console.log(res)
-				if(res.data.code==0){
-					if(orderstatus==0){
-						//未付款的开始的时间
-						state.Notcreated = startTime
-						//这是未付款的 =  未付款的时间 *1000(得到毫秒)  + 创建时间的秒数
-						state.Notpaying = (res.data.data.buy_close_time * 1000)+startTime
-						let time = null
-						//如果未付款时间等于 取消的时间 就自动取消订单
-						time = setInterval(()=>{
-							state.Notcreated = state.Notcreated++
-							if(state.Notcreated==state.Notpaying){
-								clearInterval(time)
+			// console.log(dateobj)
+			this.commit("gettokey")
+			//根据订单的状态调用不同的完成接口
+			let {startTime,endTime,Completiontime,orderstatus,order_sn} = dateobj
+			uni.request({
+				url:`${Requestpath}order/getOrderOverTimeConfig`,
+				success(res) {
+					if(res.data.code==0){
+						if(orderstatus==0){
+							//未付款的开始的时间
+							console.log(startTime)
+							//这是未付款的 =  未付款的时间 *1000(得到毫秒)  + 创建时间的秒数
+							state.Notpaying = (res.data.data.buy_close_time * 1000)+startTime
+							let dataTime = new Date()
+							//如果未付款时间等于 取消的时间 就自动取消订单
+							// 订单创建时间
+							 state.remainingTime = parseInt((state.Notpaying - dataTime)/1000/60)
+							if(state.remainingTime<=0){
 								uni.request({
 									url:`${Requestpath}order/noPayOrderAutoCancelOrder`,
-									method:"POST",
+									method:'POST',
 									data:{
 										token:state.tokey,
 										o_sns:[order_sn]
 									},
 									success(res) {
 										console.log(res)
+										state.remainingTime = 0
 									}
 								})
 							}
-						})
-					}else if(orderstatus==2){
-						//这是发货
-						//这是发货的时间
-						let sendtime = new Date(endTime)
-						state.sendTimes = sendtime.getTime()
-						//这是获取结束时间的毫秒数
-						let completiontime = new Date(Completiontime)
-						let completiontimes = completiontime.getTime()
-						let time = null
-						//发货时间时间的毫秒数 进行加加  当时间与完成时间 一直时 停止定时器
-						time = setInterval(()=>{
-							state.sendTimes = state.sendTimes++
-							if(state.sendTimes==completiontimes){
-								clearInterval(time)
-								//进行请求自动收货时间
+						}else if(orderstatus==2){
+							//自动收货功能
+							//计算 店家发货时间+配置的收货时间 -new date时间
+							//这是发货
+							//这是发货的时间
+							console.log(endTime)
+							let sendtime = new Date(endTime.replace(/-/g, '/'))
+							
+							// console.log(sendtime)
+							state.sendTimes = sendtime.getTime()
+							state.Notpaying = ((res.data.data.auto_receiving_day * 1000) + state.sendTimes - new Date().getTime())/1000/60
+							if(parseInt(state.Notpaying)==0){
+								// 进行请求自动收货时间
 								uni.request({
 									url:`${Requestpath}order/autoConfirmPayOrder`,
 									method:"POST",
@@ -136,15 +286,30 @@ let mutations = {
 									}
 								})
 							}
-						},1000)
-						console.log(sendTimes)
-					}else if(orderstatus==3){
-						//这是完成时间
+						}else if(orderstatus==3){
+							//这是完成时间
+							//自动评价 = 完成时间 + 配置信息 - new date  
+							let CompletiontimeS = new Date(Completiontime.replace(/-/g, '/'))
+							state.sendTimes = CompletiontimeS.getTime()
+							state.Notpaying = parseInt((res.data.data.complete_day*1000) +  state.sendTimes - new Date().getTime())/1000/60
+							if(state.Notpaying==0){
+								uni.request({
+									url:`${Requestpath}order/noEvaluationOrderToFinish`,
+									method:"POST",
+									data:{
+										token:state.tokey,
+										o_sns:order_sn
+									},
+									success(res) {
+										console.log(res)
+									}
+								})
+							}
+						}
 					}
 				}
-			}
-		})
-	},
+			})
+		},
 	
 	
 	
@@ -173,9 +338,7 @@ let mutations = {
 					success(res) {
 						if(res.data.code==0){
 							_this.commit("getcarlist")
-							uni.switchTab({
-								url:"/pages/shoppingCart/shoppingCart"
-							})
+							_this.commit("getshowmodel",{msg:'已加入购物车'})
 						}
 					}
 				})
@@ -211,6 +374,8 @@ let mutations = {
 									url:"/pages/login/login"
 								})
 								return
+							}else if(state.shopcatdeletandlistbool==false && res.data.code==1){
+								state.cartList = []
 							}
 						}
 					}
@@ -311,10 +476,11 @@ let mutations = {
 				cids:arr
 			},
 			success(res) {
-				// console.log(res)
 				if(res.data.code==0){
+					state.shopcatdeletandlistbool = false
 					//调用mutations里面自身的方法
 					_this.commit("getcarlist")
+					
 				}else{
 					uni.showToast({
 						title:res.data.msg,
@@ -347,7 +513,8 @@ let mutations = {
 		})
 	},
 	//当滚动底部的时候
-	scrolltolower(){
+	shopcarscrolltolower(){
+		state.shopcatdeletandlistbool = true
 		let remainder = this.state.cartList.length / 10
 		if(remainder >= this.state.pages){
 			this.state.pages++
@@ -395,28 +562,42 @@ let mutations = {
 	/*---订单----*/
 	//请求订单信息的方法 29a8b269b62da603424f405be0a767dc
 	getTemporarynonpayment(state,TabCurindex){
-		this.commit("gettokey")
-		let {index,geturl} = TabCurindex
-		uni.request({
-			url:Requestpath+geturl,
-			method:"POST",
-			data:{
-				token:state.tokey,
-				page:1,
-				pageSize:10
-			},
-			success(res) {
-				// console.log(res)
-				if(res.data.code==0){
-					state.Temporarynonpaymentlist = res.data.data.list
-				}
-			}
-		})
-	},
+	  this.commit("gettokey")
+	  let {index,geturl} = TabCurindex
+	  console.log(geturl)
+	  uni.request({
+	   url:Requestpath+geturl,
+	   method:"POST",
+	   data:{
+	    token:state.tokey,
+	    page:state.orderpage,
+	    pageSize:10
+	   },
+	   success(res) {
+	    if(res.data.code==0){
+	     state.Temporarynonpaymentlist =state.Temporarynonpaymentlist.concat(res.data.data.list)
+	     if(state.Delete){
+	      state.Temporarynonpaymentlist = res.data.data.list
+	      state.Delete = false
+	     }
+	    }else{
+	     state.Temporarynonpaymentlist =state.Temporarynonpaymentlist.concat(res.data.data.list)
+	    }
+	    console.log(state.Temporarynonpaymentlist)
+	   }
+	  })
+	 },
+	 //下拉订单刷新
+	  scrollBottom(state,pagesobj){
+	   let {pages} = pagesobj
+	   state.orderpage = pages
+	  },
 	//列表外面的删除订单
 	deletescollectionAndfootprint(state,delectorder){
+		state.Delete = true
 		const _this = this
 		let {order_sn,TabCur,url} = delectorder
+		
 		this.commit("gettokey")
 		uni.showModal({
 			title:"亲!",
@@ -452,7 +633,7 @@ let mutations = {
 	linkDetails(state,orderinfo){
 		// console.log(orderinfo)
 		// state.order_sn = order_sn
-		let {order_sn,title,dispatch_price,swift_no,address_id,buyer_name,price,create_time,send_time,finish_time} = orderinfo
+		let {order_sn,title,dispatch_price,swift_no,address_id,buyer_name,price,create_time,send_time,finish_time,cancel_time} = orderinfo
 		uni.setStorage({
 			key:"ordertitle",
 			data:{
@@ -475,7 +656,9 @@ let mutations = {
 				//发货时间
 				send_time,
 				//完成时间
-				finish_time
+				finish_time,
+				//这是取消的时间
+				cancel_time,
 			}
 		})
 		uni.navigateTo({
@@ -668,7 +851,7 @@ let mutations = {
 				pageSize:10
 			},
 			success(res) {
-				console.log(res)
+				console.log(res,"请求的评价列表")
 				if(res.data.code==0){
 					//在根据订单号去查商品
 					state.evaluationlist = res.data.data.list
@@ -863,7 +1046,40 @@ let mutations = {
 	scrolltolower(){
 		state.Brandpage++
 		this.commit("getgetBrandList",{Brandloadbools:false})
-	}
+	},
+	
+	/******直播******/
+		//获取主播在开播前要直播的商品
+		getliveshoplist(){
+			const _this = this 
+			_this.commit("gettokey")
+			setTimeout(()=>{
+				uni.request({
+					url:`${Requestpath}live/getAnchorGoodList`,
+					method:"POST",
+					data:{
+						token:state.tokey,
+						page:state.livepages,
+						pageSize:5
+					},
+					success(res) {
+						if(res.data.code==0){
+							if(state.livepages > 1){
+								state.liveshoplist = state.liveshoplist.concat(res.data.data.list)
+							}else{
+								state.liveshoplist = res.data.data.list
+							}
+						}
+					}
+				})
+			},1500)
+		},
+		//当用户主播滑动商品的列表到底部的时候
+		loadmore(){
+			state.livepages++
+			this.commit("getliveshoplist")
+		}
+	/******直播*****/
 }
 
 //actions用于操作异步

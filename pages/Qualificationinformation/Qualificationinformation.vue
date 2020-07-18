@@ -133,6 +133,12 @@
 			}
 		},
 		methods: {
+			toast(message){
+				uni.showToast({
+					title:message,
+					icon:"none"
+				})
+			},
 			ViewImage(e) {
 				uni.previewImage({
 					urls: this.imgList,
@@ -157,7 +163,7 @@
 			// 	uni.navigateTo({
 			// 		url:"/pages/Businessinformation/Businessinformation"
 			// 	})
-			// },
+			// },  
 			ChooseImage() {
 				const _this = this
 				uni.chooseImage({
@@ -186,22 +192,18 @@
 			},
 			formSubmit(e) {
 				const _this = this
-				for(let key in e.detail.value){
-					if(e.detail.value[key] == "" && _this.imgsrc != ""){
-						return false
-					}else{
+				
 						if(_this.selectiondatalist.length > 0){
 									// console.log(e.detail.value)
 									uni.getStorage({
 										key:"bindtokey",
 										success(res){
-											if(_this.titlename=="Individuals"){
-												// 个人入驻
+											if(_this.titlename=="Individuals"){ 
+												// 个人入驻    
 												uni.request({
-													url:`${app.globalData.Requestpath}store/updateMerchantJoinInfo`,
+													url:`${app.globalData.Requestpath}store/addMerchantJoinInfo`,
 													method:"POST",
 													data:{
-														store_area:0,
 														token:res.data,
 														store_name:e.detail.value.store,
 														store_addr:e.detail.value.address,
@@ -212,26 +214,33 @@
 														store_type:_this.store_type
 													},
 													success(res){
-														if(res.data.code==0){
-															uni.navigateTo({
-																url:`/pages/Businessinformation/Businessinformation?titlename=${_this.titlename}`
-															})
-														}else{
-															app.globalData.showtoastsame(res.data.msg)
-														}
-													}
+														   if(!(/^1[3456789]\d{9}$/.test(e.detail.value.phone))){
+														   	   _this.toast("手机号码有误，请重试")
+														   }else if(!(/^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/.test(e.detail.value.email))){
+														     	_this.toast("邮箱格式错误")
+														   }else{
+															   if(res.data.code==0){
+															   	uni.navigateTo({
+															   		url:`/pages/Businessinformation/Businessinformation?titlename=${_this.titlename}&storename=${e.detail.value.store}`
+															   	})
+															   }else{
+															   	  app.globalData.showtoastsame(res.data.msg)  
+															   }
+														   }
+													   }
+													
 												})
 											}else{
 												// console.log(_this.imgsrc)
 												// 商家入驻
 												uni.request({
-													url:`${app.globalData.Requestpath}store/updateMerchantJoinInfo`,
+													url:`${app.globalData.Requestpath}store/addMerchantJoinInfo`,
 													method:"POST",
 													data:{
 														license_sn:e.detail.value.businesslicense,  //营业执照号
 														license_validity:e.detail.value.businesslicenseDate ,//营业执照有效期
 														license_scope:e.detail.value.licensescope, //法定经营范围
-														license_pic:_this.imgsrc,   //营业电子照  	
+														license_pic:_this.imgsrc,   //营业电子照  		
 											   			token:res.data,
 														store_name:e.detail.value.store,
 														store_addr:e.detail.value.address,
@@ -242,12 +251,18 @@
 														store_type:_this.store_type,
 													},
 													success(res){
-														if(res.data.code==0){
-															uni.navigateTo({
-																url:`/pages/Businessinformation/Businessinformation?titlename=${_this.titlename}`
-															})
+														if(!(/^1[3456789]\d{9}$/.test(e.detail.value.phone))){
+															_this.toast("手机号码有误，请重试")
+														}else if(!(/^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/.test(e.detail.value.email))){
+															_this.toast("邮箱格式错误")
 														}else{
-															app.globalData.showtoastsame(res.data.msg)
+															if(res.data.code==0){
+																uni.navigateTo({
+																	url:`/pages/Businessinformation/Businessinformation?titlename=${_this.titlename}&storename=${e.detail.value.store}`
+																})
+															}else{
+																app.globalData.showtoastsame(res.data.msg)
+															}
 														}
 													}
 												})
@@ -257,14 +272,11 @@
 						}else{
 							  app.globalData.showtoastsame('请填写完整信息')
 						}
-					}
-				}
-			},
+				},
 			selectiondata(e){
 				this.selectiondatalist = e
-				// console.log(this.selectiondatalist[2][0].area_id)
+				// console.log(this.selectiondatalist[2][0].area_id)  
 			}
-			
 		},
 		components:{
 			actionbar,

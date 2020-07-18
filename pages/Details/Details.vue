@@ -5,16 +5,17 @@
 			:pic="pic" 
 			:region="region" 
 			:storeid="storeid" 
+			:gid="gid" 
 			:tokey="tokey" 
 			:couplebool="couplebool"
 			:good_state="good_state"
 			:good_verify="good_verify"
 			:good_delete="good_delete"
+			:liveshopstate="liveshopstate"
 		></pricetitle>
 		<imgs :imglist="good_content_images"></imgs>
 		<bottomcar 
 			:pic="pic" 
-			imgs="/static/cart/01.webp" 
 			:tokey="tokey" 
 			:gid="gid" 
 			:storeid="storeid" 
@@ -30,7 +31,7 @@
 	// 这是商品的轮播图
 	import detailsbanner from "@/components/indexcomponents/banner.vue"
 	//这是商品的商品的title
-	import pricetitle from "@/components/Details/PriceTitle"
+	import pricetitle from "@/components/Details/PriceTitle.vue"
 	//这是详情图
 	import imgs from "@/components/Details/detailsimgs.vue"
 	import bottomcar from "@/components/Details/detailsbottomcar.vue"
@@ -55,6 +56,7 @@
 				good_state:"",//商品的状态 是否下架 
 				good_verify:"",//是否通过
 				good_delete:"",//是否删除
+				liveshopstate:""
 			}
 		},
 		methods: {
@@ -70,14 +72,17 @@
 		},
 		onLoad(opction){
 			// couplebool
-			// console.log(opction)
+			console.log(opction)
+			let {id,storeid,goodtype,liveshopstate} = opction
 			const _this = this
 			//这是商品的id
-			this.gid = opction.id
+			this.gid = id
 			//店铺id
-			this.storeid = opction.storeid
+			this.storeid = storeid
+			this.liveshopstate = liveshopstate
+			console.log(this.liveshopstate)
 			//判断是不是新人
-			if(opction.goodtype=="npt"){
+			if(goodtype=="npt"){
 				this.couplebool = "npt"
 			}else{
 				this.couplebool = "nt"
@@ -91,7 +96,7 @@
 				success(res) {
 					// console.log(res.data.data.good_content_images)
 					if(res.data.code==0){
-						console.log(res)
+						// console.log(res)
 						_this.good_state = res.data.data.good_state
 						_this.good_verify = res.data.data.good_verify
 						_this.good_delete = res.data.data.good_delete
@@ -161,5 +166,6 @@
 <style lang="less" scoped>
 	.Details{
 		position: relative;
+		background-color: #F8F8F8;
 	}
 </style>

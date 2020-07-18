@@ -143,7 +143,7 @@
 
 <style lang="less" scoped>
 	.PersonalMy-big-bg{
-		background-color: #FFFFFF !important;
+		background-color: #F8F8F8 !important;
 	}
 	.Mynine-cell-operation{
 		margin-top: 40rpx;
@@ -151,7 +151,7 @@
 		justify-content: center;
 		.Mynine-cell-operation-midden{
 			width: 95%;
-			box-shadow: 2rpx 0px 8rpx 6rpx #c6c6c6;
+			// box-shadow: 2rpx 0px 8rpx 6rpx #c6c6c6;
 		}
 	}
 </style>

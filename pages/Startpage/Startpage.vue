@@ -1,6 +1,6 @@
 <template>
 	<!-- #ifdef APP-PLUS -->
-	<view class="Startpage" :style="{'background-image':'url(/static/Startpage/Startpage.gif)'}" v-if="Guidepagebools">
+	<view class="Startpage" :style="{'background-image':'url('+'http://hbk.huiboke.com'+imgs+')'}" v-if="Guidepagebools">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<view class="seconds">
 			<view class="Numbers" @tap="Stoptimer">
@@ -20,7 +20,8 @@
 				nums:10,
 				Startpagebool:true,
 				time:null,
-				Guidepagebools:false
+				Guidepagebools:false,
+				imgs:""
 			}
 		},
 		methods: {
@@ -35,30 +36,37 @@
 		},
 		created(){
 			const _this = this
-			// uni.getStorage({
-			// 	key:"Startpagebool",
-			// 	success(res) {
-			// 		cons
-			// 		_this.Startpagebool = res.data
-			// 	}
-			// })
-			_this.time = setInterval(()=>{
-				_this.nums--
-				if(_this.nums<0){
-					_this.nums = 0
-					clearInterval(_this.time)
-					//pages/Activitiesindex/Activitiesindex
-					//pages/index/index
-					uni.switchTab({
-						url:`/pages/index/index`
-					})
+			uni.request({
+				url:`${app.globalData.Requestpath}guider/getGuiderInfo`,
+				method:"POST",
+				data:{
+					type:1
+				},
+				success(res) {
+					if(res.data.code==0){
+						_this.imgs = res.data.data.data[0].adv_img
+						_this.nums = res.data.data.data[0].seconds
+						_this.time = setInterval(()=>{
+							_this.nums--
+							if(_this.nums<0){
+								_this.nums = 0
+								clearInterval(_this.time)
+								//pages/Activitiesindex/Activitiesindex
+								//pages/index/index
+								uni.switchTab({
+									url:`/pages/index/index`
+								})
+							}
+						},1000)
+					}
 				}
-			},1000)
+			})
+			
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
 			this.Guidepagebools = app.globalData.Guidepagebool
-		}
+		},
 	}
 </script>
 

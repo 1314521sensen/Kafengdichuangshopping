@@ -1,13 +1,13 @@
 <template>
 	<view class="Littlebeebox">
-		<view class="Littlebee" :style="{'background-image':'url(/static/littlebee/littlebeebg.gif)'}">
+		<view class="Littlebee" :style="{'background-image':'url('+this.$store.state.httpUrl+'/littlebee/littlebeebg.gif)'}">
 			<view class="Littlebee-top">
 				<!-- 这是上面的值 -->
 				<view class="Littlebee-top-right-zhi">
 					<view class="plicevalue" v-for="(item,index) in valueiconlist" :key="index">
 						<view class="icon-box">
 							<view class="icon">
-								<image :src="item.imgs" class="imgs"></image>
+								<image :src="'http://hbk.huiboke.com/uploads/app/image/'+item.imgs" class="imgs"></image>
 							</view>
 							<text class="iconvalue" :style="{'color':item.textcolor}">{{item.value}}</text>
 						</view>
@@ -24,7 +24,7 @@
 				<view class="activity">
 					<view 
 						class="sun activityvalue" 
-						:style="{'background-image':'url('+item.imgs+')','margin-top':item.marginTop+'rpx'}" 
+						:style="{'background-image':'url('+'http://hbk.huiboke.com/uploads/app/image/'+item.imgs+')','margin-top':item.marginTop+'rpx'}" 
 						v-for="(item,index) in activitylist" 
 						:key="index"
 						@tap="activityicon"
@@ -43,22 +43,22 @@
 			return {
 				activitylist:[
 					{
-						imgs:"/static/littlebee/sun.png",
+						imgs:"littlebee/sun.png",
 						marginTop:0
 					},
 					{
-						imgs:"/static/littlebee/rain.png",
+						imgs:"littlebee/rain.png",
 						marginTop:0
 					}
 				],
 				valueiconlist:[
 					{
-						imgs:"/static/littlebee/sun.png",
+						imgs:"littlebee/sun.png",
 						value:1000,
 						textcolor:"#febc51"
 					},
 					{
-						imgs:"/static/littlebee/smailrain.png",
+						imgs:"littlebee/smailrain.png",
 						value:1000,
 						textcolor:"#4fb5e5"
 					}

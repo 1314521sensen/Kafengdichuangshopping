@@ -2,7 +2,7 @@
 	<view class="choosing" :style="{'padding-top':statusBar+10+'rpx'}">
 		<actionbar message="入驻协议" url="/pages/PersonalMy/PersonalMy"></actionbar>
 		<view class="choosing-img">
-			<view class="imgsbox" :style="{'background-image':'url(/static/logo.png)'}"></view>
+			<view class="imgsbox" :style="{'background-image':'url('+this.$store.state.httpUrl+'logo.png'+')'}"></view>
 		</view>
 		<view class="choosing-btn">
 			<button class="cu-btn round text-white" v-for="(item,index) in btnlist" :key="index" @tap="enterinto" :data-indexs="index">{{item}}</button>
@@ -54,7 +54,7 @@
 				let indexs = e.currentTarget.dataset.indexs
 				if(this.radio=='B'){
 					//如果店铺的状态未通过 或者为null,让用户从新开通 否则 状态为1或者为2直接跳到最后
-					if(this.store_state == -1 || this.store_state==null){
+					if(parseInt(this.store_state) == -1 || this.store_state==null){
 						if(parseInt(indexs)==0){
 							uni.navigateTo({
 								url:`/pages/Qualificationinformation/Qualificationinformation?titlename=Individuals`
@@ -64,7 +64,7 @@
 								url:`/pages/Qualificationinformation/Qualificationinformation?titlename=enterprises`
 							})
 						}
-					}else if(this.store_state == 1 || this.store_state == 2){
+					}else if(parseInt(this.store_state) == 1 || parseInt(this.store_state) == 2){
 						if(parseInt(indexs)==0){
 							uni.navigateTo({
 								url:`/pages/contractsigning/contractsigning?titlename=Individuals`
@@ -102,6 +102,8 @@
 						success(res) {
 							if(res.data.code==0){
 								_this.store_state = res.data.data.store_state
+							}else{
+								_this.store_state = -1
 							}
 						}
 					})

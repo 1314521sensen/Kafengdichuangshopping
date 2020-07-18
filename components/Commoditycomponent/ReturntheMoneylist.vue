@@ -4,7 +4,12 @@
 				<!-- 这是背景图片 -->
 				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
 				<!-- <button class="cu-btn bg-red margin-tb-sm lg" :style="{'display':display}">删除你不想要的商品</button> -->
-				<view class="cu-item" v-for="(item,index) in this.$store.state.refundreturnlist" :key="index">
+				<view class="cu-item" 
+					v-for="(item,index) in this.$store.state.refundreturnlist" 
+					:key="index"
+					:data-s_id="item.store_id"
+					@tap="particulars"
+				>
 					
 					<!-- @tap="linkDetails(item.order_id,item.order_sn)" -->
 					
@@ -37,6 +42,12 @@
 			}
 		},
 		methods:{
+			particulars(e){
+               let {s_id} = e.currentTarget.dataset
+                   uni.navigateTo({
+						url:`/pages/Store/store?storeid=${s_id}`
+               		})
+			}
 			// linkDetails(){
 			// 	console.log(1)
 			// 	//orderid----订单id

@@ -2,7 +2,7 @@
 	<view class="store">
 		<!-- <pageheight :statusBar="statusBar"></pageheight> -->
 		<!-- 顶部 -->
-		<view class="kepala" :style="{'background-image':'url(/static/store/store_bg.png)','padding-top':statusBar+20+'rpx'}">
+		<view class="kepala" :style="{'background-image':'url('+this.$store.state.httpUrl+'/store/store_bg.png)','padding-top':statusBar+20+'rpx'}">
 			<!-- 导航 -->
 			<view class="kep_nav">
 				<view class="cu-bar">
@@ -23,7 +23,7 @@
 				<!-- 店铺上面的左边信息 -->
 				<view class="store_presentationLeft">
 					<view class="logoBox">
-						<image class="logo" src="/static/store/symbo.png"></image>
+						<image class="logo" :src="'http://hbk.huiboke.com'+store_logo"></image>
 					</view>
 					<view class="store_nameBox">
 						<view class="storeName_text">{{Shopname}}</view>
@@ -58,11 +58,11 @@
 				</view>
 				<!-- 右边的关注等 -->
 				<view class="store_presentationRight">
-					<view class="butt_on">
+					<view class="butt_on" @tap="attentionstore">
 						<text>+</text>
 						关注
 					</view>
-					<view>17人</view>
+					<view>{{fav_count}}人</view>
 				</view>
 			</view>
 			<!-- 分类 -->
@@ -86,7 +86,7 @@
 				<!-- 优惠券 -->
 				<discountcoupon></discountcoupon>
 				<!-- 新品开业 -->
-				<storenewArrival></storenewArrival>
+				<storenewArrival :storenewArrivallist="storenewArrivallist"></storenewArrival>
 				<!-- 精品大卖 -->
 				<boutiqueBarley msg="精品大卖" :horizontallylist="horizontallylist"></boutiqueBarley>
 			</view>
@@ -95,6 +95,9 @@
 			</view>
 			<view class="navshowitem" v-if="parseInt(TabCur)==2">
 				<boutiqueBarley msg="推荐新品" :horizontallylist="newslist"></boutiqueBarley>
+			</view>
+			<view v-if="parseInt(TabCur)==3">
+				<liveMerchant :storeid="storeid"></liveMerchant>
 			</view>
 		</scroll-view>
 	</view>
@@ -111,7 +114,6 @@
 	import storenews from "@/components/store/storenews.vue"
 	//引入视频
 	// import storevideo from "@/components/store/storevideo.vue"
-	 
 	// 引入轮播图   
 	import storebanner from "@/components/store/storebanner.vue"
 	// 优惠券
@@ -121,7 +123,7 @@
 	// 精品大卖
 	import boutiqueBarley  from "@/components/store/boutiquebarley.vue"
 	import adlet from "@/components/store/adlet.vue"
-	
+	import liveMerchant from "@/components/store/liveMerchant.vue"
 	const app = getApp()
 	export default {
 		//这是店铺    
@@ -129,8 +131,8 @@
 			return {
 				statusBar:0,
 				items:"推荐",
-				Month:0,
-				day:0,
+				// Month:0,
+				// day:0,
 				storeid:"",
 				Shopname:"",//店铺的名字
 				Whetherproprietary:false,//是否自营  
@@ -142,8 +144,11 @@
 				itemss:"",
 				TabCur: 0,
 				scrollLeft: 0,
-				navlist:["推荐","宝贝","新品"],//"视频"
-				page:1
+				navlist:["推荐","宝贝","新品","直播"],//"视频"
+				page:1,
+				fav_count:0,//关注的人数
+				store_logo:"",//店铺logo
+				storenewArrivallist:[],//新店开业数据
 			}
 		},
 		methods: {
@@ -180,6 +185,7 @@
 						pageSize:10
 					},
 					success(res) {
+						// console.log(res)
 						if(res.data.code==0){
 							if(_this.page>1){
 								_this.horizontallylist = _this.horizontallylist.concat(res.data.data.list)
@@ -216,18 +222,39 @@
 				this.page++
 				this.getrecommended(this.page)
 				this.getbabylist(this.page)
+			},
+			attentionstore(){
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey) {
+						uni.request({
+							url:`${app.globalData.Requestpath}user/addStoreFavoriteInfo`,
+							method:"POST",
+							data:{
+								token:restokey.data,
+								store_id:_this.storeid,
+								store_name:_this.Shopname,
+								store_logo:_this.store_logo
+							},
+							success(res) {
+								if(res.data.code==0){
+									app.globalData.showtoastsame(res.data.msg)
+								}else{
+									app.globalData.Detectionupdatetokey(restokey.data)
+									app.globalData.showtoastsame(res.data.msg)
+								}
+							}
+						})
+					}
+				})
+				
 			}
-			
 		},
 		onLoad(opction){
 			const _this = this
 			_this.storeid = opction.storeid
 			_this.statusBar = app.globalData.statusBar
-			let date = new Date()
-			let Month = date.getMonth()+1; 
-			let day = date.getDate()
-			_this.Month = Month
-			_this.day = day
 			// console.log(_this.Month,_this.day)
 			uni.request({
 				url:`${app.globalData.Requestpath}store/getStoreInfo`,
@@ -236,7 +263,10 @@
 				},
 				success(res) {
 					if(res.data.code==0){
-						let {store_name,is_platform_store,store_servicecredit,store_credit} = res.data.data
+						let {store_name,is_platform_store,store_servicecredit,store_credit,fav_count,store_logo} = res.data.data
+						// console.log(fav_count)
+						_this.store_logo = store_logo
+						_this.fav_count = fav_count
 						_this.Shopname = store_name
 						_this.score = store_servicecredit
 						_this.storecredit = store_credit
@@ -264,6 +294,19 @@
 					_this.newslist = res.data.data
 				}
 			})
+			//请求新店开业随机商品
+			uni.request({
+				url:`${app.globalData.Requestpath}store/getRandomStoreRecommendGoodList`,
+				data:{
+					sid:_this.storeid,
+					limit:10,
+				},
+				success(res) {
+					if(res.data.code==0){
+						_this.storenewArrivallist = res.data.data
+					}
+				}
+			})
 		},
 		components:{
 			uniRate,
@@ -274,7 +317,8 @@
 			discountcoupon,
 			storenewArrival,
 			boutiqueBarley,
-			adlet
+			adlet,
+			liveMerchant
 		}
 	}
 </script>

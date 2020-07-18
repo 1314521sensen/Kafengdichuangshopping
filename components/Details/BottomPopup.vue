@@ -13,93 +13,34 @@
 		<!-- 这是底部的弹出的窗口 -->
 		<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
 			<view class="cu-zidingyi cu-dialog">
-				<view class="padding-xl">
-					<text>品牌参数</text>
-					<view class="popup-list">
-						<view class="popup-list-auxiliary" v-for="(item,index) in brandlist" :key="index">
-							<view class="popup-list-same popup-list-left">品牌</view>
-							<view class="popup-list-same popup-list-right">华为node9plus照亮你的美</view>
-						</view>
+					<view class="padding-xl">
+						<scroll-view scroll-y="true" style="height: 60vh;overflow: hidden;">
+							<text>品牌参数</text>
+							<view class="popup-list">
+								<view class="popup-list-auxiliary" v-for="(item,index) in brandlist" :key="index">
+									<view class="popup-list-same popup-list-left">{{item.attr_name}}</view>
+									<view class="popup-list-same popup-list-right">{{item.attr_value}}</view>
+								</view>
+							</view>
+						</scroll-view>	
 					</view>
-				</view>
-				<view class="cu-bar bg-red">
-					<view class="action text-green determine" @tap="hideModal">确定</view>
-				</view>
+					<view class="cu-bar bg-red">
+						<view class="action text-green determine" @tap="hideModal">确定</view>
+					</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		data(){
 			//这是底部弹窗的组件
 			return {
 				modalName: null,
 				// 这是品牌的参数
-				brandlist:[
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					},
-					{
-						titles:"品牌",
-						describe:"华为node9plus照亮你的美"
-					}
-					
-				]
+				brandlist:[]
 			}
 		},
 		methods:{
@@ -110,11 +51,31 @@
 				this.modalName = null
 			}
 		},
-		props:["parameter"]
+		props:["parameter","storeid","gid"],
+		created() {
+			const app = getApp()
+			const _this = this
+			uni.request({
+				url:`${app.globalData.Requestpath}good/getGoodattributeList`,
+				data:{
+					sid:_this.storeid,
+					gid:_this.gid
+				},
+				success(res) {
+					
+					if(res.data.code==0){
+						_this.brandlist = res.data.data
+					}
+				}
+			})
+		}
 	}
 </script>
 
 <style lang="less" scoped>
+	.margin-top{
+	  margin-top: 10rpx;
+	 }
 	.cu-bar{
 		min-height: 70rpx;
 		.action{
@@ -143,6 +104,7 @@
 		
 	}
 	.padding-xl{
+		// height: 40vh;
 		padding:40rpx 0 0 0;
 		text{
 			display:block;

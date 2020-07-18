@@ -47,18 +47,30 @@
 				})
 			},
 			login(){
-				uni.removeStorage({
-					key:"bindtokey",
-					success(res) {
-						console.log(res)
-						uni.reLaunch({
-							url:"/pages/login/login"
-						})
+				uni.showModal({
+					title:"退出登录",
+					content: '确定退出登录吗?',
+					showCancel:true,
+					cancelText:"暂不退出",
+					cancelColor:"#f00",
+					confirmText:"确定退出",
+					confirmColor:"#0f0",
+					success(res){
+						if(res.confirm){
+							uni.removeStorage({
+								key:"bindtokey",
+								success(res) {
+									console.log(res)
+									uni.reLaunch({
+										url:"/pages/login/login"
+									})
+								}
+							})
+						}else{
+							app.globalData.showtoastsame("取消退出")
+						}
 					}
 				})
-				// uni.navigateTo({
-				
-				// })
 			},
 			
 			// getcouponslistdata(){

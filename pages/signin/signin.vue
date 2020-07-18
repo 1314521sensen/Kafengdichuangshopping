@@ -5,7 +5,7 @@
 		<actionbar message="签到" url="/pages/PersonalMy/PersonalMy"></actionbar>
 		<!-- 签到 -->
 		<view class="signBg_box">
-			<view class="sign_bg" style="background-image:url(/static/sign/sign_bg.png);">
+			<view class="sign_bg" :style="{'background-image':'url('+this.$store.state.httpUrl+'/sign/sign_bg.png)'}">
 				<view class="sign_box">
 					<text class="two">2</text>
 					<text class="three">3</text>
@@ -16,10 +16,9 @@
 		<!-- 点击签到 -->
 		<view class="ClickTheSignBox">
 			<view class="ClickTheSign">
-				<text class="sign_url" style="background-image:url(/static/sign/ClicktheSign.png) "></text>
+				<text class="sign_url" :style="{'background-image':'url('+this.$store.state.httpUrl+'/sign/ClicktheSign.png)'}"></text>
 				<text class="promptlySign">立即签到</text>
 			</view>
-				
 		</view>
 		<!-- 兑换商品 -->
 			<view class="conversion_titie">

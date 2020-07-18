@@ -1,5 +1,4 @@
 <template>
-	
 	<view class="list">
 		<!-- <scroll-view scroll-y="true" @scrolltolower="scrolltolower"  class="scrolltolower-list"> -->
 			<view class="cu-list menu-avatar">
@@ -34,7 +33,6 @@
 				</view>
 			</view>
 		<!-- </scroll-view> -->
-		
 	</view>
 </template>
 
@@ -98,7 +96,7 @@
 
 <style lang="less" scoped>
 	.list{
-	  // background-color: #fff;
+	   background-color: #F8F8F8;
 	  .shopping-title{
 	   //由于背景图片没高度 给来一个高度
 	   height:70rpx;
@@ -113,7 +111,7 @@
 	   flex-wrap:wrap;
 	   justify-content:space-between;
 	   padding: 0 20rpx;
-	   
+	   background-color: #F8F8F8;
 	   
 	  }
 	  .cu-list.menu-avatar>.cu-item{
@@ -124,7 +122,7 @@
 	   margin-bottom: 18rpx;
 	   border-radius: 20rpx;
 	   overflow: hidden;
-	   box-shadow: 4rpx 4rpx 12rpx #C0C0C0;
+	   // box-shadow: 4rpx 4rpx 12rpx #C0C0C0;
 	   padding:0;
 	   // box-shadow: 0rpx 0rpx 0rpx 5rpx;
 	   // align-items: center;
@@ -138,7 +136,6 @@
 	   .cu-item-left{
 	    .cu-item-left-bg{
 			width:100%;
-			// background-size: 100% 100%;
 		}
 	   }
 	   .cu-item-right{
@@ -158,7 +155,7 @@
 	       line-height:28rpx;
 	       color:#000;
 	       font-size: 28rpx;
-	      overflow : hidden;
+			overflow : hidden;
 	       text-overflow: ellipsis;
 	       display: -webkit-box;
 	       -webkit-line-clamp: 2;
@@ -173,10 +170,10 @@
 	       line-height:28rpx;
 	       color:#000;
 	       font-size: 22rpx;
-	       height: 50rpx;
-	       overflow: hidden;
-	       text-overflow:ellipsis;
-	       white-space: nowrap;
+	       display: -webkit-box;
+		   -webkit-box-orient: vertical;
+		   -webkit-line-clamp: 2;
+		   overflow: hidden;
 	      }
 	     /* #endif */
 	      .price{

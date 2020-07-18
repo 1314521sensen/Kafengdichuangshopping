@@ -3,42 +3,56 @@
 		<view>
 			<!-- 招牌 -->
 			<view class="titie_Logo">
-				<view class="Logo_url" style="background-image: url(/static/store/signboard.png);" mode="">
+				<view class="Logo_url" :style="{'background-image':'url('+this.$store.state.httpUrl+'store/signboard.png)'}" mode="">
 					<view>新店开业  新品大筹</view>
 				</view>
 			</view>
 			<!-- 商品列表 -->
 			<view class="rushGoodsListBox">
 				<!-- 每个商品 -->
-				<view class="rushGoods">
+				<view class="rushGoods" 
+					v-for="(item,index) in storenewArrivallist" 
+					:key="index" 
+					v-if="index%2<1"
+					:data-g_id="item.good_id"
+					:data-s_id="item.store_id"
+					@tap="randomshopdefault"
+				>
 					<!-- 左边图片展示 -->
 					<view class="exhibition">
-						<image src="/static/store/directeme.png" mode=""></image>
+						<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
 					</view>
 					<!-- 右边的详细内容  -->
 					<view class="detailMatter" style="background-image: url(/static/store/petal.png);">
-						<view class="data_name">VeroModa2020夏季狂侣折扣...</view>
-						<view class="deta_text">情侣框，涂鸦印花</view>
-						<view class="deta_price">￥99.00</view>
+						<view class="data_name">{{item.good_title}}</view>
+						<view class="deta_text">{{'畅销:'+item.good_click}}</view>
+						<view class="deta_price">{{'¥'+item.good_promotion_price}}</view>
 						<view class="Snapped">
 							<text class="spnTxt">立即抢购</text>
 						</view>
 					</view>
 				</view>
 				<!-- 每个商品 -->
-				<view class="rushGoods">
+				<view class="rushGoods" 
+					v-for="(item,index) in storenewArrivallist" 
+					:key="index" 
+					v-if="index%2>=1"
+					:data-g_id="item.good_id"
+					:data-s_id="item.store_id"
+					@tap="randomshopdefault"
+				>
 					<!-- 左边图片展示 -->
-					<view class="detailMatter_right" style="background-image: url(/static/store/petal.png)">
-						<view class="data_name">VeroModa2020夏季狂侣折扣...</view>
-						<view class="deta_text">情侣框 ,涂鸦印花</view>
-						<view class="deta_price">￥99.00</view>
+					<view class="detailMatter_right" style="background-image: url(http://hbk.huiboke.com/uploads/app/image/static/store/petal.png)">
+						<view class="data_name">{{item.good_title}}</view>
+						<view class="deta_text">{{item.good_click+':销畅'}}</view>
+						<view class="deta_price">{{'¥'+item.good_promotion_price}}</view>
 						<view class="Snapped">
 							<text class="spnTxt">立即抢购</text>
 						</view>
 					</view>
-					<!-- 右边的详细内容 -->
+					 <!-- 右边的详细内容 -->
 					<view class="exhibition">
-						<image src="/static/store/directeme.png" mode=""></image>
+						<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -54,7 +68,14 @@
 			}
 		},
 		methods: {
-		}
+			randomshopdefault(e){
+				let {g_id,s_id} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+				})
+			}
+		},
+		props:["storenewArrivallist"],
 	}
 </script>
 

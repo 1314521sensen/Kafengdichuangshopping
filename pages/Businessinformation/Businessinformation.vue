@@ -11,7 +11,7 @@
 				<view class="Business-bottom">
 					<view class="cu-form-group BusinessPadding">
 						<view class="title">店铺名称:</view>
-						<input placeholder="请输入店铺名称" name="input" class="inp" placeholder-class="inpplaceholder" v-model="message"></input>
+						<input placeholder="请输入店铺名称" :disabled="true" name="input" class="inp" placeholder-class="inpplaceholder" v-model="message"></input>
 					</view>
 					<view class="cu-form-group BusinessPadding">
 						<view class="title">店铺等级:</view>
@@ -57,63 +57,50 @@
 			}
 		},
 		methods: {
-			
 			Businessbtn(){
 				const _this = this
 				uni.getStorage({
 					key:"bindtokey",
 					success(res){
-						if(_this.message!==""){
-							//检查店铺名称是否存在
-							uni.request({
-								url:`${app.globalData.Requestpath}store/checkStoreName`,
-								method:"POST",
-								data:{
-									token:res.data,
-									s_name:_this.message
-								},
-								success(resCheckelectricshop) {
-									if(resCheckelectricshop.data.code==0){
-										//这是判断用户选择的不能为空
-										if(_this.level!=="" && _this.category!=="",_this.Businesscategorylist.length>0){
-											// console.log(_this.businesstype)
-											uni.request({
-												url:`${app.globalData.Requestpath}store/updateMerchantJoinInfo`,
-												method:"POST",
-												data:{
-													token:res.data,
-													store_type:_this.businesstype,
-													store_name:_this.message,
-													gc_id1:_this.category.gc_id,
-													grade_id:_this.level.grade_id,
-													gc_ids:_this.strid,
-													gc_margin:_this.pricetext
-												},
-												success(updataresinfo) {
-													if(updataresinfo.data.code==0){
-														uni.navigateTo({
-															url:`/pages/contractsigning/contractsigning?titlename=${_this.businesstype?'enterprises':'Individuals'}`
-														})
-													}else{
-														app.globalData.showtoastsame(updataresinfo.data.msg)
-													}
-												}
-											})
-											
-										}else{
-											app.globalData.showtoastsame("请填写完整信息")
-										}
-									}else{
-										app.globalData.showtoastsame(resCheckelectricshop.data.msg)
-										app.globalData.Logback(resCheckelectricshop.data.msg)
-									}
-								}
+						if(!_this.pricetext){
+							uni.showToast({
+								title:"价格不能为0",
+								icon:"none"
 							})
 						}else{
-							//如果店铺名为空的话就提示用户
-							app.globalData.showtoastsame("店铺名称不能为空")
-						}
-					}
+							if(_this.message!==""){
+								//检查店铺名称是否存在
+								//这是判断用户选择的不能为空
+									if(_this.level!=="" && _this.category!=="",_this.Businesscategorylist.length>0){
+										// console.log(_this.businesstype)
+										uni.request({
+											url:`${app.globalData.Requestpath}store/updateMerchantJoinInfo`,
+											method:"POST",
+											data:{
+												token:res.data,
+												store_type:_this.businesstype,
+												store_name:_this.message,
+												gc_id1:_this.category.gc_id,
+												grade_id:_this.level.grade_id,
+												gc_ids:_this.strid,
+												gc_margin:_this.pricetext
+											},
+											success(updataresinfo) {
+												if(updataresinfo.data.code==0){
+													uni.navigateTo({
+													url:`/pages/contractsigning/contractsigning?titlename=${_this.businesstype?'enterprises':'Individuals'}`
+													})
+												}else{
+													app.globalData.showtoastsame(updataresinfo.data.msg)
+												}
+											}
+										})
+									}else{
+										app.globalData.showtoastsame("请填写完整信息")
+									}
+								}
+							}
+					  }
 				})
 			},
 			//这是选择等级返回来的值
@@ -169,6 +156,7 @@
 			bottomModal
 		},
 		onLoad(opctrion) {
+			this.message = opctrion.storename
 			this.statusBar = app.globalData.statusBar
 			console.log(opctrion.titlename)
 			if(opctrion.titlename=='Individuals'){

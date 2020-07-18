@@ -5,10 +5,10 @@
 			:style="{'background-image':'url(/static/Newgift/Presentscar.gif)','height':Newgiftheight+'vh','width':Newgiftwidth+'%'}" 
 			v-if="Newgiftbool">
 		</view>
-		<view class="new" :style="{'background-image':'url('+yuming+'Newgift/bg.png'+')'}">
+		<view class="new" :style="{'background-image':'url('+this.$store.state.httpUrl+'Newgift/bg.png'+')'}">
 			<pageheight :statusBar="statusBar"></pageheight>
 			<scroll-view class="fa-new" scroll-y="true" >
-				<view class="new-top-img" :style="{'background-image':'url('+yuming+'Newgift/bgtitle.png'+')'}"></view>
+				<view class="new-top-img" :style="{'background-image':'url('+this.$store.state.httpUrl+'/Newgift/bgtitle.png'+')'}"></view>
 				<view class="new-bottom">
 					<NewPeople v-if="couponslist.length>0"></NewPeople>
 					<scroll-view :scroll-x="true" @scrolltolower="scrolltolower">
@@ -71,8 +71,8 @@
 			</scroll-view>
 			<view class="new-bottom-bottom cu-dialog">
 				<view class="bottom-midden">
-					<view class="log-left" :style="{'background-image':'url('+yuming+'logo.png'+')'}"></view>
-					<view class="log-right" :style="{'background-image':'url('+yuming+'Newgift/bottomlogo.png'+')'}"></view>
+					<view class="log-left" :style="{'background-image':'url('+this.$store.state.httpUrl+'logo.png'+')'}"></view>
+					<view class="log-right" :style="{'background-image':'url('+this.$store.state.httpUrl+'Newgift/bottomlogo.png'+')'}"></view>
 				</view>
 			</view>
 		</view>

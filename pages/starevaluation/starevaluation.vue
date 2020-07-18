@@ -25,7 +25,7 @@
 						图片上传
 					</view>
 					<view class="action">
-						{{imgList.length}}/4
+						<!-- {{imgList.length}}/4  -->
 					</view>
 				</view>
 				<view class="cu-form-group">
@@ -36,7 +36,7 @@
 								<text class='cuIcon-close'></text>
 							</view>
 						</view>
-						<view class="solids" @tap="ChooseImage" v-if="imgList.length<=4">
+						<view class="solids" @tap="ChooseImage" v-if="imgList.length<4">
 							<view class="bg">
 								
 							</view>
@@ -109,12 +109,16 @@
 				yuming:"",
 				neirongtext:"",
 				imgreturnlist:[],//后台返回的图片数组
+				arraylastimages:[]
 			}
 		},
 		components:{
 			Star
 		},
 		methods:{
+			ViewImage(){
+				
+			},
 			ChooseImage() {
 				const _this = this
 				uni.chooseImage({
@@ -124,36 +128,20 @@
 					success: (res) => {
 						if (this.imgList.length != 0) {
 							this.imgList = this.imgList.concat(res.tempFilePaths)
+							this.imgreturnlist = this.imgList
+							// console.log(this.imgreturnlist)
 							// console.log(this.imgList,"多张")
-							let str = ""
-							this.imgList.forEach((item,index)=>{
-								str += item+','
-							})
-							str = str.substring(str.length-1,1)
-							console.log(str)
-							uni.uploadFile({
-								url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
-								filePath:str,
-								name:"file",
-								fileType:"image",
-								success(res){
-									
-								}
-							})
+							// let str = ""
+							// let arr = []
+							// this.imgList.forEach((item,index)=>{
+							// 	str += item+','
+							// })
+							// str = str.substring(str.length-1,1)
+							// arr.push(str)
+							// this.imgreturnlist = arr
 						} else {
 							this.imgList = res.tempFilePaths
-							console.log(this.imgList)
-							uni.uploadFile({
-								url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
-								filePath:this.imgList[0],
-								name:"file",
-								fileType:"image",
-								success(res){
-									if(JSON.parse(res.data).code==0){
-										_this.imgreturnlist.push(JSON.parse(res.data).data.src)
-									}
-								}
-							})
+							_this.imgreturnlist = this.imgList
 						}
 					}
 				});
@@ -196,27 +184,23 @@
 					}
 				})
 			},
-			//将评价提交到后台
-			submitevaluation(){
+			//封装一个共用的提交评价
+			plicestarevaluation(getimglist){
 				const _this = this
-				let {topvalue,imgreturnlist,neirongtext,Logisticsvalue,attitudevaluevalue} = this.$data
-				console.log(topvalue,imgreturnlist,neirongtext,Logisticsvalue,attitudevaluevalue)
+				// console.log(_this.tokey,_this.bianhao,_this.gid,_this.topvalue,_this.attitudevaluevalue,_this.Logisticsvalue,_this.neirongtext)
 				//  开始对商品评价
-				if(topvalue==0 || imgreturnlist.length==0 || neirongtext==""){
-					app.globalData.showtoastsame("请填写完整信息")
-				}else{
 					uni.request({
 						url:`${app.globalData.Requestpath}order/orderGoodEvaluation`,
 						method:"POST",
 						data:{
-							token:this.tokey,
-							o_sn:this.bianhao,
-							gid:this.gid,
-							desccredit:topvalue,
-							servicecredit:attitudevaluevalue,
-							deliverycredit:Logisticsvalue,
-							e_content:neirongtext,
-							e_pic:imgreturnlist
+							token:_this.tokey,
+							o_sn:_this.bianhao,
+							gid:_this.gid,
+							desccredit:_this.topvalue?_this.topvalue:5,
+							servicecredit:_this.attitudevaluevalue?_this.attitudevaluevalue:5,
+							deliverycredit:_this.Logisticsvalue?_this.Logisticsvalue:5,
+							e_content:_this.neirongtext?_this.neirongtext:'该用户没有评价',
+							e_pic:getimglist
 						},
 						success(res) {
 							console.log(res)
@@ -238,6 +222,39 @@
 							}
 						}
 					})
+			},
+			//将评价提交到后台
+			submitevaluation(){
+				const _this = this
+				let imgreturnlistarr = []
+				let {topvalue,imgreturnlist,neirongtext,Logisticsvalue,attitudevaluevalue} = this.$data
+				// console.log(imgreturnlist,"这是要上传的而图片")
+				// console.log(imgreturnlist.length)  
+				if(parseInt(imgreturnlist.length)>0){
+					// console.log("执行有图片")
+					//每次上传图片都渲染
+					for(var i = 0 ; i < imgreturnlist.length ; i++){
+						uni.uploadFile({
+							url:`${app.globalData.Requestpath}common/uploadImages?type=order`,
+							filePath:imgreturnlist[i],	
+							name:"file",
+							fileType:"image",
+							success(res){
+							    
+								//JSON  转字符串   
+								if(JSON.parse(res.data).code==0){
+									// console.log(JSON.parse(res.data).data[0])
+									//把每张图片追加到一个自定义数组当中
+									_this.arraylastimages.push(JSON.parse(res.data).data[0])
+								}
+							}
+						})
+					}
+					_this.plicestarevaluation(_this.arraylastimages)
+					
+				}else{
+					console.log(imgreturnlistarr)
+					_this.plicestarevaluation(_this.arraylastimages)
 				}
 			}
 		},

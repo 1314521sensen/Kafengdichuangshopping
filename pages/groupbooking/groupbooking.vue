@@ -26,7 +26,7 @@
 					<view class="PeopleProvinceBox">
 						<!-- 图片 -->
 						<view class="PeoImgBox">
-							<image class="hot_" src="/static/groupbooking/top1.png" mode=""></image>
+							<image class="hot_" :src="this.$store.state.httpUrl+'/groupbooking/top1.png'" mode=""></image>
 							<image class="perUrl"  src="/static/groupbooking/belle.png" mode=""></image>
 						</view>
 						<!-- 描述 -->
@@ -37,7 +37,7 @@
 					<view class="PeopleProvinceBox">
 						<!-- 图片 -->
 						<view class="PeoImgBox">
-							<image class="hot_" src="/static/groupbooking/top2.png" mode=""></image>
+							<image class="hot_" :src="this.$store.state.httpUrl+'/groupbooking/top2.png'" mode=""></image>
 							<image class="perUrl"  src="/static/groupbooking/belle.png" mode=""></image>
 						</view>
 						<!-- 描述 -->
@@ -48,7 +48,7 @@
 					<view class="PeopleProvinceBox">
 						<!-- 图片 -->
 						<view class="PeoImgBox">
-							<image class="hot_" src="/static/groupbooking/top3.png" mode=""></image>
+							<image class="hot_" :src="this.$store.state.httpUrl+'/groupbooking/top3.png'" mode=""></image>
 							<image class="perUrl"  src="/static/groupbooking/belle.png" mode=""></image>
 						</view>
 						<!-- 描述 -->

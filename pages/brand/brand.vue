@@ -11,7 +11,7 @@
 			</view> -->
 		</view>
 		<!-- 精品推荐 -->
-		<view class="recommendation" style="background-image: url(/static/brand/recommendation.png);">
+		<view class="recommendation" :style="{'background-image':'url('+this.$store.state.httpUrl+'/brand/recommendation.png'+')'}">
 			<!-- 标题 -->
 			<view class="mend_tltBox">
 				<view class="mend_tlt">精品推荐</view>

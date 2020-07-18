@@ -1,6 +1,7 @@
 <template>
 	<view class="returenloginpasswordall">
 		<pageheight :statusBar="statusBar"></pageheight>
+		<actionbar message="修改登录密码"  url="/pages/PersonalMy/PersonalMy" :Jumpchoose="false"></actionbar>
 		<form @submit="confirmreturnlogin">
 				<view class="item">
 					<!-- 这是普通的 -->
@@ -23,7 +24,7 @@
 						<view class="cu-form-group margin-top">
 							<view class="title">{{item.titlesms}}</view>
 							<input :placeholder="item.titlesmsplaceholder" :name="item.namesms"></input>
-							<button class='cu-btn bg-green shadow' @tap="Verificationode" :disabled="disabled">{{codetext}}</button>
+							<button class='cu-btn bg-green shadow' @tap="Verificationode" :disabled="disabled">{{countdowntext}}</button>
 						</view>
 						<view class="cu-form-group margin-top">
 							<view class="title">{{item.titlenewpassword}}</view>
@@ -39,6 +40,7 @@
 </template>
 
 <script>
+	import actionbar from "@/components/actionbar/actionbar.vue"
 	const app = getApp()
 	export default{
 		data(){
@@ -48,6 +50,8 @@
 				tokey:"",
 				disabled:false,
 				codetext:"验证码",
+				countdowntext:"获取验证码",//这是重新验证码的文字变量
+				wait:60,//这是时间倒计时
 				phonecode:"",
 				id:"",
 				list:[
@@ -79,6 +83,26 @@
 			}
 		},
 		methods:{
+			time(){
+				this.disabled = true
+				//这块点击反复执行定时器
+				// clearInterval(times)
+				let {countdowntext,wait} = this.$data
+				// console.log(countdowntext,wait)
+					this.times = setInterval(()=>{
+						wait--
+						// console.log(wait)
+						this.countdowntext = wait
+						if(wait==0){
+							this.disabled = false
+							countdowntext = "重新获取验证码"
+							clearInterval(this.times)
+							this.countdowntext = countdowntext
+							this.wait = 60
+						}
+					},1000)
+			},
+
 			//封装一个提示框的接口
 			showToastkuang(message){
 				uni.showToast({
@@ -101,6 +125,7 @@
 							userid:this.id
 						}
 						app.globalData.VerificationCode(json)
+						this.time()
 					}else{
 						let json = {
 							email:this.phonecode,
@@ -108,6 +133,7 @@
 							userid:this.id
 						}
 						app.globalData.emailreg(json)
+						this.time()
 					}
 					
 				}else{
@@ -149,7 +175,7 @@
 										url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 									})
 								}else{
-									this.showToastkuang("原密码错误")
+									this.showToastkuang("旧密码不能与新密码一致")
 								}
 							}
 						})
@@ -216,9 +242,16 @@
 			// console.log(this.tokey)
 			//这个是控制状态栏高度的
 			this.statusBar = app.globalData.statusBar
+		},
+		components:{
+			actionbar
 		}
 	}
 </script>
 
-<style>
+<style lang="less" scoped>
+	.returenloginpasswordall{
+		background-color: #F8F8F8;
+		min-height: 100vh;
+	}
 </style>

@@ -9,7 +9,7 @@
 		 <view class="introduce">
 			<text class="introduced_name">嘻哈帽子女潮日系无棒球帽秋冬瓜</text>
 			<view class="price_detail">
-				<image class="price_Img" src="/static/giftdetails/integral.png" mode=""></image>
+				<image class="price_Img" :src="this.$store.state.httpUrl+'giftdetails/integral.png'" mode=""></image>
 				<text class="price">300</text>
 			</view>
 		 </view>
@@ -39,7 +39,7 @@
 						 <view>
 							 <view class="ziliao">
 								 <!-- 头像 -->
-								 <image class="phone" src="/static/giftdetails/yue.png" mode=""></image>
+								 <image class="phone"  :src="httpurl+'giftdetails/yue.png'" mode=""></image>
 								 <view class="name">xxxx</view>
 							 </view>
 							 <view> 
@@ -83,6 +83,7 @@
 			return{
 				evaluatenum:25,
 				statusBar:0,
+				httpurl:"http://hbk.huiboke.com/uploads/app/image/",
 				swiperList:[
 					{
 						imgs:"/static/indexbanner/banner1.jpg",

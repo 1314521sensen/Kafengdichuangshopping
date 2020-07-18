@@ -50,6 +50,7 @@
 				}, {
 					badge: 0,
 					name: '我的咨询',
+					url:"/pages/Customerservice/Customerservice",
 					imgs:"http://hbk.huiboke.com/uploads/app/image/my/ScratchableLatex/Myadvice.png",
 					Routinghopname:"userMyinquiry"
 				}, {

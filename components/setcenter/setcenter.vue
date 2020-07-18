@@ -110,5 +110,8 @@
 </script>
 
 <style lang="less">
-	
+	.setcenter{
+		background-color: #f8f8f8;
+		min-height: 100vh;
+	}
 </style>

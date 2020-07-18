@@ -65,9 +65,10 @@
 		justify-content: center;
 		.orders-box{
 			width: 95%;
-			box-shadow: 2rpx 0px 8rpx 6rpx #c6c6c6;
+			// box-shadow: 2rpx 0px 8rpx 6rpx #c6c6c6;
 			padding:20rpx 4rpx;
 			background-color: #fff;
+			border-radius: 30rpx;
 			.orders-title-name{
 			// width: ;
 			display: flex;

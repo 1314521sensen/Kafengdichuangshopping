@@ -1,9 +1,9 @@
 <template>
-	<view>
+	<view class="integralBox">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<actionbar message="我的积分" url="/pages/PersonalMy/PersonalMy"></actionbar>
-		<view class="integra-banner" :style="{'background-image':'url('+integrabannerbgurl+')'}">
-			<view class="integra-img" :style="{'background-image':'url('+integraimgbgurl+')'}">
+		<view class="integra-banner" :style="{'background-image':'url('+this.$store.state.httpUrl+'/integral/1.png)'}">
+			<view class="integra-img" :style="{'background-image':'url('+this.$store.state.httpUrl+'/integral/2.png)'}">
 				<view class="integral-text-left">
 					<text class="left-one">{{nums}}</text>
 					<view class="integral-smail-left-text">
@@ -52,6 +52,10 @@
 </script>
 
 <style lang="less" scoped>
+	.integralBox{
+		height: 100vh;
+		background-color: #F8F8F8; 
+	}
 	.integra-banner{
 		overflow: hidden;
 		background-size: cover;

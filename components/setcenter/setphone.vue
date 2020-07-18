@@ -28,7 +28,7 @@
 							<view class="cu-bar bg-white justify-end">
 								<view class="action btn">
 									<button class="cu-btn line-green text-green" form-type="submit">{{submitbtn}}</button>
-									<button class="cu-btn line-green text-red" @tap="smsreg" :style="{'display':phoneregstyle}">获取手机号验证码</button>
+									<button class="cu-btn line-green text-red" @tap="smsreg" :style="{'display':phoneregstyle}" :disabled="disabled">{{countdowntext}}</button>
 								</view>
 							</view>
 						</view>
@@ -54,10 +54,33 @@
 				placeholdernewsphone:"请输入新的手机号",
 				placeholdernewssms:"请输入新手机验证码",
 				value:"",
-				value2:""
+				value2:"",
+				countdowntext:"获取验证码",
+                wait:60,
+               	disabled:false
 			}
 		},
 		methods:{
+			time(){
+				this.disabled = true
+				//这块点击反复执行定时器
+				// clearInterval(times)
+				let {countdowntext,wait} = this.$data
+				// console.log(countdowntext,wait)
+					this.times = setInterval(()=>{
+						wait--
+						// console.log(wait)
+						this.countdowntext = wait
+						if(wait==0){
+							this.disabled = false
+							countdowntext = "重新获取验证码"
+							clearInterval(this.times)
+							this.countdowntext = countdowntext
+							this.wait = 60
+						}
+						
+					},1000)
+			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 				let arr = []
@@ -100,6 +123,7 @@
 				}
 				//这里发送验证码是采用app里封装的
 				app.globalData.VerificationCode(json)
+				this.time()
 			},
 			//点击确定的时候
 			setregphone(e){

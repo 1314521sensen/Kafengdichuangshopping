@@ -11,7 +11,7 @@
 					<text class="non-payment" v-if="orderstatus==1">订单已付款</text>
 					<text class="non-payment" v-if="orderstatus==2">订单已发货</text>
 					<text class="non-payment" v-if="orderstatus==3">订单已完成</text>
-					<text v-if="orderstatus==0">30分钟内自动取消订单</text>
+					<text v-if="orderstatus==0">{{this.$store.state.remainingTime}}分钟内自动取消订单</text>
 					<!-- <xqcountdown 
 						:startTime="String(this.$store.state.Notcreated)" 
 						:endTime="String(this.$store.state.Notpaying)"
@@ -35,13 +35,18 @@
 				</view>
 			</view>
 			<Selectexpresscompany v-if="orderstatus==3"></Selectexpresscompany>
-			<Deliveryaddressshow v-if="orderstatus>1"></Deliveryaddressshow>
+			<deliveryaddressshow v-if="orderstatus>1"></deliveryaddressshow>
 			<view class="shoporder">
 				<view class="shoporder-list" v-for="(item,index) in this.$store.state.orderlistshop" :key='index'>
 					<view class="order-title">
 						<text>{{s_title}}</text>
 					</view>
-					<view class="shopgoosorder">
+					<view 
+						class="shopgoosorder"
+						  @tap="toDetails"
+		                  :data-g_id="item.good_id"
+		                  :data-s_id="item.store_id"
+					>
 						<view class="shop-img">
 							<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
 						</view>
@@ -64,7 +69,7 @@
 					<view class="Deliverynote">
 						<view class="actual-payment">
 							<text class="actual-payment-text">实付款</text>
-							<text class="actual-payment-price" v-text="'￥'+item.good_pay_price*item.good_num"></text>
+							<text class="actual-payment-price" v-text="'￥'+(item.good_pay_price*item.good_num+Number(dispatch_price))"></text>
 						</view>
 					</view>
 				</view>
@@ -101,7 +106,7 @@
 	//引入查询物流的快递
 	import Selectexpresscompany from "@/components/Commoditycomponent/Selectexpresscompany.vue"
 	//引入跳到物流的页面
-	import Deliveryaddressshow from "@/components/Temporarynonpayment/Deliveryaddressshow.vue"
+	import deliveryaddressshow from "@/components/Temporarynonpayment/Deliveryaddressshow.vue"
 	//引入倒计时的插件
 	import xqcountdown from "@/components/xq-countdown/xq-countdown.vue"
 	const app = getApp()
@@ -131,10 +136,16 @@
 			// actionbar,
 			shopoderbottom,
 			Selectexpresscompany,
-			Deliveryaddressshow,
+			deliveryaddressshow,
 			xqcountdown
 		},
 		methods:{
+			toDetails(e){
+				 let {g_id,s_id} = e.currentTarget.dataset
+				  uni.navigateTo({
+                   		url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+                  })
+			}
 		},
 		//后期说
 		onLoad(opction) {
@@ -158,10 +169,10 @@
 					_this.startTime = res.data.create_time //这是创建时间
 					_this.endTime = res.data.send_time //这是发货时间
 					_this.Completiontime = res.data.finish_time //这是完成时间
+					_this.cancel_time = res.data.cancel_time
 					//拿到创建时间 转换成时间戳 弄个倒计时
-					let date = new Date(_this.startTime)
+					 let date = new Date(_this.startTime.replace(/-/g, '/'))
 					let createdTime = date.getTime()
-					
 					//请求订单详情信息
 					uni.getStorage({
 						key:"bindtokey",
@@ -255,7 +266,7 @@
 <style lang="less" scoped>
 	.TheOrderDetails{
 		.top{
-			background-color: #fe7a00;
+			background-color: #F8F8F8;
 			.bg-title{
 				width: 100%;
 				padding: 60rpx 0 40rpx 60rpx;

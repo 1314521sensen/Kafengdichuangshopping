@@ -10,7 +10,13 @@
 					<text>国际潮牌,限时折扣</text>
 				</view>
 				<view class="hot-bottom">
-					<view class="bottom-img" v-for="(item,index) in Popularimglist" :key="index">
+					<view class="bottom-img" 
+						v-for="(item,index) in Popularimglist" 
+						:key="index"
+						:data-g_id="item[0]"
+						:data-s_id="item[16]"
+						@tap="materialpurchase"
+					>
 						<image :src="'http://hbk.huiboke.com'+item[2]" mode=""></image>
 					</view>
 				</view>
@@ -24,15 +30,28 @@
 					<text>亿款零食,商家直供</text>
 				</view>
 				<view class="fruits-bottom">
-					<view class="bottom-img" v-for="(item,index) in Tosend" :key="index">
+					<view 
+						class="bottom-img" 
+						v-for="(item,index) in Tosend" 
+						:key="index"
+						:data-g_id="item[0]"
+						:data-s_id="item[16]"
+						@tap="materialpurchase"
+					>
 						<image :src="'http://hbk.huiboke.com'+item[2]" mode=""></image>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="featuredCommodity-bottom">
-			<view class="purchase" v-for="(item,index) in purchaseListSum " :key="index">
-				<h4 :style="{'color':item.color}">{{item.text}}</h4>
+			<view class="purchase" 
+				v-for="(item,index) in purchaseListSum" 
+				:key="index"
+				:data-g_id="item.good_id"
+				:data-s_id="item.store_id"
+				@tap="materialpurchase"
+			>
+				<text :style="{'color':item.color}">{{item.text}}</text>
 				<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
 			</view>
 		</view>
@@ -53,29 +72,38 @@
 				Tosend:[],
 				purchaseList:[
 					{
-						text:"美食",
+						text:"亿万",
 						color:"#ffc96b"
 					},
 					{
-						text:"服饰",
+						text:"精选",
 						color:"#94ff60"
 					},
 					{
-						text:"家电",
+						text:"好品",
 						color:"#ff6464"
 					},
 					{
-						text:"美妆",
+						text:"限时",
 						color:"#6589ff"
 					},
 					{  
-						text:"母婴",
+						text:"折扣",
 						color:"#ff669f"
 					}
 				],
 				purchaseListSum:[
 					
 				],
+			}
+		},
+		methods:{
+			materialpurchase(e){
+				// console.log(e)
+				let {g_id,s_id} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
+				})
 			}
 		},
 		created(){
@@ -86,6 +114,7 @@
 					limit:5
 				},
 				success(res){
+					// console.log(res)
 					if(res.data.code==0){
 						_this.totalnumber = res.data.data
 						// console.log(_this.totalnumber)

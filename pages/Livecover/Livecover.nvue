@@ -1,5 +1,5 @@
 <template>
-<!-- #ifdef APP-PLUS -->
+ <!-- #ifdef APP-PLUS -->
 	<view class="livecover" :style="{width:windowWidth+'px',height:windowHeight+'px'}">
 		<!--这是直播推流组件 -->
 		<live-pusher 
@@ -98,7 +98,10 @@
 					// 	url:"/static/Pushflow/Cameratransformation.png"
 					// }
 				],
-				Skincare:false
+				Skincare:false,
+				// 临时变量
+				indexlinshi:0,
+				storeid:"",//为了获得店铺id
 			}
 		},
 		methods: {
@@ -130,8 +133,11 @@
 						if(res.confirm){
 							//关闭摄像头预览
 							_this.context.stopPreview()
+							//开启推流
+							// _this.context.start()
+							// 后面添加参数的是临时的
 							uni.redirectTo({
-								url:`/pages/livestudio/livestudio`
+								url:`/pages/livestudio/livestudio?storeid=${_this.storeid}&index=${_this.indexlinshi}`
 							})
 						}
 					}
@@ -142,8 +148,12 @@
 				if(_this.Backcoverurl!=="" && _this.Backinpvalue!==""){//如果两个值不为空的情况下
 					//关闭摄像头预览
 					_this.context.stopPreview()
+					//开启推流
+					// _this.context.start()
 					uni.redirectTo({
-						url:`/pages/livestudio/livestudio`
+						// 后面添加参数的是临时的
+						
+						url:`/pages/livestudio/livestudio?storeid=${_this.storeid}&index=${_this.indexlinshi}`
 					})
 				}else if(_this.Backcoverurl==""){//如果图片的为空
 					_this.covermodel('封面图片未选择',"为了让其他人更好的关注您,请设置封面图片")
@@ -185,9 +195,7 @@
 			},
 			//点击×的时候
 			Shutdown(){
-				uni.switchTab({
-					url:"/pages/Liveplatformlist/Liveplatformlist"
-				})
+				uni.navigateBack()
 			},
 			//这是子组件穿回来的值
 			coverurl(e){
@@ -270,9 +278,15 @@
 		},
 		components:{
 			livecovemidden
-		}
+		},
+		onLoad(opction) {
+			let {index,storeid} = opction
+			this.storeid = storeid
+			this.indexlinshi = index
+		},
+		
 	}
-// #endif
+	// #endif
 </script>
 
 <style>
@@ -357,5 +371,5 @@
 		margin:15rpx 0;
 		border-radius:20rpx;
 	}
-	/* #endif */
+/* #endif */
 </style>

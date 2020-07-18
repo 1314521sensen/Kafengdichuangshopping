@@ -1,5 +1,5 @@
 <template>
-	<view class="Successful_opening_store" :style="{'background-image':'url(/static/carddianpu/opening.jpg)'}">
+	<view class="Successful_opening_store" :style="{'background-image':'url('+this.$store.state.httpUrl+'carddianpu/opening.jpg)'}">
 		
 	</view>
 </template>

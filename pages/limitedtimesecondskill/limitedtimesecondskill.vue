@@ -1,9 +1,9 @@
 <template>
 	<view class="limitedtimesecondskill">
 		<!-- 活动图 -->
-		<view class="activityGraph" style="background:url(/static/limitedtimesecondskill/banner.gif) no-repeat;background-size: 100% 100%;"></view>
+		<view class="activityGraph" :style="{'background-image':'url('+this.$store.state.httpUrl+'/limitedtimesecondskill/banner.gif)','background-size':'100% 100%'}"></view>
 		<!-- 活动规则 -->
-		<view class="activityRules" style="background: url(/static/limitedtimesecondskill/activityUrl.png) no-repeat;">
+		<view class="activityRules"  :style="{'background':'url('+this.$store.state.httpUrl+'/limitedtimesecondskill/activityUrl.png)','background-repeat':'no-repeat'}">
 			<view class="titie">活动规则</view>
 			<view class="regulation">没件商品数量有限，秒杀完立即恢复原价</view>
 		</view>

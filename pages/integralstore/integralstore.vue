@@ -22,7 +22,7 @@
 					@tap="tabSelect" 
 					:data-id="index">
 					<view class="icon">
-						<image :src="item.imgs" alt="">
+						<image :src="'http://hbk.huiboke.com/uploads/app/image/'+item.imgs" alt="">
 					</view>
 					{{item.name}}
 				</view>
@@ -95,16 +95,16 @@
 				TabCur: 0,
 				navList:[{
 					name:"商品专区",
-					imgs:"/static/integralstore/commodity.png",
+					imgs:"integralstore/commodity.png",
 				},{
 					name:"特卖专区",
-					imgs:"/static/integralstore/special.png",
+					imgs:"integralstore/special.png",
 				},{
 					name:"新品专区",
-					imgs:"/static/integralstore/newproduct.png",
+					imgs:"integralstore/newproduct.png",
 				},{
 					name:"热销专区",
-					imgs:"/static/integralstore/hotcakes.png",
+					imgs:"integralstore/hotcakes.png",
 				}],
 				statusBar:0,
 			};

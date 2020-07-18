@@ -2,7 +2,7 @@
 	<view class="Resetloginpassword">
 		<view class="orders">
 			<view class="orders-title-name" @tap="showModal" data-target="RadioModal">
-				<text>修改密码</text>
+				<text>修改登录密码</text>
 				<view class="mintext">
 					<text class="lg text-gray cuIcon-right"></text>
 				</view>

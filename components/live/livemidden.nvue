@@ -139,17 +139,19 @@
 				// })
 				// #ifdef APP-PLUS
 					uni.share({
-					    provider: "weixin",
-					    scene: "WXSceneSession",
-					    type: 1,
-					    summary: "我正在使用HBuilderX开发uni-app，赶紧跟我一起来体验！",
-					    success: function (res) {
-					        console.log("success:" + JSON.stringify(res));
-					    },
-					    fail: function (err) {
-					        console.log("fail:" + JSON.stringify(err));
-					    }
-					});
+						provider:"weixin",
+						type:1,
+						title:"正在测试分享",
+						scene:"WXSceneSession",
+						summary:"我正在测试分享",
+						imageUrl:"/static/logo.png",
+						success(res){
+							console.log(res,"成功")
+						},
+						fail(err){
+							console.log(err,"失败")
+						}
+					})
 				// #endif
 			}
 		},

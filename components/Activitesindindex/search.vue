@@ -70,4 +70,7 @@
 			color:#fff;
 		}
 	}
+	.cuIcon-search{
+	    color: #f8f8f8;
+	}
 </style>

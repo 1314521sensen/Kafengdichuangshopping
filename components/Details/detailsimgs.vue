@@ -21,11 +21,12 @@
 <style lang="less" scoped>
 	.detailsimgs{
 		width: 100%;
+		margin-bottom: 100rpx;
 		.imgs{
 			width: 100%;
-			margin:4rpx auto 0;
 			image{
 				width: 100%;
+				vertical-align:bottom;
 			}
 		}
 	}

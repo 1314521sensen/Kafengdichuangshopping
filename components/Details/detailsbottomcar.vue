@@ -19,7 +19,7 @@
 					购物车
 				</view>
 				<view class="btn-group">
-					<button class="cu-btn bg-orange round shadow-blur" @tap="Addcart(pic,imgs)">加入购物车</button>
+					<button class="cu-btn bg-orange round shadow-blur" @tap="Addcart(pic)">加入购物车</button>
 					<button class="cu-btn bg-red round shadow-blur" @tap="Skiporder" data-target="bottomModal">立即订购</button>
 				</view>
 			</view>
@@ -93,7 +93,7 @@
 					url:"/pages/shoppingCart/shoppingCart"
 				})
 			},
-			Addcart(obj,img){
+			Addcart(obj){
 				app.globalData.Detectionupdatetokey(this.tokey)
 				let {store_name,good_title,good_price,good_pic} = obj
 				this.$store.commit("Addcart",{s_name:store_name,g_name:good_title,g_pic:good_pic,gid:this.gid,sid:this.storeid,couplebool:this.couplebool})
@@ -188,7 +188,7 @@
 				this.modalName = e
 			}
 		},
-		props:["pic","imgs","gid","storeid","couplebool","good_state","good_verify","good_delete"],
+		props:["pic","gid","storeid","couplebool","good_state","good_verify","good_delete"],
 		created(){
 			const _this = this
 			uni.getStorage({

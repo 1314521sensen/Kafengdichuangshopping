@@ -68,9 +68,11 @@
 					// console.log("tokey没过期")
 				}
 			},
+			
 		},
 		//此生命周期只会app打开时 只会触发一次
-		onLaunch: function() {
+		onLaunch() {
+			console.log(111,"为了测试更新")
 			const _this = this
 			//这里为了设置状态栏的高 ----开始
 			uni.getSystemInfo({
@@ -94,16 +96,56 @@
 				})
 				// #endif
 			//启动页结束
+			
+			
 			//app热更新---开始
 			// #ifdef APP-PLUS
-			// console.log(plus.runtime.version)//这是版本名称号
-			// console.log(plus.runtime.versionCode)
-			// let Applicationnum = plus.runtime.version.split('.').join('')
-			// console.log(Applicationnum)
-			// console.log(plus.runtime.appid)//这是appid
-			// console.log(plus.os.name)//这是Android
+				
+				uni.getSystemInfo({
+					success(res){
+						console.log(plus.runtime.version)
+						let version = plus.runtime.version
+						let Applicationnum = version.split('.').join('')
+						//判断用户是安卓还是苹果
+						if(res.platform=="android"){
+							//获取网络状态
+							uni.getNetworkType({
+								success(resnetworkType) {
+									if(resnetworkType.networkType=="wifi"){
+										_this.$store.commit("Appwholeupdate",{version:Applicationnum,modelboll:true})
+									}else if(resnetworkType.networkType=="unknown" || resnetworkType.networkType=="ethernet"){
+										// console.log("你正在使用其他网络")
+										_this.$store.commit("Appwholeupdate",{version:Applicationnum,modelboll:false})
+									}else if(resnetworkType.networkType=="none"){
+										// console.log("无网络")
+									}else{
+										uni.showModal({
+											title:`您正在使用${resnetworkType.networkType}网络`,
+											content:"您确定要更新APP吗",
+											showCancel:true,
+											cancelText:"稍后更新",
+											confirmText:"立即更新",
+											success(resbtn) {
+												if(resbtn.confirm){
+													_this.$store.commit("Appwholeupdate",{version:Applicationnum,modelboll:false})
+												}
+											}
+										})
+									}
+								}
+							})
+							_this.$store.commit("AppHotupdate",{version:Applicationnum})
+						}
+					},
+					fail(err){
+						console.log(err)
+					}
+				})
 			// #endif
 			//app热跟新---结束
+			
+			
+			
 			//引导页---开始
 			// #ifdef APP-PLUS
 				uni.getStorage({
@@ -116,7 +158,6 @@
 						})
 					},
 					fail(err){
-						console.log(err)
 						_this.globalData.Guidepagebool = false
 						uni.redirectTo({
 							url:"/pages/Guidepage/Guidepage"
@@ -154,6 +195,8 @@
 				},false);
 			// #endif
 			//push推送结束---结束
+			/*****/
+			this.$store.commit("connect")
 		},
 		onShow: function() {
 			

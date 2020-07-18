@@ -315,6 +315,11 @@
 </script>
 
 <style lang="less" scoped>
+	.binding{
+		background-color: #F8F8F8;
+		min-height: 100vh;
+		border: 2rpx solid rgba(0,0,0,0);
+	}
 	.inp{
 		input{
 			margin-bottom:20rpx;
