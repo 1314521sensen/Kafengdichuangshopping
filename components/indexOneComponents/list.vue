@@ -110,9 +110,9 @@
 	   display: flex;
 	   flex-wrap:wrap;
 	   justify-content:space-between;
-	   padding: 0 20rpx;
-	   background-color: #F8F8F8;
-	   
+	   // padding: 0 20rpx;
+	   background-color: #f2f2f2;
+	   padding:20rpx 28rpx;
 	  }
 	  .cu-list.menu-avatar>.cu-item{
 	   display:block;
@@ -193,7 +193,7 @@
 	  .cu-avatar.lg{
 	   width: 318rpx;
 	   height:330rpx;
-	   border-radius:18rpx;
+	   border-radius:18rpx 18rpx 0 0;
 	  }
 		.cu-btn.lg{
 			line-height:80rpx;

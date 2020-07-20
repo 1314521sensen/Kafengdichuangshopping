@@ -93,7 +93,6 @@
 				],
 				list:[
 					"微信",
-					"支付宝",
 					"余额"
 				],
 				passwordzhifutanchuang:false,//是否弹出输入支付密码弹窗
@@ -134,9 +133,9 @@
 			Determinepayment(){
 				//将选择支付的的弹窗关闭
 				this.modalName = null
-				if(this.radioname=='radioname0'){//微信支付
-					
-				}else if(this.radioname=='radioname1'){//支付宝支付
+				if(this.radioname=='radio0'){//微信支付
+					this.getOrderInfo()
+				}else if(this.radioname=='radioname5'){//支付宝支付
 					
 				}else{//余额支付
 					// console.log()
@@ -193,12 +192,48 @@
 			},
 			Confirmgoods(){
 				this.$store.commit("Confirmgoods",{order_sn:this.order_sn})
+			},
+			//封装微信支付请求
+			getOrderInfo() {
+				const _this = this
+				let appid = 'wx0f9236b57d357dbb';
+				let url = `${app.globalData.Requestpath}pay/wechatpay`;
+				uni.request({
+					url,
+					method:"POST",
+					data:{
+						payid:"wxpay",
+						appid,
+						swift_id:_this.swift_no
+					},
+					success(res) {
+						if(res.statusCode==200){
+							uni.requestPayment({
+								provider:'wxpay',
+								orderInfo:res.data,
+								success: (e) => {
+									console.log("success",e);
+									uni.showToast({
+										title:"支付完成"
+									})
+								},
+								fail: (e) => {
+									console.log('fail',e);
+									uni.showModal({
+										content:"支付失败:" + JSON.stringify(e),
+										showCancel:false
+									})
+								}
+							})
+						}
+					}
+				})
 			}
 		},
 		components:{
 			paymoney
 		},
-		props:["price","order_sn","orderstatus"]
+		props:["price","order_sn","orderstatus","swift_no"]
 	}
 </script>
 

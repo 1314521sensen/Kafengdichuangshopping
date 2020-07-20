@@ -12,11 +12,11 @@
 					<view :class="collectionbool?'cuIcon-favorfill':'cuIcon-favor'"></view>{{collection}}
 				</view>
 				<view class="action" @tap="shoppingcart">
-					<view class="cuIcon-cart">
+					<view class="cuIcon-servicefill">
 						<!-- cu-tag这个是角标 -->
 						<view class="badge" :class="len?'cu-tag badge':'badge'">{{len}}</view>
 					</view>
-					购物车
+					客服
 				</view>
 				<view class="btn-group">
 					<button class="cu-btn bg-orange round shadow-blur" @tap="Addcart(pic)">加入购物车</button>
@@ -88,9 +88,12 @@
 				})
 			},
 			shoppingcart(){
+				// console.log(this.pic)
 				app.globalData.Detectionupdatetokey(this.tokey)
-				uni.switchTab({
-					url:"/pages/shoppingCart/shoppingCart"
+				//店铺跳转的时候  把图片 商品的标题商品的 价格 发送的过去
+				uni.navigateTo({
+					url:`/pages/Customerservice/Customerservice?
+						shoplink=storeshop&shopimg=${JSON.stringify(this.pic.good_pic)}&shoptitle=${this.pic.good_title}&shopprice=${this.pic.good_price}&shoppromotion_price=${this.pic.good_promotion_price}&storename=${this.pic.store_name}`
 				})
 			},
 			Addcart(obj){

@@ -127,6 +127,7 @@
 							}
 						}
 						.head-information{
+							width: 200rpx;
 							padding-top:10rpx;
 							margin-left:32rpx;
 							color:#fff;
@@ -134,6 +135,9 @@
 								display:block;
 								font-size: 30rpx;
 								font-weight: bold;
+								white-space:nowrap;
+								overflow:hidden; 
+								text-overflow:ellipsis;
 							}
 							.Personalhomepagebtn{
 								font-size: 24rpx;

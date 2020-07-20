@@ -105,9 +105,9 @@
 				}
 			})
 		},
-		components:[
+		components:{
 			actionbar
-		],
+		},
 	}
 </script>
 

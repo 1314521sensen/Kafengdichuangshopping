@@ -95,7 +95,7 @@
 					</view>
 				</view>
 			</view>
-			<shopoderbottom :orderstatus="orderstatus" :price="price" :order_sn="order_sn"></shopoderbottom>
+			<shopoderbottom :orderstatus="orderstatus" :price="price" :order_sn="order_sn" :swift_no="swift_no"></shopoderbottom>
 		</scroll-view>
 	</view>
 </template>

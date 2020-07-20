@@ -44,6 +44,7 @@ let state = {
 	orderpage: 1,//订单请求的页数
 	liveshoplist:[],//存放主播开播前需要携带直播的商品
 	livepages:1,//获取直播的商品的页数
+	Customersendmsglist:[],//这是店铺或者客服的消息记录
 }
 //getters 用于计算
 let getters = {
@@ -189,6 +190,7 @@ let mutations = {
 		//建立链接
 		connect(){
 			uni.connectSocket({
+				// wss://echo.websocket.org
 				url: 'wss://echo.websocket.org',
 				// #ifdef MP
 				header: {
@@ -222,6 +224,8 @@ let mutations = {
 			uni.onSocketMessage((res) => {
 				// this.msg = res.data
 				console.log('onMessage这是服务器返回的', res)
+				state.Customersendmsglist.push({'sendmsgdata':res.data,'msgtype':'serveReturn'})
+				
 			})
 		},
 	/***websocket----结束***/
@@ -1078,8 +1082,40 @@ let mutations = {
 		loadmore(){
 			state.livepages++
 			this.commit("getliveshoplist")
-		}
+		},
 	/******直播*****/
+	
+	
+	
+	
+	
+	
+	
+	
+	/****平台或者店铺客服****/
+	//客服页面点击发送按钮的时候
+	Customersendmsg(state,sendmsgobj){
+		const _this = this
+		let {textvalue} = sendmsgobj
+		if(textvalue!==""){
+			//这是往服务器中发送消息
+			uni.sendSocketMessage({
+			      data:textvalue,
+				  success(res) {
+					  // Customersendmsglist
+				  	console.log(res,"这是发送成功")
+					state.Customersendmsglist.push({'sendmsgdata':textvalue,'msgtype':'usersend'})
+				  },
+				  fail(err){
+					  console.log(err,"这是发送失败")
+				  }
+			});
+			console.log(state.Customersendmsglist)
+		}else{
+			_this.commit('getshowmodel',{msg:"文字不能为空"})
+		}
+	}
+	
 }
 
 //actions用于操作异步

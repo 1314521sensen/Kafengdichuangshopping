@@ -21,7 +21,7 @@
 				<feature></feature>
 				<featuredCommodity></featuredCommodity>
 				<!-- <exhibitionBanner></exhibitionBanner> -->
-			<view class="shopingList">
+			<view class="shopingList" style="margin-top:28rpx">
 				<!-- <listNav></listNav> -->
 				<list :list='list' :page='page' style="background-color: transparent" display="none"></list>
 				<view class="bottom-text" v-if="textbool">
