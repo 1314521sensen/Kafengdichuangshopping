@@ -1,50 +1,51 @@
 <template>
-	<view>
-		<view class="commodityBox" v-if="shoplinknew=='storeshop' && shopbool==false">
-			<!-- 这是用户店铺进来的时候 -->
-				<view class="commodity">
-					<view class="img">
-						<image :src="'http://hbk.huiboke.com'+JSON.parse(shopopction.shopimg)" mode=""></image>
+	<view class="CustomerBox" :style="{'padding-top':statusBar+'px'}">
+		<scroll-view class="cu-chat" :scroll-y="true" :scroll-top="scrollTop">
+			<view class="commodityBox" v-if="shoplinknew=='storeshop' && shopbool==false">
+				<!-- 这是用户店铺进来的时候 -->
+					<view class="commodity">
+						<view class="img">
+							<image :src="'http://hbk.huiboke.com'+JSON.parse(shopopction.shopimg)" mode=""></image>
+						</view>
+						<view class="particulars">
+							<view class="presentation">
+								<text>{{shopopction.shoptitle}}</text>
+							</view>
+							<view class="pic">
+								<!--如果商品的价格和促销的价格一致 那就采用促销价格 如果不一样的 促销价格肯定低至商品的价格 -->
+								<text>
+									￥{{shopopction.shopprice==shopopction.shoppromotion_price?shopopction.shoppromotion_price:shopopction.shoppromotion_price+'-'+shopopction.shopprice}}
+									</text>
+							</view>
+							<view class="send">
+								<button class="cu-btn round" @tap="sendCustomershop">发给客服</button>
+							</view>
+						</view>
 					</view>
-					<view class="particulars">
-						<view class="presentation">
-							<text>{{shopopction.shoptitle}}</text>
+				</view>
+		<!-- <cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="backText">返回</block><block slot="content">聊天</block></cu-custom> -->
+			<view class="blurbshopdefault" v-if="shopbool">
+				<view class="blurbBox">
+						<view class="img">
+							<image :src="'http://hbk.huiboke.com'+JSON.parse(shopopction.shopimg)" mode=""></image>
 						</view>
 						<view class="pic">
-							<!--如果商品的价格和促销的价格一致 那就采用促销价格 如果不一样的 促销价格肯定低至商品的价格 -->
 							<text>
 								￥{{shopopction.shopprice==shopopction.shoppromotion_price?shopopction.shoppromotion_price:shopopction.shoppromotion_price+'-'+shopopction.shopprice}}
 								</text>
 						</view>
-						<view class="send">
-							<button class="cu-btn round" @tap="sendCustomershop">发给客服</button>
+						<view class="letter">
+							<text>{{shopopction.shoptitle}}</text>
 						</view>
-					</view>
+						<view class="discounts">
+							<text>店铺劵满80送20</text>
+						</view>
+						<view class="commodityshop">
+							<text class="cuIcon-shopfill"></text><text>{{shopopction.storename}}</text>
+						</view>
 				</view>
 			</view>
-		<!-- <cu-custom bgColor="bg-gradual-pink" :isBack="true"><block slot="backText">返回</block><block slot="content">聊天</block></cu-custom> -->
-		<view class="blurbshopdefault" v-if="shopbool">
-			<view class="blurbBox">
-					<view class="img">
-						<image :src="'http://hbk.huiboke.com'+JSON.parse(shopopction.shopimg)" mode=""></image>
-					</view>
-					<view class="pic">
-						<text>
-							￥{{shopopction.shopprice==shopopction.shoppromotion_price?shopopction.shoppromotion_price:shopopction.shoppromotion_price+'-'+shopopction.shopprice}}
-							</text>
-					</view>
-					<view class="letter">
-						<text>{{shopopction.shoptitle}}</text>
-					</view>
-					<view class="discounts">
-						<text>店铺劵满80送20</text>
-					</view>
-					<view class="commodityshop">
-						<text class="cuIcon-shopfill"></text><text>{{shopopction.storename}}</text>
-					</view>
-			</view>
-		</view>
-		<view class="cu-chat">
+		
 			<!-- 如果是用户发送的就给外面加一个self类名 -->
 			<view 
 				class="cu-item" 
@@ -75,6 +76,9 @@
 					v-if="item.msgtype=='usersend'"
 				></view>
 				<!-- <view class="date">2018年3月23日 13:23</view> -->
+			</view>
+			<view class="messagejudge">
+			    <text>{{this.$store.state.linkstate}}</text> 
 			</view>
 			<!-- <view class="cu-info round">对方撤回一条消息!</view> -->
 			<!-- <view class="cu-item">
@@ -141,19 +145,26 @@
 				</view>
 				<view class="date">13:23</view>
 			</view>-->
-		</view>
-		<view class="bottom_input foot input" :style="[{bottom:InputBottom+'px'}]">
+			<view id='gundong' style='height:2rpx;width:100%'></view>
+		</scroll-view>
+		<view class="bottom_input foot input">
 			<!-- 这是input旁边的那些dom -->
 			<view class="cu-bar">
 				<view class="action" @tap="showModal" data-target="Modal">
-					<text class="cuIcon-pic text-grey"></text>
+					<text class="cuIcon-pic text-grey Icon_face"></text>
 				</view>
-				<input class="solid-bottom" :adjust-position="false" :focus="inputshow" maxlength="300" cursor-spacing="10"
-				 @focus="InputFocus" @blur="InputBlur" v-model="inpvalue" @input="inputvalue"></input>
+				<!-- <input class="solid-bottom" :adjust-position="false" :focus="inputshow" maxlength="300" cursor-spacing="10"
+				 @focus="InputFocus" @blur="InputBlur" v-model="inpvalue" @input="inputvalue"></input> -->
+				 <!-- <view class="inp" contenteditable="true"  @input="inputvalue" v-html="inpvalue"></view> -->
+				 <!-- 输入的聊天框 -->
+					 <editor id="editor" class="ql-container"  @ready="onEditorReady" @focus="InputFocus" @blur="InputBlur"></editor>
+				
+				 
+				 
 				<view class="action">
-					<text class="cuIcon-emojifill text-grey" @tap="expression"></text>
+					<text class="cuIcon-emojifill text-grey Icon_face" @tap="expression"></text>
 				</view>
-				<button class="cu-btn bg-green shadow" @tap="sendmsg">发送</button>
+				<button class="cu-btn bg-green shadow send" @tap="sendmsg">发送</button>
 			</view>
 			<!-- 这是表情 -->
 			<view class="expression" v-if="bool">
@@ -201,10 +212,12 @@
 </template>
 
 <script>
+	const app = getApp()
 	//这是客服
 	export default {
 		data() {
 			return {
+				statusBar:0,
 				shopopction:"",//这是商品跳进来的
 				shoplinknew:"",//判断是在过来的
 				InputBottom: 0,
@@ -214,15 +227,21 @@
 				focusautomatic:false,//控制键盘是否自动弹出来
 				inputshow:false,
 				modalName: null,
+				screenHeight:0,//屏幕的高度
+				keyboardHeight:0,//键盘的高度 用于计算
+				oldbottom:0,//// 记录 滚动 元素的 bottom 值
+				scrollTop:0,//卷区的高度
 				Photo:[
 					{
 						img:"/static/chat/Photoalbum.png",
 						titleName:"相册"
 					},
+					// #ifdef APP-PLUS
 					{
 						img:"/static/chat/camera.png",
 						titleName:"相机"
-					}
+					},
+					// #endif
 				],
 				imgList:[],//相册
 				bool:false,
@@ -271,12 +290,11 @@
 		},
 		methods: {
 			InputFocus(e) {
-				this.bool = false
-				this.InputBottom = e.detail.height
-				//将系统的键盘高度存起来
-				uni.setStorage({
-					key:"KeyboardHeight",
-					data:this.InputBottom
+				// this.bool = false
+				//这里为了获取键盘的高度
+				uni.onKeyboardHeightChange((res)=>{
+					this.InputBottom = res.height
+					this.keyboardHeight =res.height
 				})
 			},
 			// 当用户点击 商品发送给客服的时候触发该事件
@@ -285,13 +303,27 @@
 			},
 			InputBlur(e) {
 				this.InputBottom = 0
+				this.keyboardHeight = 0
+				// if(this.bool){
+				// 	this.bool = false
+				// }
 			},
 			//当用户点击发送消息的时候
 			sendmsg(){
 				const _this = this
+				// console.log(_this.inpvalue)
+				this.editorCtx.getContents({
+					success(res){
+						
+						_this.$store.commit("Customersendmsg",{textvalue:res.html})
+						_this.editorCtx.clear({
+							success: function(res) {
+							}
+						})
+					}
+				})
 				
-				_this.$store.commit("Customersendmsg",{textvalue:_this.inpvalue,inpvaluestr:_this.inpvaluestr})
-				_this.inpvalue = ""
+				// _this.inpvalue = ""
 				// console.log(this.inpvalue)
 			},
 			
@@ -315,17 +347,32 @@
 			},
 			//封装调用相机还是相册
 			ChooseImage(choosePhotoaAnd) {
+				const _this = this
 				uni.chooseImage({
 					count:1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: [choosePhotoaAnd], //通过传参不同调用不同的 相册或者相机
 					success: (res) => {
-						if (this.imgList.length != 0) {
-							this.imgList = this.imgList.concat(res.tempFilePaths)
-						} else {
-							this.imgList = res.tempFilePaths
-						}
-						this.hideModal()
+						uni.uploadFile({
+							url:`${app.globalData.Requestpath}common/uploadImage?type=customer`,
+							filePath:res.tempFilePaths[0],
+							name:"file",
+							fileType:"image",
+							success(resimg){
+								
+								let resimgparse = JSON.parse(resimg.data)
+								console.log(resimgparse)
+								if(resimgparse.code==0){
+									_this.$store.commit("Customersendmsg",{textvalue:`<image style='width:80px;' src='${'http://hbk.huiboke.com'+resimgparse.data.src}'></image>`})
+									_this.hideModal()
+								}
+							},
+							fail(err){
+								
+							}
+						})
+						
+						
 					}
 				});
 			},
@@ -333,39 +380,73 @@
 					this.bool = !(this.bool)
 			},
 			//当用户输入值的时候
-			inputvalue(e){
-				this.inpvaluestr = e.detail.value
-			},
+			// inputvalue(e){
+			// 	this.inpvaluestr = e.detail.value
+			// },
 			Meme(e){
 				// console.log(e.currentTarget.dataset)
 				let {imgindex,swiperitemindex,src} = e.currentTarget.dataset
 				// console.log(this.expressionlist[swiperitemindex][imgindex].name)
-				this.inpvalue = this.inpvalue+this.expressionlist[swiperitemindex][imgindex].name+'<image src="'+src+'"></image>'
+				this.editorCtx.insertImage({
+					src,
+					alt: '图像',
+					data:{
+						face:`face[${this.expressionlist[swiperitemindex][imgindex].name}]`
+					},
+					success: function() {
+						console.log('insert image success')
+						console.log('点击图片')
+						
+					}
+				})
+			},
+			//初始化富文本
+			onEditorReady(){
+				uni.createSelectorQuery().select('#editor').context((res) => {
+					this.editorCtx = res.context
+				}).exec()
 			}
 		},
 		onLoad(opction){
+			console.log("已经入onload的事件")
 			const _this = this
-			let {shoplink} = opction
+			let {shoplink,statestore} = opction
 			_this.shoplinknew = shoplink
 			// 这里是商品详情跳转过来的 就不用了解构了  直接用  为了少定义变量
 			_this.shopopction = opction
+			//传入 参数 判断以后点击的 是平台 0 店铺 1
+			this.$store.commit("connect",{typestore:statestore})
+			this.statusBar = app.globalData.statusBar
 			//当用户已进入页面的时候  在缓存中 取值如果没有  就让键盘自动弹出来  获取用户的键盘的高度 
-			//如果取出来的时候就不需要在弹出来
-			uni.getStorage({
-				key:"KeyboardHeight",
-				success(reskey){
-					_this.focusautomatic = false
-					// console.log(reskey,"获取成功")
-				},
-				fail(err){
-					_this.focusautomatic = true
-					uni.setStorage({
-						key:"KeyboardHeight",
-						data:100
-					})
+		},
+		created() {
+			const _this = this
+			//获取系统的信息
+			uni.getSystemInfo({
+				success(res) {
+					_this.screenHeight = res.screenHeight
 				}
 			})
-		}
+		},
+		beforeDestroy(){
+			this.$store.commit("soketclose")
+		},
+		mounted(){
+			// 滚动条的距离
+			uni.createSelectorQuery().select("#gundong").boundingClientRect((res)=>{
+					this.oldbottom = res.bottom  // 记录 滚动 元素的 bottom 值
+				}).exec()
+		},
+		updated(){
+			uni.createSelectorQuery().select("#gundong").boundingClientRect((res)=>{
+				// console.log(res) 
+				var newbottom = res.bottom
+				if(Number(newbottom) > Number(this.oldbottom)){
+						this.scrollTop = newbottom
+					}
+				 this.oldbottom = newbottom
+			}).exec();
+		},
 	}
 </script>
 
@@ -373,6 +454,20 @@
   page{
     background-color: #F5F5F5;
     padding-bottom: 100rpx;
+  }
+  .CustomerBox{
+	  
+  }
+  .cu-chat{
+	  height:92vh;
+	  overflow: hidden;
+	  // background-color:deeppink;
+  }
+  .inp{
+	  width: 65%;
+	  height:60rpx;
+	  // background-color:red;
+	  outline: none;
   }
   .cameraphotoAndalbum{
 	  display:flex;
@@ -394,9 +489,11 @@
 	  }
   }
   .bottom_input{
-     position: fixed;
+     position: absolute;
      bottom: 0;
+	 left:0;
      width: 100%;
+	 background-color:#f2f2f2;
     }
   .expression{
 	   .meme_list{
@@ -405,6 +502,7 @@
 			display: flex;
 			justify-content: space-around;
 			flex-wrap: wrap;
+			background-color: #FFFFFF;
 		.cover-images{
 			 width: 60rpx;
 			 height: 60rpx;
@@ -523,4 +621,38 @@
 				}
 			}
 		}
+		
+		
+			.ql-container{
+				width: 420rpx;
+				background-color: #FFFFFF;
+				border-radius: 50rpx 50rpx 50rpx 50rpx;
+				height: 70rpx;
+				min-height: 70rpx;
+				// line-height: 80rpx;
+				padding: 18rpx 10rpx;
+			}
+		.send{
+			width: 120rpx;
+			height: 60rpx;
+		}
+		// .cu-bar .action>uni-text[class*="cuIcon-"], .cu-bar .action>uni-view[class*="cuIcon-"]{
+		// 	font-size: 64rpx;
+		// }
+	.Icon_face{
+		font-size: 44rpx !important;
+	}
+	 
+	 .cu-bar{
+	  padding: 0 10rpx;
+	 }
+	 .messagejudge{
+	    text-align: center;
+	    text{
+	     padding: 10rpx 20rpx;
+	     border-radius: 50rpx;
+	     background-color: #e1e1e1;
+	     color:#bfbfbf;
+	   }
+	 }
 </style>

@@ -60,7 +60,7 @@
 				}else{
 					//点击跳进直播商品列表
 					uni.navigateTo({
-						url:`/pages/liveaddshoplist/liveaddshoplist`
+						url:`/pages/liveaddshoplist/liveaddshoplist?storeid=${this.storeid}&type=storetype`
 					})
 				}
 			},

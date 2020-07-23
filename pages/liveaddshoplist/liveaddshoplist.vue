@@ -9,7 +9,7 @@
 				添加直播商品
 			</view>
 		</view>
-		<view class="cu-bar search">
+		<view class="cu-bar search" v-if="type!='storetype'">
 			<view class="search-form round">
 				
 				<input 
@@ -57,7 +57,9 @@
 				pages:1,
 				value:"",
 				liveshoplist:[],
-				Shop_g_idlist:[]
+				Shop_g_idlist:[],
+				storeid:"",
+				type:""
 			}
 		},
 		methods: {
@@ -71,7 +73,8 @@
 						token:_this.tokey,
 						page:_this.pages,
 						pageSize:10,
-						gkey:_this.value
+						gkey:_this.value,
+						sid:_this.storeid
 					},
 					success(res) {
 						if(res.data.code==0){
@@ -140,8 +143,12 @@
 				}
 			})
 		},
-		onLoad() {
+		onLoad(opction) {
+			console.log(opction)
+			let {storeid,type} = opction
 			const _this = this
+			_this.storeid = storeid
+			_this.type = type
 			_this.statusBar = app.globalData.statusBar
 		}
 	}

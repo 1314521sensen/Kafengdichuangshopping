@@ -196,7 +196,7 @@
 			// #endif
 			//push推送结束---结束
 			/*****/
-			this.$store.commit("connect")
+			
 		},
 		onShow: function() {
 			

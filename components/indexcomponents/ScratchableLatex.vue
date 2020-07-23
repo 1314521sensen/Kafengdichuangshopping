@@ -35,9 +35,16 @@
 			collection(e){
 				let {url,routinghopname,name} = e.currentTarget.dataset
 				if(url!==undefined){
-					uni.navigateTo({
-						url:`${url}?title=${name}&titlename=${routinghopname}`
-					})
+					if(routinghopname=="userMyinquiry"){
+						uni.navigateTo({
+							url:`${url}?title=${name}&titlename=${routinghopname}&statestore=0`
+						})
+					}else{
+						uni.navigateTo({
+							url:`${url}?title=${name}&titlename=${routinghopname}`
+						})
+					}
+					
 				}else{
 					app.globalData.showtoastsame("功能正在开发,请耐心等待")
 				}

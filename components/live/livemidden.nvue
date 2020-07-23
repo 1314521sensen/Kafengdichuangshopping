@@ -23,24 +23,27 @@
 					<livechatlist :componentwidth="componentwidth" :list="list"></livechatlist>
 					<!-- 引入文本框 -->
 					<!-- <inptext :componentheight="componentheight" :keyboardheight="keyboardheight" :componentwidth="componentwidth"></inptext> -->
-					<cover-view class="bottomevent parent-padding-leftAndright">
-						<cover-view class="bottomevent-imgs">
+					<cover-view class="bottomevent parent-padding-leftAndright" :style="{width:componentwidth+'px'}" :class="inpbool?'bottomeventcolor':'bottomeventweicolor'">
+						<cover-view class="bottomevent-imgs" v-if="inpbool==false">
 							<cover-image src="/static/liveplatfrom/car.png" class="bottomevent-img" @tap="zhiboshop"></cover-image>
 						</cover-view>
-						<cover-view class="inp">
-							<input type="text" @focus="focusinp" @blur="blurinp" placeholder="跟主播聊聊" class="font-size-thirty textcolorwrite inptext"></input>
+						<cover-view class="inp" :class="inpbool?'inpflex':'inpwidth'">
+							<input type="text" v-model="inptvalue" @focus="focusinp" @blur="blurinp" placeholder="跟主播聊聊" class="font-size-thirty inptext" :class="inpbool?'textcolor-black':'textcolorwrite'"></input>
 						</cover-view>
-						<cover-view class="share">
+						<cover-view class="share"  v-if="inpbool==false">
 							<cover-image src="/static/liveplatfrom/More.png" class="shareimgs" @click="reportqiehuan" v-if="reportbool"></cover-image>
 							<cover-view class="report" v-if="reportbool==false">
 								<text class="textcolorwrite font-size-thirty reporttext text-center">举报</text>
 							</cover-view>
 						</cover-view>
-						<cover-view class="share" @tap="sharezhibo">
+						<cover-view class="share" @tap="sharezhibo"  v-if="inpbool==false">
 							<cover-image src="/static/liveplatfrom/share.png" class="shareimgs"></cover-image>
 						</cover-view>
-						<cover-view class="share">
+						<cover-view class="share"  v-if="inpbool==false">
 							<cover-image :src="xinurl" class="shareimgs" @click="xin"></cover-image>
+						</cover-view>
+						<cover-view class="btn"  v-if="inpbool==true">
+							<button class="button" @click="btnsend">发送</button>
 						</cover-view>
 					</cover-view>
 					<!-- 引入商品列表组件 -->
@@ -79,7 +82,9 @@
 				keyboardheight:0,//键盘高度
 				reportbool:true,//举报bool值
 				viewList: [],//心的数组
-				xinurl:"/static/liveplatfrom/dianxin.png"
+				xinurl:"/static/liveplatfrom/dianxin.png",
+				inpbool:false,//判断用户是否获取焦点了
+				inptvalue:"",//获取inp的内容
 			}
 		},
 		props:["componentwidth","componentheight","statusheight","bottomheight"],
@@ -110,14 +115,17 @@
 			},
 			//当获取焦点的时候
 			focusinp(){
-				uni.onKeyboardHeightChange((res)=>{
-					//获取键盘高度
-					this.keyboardheight = res.height
-				})
+				this.inpbool = true
+				// uni.onKeyboardHeightChange((res)=>{
+				// 	//获取键盘高度
+				// 	// this.keyboardheight = res.height
+				// 	// console.log(this.keyboardheight)
+				// })
 			},
 			//当失去焦点的时候
 			blurinp(){
-				console.log("当键盘弹起或收起的时候触发")
+				this.inpbool = false
+				// console.log("当键盘弹起或收起的时候触发")
 			},
 			//举报切换
 			reportqiehuan(e){
@@ -153,6 +161,11 @@
 						}
 					})
 				// #endif
+			},
+			//当用户点击了消息发送按钮的时候
+			btnsend(){
+				// console.log(this.inptvalue)
+				this.inptvalue = ""
 			}
 		},
 		components:{
@@ -205,16 +218,30 @@
 	
 	/* 这是底部的-----开始 */
 	.midden-bottom{
+		/* position: relative; */
 		/* background-color:deeppink; */
 		flex-direction:column-reverse;
 	}
-	
+	.midden-bottom-childBottom{
+		/* background-color:yellow; */
+	}
 	.bottomevent{
+		/* background-color:green; */
+		
+		/* position:absolute;
+		bottom:0;
+		left:0; */
 		justify-content: space-between;
 		flex-direction:row;
 		align-items: flex-end;
 		/* height:20px; */
 		/* background-color: yellow; */
+	}
+	.bottomeventweicolor{
+		background-color:transparent;
+	}
+	.bottomeventcolor{
+		background-color:#fff;
 	}
 	.bottomevent-imgs{
 		width: 70rpx;
@@ -227,7 +254,7 @@
 		/* background-color:blue; */
 	}
 	.inp{
-		width:300rpx;
+		/* width:300rpx; */
 		height:70rpx;
 		/* background-color:red; */
 		justify-content: flex-end;
@@ -235,6 +262,24 @@
 	.inptext{
 		height:70rpx;
 		/* line-height: */
+	}
+	.inpwidth{
+		width: 300rpx;
+	}
+	.inpflex{
+		flex:0.8;
+	}
+	.btn{
+		flex:0.2;
+		background-color:green;
+		height:70rpx;
+		/* line-height:70rpx; */
+	}
+	.button{
+		height:70rpx;
+		line-height:70rpx;
+		border-radius:0;
+		border-width: 0;
 	}
 	.share{
 		width: 70rpx;
