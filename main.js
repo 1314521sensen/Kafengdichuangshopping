@@ -8,6 +8,7 @@ import pageheight from '@/components/pageheight/pageheight.vue'
 import loading from "@/components/Commoditycomponent/loading.vue"
 //引入暂无商品的页面
 import hint from "@/components/actionbar/hint.vue"
+
 Vue.component('pageheight',pageheight)
 Vue.component('loading',loading)
 Vue.component('hint',hint)

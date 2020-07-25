@@ -1,6 +1,10 @@
 <template>
 	<view class="CustomerBox" :style="{'padding-top':statusBar+'px'}">
 		<scroll-view class="cu-chat" :scroll-y="true" :scroll-top="scrollTop">
+			<!-- 连接客服的按钮 -->
+			<view class="customerservice" @tap="reconnection" v-show="this.$store.state.isconnectserver">
+			    <image :src="'http://hbk.huiboke.com/uploads/app/image/customerservice/service.png'" mode=""></image>
+			</view>
 			<view class="commodityBox" v-if="shoplinknew=='storeshop' && shopbool==false">
 				<!-- 这是用户店铺进来的时候 -->
 					<view class="commodity">
@@ -55,8 +59,8 @@
 			>
 				<!-- 这是客服的头像 -->
 				<view 
-					class="cu-avatar radius" 
-					style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big143004.jpg)"
+					class="cu-avatar radius radios" 
+					:style="{'background-image':'url('+item.avatar+')'}"
 					v-if="item.msgtype=='serveReturn'"
 				></view>
 				<!-- 这是两个人发送的内容 -->
@@ -71,8 +75,8 @@
 				</view>
 				<!-- 这是用户的头像 -->
 				<view 
-					class="cu-avatar radius" 
-					style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg)"
+					class="cu-avatar radius radios" 
+					:style="{'background-image':'url('+item.avatar+')'}"
 					v-if="item.msgtype=='usersend'"
 				></view>
 				<!-- <view class="date">2018年3月23日 13:23</view> -->
@@ -267,25 +271,88 @@
 				dotStyle: false,
 				expressionlist:[
 					[
-						{name:'微笑'},{name:'呲牙'},{name:'大笑'},{name:'快乐'},{name:'可怜'},{name:'抠鼻'},{name:'惊讶'},
-						{name:'害羞'},{name:'调皮'},{name:'闭嘴'},{name:'鄙视'},{name:'爱你'},{name:'大哭'},{name:'偷笑'},
-						{name:'亲亲'},{name:'难过'},{name:'高兴'},{name:'糗大了'},{name:'右哼哼'},{name:'左哼哼'},{name:'嘘'}
+						{name:'face[微笑]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/0.gif"},
+						{name:'face[嘻嘻]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/1.gif"},
+						{name:'face[哈哈]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/2.gif"},
+						{name:'face[可爱]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/3.gif"},
+						{name:'face[可怜]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/4.gif"},
+						{name:'face[挖鼻]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/5.gif"},
+						{name:'face[吃惊]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/6.gif"},
+						{name:'face[害羞]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/7.gif"},
+						{name:'face[挤眼]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/8.gif"},
+						{name:'face[闭嘴]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/9.gif"},
+						{name:'face[鄙视]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/10.gif"},
+						{name:'face[爱你]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/11.gif"},
+						{name:'face[泪]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/12.gif"},
+						{name:'face[偷笑]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/13.gif"},
+						{name:'face[亲亲]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/14.gif"},
+						{name:'face[生病]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/15.gif"},
+						{name:'face[太开心]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/16.gif"},
+						{name:'face[白眼]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/17.gif"},
+						{name:'face[右哼哼]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/18.gif"},
+						{name:'face[左哼哼]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/19.gif"},
+						{name:'face[嘘]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/20.gif"}
 					],
 					[
-						{name:'哀'},{name:'委屈'},{name:'想吐'},{name:'哈欠'},{name:'开心'},{name:'发火'},{name:'疑问'},
-						{name:'饥饿'},{name:'拜拜'},{name:'思考'},{name:'汗'},{name:'困'},{name:'睡觉'},{name:'钱'},
-						{name:'快哭了'},{name:'酷'},{name:'色'},{name:'愤怒'},{name:'鼓掌'},{name:'晕'},{name:'哭'}
+						{name:'face[哀]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/21.gif"},
+						{name:'face[委屈]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/22.gif"},
+						{name:'face[吐]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/23.gif"},
+						{name:'face[哈欠]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/24.gif"},
+						{name:'face[抱抱]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/25.gif"},
+						{name:'face[怒]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/26.gif"},
+						{name:'face[疑问]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/27.gif"},
+						{name:'face[馋嘴]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/28.gif"},
+						{name:'face[拜拜]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/29.gif"},
+						{name:'face[思考]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/30.gif"},
+						{name:'face[汗]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/31.gif"},
+						{name:'face[困]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/32.gif"},
+						{name:'face[睡]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/33.gif"},
+						{name:'face[钱]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/34.gif"},
+						{name:'face[失望]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/35.gif"},
+						{name:'face[酷]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/36.gif"},
+						{name:'face[色]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/37.gif"},
+						{name:'face[哼]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/38.gif"},
+						{name:'face[鼓掌]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/39.gif"},
+						{name:'face[晕]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/40.gif"},
+						{name:'face[悲伤]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/41.gif"}
 					],
 					[
-						{name:'抓狂'},{name:'擦汗'},{name:'坏笑'},{name:'争吵'},{name:'互粉'},{name:'爱心'},{name:'心碎'},
-						{name:'猪头'},{name:'熊猫'},{name:'兔子'},{name:'好的'},{name:'耶'},{name:'强'},{name:'不行'},
-						{name:'厉害'},{name:'勾引'},{name:'弱'},{name:'羊驼'},{name:'神马'},{name:'囧'},{name:'云'}
+						{name:'face[抓狂]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/42.gif"},
+						{name:'face[黑线]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/43.gif"},
+						{name:'face[阴险]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/44.gif"},
+						{name:'face[怒骂]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/45.gif"},
+						{name:'face[互粉],url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/46.gif'},
+						{name:'face[心]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/47.gif"},
+						{name:'face[伤心]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/48.gif"},
+						{name:'face[猪头]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/49.gif"},
+						{name:'face[熊猫]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/50.gif"},
+						{name:'face[兔子]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/51.gif"},
+						{name:'face[ok]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/52.gif"},
+						{name:'face[耶]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/53.gif"},
+						{name:'face[good]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/54.gif"},
+						{name:'face[NO]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/55.gif"},
+						{name:'face[赞]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/56.gif"},
+						{name:'face[来]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/57.gif"},
+						{name:'face[弱]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/58.gif"},
+						{name:'face[草泥马]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/59.gif"},
+						{name:'face[神马]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/60.gif"},
+						{name:'face[囧]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/61.gif"},
+						{name:'face[浮云]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/62.gif"},
 					],
 					[
-						{name:'给力'},{name:'人们'},{name:'VIP'},{name:'奥特曼'},{name:'礼物'},{name:'时间'},{name:'麦克风'},
-						{name:'蜡烛'},{name:'蛋糕'}
+						{name:'face[给力]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/63.gif"},
+						{name:'face[围观]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/64.gif"},
+						{name:'face[威武]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/65.gif"},
+						{name:'face[奥特曼]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/66.gif"},
+						{name:'face[礼物]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/67.gif"},
+						{name:'face[钟]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/68.gif"},
+						{name:'face[话筒]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/69.gif"},
+						{name:'face[蜡烛]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/70.gif"},
+						{name:'face[蛋糕]',url:"http://hbk.huiboke.com/uploads/app/image/Expressionpackage/71.gif"},
+						
 					]
 				],
+				
 			}
 		},
 		methods: {
@@ -391,7 +458,7 @@
 					src,
 					alt: '图像',
 					data:{
-						face:`face[${this.expressionlist[swiperitemindex][imgindex].name}]`
+						face:this.expressionlist[swiperitemindex][imgindex].name
 					},
 					success: function() {
 						console.log('insert image success')
@@ -405,17 +472,23 @@
 				uni.createSelectorQuery().select('#editor').context((res) => {
 					this.editorCtx = res.context
 				}).exec()
+			},
+			//联系客服按钮
+			reconnection(){
+				this.$store.commit("connect",{typestore:this.statestore,expressionlist:this.expressionlist})
 			}
 		},
 		onLoad(opction){
+			console.log(this.expressionlist)
 			console.log("已经入onload的事件")
 			const _this = this
 			let {shoplink,statestore} = opction
 			_this.shoplinknew = shoplink
+			_this.statestore = statestore
 			// 这里是商品详情跳转过来的 就不用了解构了  直接用  为了少定义变量
 			_this.shopopction = opction
 			//传入 参数 判断以后点击的 是平台 0 店铺 1
-			this.$store.commit("connect",{typestore:statestore})
+			this.$store.commit("connect",{typestore:statestore,expressionlist:this.expressionlist})
 			this.statusBar = app.globalData.statusBar
 			//当用户已进入页面的时候  在缓存中 取值如果没有  就让键盘自动弹出来  获取用户的键盘的高度 
 		},
@@ -655,4 +728,21 @@
 	     color:#bfbfbf;
 	   }
 	 }
+	.customerservice{
+			  position: fixed;
+			  right: 0;
+			  top: 20%;
+			  width: 80rpx;
+			  background-color: #D9D9D9;
+			  z-index: 99;
+			  // border-radius: 30rpx;
+			  // padding: 10rpx 20rpx;
+			  image{
+				  width: 80rpx;
+				  height: 80rpx;
+			  }
+		  }
+	.radios{
+		border-radius:50%;
+	}
 </style>

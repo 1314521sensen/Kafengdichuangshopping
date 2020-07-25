@@ -93,7 +93,7 @@
 				//店铺跳转的时候  把图片 商品的标题商品的 价格 发送的过去
 				uni.navigateTo({
 					url:`/pages/Customerservice/Customerservice?
-						shoplink=storeshop&shopimg=${JSON.stringify(this.pic.good_pic)}&shoptitle=${this.pic.good_title}&shopprice=${this.pic.good_price}&shoppromotion_price=${this.pic.good_promotion_price}&storename=${this.pic.store_name}&statestore=9`
+						shoplink=storeshop&shopimg=${JSON.stringify(this.pic.good_pic)}&shoptitle=${this.pic.good_title}&shopprice=${this.pic.good_price}&shoppromotion_price=${this.pic.good_promotion_price}&storename=${this.pic.store_name}&statestore=${this.storeid}`
 				})
 			},
 			Addcart(obj){

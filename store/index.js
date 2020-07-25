@@ -53,6 +53,7 @@ let state = {
 	kf_id:"",//这是后台返回来的客服id
 	kf_name:"",//这是后台返回来的客服名字
 	sokettime:null,//客服的长连接定时器
+	isconnectserver:false, //联系客服的是否显示 
 }
 //getters 用于计算
 let getters = {
@@ -196,7 +197,10 @@ let mutations = {
 	/***websocket---开始***/
 		//建立链接
 		connect(state,typestoreobj){
-			let {typestore} = typestoreobj
+			let {typestore,expressionlist} = typestoreobj
+			// #ifdef APP-PLUS
+			state.isconnectserver = true
+			// #endif
 			const _this = this
 			//先获取tokey 通过tokey去获取用户的详情 把用户的信息
 			_this.commit("gettokey")
@@ -207,6 +211,7 @@ let mutations = {
 					token:state.tokey
 				},
 				success(res) {
+					
 					// console.log(res)
 					if(res.data.code==0){
 						console.log("先进入请求者")
@@ -216,7 +221,7 @@ let mutations = {
 						state.avatar = user_pic
 						uni.connectSocket({
 							// wss://echo.websocket.org
-							url: 'ws://192.168.1.124:7272',
+							url: 'ws://49.232.153.178:7272',
 							// #ifdef MP
 							header: {
 								'content-type': 'application/json'
@@ -233,7 +238,7 @@ let mutations = {
 										type:"userInit",
 										uid:state.uid,
 										name:state.uname,
-										avatar:state.avatar,
+										avatar:'http://hbk.huiboke.com'+state.avatar,
 										group:1,
 										store:typestore,
 								}
@@ -245,9 +250,11 @@ let mutations = {
 										data:JSON.stringify(initobj),
 										success(resinit){
 											state.linkstate = "正在连接中"
+											state.isconnectserver = false
 										},
 										fail(err){
 											state.linkstate = "连接中断"
+											state.isconnectserver = true
 										}
 									})
 								},3000)
@@ -255,6 +262,7 @@ let mutations = {
 							fail(err) {
 								console.log(err)
 								state.linkstate = "连接失败"
+								state.isconnectserver = true
 								// 这里是接口调用失败的回调，不是连接失败的回调，请注意
 							}
 						})
@@ -263,15 +271,8 @@ let mutations = {
 			})
 			// 监听WebSocket连接打开事件。
 			uni.onSocketOpen((res) => {
-				console.log(res,"连接成功")
 				state.socketOpen = true
-				// this.connected = true
-				// uni.hideLoading()
-				uni.showToast({
-					icon: 'none',
-					title: '连接成功'
-				})
-				
+				state.isconnectserver = false
 				state.sokettime = setInterval(function(){
 					let pingobj = {
 						type:'ping'
@@ -293,9 +294,12 @@ let mutations = {
 			//监听WebSocket接受到服务器的消息事件。
 			uni.onSocketMessage((res) => {
 				// this.msg = res.data
-				console.log('onMessage这是服务器返回的', res)
+				// console.log('onMessage这是服务器返回的', res)
 				//根据类型进行存储值
+				//这是处理表情的正则
+				let regexpression = /face\[.*?\]/gi
 				let resparse = JSON.parse(res.data)
+				//这是处理图片的正则
 				let regimg = /img[\S]/gi
 				console.log(resparse)
 				if(resparse.message_type=='wait'){
@@ -306,17 +310,34 @@ let mutations = {
 					state.linkstate = "正在转接对应客服"
 				}else if(resparse.message_type=="chatMessage"){
 					if(regimg.test(resparse.data.content)){
-						let imgstr = resparse.data.content.substr(4,resparse.data.content.length-1)
-						state.Customersendmsglist.push({'sendmsgdata':`<image src=${imgstr}></image>`,'msgtype':'serveReturn'})
+						//这是处理图片的
+						let imgstr = resparse.data.content.substring(4,resparse.data.content.length-1)
+						state.Customersendmsglist.push({'sendmsgdata':`<image src=${imgstr} style='width:80px'></image>`,'msgtype':'serveReturn','avatar':resparse.data.avatar})
+					}else if(resparse.data.content.match(regexpression)!==null){
+						//这是处理表情的
+						let arr = resparse.data.content.match(regexpression)
+						expressionlist.forEach((item,index)=>{
+							item.forEach((items,indexs)=>{
+								arr.forEach((itemss,indexss)=>{
+									 if(itemss==items.name){
+										return resparse.data.content = resparse.data.content.replace(itemss,`<img src=${items.url}></img>`)	
+									 }
+								})
+							})
+						})
+						state.Customersendmsglist.push({'sendmsgdata':resparse.data.content,'msgtype':'serveReturn','avatar':resparse.data.avatar})
 					}else{
-						state.Customersendmsglist.push({'sendmsgdata':resparse.data.content,'msgtype':'serveReturn'})
+						//这是处理纯文本的
+						state.Customersendmsglist.push({'sendmsgdata':resparse.data.content,'msgtype':'serveReturn','avatar':resparse.data.avatar})
 					}
 				}else if(resparse.message_type=="connect"){
 					state.linkstate = "连接成功"
+					state.isconnectserver = false
 					state.kf_id = resparse.data.kf_id
 					state.kf_name = resparse.data.kf_name
 				}else if(resparse.message_type=="kf_online"){
 					state.linkstate = "客服以上班"
+					state.isconnectserver = false
 				}
 			})
 		},
@@ -1218,7 +1239,7 @@ let mutations = {
 				  success(res) {
 					  // Customersendmsglist
 				  	console.log(res,"这是发送成功")
-					state.Customersendmsglist.push({'sendmsgdata':textvalue,'msgtype':'usersend'})
+					state.Customersendmsglist.push({'sendmsgdata':textvalue,'msgtype':'usersend','avatar':'http://hbk.huiboke.com'+state.avatar})
 				  },
 				  fail(err){
 					  console.log(err,"这是发送失败")

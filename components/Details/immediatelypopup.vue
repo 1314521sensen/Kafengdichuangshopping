@@ -15,7 +15,7 @@
 				</view>
 			</view>
 			<view class="immediately-midden-scrollarea">
-				<scroll-view scroll-y="true" class="scrollarea">
+				<scroll-view scroll-y="true" class="scrollarea" :class="immediatelylist.length>1?'scrollareaactive':''">
 					<view class="scrollareapagespecifications">
 						<view class="scrollareapagespecifications-item" v-for="(item,index) in immediatelylist" :key="index">
 							<view class="item-text">
@@ -179,8 +179,8 @@
 		text-align:left;
 		// height:50vh;
 		.cu-dialog{
-			height:70vh;
-			padding:0 20rpx;
+			// height:70vh;
+			padding:0 20rpx 20rpx;
 			.immediately-top{
 				display:flex;
 				justify-content: space-between;
@@ -224,15 +224,13 @@
 		.immediately-midden-scrollarea{
 			font-size: 30rpx;
 			font-weight: bold;
-			margin:44rpx 0;
+			margin:0 0 44rpx;
 			padding: 0 20rpx;
 			.scrollarea{
-				height:34vh;
 				//这是midden中间的规格
 				.scrollareaspecifications{
 					text{
 						color:#7f7f7f;
-						
 					}
 				}
 				//这是midden一些配置规格
@@ -259,6 +257,9 @@
 						}
 					}
 				}
+			}
+			.scrollareaactive{
+				height:34vh;
 			}
 		}
 		.numberof{

@@ -96,7 +96,6 @@
 				success(res) {
 					// console.log(res.data.data.good_content_images)
 					if(res.data.code==0){
-						// console.log(res)
 						_this.good_state = res.data.data.good_state
 						_this.good_verify = res.data.data.good_verify
 						_this.good_delete = res.data.data.good_delete
