@@ -6,7 +6,13 @@
 				<cover-view class="midden-top-childTop">
 					<!-- 顶部的结构 -->
 					<!-- 这是公共的 -->
-					<liveroomtopinfo :Focusshow="true"></liveroomtopinfo>
+					<liveroomtopinfo 
+						:Focusshow="true" 
+						:room_id="roomid"
+						:live_nick="livenick"
+						:live_pic="livepic"
+					>
+					</liveroomtopinfo>
 					<!--  -->
 					<cover-view class="midden-childtopmidden-info">
 						<cover-view class="intimacy border-radiusthirty bg-Black-gradient">
@@ -16,10 +22,12 @@
 						</cover-view>
 					</cover-view>
 				</cover-view>
+				
 			</cover-view>
 			<!-- 下面占一半 在让他们的子元素占上面还是占下面-->
 			<cover-view class="midden-bottom" :style="{height:(componentheight/2)+'px','padding-bottom':(bottomheight+10)+'px'}">
 				<cover-view class="midden-bottom-childBottom">
+					
 					<livechatlist :componentwidth="componentwidth" :list="list"></livechatlist>
 					<!-- 引入文本框 -->
 					<!-- <inptext :componentheight="componentheight" :keyboardheight="keyboardheight" :componentwidth="componentwidth"></inptext> -->
@@ -47,10 +55,12 @@
 						</cover-view>
 					</cover-view>
 					<!-- 引入商品列表组件 -->
-				<livemiddengoodshoplist :componentheight="componentheight" :componentwidth="componentwidth" paddingbottom="30" v-if="shopbool"></livemiddengoodshoplist>
+				<livemiddengoodshoplist :Immediatelygrabbool="true" :componentheight="componentheight" :componentwidth="componentwidth" paddingbottom="30" v-if="shopbool"></livemiddengoodshoplist>
+				
 				</cover-view>
 				<!-- 引入小心心组件 -->
 				<!-- <xiaoxinxin :viewList="viewList"></xiaoxinxin> -->
+				<Specificationsprops :componentheight="componentheight" :componentwidth="componentwidth" v-if="this.$store.state.livespecificationsbool"></Specificationsprops>
 			</cover-view>
 		</cover-view>
 	</cover-view>
@@ -65,6 +75,8 @@
 	import liveroomtopinfo from "../liveplice/liveroomtopinfo.nvue"
 	//引入聊天列表
 	import livechatlist from "../liveplice/livechatlist.nvue"
+	//引入商品规格
+	import Specificationsprops from "@/components/liveplice/Specificationsprops.nvue"
 	export default {
 		data(){
 			return {
@@ -87,7 +99,7 @@
 				inptvalue:"",//获取inp的内容
 			}
 		},
-		props:["componentwidth","componentheight","statusheight","bottomheight"],
+		props:["componentwidth","componentheight","statusheight","bottomheight","livenick","roomid","livepic"],
 		methods:{
 			//这是点击了购物标图片
 			zhiboshop(e){
@@ -172,7 +184,8 @@
 			livemiddengoodshoplist,
 			inptext,
 			liveroomtopinfo,
-			livechatlist
+			livechatlist,
+			Specificationsprops
 		}
 	}
 </script>

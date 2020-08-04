@@ -27,6 +27,9 @@
 						<input class="verification" placeholder="请输入验证码" name="phonecode"></input>
 						<button class='cu-btn bg-green shadow newcu-btn' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
 					</view>
+					<view class="fa_referrer_mobile cu-form-group" v-if="bool">
+								<input type="text" placeholder="推荐人手机号(选填)" name="referrer_mobile" v-model="referrer_mobile"/>
+							</view>
 					<view class="loginButton">
 						<button class="bg-gradual-red cu-btn block bg-orange margin-tb-sm lg" form-type="submit">
 							注册
@@ -51,7 +54,10 @@
 				phone:"",
 				times:null,
 				password:"",
-				Confirmpassword:""
+				Confirmpassword:"",
+				referrer_sc: '',
+				referrer_mobile:'',
+				bool:true
 			}
 		},
 		methods: {
@@ -123,7 +129,7 @@
 			smslogin(e){
 				// console.log(e)
 				//获取里面的每一个值
-				let {username,password,Confirmpassword,phone,phonecode} = e.detail.value
+				let {username,password,Confirmpassword,phone,phonecode,referrer_mobile} = e.detail.value
 				//写两个正则
 				//来匹配账号
 				//账号必须为5到100位
@@ -142,7 +148,9 @@
 							username:username,
 							password:password,
 							mobile_phone:phone,
-							code:phonecode
+							code:phonecode,
+							referrer_sc:this.referrer_sc,
+							referrer_mobile:referrer_mobile
 						}
 						//将用户微信与微信绑定的参数
 						let bingjson = {
@@ -257,6 +265,12 @@
 			}else{
 				app.globalData.showtoastsame("请保持和前面的密码一致")
 			}
+			}
+		},
+		onLoad(opction) {
+			const _this = this
+			if(opction.type==1){
+				_this.bool = false
 			}
 		}
 	}

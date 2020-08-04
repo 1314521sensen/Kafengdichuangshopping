@@ -60,7 +60,8 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
                     "<uses-permission android:name=\"android.permission.REQUEST_INSTALL_PACKAGES\"/>"
                 ],
-                "autoSdkPermissions" : true
+                "autoSdkPermissions" : true,
+                "abiFilters" : [ "armeabi-v7a", "arm64-v8a" ]
             },
             /* ios打包配置 */
             "ios" : {},
@@ -69,7 +70,7 @@
                 "oauth" : {
                     "weixin" : {
                         "appid" : "wx0f9236b57d357dbb",
-                        "appsecret" : "ce11e7fd9e0236b65d62b9d663b823f6",
+                        "appsecret" : "f32abb9c6bc9446b211d57b02feca44c",
                         "UniversalLinks" : ""
                     }
                 },
@@ -148,6 +149,9 @@
                     }
                 }
             }
+        },
+        "uniStatistics" : {
+            "enable" : true
         }
     },
     /* 快应用特有相关 */
@@ -159,21 +163,47 @@
             "urlCheck" : false,
             "es6" : false
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : true
+        }
     },
     "mp-alipay" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : true
+        }
     },
     "mp-baidu" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : true
+        }
     },
     "mp-toutiao" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : true
+        },
+        "setting" : {
+            "urlCheck" : true
+        }
     },
     "h5" : {
         "router" : {
             "mode" : "history"
         },
-        "title" : "惠播客"
+        "title" : "惠播客",
+        "uniStatistics" : {
+            "enable" : true
+        }
+    },
+    "uniStatistics" : {
+        "enable" : true
+    },
+    "mp-qq" : {
+        "uniStatistics" : {
+            "enable" : true
+        }
     }
 }

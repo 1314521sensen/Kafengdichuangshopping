@@ -23,6 +23,7 @@
 			:good_state="good_state"
 			:good_verify="good_verify"
 			:good_delete="good_delete"
+			:producttype="producttype"
 		></bottomcar>
 	</view>
 </template>
@@ -56,7 +57,8 @@
 				good_state:"",//商品的状态 是否下架 
 				good_verify:"",//是否通过
 				good_delete:"",//是否删除
-				liveshopstate:""
+				liveshopstate:"",
+				producttype:"",//判断商品是不是团长类型
 			}
 		},
 		methods: {
@@ -73,19 +75,24 @@
 		onLoad(opction){
 			// couplebool
 			console.log(opction)
-			let {id,storeid,goodtype,liveshopstate} = opction
+			let {id,storeid,goodtype,liveshopstate,type} = opction
 			const _this = this
 			//这是商品的id
 			this.gid = id
 			//店铺id
 			this.storeid = storeid
 			this.liveshopstate = liveshopstate
-			console.log(this.liveshopstate)
 			//判断是不是新人
 			if(goodtype=="npt"){
 				this.couplebool = "npt"
 			}else{
 				this.couplebool = "nt"
+			}
+			//判断是不是团长商品
+			if(parseInt(type)==3){
+				this.producttype = type
+			}else{
+				this.producttype = ""
 			}
 			//在去请求详情页的其他数据
 			uni.request({
@@ -103,6 +110,12 @@
 						_this.pic = res.data.data
 						_this.good_content_images = res.data.data.good_content_images
 						_this.storeid = res.data.data.store_id
+						//将轮播图的数据加入到缓存中
+						uni.setStorage({
+							key:"detailsbanner",
+							data:_this.swiperList
+						})
+						
 						//这和下面没关系 这块处理用户足迹的
 						//从这
 						//当用户点击进来的时候代表已经游览了商品足迹

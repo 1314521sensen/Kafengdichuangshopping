@@ -25,6 +25,7 @@
 			</view>
 		</view>
 		<storecoupon :tokey="tokey" :storeid="storeid" msg="领卷" Whatcoupon="0" titlemsg="领劵"></storecoupon>
+		<service></service>
 		<bottompopup parameter="参数" :storeid="storeid" :gid="gid"></bottompopup>
 		<evaluation :gid="gid"></evaluation>
 	</view>
@@ -34,6 +35,7 @@
 	import bottompopup from "@/components/Details/BottomPopup.vue";
 	import storecoupon from "@/components/Details/storecoupon.vue"
 	import evaluation from "@/components/Details/evaluation.vue"
+	import service from "@/components/Details/service.vue"
 	export default{
 		// 这是详情页面参数
 		data(){
@@ -49,7 +51,8 @@
 		components:{
 			bottompopup,
 			evaluation,
-			storecoupon
+			storecoupon,
+			service
 		},
 		props:["pic","region","tokey","storeid","couplebool","good_state","good_verify","good_delete","gid","liveshopstate"],
 	}

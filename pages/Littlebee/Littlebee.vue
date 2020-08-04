@@ -34,10 +34,12 @@
 				</view>
 			</view>
 		</view>
+		<beemembers></beemembers>
 	</view>
 </template>
 
 <script>
+	import beemembers from "@/components/beemembers/beemembers.vue"
 	export default {
 		data() {
 			return {
@@ -77,6 +79,9 @@
 					}
 				},100)
 			}
+		},
+		components:{
+			beemembers,
 		}
 	}
 </script>

@@ -41,7 +41,10 @@
 		}
         ,{
             "path" : "pages/Details/Details",
-            "style" : {}
+            "style" : {
+				"animationType": "zoom-fade-out",
+				 "animationDuration": 300
+			}
         }
         ,{
             "path" : "pages/SearchTo/SearchTo",
@@ -77,6 +80,10 @@
             "path" : "pages/login/login",
             "style" : {}
         },
+		{
+		    "path" : "pages/loginagreement/loginagreement",
+		    "style" : {}
+		},
 		{
 		    "path" : "pages/Allcoupons/allcoupons",
 		    "style" : {}
@@ -120,8 +127,11 @@
 		},
 		{
 			"path":"components/setcenter/SetChangeResetpassword"
-		}
-        ,{
+		},
+		{
+			"path":"components/setcenter/Applicationeaming"
+		},
+		{
             "path" : "pages/Allrightsreserved/Allrightsreserved",
             "style" : {}
         },
@@ -168,6 +178,10 @@
             "style" : {}
         },
 		{
+		    "path" : "pages/liveuserSowing/liveuserSowing",
+		    "style" : {}
+		},
+		{
 			"path":"pages/discount/discount"
 		},
 		{
@@ -190,11 +204,7 @@
 		},
 		{
 			"path":"pages/autotrophy/autotrophy"
-		}
-        ,{
-            "path" : "pages/liveuserSowing/liveuserSowing",
-            "style" : {}
-        },
+		},
 		{
 		    "path" : "pages/giftdetails/giftdetails",
 		    "style" : {}
@@ -293,6 +303,10 @@
         },
 		{
 		    "path" : "pages/Live_commission_end/Live_commission_end",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/WeChatLanding/WeChatLanding",
 		    "style" : {}
 		}
     ],

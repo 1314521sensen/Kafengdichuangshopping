@@ -2,10 +2,10 @@
 	<cover-view class="midden-childTop-info">
 		<cover-view class="midden-childTop-left border-radiusfifty bg-Black-gradient">
 			<cover-view class="midden-left-image border-radiusOnehundred">
-				<cover-image src="/static/logo.png" class="imgs border-radiusfifty"></cover-image>
+				<cover-image :src="'http://hbk.huiboke.com'+live_pic" class="imgs border-radiusfifty"></cover-image>
 			</cover-view>
 			<cover-view class="midden-left-text">
-				<text class="textcolorwrite textsize text-center margin-top-firchild">老海家农产品</text>
+				<text class="textcolorwrite textsize text-center margin-top-firchild">{{live_nick}}</text>
 				<text class="textcolorwrite textsize text-center margin-top font-size-twenty-four">1005观看|中国</text>
 			</cover-view>
 			<cover-view class="midden-left-Focuson bg-deepink border-radiusthirty" v-if="Focusshow">
@@ -15,7 +15,7 @@
 		<cover-view class="midden-childTop-right">
 			<cover-view class="midden-childTop-right-title bg-Black-gradient border-radiusthirty">
 				<text class="font-size-twenty-four text-center bg-gradient-white text-padding-plice border-radius-topLeft border-radius-topright">惠播客直播</text>
-				<text class="font-size-twenty-four text-center textcolor-Promptreply text-padding-six">ID:1370539</text>
+				<text class="font-size-twenty-four text-center textcolor-Promptreply text-padding-six">ID:{{room_id}}</text>
 			</cover-view>
 		</cover-view>
 	</cover-view>
@@ -23,7 +23,7 @@
 
 <script>
 	export default {
-		props:["Focusshow",]
+		props:["Focusshow","room_id","live_nick","live_pic"]
 	}
 </script>
 

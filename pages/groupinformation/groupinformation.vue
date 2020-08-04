@@ -26,11 +26,13 @@
 				</view>
 			</view>
 		</view>
+		<!-- <beemembers></beemembers> -->
 	</view>
 </template>
 
 <script>
 	const app = getApp()
+	// import beemembers from "@/components/beemembers/beemembers.vue"
 	export default {
 		data() {
 			return {
@@ -40,9 +42,9 @@
 		methods: {
 			applyinfo(){
 				//点击请求后台数据
-				//请求完成 进行跳转
+				//请求完成 进行跳转/pages/headearnings/headearnings
 				uni.redirectTo({
-					url:"/pages/headearnings/headearnings"
+					url:"/pages/Littlebee/Littlebee?title=小蜜蜂&titlename=userTopupwithdrawal"
 				})
 			},
 			returnicon(){
@@ -53,6 +55,9 @@
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		components:{
+			// beemembers,
 		}
 	}
 </script>

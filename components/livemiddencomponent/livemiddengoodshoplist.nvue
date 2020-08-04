@@ -40,16 +40,29 @@
 					</cover-view>
 				</cover-view>
 				<!-- 下面是按钮 -->
-				<cover-view class="item-bottom" v-if="Immediatelygrabbool">
+				<cover-view 
+					class="item-bottom" 
+					v-if="Immediatelygrabbool" 
+					@tap="Immediatelygrab"
+					:data-gid="item.good_id"
+					:data-s_id="item.store_id"
+					:data-g_le="item.good_title"
+					:data-g_price="item.good_price"
+					:data-g_pic="item.good_pic"
+					:data-store_name="item.store_name"
+					:data-share_code="item.share_code"
+				>
 					<text class="item-button border-plice border-styles text-center font-size-thirty textcolorwrite">马上抢</text>
 				</cover-view>
 			</cover-view>
 		</scroller>
+		
 	</cover-view>
 </template>
 
 <script>
 	//这是直播商品组件
+	
 	export default {
 		data(){
 			return {
@@ -65,9 +78,21 @@
 			//当滚动到底部的时候
 			loadmore(e){
 				this.$store.commit("loadmore")
+			},
+			//点击马上抢
+			Immediatelygrab(e){
+				console.log("马上抢")
+				const _this = this
+				let {gid,s_id,g_le,g_price,g_pic,store_name,share_code} = e.currentTarget.dataset
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey){
+						_this.$store.commit("Immediatelygrab",{gid,s_id,g_le,g_price,g_pic,tokey:restokey.data,store_name,share_code})
+					}
+				})
 			}
 		},	
-		props:["componentheight","componentwidth","paddingbottom","Immediatelygrabbool"]
+		props:["componentheight","componentwidth","paddingbottom","Immediatelygrabbool"],
 	}
 </script>
 

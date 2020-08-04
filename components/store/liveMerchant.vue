@@ -16,17 +16,6 @@
 				</view>
 			</view>
 		</view>
-		<!-- 这里临时 -->
-		<view>临时直播接口</view>
-		<view class="linshi">
-			<button 
-				v-for="(item,index) in 20" 
-				:key="index" 
-				:style="{'margin-top':10+'rpx'}" 
-				@tap="linshi"
-				:data-indexs="index"
-			>{{index+1}}直播入口</button>
-		</view>
 	</view>
 </template>
 
@@ -63,14 +52,6 @@
 						url:`/pages/liveaddshoplist/liveaddshoplist?storeid=${this.storeid}&type=storetype`
 					})
 				}
-			},
-			// 临时用
-			linshi(e){
-				// console.log(e.currentTarget.dataset)
-				let {indexs} = e.currentTarget.dataset
-				uni.navigateTo({
-					url:`/pages/Livecover/Livecover?index=${parseInt(indexs)}`
-				})
 			}
 		},
 		props:["storeid"],

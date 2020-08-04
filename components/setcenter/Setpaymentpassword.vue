@@ -13,6 +13,7 @@
 
 <script>
 	//components/setcenter/SetChangeResetpassword
+	const app = getApp()
 	export default{
 		data(){
 			return {
@@ -37,20 +38,27 @@
 		created(){
 			const _this = this
 			//检测用户是否设置支付密码
-			uni.request({
-				url:"http://hbk.huiboke.com/api/user/isSetPayPassword",
-				method:"POST",
-				data:{
-					token:_this.tokey
-				},
-				success(reszhifu){
-					if(reszhifu.data.code==0){//code等于0 代表密码存在
-						 _this.setzhifumimabool = reszhifu.data.data.flag //1
-						 _this.message = "修改支付密码"
-					}else{//code等于1代表密码不存在
-						_this.setzhifumimabool = reszhifu.data.data.flag //0
-						_this.message = "设置支付密码"
-					}
+			uni.getStorage({
+				key:"bindtokey",
+				success(restokey) {
+					uni.request({
+						url:`${app.globalData.Requestpath}user/isSetPayPassword`,
+						method:"POST",
+						data:{
+							token:restokey.data
+						},
+						success(reszhifu){
+							console.log(reszhifu)
+							if(reszhifu.data.code==0){//code等于0 代表密码存在
+								
+								 _this.setzhifumimabool = reszhifu.data.data.flag //1
+								 _this.message = "修改支付密码"
+							}else{//code等于1代表密码不存在
+								_this.setzhifumimabool = reszhifu.data.data.flag //0
+								_this.message = "设置支付密码"
+							}
+						}
+					})
 				}
 			})
 		},

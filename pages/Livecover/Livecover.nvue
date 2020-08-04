@@ -23,7 +23,6 @@
 			local-mirror="enable"
 			:style="{width:windowWidth+'px',height:windowHeight+'px'}"
 		>
-			
 		</live-pusher>
 		<cover-view class="coverfather" :style="{width:windowWidth+'px',height:windowHeight+'px','padding-top':statusBarHeight+'px'}">
 			<!-- <livecovetop></livecovetop> -->
@@ -37,7 +36,7 @@
 					<cover-image src="/static/Pushflow/cha.png" class="icon-imgs"></cover-image>
 				</cover-view>
 			</cover-view>
-			<livecovemidden :windowWidth="windowWidth" @coverurl="coverurl" @inpvalue="inpvalue"></livecovemidden>
+			<livecovemidden :windowWidth="windowWidth" @coverurl="coverurl" @inpvalue="inpvalue" @nickname="nickname"></livecovemidden>
 			<!-- 上面的两个组件最后给父组件 把接下来的按钮留给父组件 这样就能少了一步传值 -->
 			<cover-view class="livecover-bottom parent-padding-leftAndright" :style="{width:windowWidth+'px','padding-bottom':(windowBottom+5)+'px'}">
 				<!-- <cover-view class="location">
@@ -93,15 +92,17 @@
 				righticon:[
 					{
 						url:"/static/Pushflow/Skincare.png"
+					},
+					{
+						url:"/static/Pushflow/Cameratransformation.png"
 					}
-					// {
-					// 	url:"/static/Pushflow/Cameratransformation.png"
-					// }
 				],
 				Skincare:false,
 				// 临时变量
 				indexlinshi:0,
 				storeid:"",//为了获得店铺id
+				tokey:"",//用户的tokey
+				livenickname:"",//用户直播的昵称
 			}
 		},
 		methods: {
@@ -117,6 +118,9 @@
 					}else{
 						this.Skincare = true
 					}
+				}else{
+					//切换前后摄像头
+					this.context.switchCamera()
 				}
 			},
 			covermodel(msgtitle,msgcotent){
@@ -136,29 +140,33 @@
 							//开启推流
 							// _this.context.start()
 							// 后面添加参数的是临时的
-							uni.redirectTo({
-								url:`/pages/livestudio/livestudio?storeid=${_this.storeid}&index=${_this.indexlinshi}`
-							})
+							_this.getliveinforoom()
 						}
 					}
 				})
 			},
 			//封装一个执行上面的模态框的方法
 			Detectionlive(_this){
-				if(_this.Backcoverurl!=="" && _this.Backinpvalue!==""){//如果两个值不为空的情况下
+				if(_this.Backcoverurl!=="" && _this.Backinpvalue!=="" && _this.livenickname!==""){//如果两个值不为空的情况下
 					//关闭摄像头预览
 					_this.context.stopPreview()
 					//开启推流
 					// _this.context.start()
-					uni.redirectTo({
-						// 后面添加参数的是临时的
-						
-						url:`/pages/livestudio/livestudio?storeid=${_this.storeid}&index=${_this.indexlinshi}`
-					})
+					//这里为了保存 用户开直播的信息
+					// console.log(_this.tokey)
+					_this.getliveinforoom()
 				}else if(_this.Backcoverurl==""){//如果图片的为空
-					_this.covermodel('封面图片未选择',"为了让其他人更好的关注您,请设置封面图片")
+					// _this.covermodel('封面图片未选择',"为了让其他人更好的关注您,请设置封面图片")
+					app.globalData.showtoastsame("封面图片未选择")
+					return 
 				}else if(_this.Backinpvalue==""){//如果描述为空的情况下
-					_this.covermodel("标题未填写","为了让其他人更好的关注您,请填写标题")
+					// _this.covermodel("标题未填写","为了让其他人更好的关注您,请填写标题")
+					app.globalData.showtoastsame("标题未填写")
+					return
+				}else if(_this.livenickname==""){
+					// _this.covermodel("昵称未填写","为了让其他人更好的关注您,请填写昵称")
+					app.globalData.showtoastsame("昵称未填写")
+					return 
 				}
 			},
 			//开始直播
@@ -197,12 +205,59 @@
 			Shutdown(){
 				uni.navigateBack()
 			},
+			//封装个方法 用于请求后台的信息 保存直播间
+			getliveinforoom(){
+				const _this = this
+				// console.log(_this.tokey,_this.livenickname,_this.Backcoverurl,_this.Backinpvalue,"这是最后要更改的值")
+				uni.request({
+					url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
+					method:"POST",
+					data:{
+						token:_this.tokey,
+						live_nick:_this.livenickname,
+						live_pic:_this.Backcoverurl,
+						live_desc:_this.Backinpvalue,
+						is_living:1
+					},
+					success(res) {
+						if(res.data.code==0){
+							uni.request({
+								url:`${app.globalData.Requestpath}live_user/getLiveUserInfo`,
+								method:"POST",
+								data:{
+									token:_this.tokey
+								},
+								success(resinfo) {
+									// console.log(resinfo)
+									if(resinfo.data.code==0){
+										// console.log("已经进来了")
+										let {live_url,room_id,live_nick,live_pic} = resinfo.data.data
+										// console.log(live_url,room_id,live_nick,live_pic)
+										uni.redirectTo({
+											// 后面添加参数的是临时的
+											url:`/pages/livestudio/livestudio?storeid=${_this.storeid}&index=${_this.indexlinshi}&beauty=${_this.beauty}&whiteness=${_this.whiteness}&url=${live_url}&roomid=${room_id}&livenick=${live_nick}&livepic=${live_pic}`
+										})
+									}
+								}
+							})
+						}
+					}
+				})
+			},
+			
+			
 			//这是子组件穿回来的值
 			coverurl(e){
 				this.Backcoverurl = e
+				// console.log(this.Backcoverurl)
 			},
 			inpvalue(e){
 				this.Backinpvalue = e
+			},
+			nickname(e){
+				// console.log(e)
+				this.livenickname = e
+				// console.log(this.livenickname)
 			},
 			//增加美颜
 			Increaseskin(e){
@@ -273,18 +328,23 @@
 			// this.context.start()
 			//开启摄像头预览
 			this.context.startPreview()
-			//切换前后摄像头
-			this.context.switchCamera()
+			
 		},
 		components:{
 			livecovemidden
 		},
 		onLoad(opction) {
+			const _this = this
 			let {index,storeid} = opction
-			this.storeid = storeid
-			this.indexlinshi = index
+			_this.storeid = storeid
+			_this.indexlinshi = index
+			uni.getStorage({
+				key:"bindtokey",
+				success(restokey) {
+					_this.tokey = restokey.data
+				}
+			})
 		},
-		
 	}
 	// #endif
 </script>

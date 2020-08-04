@@ -11,6 +11,9 @@
 .bg-Lightgrey{
 	background-color: #333333;
 }
+.textcolor-black{
+	color: #000000;
+}
 /*字体颜色---结束*/
 
 
@@ -56,6 +59,9 @@
 }
 .text-padding-leftshis{
 	padding-left:10rpx;
+}
+.text-paddingOrsotwenty{
+	padding:0 20rpx;
 }
 
 /*内边距大小---结束*/

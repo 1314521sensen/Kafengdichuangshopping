@@ -1,29 +1,36 @@
 <template>
+	<!--  style="height: 100vh;overflow: auto;" -->
 	<view class="headeadnings">
-		<!-- 头部 -->
-		<view class="witder" style="background-image: url(/static/headearning/headnav_bg.png)" :style="{'padding-top':statusBar+'rpx'}">
-			<view class="header_nav">
-				<text class="lg text-gray cuIcon-back" @tap="returnmypeoby"></text>
-			</view>
-		</view>
-		<!-- 头像和名字 -->
-		<view class="PhonenameBox">
-			<view><image class="LO_Phone" src="/static/headearning/beautyace.png" mode=""></image></view>
-			<view class="name">美了美了美了</view>
-		</view>
-		<!-- 详细收益等 -->
-		<view class="earnings_flex">
-			<view class="earnings">
-				<view class="ThepromotingBox" v-for="(item,index) in ThepromotingBoxs" :key='index'>
-					<text class="Thetext">{{item.Thetext}}</text>
-					<text class="Theearnings">{{item.Theearnings}}</text>
+		   <scroll-view :scroll-y='true' @scrolltolower='scrolltolower' style="height: 95vh;">
+				<!-- 头部 -->
+				<view class="witder" style="background-image: url(/static/headearning/headnav_bg.png)" :style="{'padding-top':statusBar+'rpx'}">
+					<view class="header_nav">
+						<text class="lg text-gray cuIcon-back" @tap="returnmypeoby"></text>
+					</view>
 				</view>
+				<!-- 头像和名字 -->
+				<view class="PhonenameBox">
+					<view><image class="LO_Phone" src="/static/headearning/beautyace.png" mode=""></image></view>
+					<view class="name">美了美了美了</view>
+				</view>
+				<!-- 详细收益等 -->
+				<view class="earnings_flex">
+					<view class="earnings">
+						<view class="ThepromotingBox" v-for="(item,index) in ThepromotingBoxs" :key='index'>
+							<text class="Thetext">{{item.Thetext}}</text>
+							<text class="Theearnings">{{item.Theearnings}}</text>
+						</view>
+					</view>
+				</view>
+				<!-- 商品  详细 提现等   -->
+				<elaborate></elaborate>
+				<!-- 剩余团购数量 -->
+				<productlist :lists='list'></productlist>
+			</scroll-view>
+			<!-- 到底没有数据显示的 -->
+			<view class="bottom-text" v-if="textbool">
+				<text>{{hinttext}}</text>
 			</view>
-		</view>
-		<!-- 商品  详细 提现等 -->
-		<elaborate></elaborate>
-		<!-- 剩余团购数量 -->
-		<productlist></productlist>
 	</view>	
 </template>
 	
@@ -46,12 +53,52 @@
 					},
 				   {
 					   Thetext:'RMB200',
-					   Theearnings:'积累佣金'
+					   Theearnings:'积累佣金 '  
 				    }],
-					statusBar:0
+					statusBar:0,
+					page:1,//当前页数 
+					list:[],//存储的数据
+					iconbool:true,
+					textbool:false,
+					hinttext:'暂无数据'  
 			   } 
 		 },
+	    created(){
+			 this.indexshoplist(this.page)
+	    },
 		methods: {
+			scrolltolower(){
+				 this.page+=1
+				 this.indexshoplist(this.page)
+			},
+			indexshoplist(page){
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}good/getCommanderGoodList`,
+					data:{
+						page:_this.page,
+						pageSize:6
+					},
+					success(res) {
+						console.log(res)
+						if(res.data.code==0){
+							if(_this.page>1){
+								_this.list = _this.list.concat(res.data.data.list)
+								// console.log(_this.list)
+							}else{
+								_this.list = res.data.data.list
+							}
+						}else{
+							// app.globalData.showtoastsame("数据暂无")
+							 if(_this.page > 1){
+								 _this.hinttext = '我也是有底线的'
+							 }
+							_this.textbool = true
+						}
+						// _this.iconbool = false  
+					}  
+				})
+			},
 			returnmypeoby(){
 				uni.switchTab({
 					url:"/pages/PersonalMy/PersonalMy"
@@ -70,6 +117,9 @@
 </script>
   
 <style lang="less" scoped>
+	page{
+		background-color: #F8F8F8;
+	}
 	.headeadnings{
 		.witder{
 			height: 440rpx;
@@ -130,6 +180,9 @@
 		.text-gray{
 			font-size: 35rpx;
 		}
+	}
+	.bottom-text{
+		text-align: center;
 	}
 	
 </style>

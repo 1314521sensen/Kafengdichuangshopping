@@ -11,10 +11,22 @@
 				:enable-play-gesture="false" 
 				:muted="false"
 				:direction="direction"
+				@error="videoerr"
+				@waiting="waiting"
+				@progress="progress"
 				>
 				<cover-view :style="{width:wdith+'px',height :height+ 'px'}" class="cover-view-box">
 					<scroller scroll-direction="horizontal" :style="{width:wdith+'px',height :height+ 'px'}" class="covercomponent" >
-						<livemidden :componentwidth="width" :componentheight="height" :statusheight="statusheight" :bottomheight="bottomheight"></livemidden>
+						<livemidden 
+							:componentwidth="width" 
+							:componentheight="height" 
+							:statusheight="statusheight" 
+							:bottomheight="bottomheight"
+							:livenick="livenick"
+							:roomid="roomid"
+							:livepic="livepic"
+						>
+						</livemidden>
 						<!-- <liveleft :componentwidth="width" :componentheight="height"></liveleft> -->
 						<!-- <liveright :componentwidth="width" :componentheight="height"></liveright> -->
 					</scroller>
@@ -39,10 +51,21 @@
 				bottomheight:0,
 				//临时的路径
 				url:"",
+				livenick:"",
+				roomid:"",
+				livepic:""
 			}
 		},
 		methods: {
-			
+			videoerr(e){
+				console.log(e,"这是加载报错的时候")
+			},
+			waiting(e){
+				console.log(e,"这是加载缓冲的时候")
+			},
+			progress(e){
+				console.log(e,"加载进度")
+			}
 		},
 		components:{
 			liveleft,
@@ -65,8 +88,13 @@
 			})
 		},
 		onLoad(opction){
-			let {indexs} = opction
-			this.url = `rtmp://49.232.153.178:1935/live/live0${parseInt(indexs)+1}`
+			// console.log(opction)
+			let {indexs,live_url,livenick,roomid,livepic,uid} = opction
+			this.url = live_url
+			this.livenick = livenick
+			this.roomid = roomid
+			this.livepic = livepic
+			this.$store.commit('userliveshoplist',uid)
 		}
 	// #endif
 	}

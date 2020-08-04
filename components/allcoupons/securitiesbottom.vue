@@ -41,7 +41,11 @@
 									
 								
 							</view>
-							<view class="demo_right" @tap="couponsUse">
+							<view 
+								class="demo_right" 
+								@tap="couponsUse"
+								:data-s_id='item.store_id'
+							>
 								<text class="right_center">
 									立即使用
 								</text>
@@ -82,10 +86,17 @@
 				this.$emit("storeIsStillAndPlatform",indexs)
 				
 			},
-			couponsUse(){
-				uni.switchTab({
-					url:`/pages/index/index`
-				})
+			couponsUse(e){
+				let {s_id} = e.currentTarget.dataset
+				if(parseInt(s_id)){
+					uni.navigateTo({
+						url:`/pages/Store/store?storeid=${s_id}`
+					})
+				}else{
+					uni.switchTab({
+						url:`/pages/index/index`
+					})
+				}
 			},
 			particularsClick(e){
 				let {indexs,bool} = e.currentTarget.dataset

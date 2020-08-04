@@ -29,7 +29,7 @@
 				<view class="flashrollBox" :style="{width:230*10+'rpx'}">
 					<view class="singleCommoditiesBox" v-for="(item,index) in 10" :key="index">
 						<!-- 展示图 -->
-						<view  class="purchaseUrl" :style="{'background-image':'url(/static/index/autotrophy/electronic.png)'}"></view>
+						<view  class="purchaseUrl"></view>
 						<!-- 描述 -->
 						<view class="describe">【超级盒子】猫王收音机MW-2...</view>
 						<view class="num">
@@ -93,8 +93,8 @@
 		<view class="recommendProduct">
 			<!-- 单个产品 -->
 			<view class="singleCommodities" v-for="(item,index) in 10" :key="index">
-				<!-- 展示图 -->
-				<view  class="purchaseUrl" :style="{'background-image':'url(/static/index/autotrophy/electronic.png)'}"></view>
+				<!-- 展示图 :style="{'background-image':'url(/static/index/autotrophy/electronic.png)'}"-->
+				<view  class="purchaseUrl" ></view>
 				<!-- 描述 -->
 				<view class="describe">【超级盒子】猫王收音机MW-2...</view>
 				<view class="num">
@@ -425,7 +425,7 @@
 			  .purchaseUrl{
 				  width: 292rpx;
 				  height: 150rpx;
-				  background: url(/static/autotrophy/electronic.png) no-repeat;
+				  // background: url(/static/autotrophy/electronic.png) no-repeat;
 				  background-size: 100% 100%;
 				  margin: 100rpx auto 0;
 			  }

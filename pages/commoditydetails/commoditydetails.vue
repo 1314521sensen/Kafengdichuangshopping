@@ -4,13 +4,15 @@
 		<!-- 头部导航 -->
 		<actionbar message="商品详细" :Jumpchoose="true" url="/pages/headearnings/headearnings"></actionbar>
 		<!-- 商品 -->
-		<view class="productdetails_box">
+		<view class="productdetails_box" >
 			<!-- 每个商品 -->
-			<view class="goodslot">
+			
+			
+			<view class="goodslot" v-for="(item,index) in commissionlist" :key="index">
 				<!-- 是哪个店铺 -->
 				<view class="whichone">
 					<view class="goodsPhon" style="background-image:url(/static/commoditydetails/camera.png);"></view>
-					<view class="store_name">SDHKJAHDk旗舰店</view>
+					<view class="store_name">{{item.store_name}}</view>
 				</view>
 				<!-- 图片展示 -->
 				<view class="picturePresentation ">
@@ -21,7 +23,7 @@
 				<!-- 详细介绍 -->
 				<view class="detailedIntroduction">
 					<view class="camear_brand">
-						<view class="brand_text">索尼相机 北京销售过百 镜头防抖科索尼相机</view>
+						<view class="brand_text">{{item.good_title}}</view>
 						<view class="discounts">
 							<text class="cialflagship">【官方旗舰点弄哦让内容弄哦让能工人蓉蓉好难哦呢人内容化</text>
 							<text class="securities">领劵</text> 
@@ -31,47 +33,11 @@
 					<!-- 存库价格等 -->
 					<view class="remainingBox">
 						<view class="keepPrice">
-							<view class="warehousing">存库10  剩余2</view>
-							<view class="priceA">￥9999.00</view>
+							<view class="warehousing">存库{{item.good_num}}</view>
+							<view class="priceA">￥{{item.good_price}}</view>
 						</view>
 						<view class="brokerage">
-							<view class="predict_agency">预估获得佣金:200</view>
-							<view class="acquire_agency">获得用金:200</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			<!-- 每个商品 -->
-			<view class="goodslot">
-				<!-- 是哪个店铺 -->
-				<view class="whichone">
-					<view class="goodsPhon" style="background-image:url(/static/commoditydetails/camera.png);"></view>
-					<view class="store_name">SDHKJAHDk旗舰店</view>
-				</view>
-				<!-- 图片展示 -->
-				<view class="picturePresentation ">
-					<!-- 推广提示 -->
-					<view class="Underpromotion">正在推广中</view>
-					<image class="pictureCamera" src="/static/commoditydetails/camera.png" mode=""></image>
-				</view>
-				<!-- 详细介绍 -->
-				<view class="detailedIntroduction">
-					<view class="camear_brand">
-						<view class="brand_text">索尼相机 北京销售过百 镜头防抖科索尼相机</view>
-						<view class="discounts">
-							<text class="cialflagship">【官方旗舰点弄哦让内容弄哦让能工人蓉蓉好难哦呢人内容化</text>
-							<text class="securities">领劵</text> 
-							<text class="reduction">60满减2</text>
-						</view>
-					</view>
-					<!-- 存库价格等 -->
-					<view class="remainingBox">
-						<view class="keepPrice">
-							<view class="warehousing">存库10  剩余2</view>
-							<view class="priceA">￥9999.00</view>
-						</view>
-						<view class="brokerage">
-							<view class="predict_agency">预估获得佣金:200</view>
+							<view class="predict_agency">预估获得佣金:{{item.prepare_cms}}</view>
 							<view class="acquire_agency">获得用金:200</view>
 						</view>
 					</view>
@@ -80,7 +46,6 @@
 		</view>
 	</view>
 </template>
-
 <script>
 	import actionbar from "@/components/actionbar/actionbar.vue"
 	const app = getApp()
@@ -88,6 +53,7 @@
 		data() {
 			return {
 				statusBar:0,
+				commissionlist:[]
 			}
 		},
 		methods: {
@@ -98,6 +64,28 @@
 		},
 		components:{
 			actionbar,
+		},
+		created() {
+			//获取佣金结算列表
+			const _this = this
+			uni.getStorage({
+				key:'bindtokey',
+				success(res){
+					uni.request({
+						url:`${app.globalData.Requestpath}CmsSettlement/getCmsSettlementList`,
+						method:"POST",
+						data:{
+							token:res.data,
+						},
+						success(res) {
+							if(res.data.code==0){
+								_this.commissionlist = res.data.data.list
+								
+							}
+						}
+					})
+				}
+			})
 		}
 	}
 </script>

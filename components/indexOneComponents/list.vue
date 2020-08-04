@@ -6,7 +6,10 @@
 				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
 				<!-- <button class="cu-btn bg-red margin-tb-sm lg" :style="{'display':display}">删除你不想要的商品</button> -->
 				<view class="cu-item" v-for="(item,index) in list" :key="index">
-					<view class="cu-item-left" @tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)">
+					<view class="cu-item-left" 
+						@tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)"
+						@longpress="longpress"
+					>
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
 						<!-- :style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"> -->
 						<view class="cu-avatar round lg cu-item-left-bg"
@@ -53,6 +56,10 @@
 					uni.navigateTo({
 						url:`/pages/Details/Details?id=${id}&storeid=${storeid}`
 					})
+			},
+			//长按事件
+			longpress(){
+				console.log(1111)
 			},
 			deletescollectionAndfootprint(e){
 				let index = e.currentTarget.dataset.index
@@ -152,7 +159,7 @@
 	     align-items: stretch !important;
 	     /* #ifdef APP-PLUS */
 	      .text-grey{
-	       line-height:28rpx;
+	       // line-height:28rpx;
 	       color:#000;
 	       font-size: 28rpx;
 			overflow : hidden;

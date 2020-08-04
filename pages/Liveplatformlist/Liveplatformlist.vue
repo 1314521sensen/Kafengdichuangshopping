@@ -26,7 +26,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="Liveplatformlistbanner">
+		<view class="Liveplatformlistbanner" v-show="swiperList.length>0">
 			<view class="Liveplatformbanner">
 				<!-- :autoplay="true" interval="5000" duration="500" -->
 				<swiper class="card-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :autoplay="true" interval="5000" duration="500" :circular="true"
@@ -34,8 +34,7 @@
 				 indicator-active-color="#0081ff">
 					<swiper-item v-for="(item,index) in swiperList" :key="index" :class="cardCur==index?'cur':''">
 						<view class="swiper-item">
-							<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
-							<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
+							<image :src="'http://hbk.huiboke.com'+item.live_pic" mode="scaleToFill"></image>
 						</view>
 					</swiper-item>
 				</swiper>
@@ -44,35 +43,48 @@
 		<view class="Livelist">
 			<view 
 				class="Livelist-item" 
-				:style="{'background-image':'url(/static/Liveplatformlist/itembg.png)'}"
-				v-for="(item,index) in 20" 
+				:style="{'background-image':'url('+'http://hbk.huiboke.com'+item.live_pic+')'}"
+				v-for="(item,index) in list" 
 				:key="index"
 				@tap="viewervideo"
 				:data-index="index"
+				:data-live_url="item.live_url"
+				:data-live_nick="item.live_nick"
+				:data-room_id="item.room_id"
+				:data-live_pic="item.live_pic"
+				:data-uid="item.user_id"
 			>
 				<view class="item-top item-plice">
-					<view class="watchimgs">
+					<!-- <view class="watchimgs">
 						<image src="/static/Liveplatformlist/liveicon.gif"></image>
 						<text class="watchtext">{{100}}人观看</text>
+					</view> -->
+					<view class="watchimgs">
+						<view class="user_name">
+							<text>{{item.live_nick}}</text>
+						</view>
+						<view class="room_number">
+							<text>{{item.room_id}}</text>
+						</view>
 					</view>
 				</view>
 				<view class="item-bottom item-plice">
 					<view class="item-describe">
 						<view class="describe-top">
 							<view class="describe-top-imags">
-								<image src="/static/Liveplatformlist/imgs.png"></image>
+								<image :src="'http://hbk.huiboke.com'+item.shop_good_pic"></image>
 							</view>
 							<view class="describe-left">
 								<view class="describedianxin">
 									<image src="/static/liveplatfrom/dianxin.png"></image>
 									<text class="describedzan">155</text>
 								</view>
-								<text class="shopLivedescribe">买一送一,半价</text>
+								<text class="shopLivedescribe">{{item.shop_good_title}}</text>
 							</view>
 						</view>
 						<view class="describe-bottom">
-							<text class="describe-price">¥100</text>
-							<text class="describe-shopstore">小熊维尼店</text>
+							<text class="describe-price">{{item.shop_good_price}}</text>
+							<text class="describe-shopstore">{{item.shop_store_name}}</text>
 						</view>
 					</view>
 				</view>
@@ -94,36 +106,7 @@
 				],
 				dotStyle: false,
 				cardCur: 0,
-				swiperList: [
-				{
-					id: 0,
-					type: 'image',
-					url: '/static/Liveplatformlist/banner1.png'
-				}, {
-					id: 1,
-					type: 'image',
-					url: '/static/Liveplatformlist/banner1.png',
-				}, {
-					id: 2,
-					type: 'image',
-					url: '/static/Liveplatformlist/banner1.png'
-				}, {
-					id: 3,
-					type: 'image',
-					url: '/static/Liveplatformlist/banner1.png'
-				}, {
-					id: 4,
-					type: 'image',
-					url: '/static/Liveplatformlist/banner1.png'
-				}, {
-					id: 5,
-					type: 'image',
-					url: '/static/Liveplatformlist/banner1.png'
-				}, {
-					id: 6,
-					type: 'image',
-					url: '/static/Liveplatformlist/banner1.png'
-				}],
+				swiperList: [],
 				list:[]
 			}
 		},
@@ -141,14 +124,73 @@
 			},
 			//点击每一个直播项 跳到不同的主播
 			viewervideo(e){
-				let {index} = e.currentTarget.dataset
+				let {index,live_url,live_nick,room_id,live_pic,uid} = e.currentTarget.dataset
+				console.log(e)
 				uni.navigateTo({
-					url:`/pages/Liveplatform/Liveplatform?indexs=${index}`
+					url:`/pages/Liveplatform/Liveplatform?indexs=${index}&live_url=${live_url}&livenick=${live_nick}&roomid=${room_id}&livepic=${live_pic}&uid=${uid}`
+				})
+			},
+			getlivelist(){
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}live_user/getLiveUserList`,
+					data:{
+						page:1,
+						pageSize:10
+					},
+					success(res) {
+						console.log(res)
+						if(res.data.code==0){
+							_this.list = res.data.data.list
+							res.data.data.list.forEach((item,index)=>{
+								// console.log(item)
+								uni.request({
+									url:`${app.globalData.Requestpath}live/getAnchorGoodInfo`,
+									data:{
+										uid:item.user_id
+									},
+									success(resliveshop) {
+										if(resliveshop.data.code==0){
+											_this.list[index].shop_good_pic = [resliveshop.data.data][0].good_pic
+											_this.list[index].shop_good_price =[resliveshop.data.data][0].good_price
+											_this.list[index].shop_store_name = [resliveshop.data.data][0].store_name
+											_this.list[index].shop_good_title = [resliveshop.data.data][0].good_title
+										}else{
+											_this.list[index].shop_good_pic = ''
+											_this.list[index].shop_good_price = ""
+											_this.list[index].shop_store_name = ""
+											_this.list[index].shop_good_title = ''
+										}
+									}
+								})
+							})
+						}
+					}
 				})
 			}
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		created() {
+			const _this = this
+			_this.getlivelist()
+			//获取轮播图里面的直播数据
+			uni.request({
+				url:`${app.globalData.Requestpath}live_user/getLiveUserListRandom`,
+				data:{
+					limit:5
+				},
+				success(res) {
+					console.log(res)
+					if(res.data.code==0){
+						_this.swiperList = res.data.data
+					}
+				}
+			})
+		},
+		onShow() {
+			this.getlivelist()
 		}
 	}
 </script>
@@ -245,6 +287,7 @@
 		padding:0 20rpx;
 		margin-top:30rpx;
 		.Livelist-item{
+			overflow: hidden;
 			width:48%;
 			height:500rpx;
 			// background-color:red;
@@ -258,22 +301,41 @@
 			}
 			.item-top{
 				.watchimgs{
+					// display: flex;
+					// align-items: center;
+					// padding:20rpx 0 0 10rpx;
+					// image{
+					// 	width: 50rpx;
+					// 	height:50rpx;
+					// 	vertical-align:middle;
+					// }
+					// .watchtext{
+					// 	display:inline-block;
+					// 	 padding:6rpx 26rpx;
+					// 	 background-color:rgba(0,0,0,.5);
+					// 	 border-radius:16rpx;
+					// 	 color:#fff;
+					// 	 margin-left:-20rpx;
+					// 	 font-size: 26rpx;
+					// }
 					display: flex;
-					align-items: center;
-					padding:20rpx 0 0 10rpx;
-					image{
-						width: 50rpx;
-						height:50rpx;
-						vertical-align:middle;
+					justify-content: space-between;
+					padding:10rpx 20rpx;
+					background-color: rgba(0,0,0,0.3);
+					.user_name{
+						color: #FFFFFF;
+						white-space:nowrap;
+						overflow:hidden;
+						text-overflow:ellipsis;
+						width: 40%;
 					}
-					.watchtext{
-						display:inline-block;
-						 padding:6rpx 26rpx;
-						 background-color:rgba(0,0,0,.5);
-						 border-radius:16rpx;
-						 color:#fff;
-						 margin-left:-20rpx;
-						 font-size: 26rpx;
+					.room_number{
+						color: #FFFFFF;
+						white-space:nowrap;
+						overflow:hidden;
+						text-overflow:ellipsis;
+						width: 50%;
+						text-align: right;
 					}
 				}
 			}
@@ -299,8 +361,10 @@
 							}
 						}
 						.describe-left{
+							overflow: hidden;
 							flex:1;
 							height:120rpx;
+							
 							// background-color:red;
 							// padding:0 10rpx;
 							color:#fff;
@@ -322,6 +386,8 @@
 								width: 100%;
 								font-size: 24rpx;
 								margin-left:10rpx;
+								white-space :nowrap;
+								text-overflow:ellipsis;
 							}
 						}
 					}
@@ -336,6 +402,10 @@
 							font-weight: bold;
 						}
 						.describe-shopstore{
+							flex:0.8;
+							white-space: nowrap;
+							overflow: hidden; 
+							text-overflow:ellipsis;
 							color:#999;
 						}
 					}

@@ -70,7 +70,7 @@
 		   }
 		 .SpellGroupBuying_URL{
 			height: 200rpx;
-			background: url(/static/indexbanner/banner5.jpg);
+			// background: url(/static/indexbanner/banner5.jpg);
 			background-size: 100% 100%; 
 		   }
 		   .zhibozhong{

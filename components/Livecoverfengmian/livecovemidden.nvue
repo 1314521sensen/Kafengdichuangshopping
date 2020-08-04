@@ -15,6 +15,17 @@
 				placeholder="请输入直播描述,最多10个字符"  
 				@blur="inpLivedescribe"/>
 		</cover-view>
+		<cover-view class="cover-imgsbottomtext">
+			<text class="textcolorwrite text-center font-size-forty">您要设置的直播昵称</text>
+		</cover-view>
+		<cover-view class="cover-infotext" :style="{width:(windowWidth/2)+'px'}">
+			<input 
+				type="text" 
+				class="infotextinp font-size-twenty-four textcolorwrite text-center" 
+				v-model="value2" 
+				placeholder="请输入直播的昵称(姓名)"  
+				@blur="inpLivenickname"/>
+		</cover-view>
 	</cover-view>
 </template>
 
@@ -25,6 +36,7 @@
 			return {
 				fengmianbool:false,
 				value:"",
+				// value2:"",
 				imgurl:""
 			}
 		},
@@ -37,21 +49,46 @@
 					sourceType:["album"],
 					success(res){
 						_this.imgurl = res.tempFilePaths[0]
+						// console.log(res.tempFilePaths[0],"本地的")
 						if(res.tempFilePaths[0]!==""){
-							_this.fengmianbool = true
-							_this.$emit('coverurl',res.tempFilePaths[0])
-							_this.$emit("inpvalue",_this.value)
+							uni.uploadFile({
+								url:`${app.globalData.Requestpath}common/uploadImage?type=liveuser`,
+								filePath:res.tempFilePaths[0],
+								name:"file",
+								fileType:"image",
+								success(resimg){
+									console.log(resimg,"这是返回的")
+									// console.log(JSON.parse(resimg.data))
+									let json = JSON.parse(resimg.data)
+									if(json.code==0){
+										_this.fengmianbool = true
+										_this.$emit('coverurl',json.data.src)
+										_this.$emit("inpvalue",_this.value)
+									}else{
+										app.globalData.showtoastsame("上传失败,请重新上传")
+									}
+								}
+							})
 						}
 					}
 				})
 			},
+			//这是直播的描述
 			inpLivedescribe(){
 				if(this.value.length<=10){
 					this.$emit('inpvalue',this.value)
 				}else{
 					app.globalData.showtoastsame("最大只能输入10个字符")
 				}
-				
+			},
+			// //你要直播的昵称
+			inpLivenickname(){
+				//名字控制到5个字
+				if(this.value2.length<=5){
+					this.$emit('nickname',this.value2)
+				}else{
+					app.globalData.showtoastsame("建议输入5个字符")
+				}
 			}
 		},
 		props:["windowWidth"]

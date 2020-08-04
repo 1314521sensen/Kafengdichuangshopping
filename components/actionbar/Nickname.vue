@@ -137,7 +137,7 @@
 			// 			//这是验证账号
 						let regusernick = /^[\W|\w]{5,20}$/;
 			// 			//验证真实姓名
-						let regusername = /^\W{2,5}$/;
+						let regusername = /^\W{2,10}$/;
 			// 			//验证性别
 						let regsex = /^[男|女]{1,1}$/
 						let num = ""
@@ -145,6 +145,13 @@
 							num = 0
 						}else{
 							num = 1
+						}
+						if(!(regusernick.test(usernick))){
+							this.toast("请填写5到20个字符")
+						}else if(!(regusername.test(username))){
+							this.toast("请填写2到10个字符")
+						}else if(!(regsex.test(usersex))){
+							this.toast("亲！请选择正确的性别哦")
 						}
 						// console.log(num)
 						if(regusernick.test(usernick) && regusername.test(username) && regsex.test(usersex)){
@@ -154,9 +161,12 @@
 							let {code} = this.json
 							console.log(code,"已经获取到code码")
 			// 				//如果code==0的时候代表tokey没过期 
-							if(code==0){
-								let {src} = this.json.data
-								console.log(src)
+							if(this.pathurl){
+								if(code == 0){
+									var src = this.json.data.src
+								}else{
+									var src = this.pathurl
+								}
 								// console.log(usernick,username,num,src)
 								// console.log(this.selectiondatalist[0][0].area_id,this.selectiondatalist[1][0].area_id,this.selectiondatalist[2][0].area_id)
 								// console.log(this.tokey)
@@ -189,13 +199,9 @@
 								})
 								
 							}else{
-								this.toast("请修改全部您的信息")
+								this.toast("请上传你的头像")
 							}
-						}else{
-							this.toast("请正确填写信息")
 						}
-					}else{
-						this.toast("请填写完整的信息")
 					}
 				}
 			}
@@ -203,7 +209,7 @@
 		components:{
 			selection
 		},
-		props:["bool","text","json"],
+		props:["bool","text","json","pathurl"],
 		created() {
 			const _this = this
 			

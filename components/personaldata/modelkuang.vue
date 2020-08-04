@@ -38,7 +38,16 @@
 			</view>
 		</view>
 		<!-- 这是昵称 -->
-		<Nickname :bool="bool" :text="text" @changebool="changebool" @changetext="changetext" :json="json" @jsons="jsons" @srcurl="srcurl"></Nickname>
+		<Nickname 
+			:bool="bool" 
+			:text="text" 
+			@changebool="changebool" 
+			@changetext="changetext" 
+			:json="json" 
+			@jsons="jsons" 
+			@srcurl="srcurl"
+			:pathurl="pathurls"
+		></Nickname>
 	</view>
 </template>
 
@@ -56,7 +65,10 @@
 				imgList: [],
 				pathurl:"",
 				show_img_list:[],
-				json:"",
+				json:{
+					code:1
+				},
+				pathurls:""
 			}
 		},
 		components:{
@@ -147,6 +159,7 @@
 			srcurl(e){
 				console.log(e)
 				this.pathurl = `http://hbk.huiboke.com${e}`
+				this.pathurls = e
 			}
 		},
 		// created() {

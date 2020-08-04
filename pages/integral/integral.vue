@@ -16,7 +16,22 @@
 				</view>
 			</view>
 		</view>
-		<list></list>
+		<!-- <list></list> -->
+		<view class="integral">
+			<view class="integral-top">
+				<text>积分获取详情</text>
+			</view>
+			<scroll-view scroll-y="true"  class="scroll-view" @scrolltolower="scrolltolower">
+				<view class="integral-details" v-for="(item,index) in integralList" :key="index">
+					<text>{{item.create_time}}</text>
+					<text>{{item.integral}}</text>
+				</view>
+				<view class="bottomtext">
+					<text>已经获取全部</text>
+				</view>
+			</scroll-view>
+			
+		</view>
 	</view>
 </template>
 
@@ -30,7 +45,9 @@
 				statusBar:"",
 				integrabannerbgurl:'/static/integral/1.png',
 				integraimgbgurl:'/static/integral/2.png',
-				nums:""
+				nums:"",
+				integralList:[],
+				pages:1
 			}
 		},
 		methods: {
@@ -38,11 +55,46 @@
 				uni.switchTab({
 					url:`/pages/index/index`
 				})
+			},
+			integral(pages){
+				const _this = this
+				uni.getStorage({
+					key: 'bindtokey',
+					success(res) {
+						uni.request({
+							url: `${app.globalData.Requestpath}user/getIntegralLogList`,
+							method: "POST",
+							data: {
+								token: res.data,
+								page:pages,
+								pageSize:20
+							},
+							success(res) {
+								// console.log(res)
+								if (res.data.code == 0) {
+									
+									if(_this.pages > 1){
+										_this.integralList =_this.integralList.concat(res.data.data.list) 
+									}else if(_this.pages == 1){
+										_this.integralList = res.data.data.list
+									}
+								}
+							}
+						})
+					}
+				})
+			},
+			scrolltolower(){
+				this.pages++
+				this.integral(this.pages)
 			}
 		},
 		components:{
 			list,
 			actionbar
+		},
+		created() {
+			this.integral(this.pages)
 		},
 		onLoad(opction){
 			this.nums = atob(opction.integralnum)
@@ -114,8 +166,38 @@
 		justify-content: space-around;
 	}
 	.Select-box{
-		
 		font-size: 40rpx;
-		
+	}
+	.integral{
+		background-color: #FFFFFF;
+		padding: 0 80rpx;
+		.integral-top{
+			padding: 20rpx 0;
+			text{
+				font-size: 36rpx;
+				font-weight: bold;
+			}
+		}
+		.scroll-view{
+			height: 70vh;
+			.integral-details{
+				display: flex;
+				justify-content: space-between;
+				padding: 10rpx 20rpx;
+				border-bottom: 2rpx solid #CCCCCC;
+				text{
+					font-size: 28;
+					font-weight: bold;
+				}
+			}
+			.bottomtext{
+				text-align: center;
+				padding: 10rpx;
+				text{
+					font-size: 24rpx ;
+					color: #CCCCCC;
+				}
+			}
+		}
 	}
 </style>

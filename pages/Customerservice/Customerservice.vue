@@ -1,6 +1,6 @@
 <template>
 	<view class="CustomerBox" :style="{'padding-top':statusBar+'px'}">
-		<scroll-view class="cu-chat" :scroll-y="true" :scroll-top="scrollTop">
+		<scroll-view class="cu-chat" :scroll-y="true" :scroll-top="scrollTop" :class="bool?'cu-chatActive':'cu-chatActivea'">
 			<!-- 连接客服的按钮 -->
 			<view class="customerservice" @tap="reconnection" v-show="this.$store.state.isconnectserver">
 			    <image :src="'http://hbk.huiboke.com/uploads/app/image/customerservice/service.png'" mode=""></image>
@@ -745,4 +745,10 @@
 	.radios{
 		border-radius:50%;
 	}
+	.cu-chatActivea{
+		  height:92vh;
+	  }
+	  .cu-chatActive{
+		  height: 60vh;
+	  }
 </style>

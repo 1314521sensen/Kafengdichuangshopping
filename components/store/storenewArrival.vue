@@ -8,11 +8,9 @@
 				</view>
 			</view>
 			<!-- 商品列表 -->
-			<view class="rushGoodsListBox">
+			<view class="rushGoodsListBox" v-for="(item,index) in storenewArrivallist" :key="index" >
 				<!-- 每个商品 -->
 				<view class="rushGoods" 
-					v-for="(item,index) in storenewArrivallist" 
-					:key="index" 
 					v-if="index%2<1"
 					:data-g_id="item.good_id"
 					:data-s_id="item.store_id"
@@ -34,8 +32,6 @@
 				</view>
 				<!-- 每个商品 -->
 				<view class="rushGoods" 
-					v-for="(item,index) in storenewArrivallist" 
-					:key="index" 
 					v-if="index%2>=1"
 					:data-g_id="item.good_id"
 					:data-s_id="item.store_id"
@@ -107,16 +103,19 @@
   .rushGoodsListBox{
 	  // 单个商品
 	  .rushGoods{	
-		  padding-top: 20rpx;
+		  padding-top: 40rpx;
 		  display: flex;
 		  justify-content: center;
 		  // 左部分
 		  .exhibition{
-			  image{
-				  width: 345rpx;
-				  height: 340rpx;
-			  }
-		  }
+		  		border-radius: 15rpx;
+		  		overflow: hidden;
+		  		image{
+		  			width: 345rpx;
+		  			height: 340rpx;
+		  			vertical-align: middle;
+		  		}
+		  	}
 		  //右部分 
 		  .detailMatter{
 			  padding-top: 20rpx;

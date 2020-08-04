@@ -8,15 +8,32 @@
 	export default {
 		data() {
 			return {
-				
+				vipvalue:0
 			}
 		},
 		methods: {
 			applygroup(){
-				uni.redirectTo({
-					url:`/pages/groupinformation/groupinformation`
-				})
+				if(this.vipvalue==0){
+					//当用户还未支付369或3690的时候 跳到申请团长页面
+					uni.redirectTo({
+						url:`/pages/groupinformation/groupinformation`
+					})
+				}else{
+					//当用户支付完成的时候 跳到团长推广的页面
+					uni.redirectTo({
+						url:`/pages/headearnings/headearnings`
+					})
+				}
 			}
+		},
+		created(){
+			const _this = this
+			uni.getStorage({
+				key:"beesVip",
+				success(resvip) {
+					_this.vipvalue = resvip.data
+				}
+			})
 		}
 	}
 </script>

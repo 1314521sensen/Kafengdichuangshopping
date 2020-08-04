@@ -90,6 +90,10 @@
 								_this.images = `http://hbk.huiboke.com${user_pic}`
 								_this.moneylist[0].num = user_amount
 								_this.moneylist[1].num = user_integral
+								uni.setStorage({
+									key:'beesVip',
+									data:resinfo.data.data.is_member
+								})
 							}else{
 								app.globalData.Requestmethod(resinfo.data.code,resinfo.data.msg)
 							}
@@ -124,20 +128,7 @@
 					app.globalData.Detectionupdatetokey(err.data)
 				}
 			})
-		},
-		// created() {
-		// 	uni.getStorage({
-		// 		key:"bindtokey",
-		// 		success(res){
-		// 			console.log(res)
-		// 			_this.tokey = res.data
-		// 			app.globalData.Detectionupdatetokey(res.data)
-		// 		},
-		// 		fail(err){
-		// 			console.log(err)
-		// 		}
-		// 	})
-		// }
+		}
 	}
 </script>
 

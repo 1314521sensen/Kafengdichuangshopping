@@ -95,7 +95,14 @@
 					</view>
 				</view>
 			</view>
-			<shopoderbottom :orderstatus="orderstatus" :price="price" :order_sn="order_sn" :swift_no="swift_no"></shopoderbottom>
+			<shopoderbottom 
+				:orderstatus="orderstatus" 
+				:price="price" 
+				:order_sn="order_sn" 
+				:swift_no="swift_no"
+				:s_id='s_id' 
+				:s_name='s_name'
+			></shopoderbottom>
 		</scroll-view>
 	</view>
 </template>
@@ -130,6 +137,8 @@
 				startTime:"",//订单的创建时间
 				endTime:"",//订单的发货时间
 				Completiontime:"",//订单的完成时间
+				s_id:0,
+				s_name:''
 			}
 		},
 		components:{
@@ -185,6 +194,8 @@
 									sn:res.data.order_sn
 								},
 								success(resinfo) {
+									_this.s_id = resinfo.data.data.store_id
+									_this.s_name = resinfo.data.data.store_name
 									// console.log(restokey.data)
 									// console.log(res.data.order_sn)
 									if(resinfo.data.code==0){

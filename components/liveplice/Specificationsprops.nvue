@@ -1,0 +1,152 @@
+<template>
+	<cover-view class="Specificationsprops bg-write" :style="{width:componentwidth+'px',height:700+'px'}">
+		<cover-view class="SpecificationTop">
+			<cover-view class="SpecificationImgLeft">
+				<cover-image class="liveshopimg" :src="'http://hbk.huiboke.com'+this.$store.state.liveshopspecifications[0].g_pic"></cover-image>
+			</cover-view>
+			<cover-view class="Specificationtextright text-paddingOrsotwenty">
+				<cover-view class="SpecificationtextrightTitle">
+					<text class="font-size-thirty textcolor-red text-weight">{{'¥'+ImmediateIprice}}</text>
+					<text class="font-size-forty" @click="liveshopclose">×</text>
+				</cover-view>
+				<cover-view>
+					<text class="font-size-twenty-senve">{{ImmediateText}}</text>
+				</cover-view>
+			</cover-view>
+		</cover-view>
+		<cover-view class="SpecificationMidden">
+			<scroller class="scroller">
+				<cover-view 
+					v-for="(item,index) in this.$store.state.liveshopspecifications[0].liveImmediatelist" 
+					:key="index"
+					class="liveImmediateBox"
+				>
+					<text class="font-size-thirty">{{item.spec_name}}</text>
+					<text 
+						class="border-plice border-styles specifications border-radiusthirty font-size-thirty" 
+						@click="liveImmediateText"
+						:data-spec_value="item.spec_value"
+						:data-indexs="index"
+						:data-spec_price="item.spec_price"
+						:data-spec_id="item.id"
+						:class="Immediateindex==index?'bg-orders-red textcolorwrite':''"
+					>{{item.spec_value}}</text>
+				</cover-view>
+			</scroller>
+		</cover-view>
+		<cover-view>
+			<button 
+				class="border-radiusfifty bg-orders-red livebutton" @click="Buynow"
+				:data-gid="this.$store.state.liveshopspecifications[0].gid"
+			><text class="textcolorwrite livebuttontext">立即购买</text></button>
+		</cover-view>
+	</cover-view>
+</template>
+
+<script>
+	const app = getApp()
+	export default {
+		data(){
+			return {
+				ImmediateText:"",
+				Immediateindex:-1,
+				ImmediateIprice:"",
+				spec_id:"",//商品规格id
+			}
+		},
+		methods:{
+			liveImmediateText(e){
+				console.log(111)
+				let {spec_value,indexs,spec_price,spec_id} = e.currentTarget.dataset
+				// console.log(spec_value)
+				this.ImmediateText = spec_value
+				this.Immediateindex = indexs
+				this.ImmediateIprice = spec_price
+				this.spec_id = spec_id
+			},
+			liveshopclose(){
+				this.$store.commit("liveshopclose")
+			},
+			Buynow(e){
+				let {gid} = e.currentTarget.dataset
+				if(this.ImmediateText!=="" && this.ImmediateText!=="请选择规格"){
+					console.log(this.$store.state.liveshopspecifications[0])
+					let SpecificationShopdetails = {
+						good_id:gid,
+						spec_id:this.spec_id,
+						good_num:1,
+						way:2,
+						good_pic:this.$store.state.liveshopspecifications[0].g_pic,
+						store_name:this.$store.state.liveshopspecifications[0].store_name,
+						good_price:this.ImmediateIprice,
+						good_name:this.$store.state.liveshopspecifications[0].g_le,
+						store_id:this.$store.state.liveshopspecifications[0].sid,
+						share_code:this.$store.state.liveshopspecifications[0].share_code,
+						share_from:1
+					}
+					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
+				}else{
+					this.ImmediateText = "请选择规格"
+				}
+			}
+		},
+		props:["componentheight","componentwidth"]
+	}
+</script>
+
+<style>
+	.Specificationsprops{
+		position: absolute;
+		top:0;
+		left:0;
+		padding:20rpx 20rpx 0;
+	}
+	.SpecificationTop{
+		flex-direction:row;
+		/* background-color:yellow; */
+		margin-bottom:15rpx;
+		/* height:50rpx; */
+	}
+	.SpecificationImgLeft{
+		width: 170rpx;
+		height:170rpx;
+		/* background-color:green; */
+		margin-right:20rpx;
+	}
+	.liveshopimg{
+		width: 170rpx;
+		height:170rpx;
+	}
+	.Specificationtextright{
+		flex:1;
+		/* background-color:pink; */
+	}
+	.SpecificationtextrightTitle{
+		flex-direction:row;
+		justify-content: space-between;
+		margin:20rpx 0;
+	}
+	.SpecificationMidden{
+		
+		
+	}
+	.scroller{
+		height:400rpx;
+		/* background-color:blue; */
+		margin-bottom:20rpx;
+	}
+	.liveImmediateBox{
+		margin-bottom:20rpx;
+	}
+	.specifications{
+		border-color:red;
+		padding:10rpx 15rpx;
+		margin-top:10rpx;
+	}
+	.livebutton{
+		border-width:0;
+	}
+	.livebuttontext{
+		line-height:90rpx;
+	}
+</style>

@@ -44,6 +44,10 @@ let state = {
 	orderpage: 1,//订单请求的页数
 	liveshoplist:[],//存放主播开播前需要携带直播的商品
 	livepages:1,//获取直播的商品的页数
+	userlivepages:1,//这是用户直播的商品页数
+	userliveid:"",//这是用户点击进去直播间主播的id
+	liveshopspecifications:[],//直播商品的规格
+	livespecificationsbool:false,//规格的布尔值 显示还是不显示
 	Customersendmsglist:[],//这是店铺或者客服的消息记录
 	//客服的值
 	uid:"",//用户的id
@@ -128,45 +132,45 @@ let mutations = {
 	//app整包更新结束
 	//app热更新--开始
 	AppHotupdate(state,hotobj){
-		// let {version} = hotobj
-		// uni.request({
-		// 	url:`${Requestpath}update/getUpdateInfo`,
-		// 	method:"POST",
-		// 	data:{
-		// 		type:1
-		// 	},
-		// 	success(res) {
-		// 		if(res.data.code==0){
-		// 			let {version_id,src} = res.data.data.data
-		// 			let returnApplicationnum = version_id.split(".").join("")
-		// 			if(returnApplicationnum > version){
-		// 				const downloadTask =  uni.downloadFile({
-		// 					url:`http://hbk.huiboke.com${src}`,
-		// 					success(resfile) {
-		// 						console.log(resfile)
-		// 						//当下载完强制安装
-		// 						plus.runtime.install(resfile.tempFilePath, {
-		// 							force:true
-		// 						},function(){
-		// 							plus.runtime.restart();
-		// 						},function(){
+		let {version} = hotobj
+		uni.request({
+			url:`${Requestpath}update/getUpdateInfo`,
+			method:"POST",
+			data:{
+				type:1
+			},
+			success(res) {
+				if(res.data.code==0){
+					let {version_id,src} = res.data.data.data
+					let returnApplicationnum = version_id.split(".").join("")
+					if(returnApplicationnum > version){
+						const downloadTask =  uni.downloadFile({
+							url:`http://hbk.huiboke.com${src}`,
+							success(resfile) {
+								console.log(resfile)
+								//当下载完强制安装
+								plus.runtime.install(resfile.tempFilePath, {
+									force:true
+								},function(){
+									plus.runtime.restart();
+								},function(){
 									
-		// 						});
-		// 					},
-		// 					fail(err){
+								});
+							},
+							fail(err){
 								
-		// 					}
-		// 				})
-		// 				//监听下载的进度
-		// 				downloadTask.onProgressUpdate((resjindu)=>{
-		// 					console.log('下载进度' + resjindu.progress);
-		// 					console.log('已经下载的数据长度' + resjindu.totalBytesWritten);
-		// 					// console.log('预期需要下载的数据总长度' + resjindu.totalBytesExpectedToWrite);
-		// 				})
-		// 			}
-		// 		}
-		// 	}
-		// })
+							}
+						})
+						//监听下载的进度
+						downloadTask.onProgressUpdate((resjindu)=>{
+							console.log('下载进度' + resjindu.progress);
+							console.log('已经下载的数据长度' + resjindu.totalBytesWritten);
+							// console.log('预期需要下载的数据总长度' + resjindu.totalBytesExpectedToWrite);
+						})
+					}
+				}
+			}
+		})
 	},
 	//app热更新--结束
 	/****app更新的要执行的函数-----开始***/
@@ -807,6 +811,7 @@ let mutations = {
 						pageSize:10
 					},
 					success(res) {
+						console.log(res)
 						// console.log(res.data.data.list)
 						if(res.data.code==0){
 							state.orderlistshop = res.data.data.list
@@ -836,6 +841,18 @@ let mutations = {
 					_this.commit("getshowmodel",{msg:res.data.msg})
 					uni.redirectTo({
 						url:"/pages/evaluate/evaluate"
+					})
+					uni.request({
+						url:`${Requestpath}cmssettlement/practicalCmsSettleAccounts`,
+						method:"POST",
+						data:{
+							token:state.tokey,
+							order_sn:order_sn,
+							good_id:state.orderlistshop[0].good_id
+						},
+						success(res){
+							console.log(res)
+						}
 					})
 				}else{
 					if(res.data.msg=="订单状态错误" && res.data.code==1){
@@ -1203,7 +1220,84 @@ let mutations = {
 		//当用户主播滑动商品的列表到底部的时候
 		loadmore(){
 			state.livepages++
+			state.userlivepages++
 			this.commit("getliveshoplist")
+			this.commit("userliveshoplist",state.userliveid)
+		},
+		userliveshoplist(state,userliveobj){
+			state.userliveid = userliveobj
+			uni.request({
+				url:`${Requestpath}live/getAnchorGoodListNoToken`,
+				data:{
+					uid:userliveobj,
+					page:state.userlivepages,
+					pageSize:3,
+				},
+				success(res) {
+					console.log(res)
+					if(res.data.code==0){
+						if(state.userlivepages > 1){
+							state.liveshoplist = state.liveshoplist.concat(res.data.data.list)
+						}else{
+							state.liveshoplist = res.data.data.list
+						}
+					}
+				}
+			})
+		},
+		
+		//当用户点击了马上抢
+		Immediatelygrab(state,Immediateobj){
+			const _this = this
+			//liveshopspecifications
+			let liveshopobj = {}
+			// console.log(Immediateobj)
+			let {gid,s_id,g_le,g_price,g_pic,tokey,store_name,share_code} = Immediateobj
+			uni.request({
+				url:`${Requestpath}good/getGoodSpecListOneLever`,
+				data:{
+					sid:s_id,
+					gid:gid
+				},
+				success(res){
+					console.log(res)
+					//因为有些没规格的所以不管失败成功都要变成true
+					if(res.data.code==0){
+						state.livespecificationsbool = true
+						liveshopobj.g_pic = g_pic
+						liveshopobj.gid=gid
+						liveshopobj.liveImmediatelist = res.data.data
+						liveshopobj.sid = s_id
+						liveshopobj.g_le = g_le
+						// liveshopobj.g_price = g_price
+						liveshopobj.store_name = store_name
+						liveshopobj.share_code = share_code
+						state.liveshopspecifications[0] = liveshopobj
+						// console.log(state.liveshopspecifications)
+					}else{
+						// console.log(gid,g_pic,store_name,g_price,g_le,s_id,share_code,"这是没规格的")
+						let SpecificationShopdetails = {
+							good_id:gid,
+							spec_id:0,
+							good_num:1,
+							way:2,
+							good_pic:g_pic,
+							store_name:store_name,
+							good_price:g_price,
+							good_name:g_le,
+							store_id:s_id,
+							share_code:share_code,
+							share_from:1
+						}
+						console.log(SpecificationShopdetails)
+						_this.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
+					}
+				}
+			})
+		},
+		//当用户点击×以后
+		liveshopclose(){
+			state.livespecificationsbool = false
 		},
 	/******直播*****/
 	

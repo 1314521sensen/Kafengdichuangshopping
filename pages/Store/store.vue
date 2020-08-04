@@ -1,105 +1,122 @@
 <template>
-	<view class="store">
-		<!-- <pageheight :statusBar="statusBar"></pageheight> -->
-		<!-- 顶部 -->
-		<view class="kepala" :style="{'background-image':'url('+this.$store.state.httpUrl+'/store/store_bg.png)','padding-top':statusBar+20+'rpx'}">
-			<!-- 导航 -->
-			<view class="kep_nav">
-				<view class="cu-bar">
-					<view class="action">
-						<text class="cuIcon-back text-white action_Ico" @tap="returnshopdefailt"></text>
-					</view>
-					<view class="search-form round inpufuoBox">
-						<text class="cuIcon-search"></text>
-						<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索商品" confirm-type="search"></input>
-					</view>
-					<view class="Icon_lgo">
-						<text class="lg text-gray cuIcon-forward"></text>
-					</view>
-				</view>
-			</view>
-			<!-- 店铺简介  -->
-			<view class="store_presentation">
-				<!-- 店铺上面的左边信息 -->
-				<view class="store_presentationLeft">
-					<view class="logoBox">
-						<image class="logo" :src="'http://hbk.huiboke.com'+store_logo"></image>
-					</view>
-					<view class="store_nameBox">
-						<view class="storeName_text">{{Shopname}}</view>
-						<view>
-							<view class="Storequality">
-								<text class="TheStoreCredit">店铺信用</text>
-								<uniRate
-									:size='14' 
-									color="#fff" 
-									active-color="#e96201" 
-									:margin="4" 
-									:disabled="true"
-									:max="5"
-									:value="storecredit"
-								></uniRate>
-							</view>
-							<view class="Storequality">
-								<text class="TheStoreCredit">综合评分</text>
-								<uniRate 
-									:size='14' 
-									color="#fff" 
-									active-color="#e96201" 
-									:margin="4" 
-									:disabled="true"
-									:max="5"
-									:value="score"
-								></uniRate>
-							</view>
+	<view>
+		<view class="store" v-if="loadingbool">
+			<!-- <pageheight :statusBar="statusBar"></pageheight> -->
+			<!-- 顶部 -->
+			<view class="kepala" :style="{'background-image':'url('+this.$store.state.httpUrl+'/store/store_bg.png)','padding-top':statusBar+20+'rpx'}">
+				<!-- 导航 -->
+				<view class="kep_nav">
+					<view class="cu-bar">
+						<view class="action">
+							<text class="cuIcon-back text-white action_Ico" @tap="returnshopdefailt"></text>
 						</view>
-						<view></view>
-					</view>
-				</view>
-				<!-- 右边的关注等 -->
-				<view class="store_presentationRight">
-					<view class="butt_on" @tap="attentionstore">
-						<text>+</text>
-						关注
-					</view>
-					<view>{{fav_count}}人</view>
-				</view>
-			</view>
-			<!-- 分类 -->
-			<view class="store-nav">
-				<view>
-					<scroll-view scroll-x class="nav" scroll-with-animation :scroll-left="scrollLeft">
-						<view class="cu-item" :class="index==TabCur?' cur':''" v-for="(item,index) in navlist" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
-							{{item}}
+						<view class="search-form round inpufuoBox">
+							<text class="cuIcon-search"></text>
+							<input 
+								@focus="InputFocus" 
+								@blur="InputBlur" 
+								@input="Input" 
+								:adjust-position="false" 
+								type="text" 
+								placeholder="搜索商品" 
+								confirm-type="search"
+								v-model="keyword"
+							></input>
 						</view>
-					</scroll-view>
+						<view class="Icon_lgo" @tap="share">
+							<text class="lg text-gray cuIcon-forward"></text>
+						</view>
+					</view>
+				</view>
+				<!-- 店铺简介  -->
+				<view class="store_presentation">
+					<!-- 店铺上面的左边信息 -->
+					<view class="store_presentationLeft">
+						<view class="logoBox">
+							<image class="logo" :src="'http://hbk.huiboke.com'+store_logo"></image>
+						</view>
+						<view class="store_nameBox">
+							<view class="storeName_text">{{Shopname}}</view>
+							<view>
+								<view class="Storequality">
+									<text class="TheStoreCredit">店铺信用</text>
+									<uniRate
+										:size='14' 
+										color="#fff" 
+										active-color="#e96201" 
+										:margin="4" 
+										:disabled="true"
+										:max="5"
+										:value="storecredit"
+									></uniRate>
+								</view>
+								<view class="Storequality">
+									<text class="TheStoreCredit">综合评分</text>
+									<uniRate 
+										:size='14' 
+										color="#fff" 
+										active-color="#e96201" 
+										:margin="4" 
+										:disabled="true"
+										:max="5"
+										:value="score"
+									></uniRate>
+								</view>
+							</view>
+							<view></view>
+						</view>
+					</view>
+					<!-- 右边的关注等 -->
+					<view class="store_presentationRight">
+						<view class="butt_on" @tap="attentionstore">
+							<text>+</text>
+							关注
+						</view>
+						<view>{{fav_count}}人</view>
+					</view>
+				</view>
+				<!-- 分类 -->
+				<view class="store-nav">
+					<view>
+						<scroll-view scroll-x class="nav" scroll-with-animation :scroll-left="scrollLeft">
+							<view class="cu-item" :class="index==TabCur?' cur':''" v-for="(item,index) in navlist" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
+								{{item}}
+							</view>
+						</scroll-view>
+					</view>
 				</view>
 			</view>
+			<!-- 判断用户点击的哪个按钮 -->
+			<scroll-view :scroll-y="true" class="scroll-view" @scrolltolower="scrolltolower">
+				<view class="navshowitem" v-if="parseInt(TabCur)==0">
+					<!-- 直播间  小广告 -->
+					<!-- v-show="isWhetherlive"  -->
+					<adlet 
+						:livestreamingId="livestreamingId"
+						:livestreamingTltle="livestreamingTltle"
+						:livestreamingPri="livestreamingPri"
+					></adlet>
+					<!-- 新品活动xxx等  可能是轮播图 -->
+					<storebanner></storebanner>
+					<!-- 优惠券 -->
+					<discountcoupon :list='list' v-if="bool"></discountcoupon>
+					<!-- 新品开业 -->
+					<storenewArrival :storenewArrivallist="storenewArrivallist"></storenewArrival>
+					<!-- 精品大卖 -->
+					<boutiqueBarley msg="精品大卖" :horizontallylist="horizontallylist"></boutiqueBarley>
+				</view>
+				<view class="navshowitem" v-if="parseInt(TabCur)==1">
+					<boutiqueBarley msg="推荐宝贝" :horizontallylist='bodylist'></boutiqueBarley>
+				</view>
+				<view class="navshowitem" v-if="parseInt(TabCur)==2">
+					<boutiqueBarley msg="推荐新品" :horizontallylist="newslist"></boutiqueBarley>
+				</view>
+				<view v-if="parseInt(TabCur)==3">
+					<liveMerchant :storeid="storeid"></liveMerchant>
+				</view>
+			</scroll-view>
 		</view>
-		<!-- 判断用户点击的哪个按钮 -->
-		<scroll-view :scroll-y="true" class="scroll-view" @scrolltolower="scrolltolower">
-			<view class="navshowitem" v-if="parseInt(TabCur)==0">
-				<!-- 直播间  小广告 -->
-				<adlet></adlet>
-				<!-- 新品活动xxx等  可能是轮播图 -->
-				<storebanner></storebanner>
-				<!-- 优惠券 -->
-				<discountcoupon></discountcoupon>
-				<!-- 新品开业 -->
-				<storenewArrival :storenewArrivallist="storenewArrivallist"></storenewArrival>
-				<!-- 精品大卖 -->
-				<boutiqueBarley msg="精品大卖" :horizontallylist="horizontallylist"></boutiqueBarley>
-			</view>
-			<view class="navshowitem" v-if="parseInt(TabCur)==1">
-				<boutiqueBarley msg="推荐宝贝" :horizontallylist='bodylist'></boutiqueBarley>
-			</view>
-			<view class="navshowitem" v-if="parseInt(TabCur)==2">
-				<boutiqueBarley msg="推荐新品" :horizontallylist="newslist"></boutiqueBarley>
-			</view>
-			<view v-if="parseInt(TabCur)==3">
-				<liveMerchant :storeid="storeid"></liveMerchant>
-			</view>
-		</scroll-view>
+		<loading v-if="loadingbool==false"></loading>
 	</view>
 </template>
 
@@ -149,6 +166,14 @@
 				fav_count:0,//关注的人数
 				store_logo:"",//店铺logo
 				storenewArrivallist:[],//新店开业数据
+				list:[],
+				bool:false,
+				keyword:"",
+				isWhetherlive:false,
+				livestreamingId:-1,//主播ID 
+				livestreamingTltle:'',//直播间描述
+				livestreamingPri:'',//主播房间图片
+				loadingbool:false,
 			}
 		},
 		methods: {
@@ -249,7 +274,40 @@
 					}
 				})
 				
-			}
+			},
+			share(){
+				uni.share({
+					provider:"weixin",
+					type:1,
+					title:"测试分享的电铺",
+					scene:'WXSceneSession',
+					summary:`http://huiboke.com/uploads/adv/20200715/59e14118aa8d6cd445e9bef57b0225bb.apk`,
+					href:"http://huiboke.com/uploads/adv/20200715/59e14118aa8d6cd445e9bef57b0225bb.apk",
+					success(res){
+						console.log(res)
+					},
+					fail(err){
+						console.log(err)
+					}
+				})
+			},
+			Input(e){
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}store/getStoreGoodList?sid=${_this.storeid}`,
+					data:{
+						g_name:_this.keyword
+					},
+					success(res) {
+						if(res.data.code==0){
+							_this.bodylist = res.data.data.list
+						}else{
+							_this.bodylist = []
+						}
+					}
+				})
+				_this.TabCur = 1
+			},
 		},
 		onLoad(opction){
 			const _this = this
@@ -319,7 +377,50 @@
 			boutiqueBarley,
 			adlet,
 			liveMerchant
-		}
+		},
+		created() {
+			const _this = this
+			//优惠券
+			uni.getStorage({
+				key:'bindtokey',
+				success:function(res){
+					uni.request({
+						url:`${app.globalData.Requestpath}activity/getStoreCouponTypeList`,
+						method:"POST",
+						data:{
+							token:res.data,
+							sid:_this.storeid,
+						},
+						success(res) {
+							if(res.data.code==0){
+								_this.list = res.data.data.list
+								_this.bool = true
+							}else{
+								_this.bool = false
+							}
+						}
+					})
+					uni.request({
+						url:`${app.globalData.Requestpath}live_user/getLiveUserInfo`,
+						method:"POST",
+						data:{
+							token:res.data
+						},
+						success(res){
+							if(res.data.code == 0){
+								_this.livestreamingId	= res.data.data.user_id
+								_this.livestreamingTltle = res.data.data.live_desc
+								_this.livestreamingPri  = res.data.data.live_pic
+								parseInt(res.data.data.is_living)? _this.isWhetherlive = true : _this.isWhetherlive = false,
+								
+								_this.loadingbool = true
+								console.log(_this.loadingbool)
+							}
+						}
+					})
+				}
+			})
+		},
 	}
 </script>
 

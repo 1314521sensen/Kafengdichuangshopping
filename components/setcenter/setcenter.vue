@@ -6,6 +6,10 @@
 		<Realnameauthentication v-if="Realnamebool==false" :tokey="tokey"></Realnameauthentication>
 		<Resetloginpassword :userphone="userphone" :useremail="useremail" :tokey="tokey" :userid="userid"></Resetloginpassword>
 		<Setpaymentpassword :tokey="tokey" :userphone="userphone" :userid="userid" :business="business"></Setpaymentpassword>
+		<anchorapplication></anchorapplication>
+		<!-- #ifdef APP-PLUS -->
+			<WeChatLanding></WeChatLanding>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -21,6 +25,10 @@
 	import Resetloginpassword from "@/components/setcenter/Resetloginpassword.vue"
 	//设置支付密码
 	import Setpaymentpassword from "@/components/setcenter/Setpaymentpassword.vue"
+	//引入开通直播的组件
+	import  anchorapplication from "@/components/setcenter/anchorapplication.vue"
+	//引入微信绑定
+	import WeChatLanding from "@/components/setcenter/WeChatLanding.vue"
 	export default{
 		data(){
 			return {
@@ -39,7 +47,9 @@
 			setphone,
 			Realnameauthentication,
 			Resetloginpassword,
-			Setpaymentpassword
+			Setpaymentpassword,
+			anchorapplication,
+			WeChatLanding
 		},
 		onLoad(opction){
 			//用来检测是否订单那个页面跳转过来的

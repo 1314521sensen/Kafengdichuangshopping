@@ -5,13 +5,17 @@
 				<view class="discountCoupon_box">
 					<scroll-view scroll-x="true" class="Scoeoll_box">
 						<!-- 单个优惠券 -->
-						<view  class="scoView" >
-							<view class="discounBox" v-for="(item,index) in discountList" :key="index"> 
+						<view  class="scoView" :style="{width: discountwidth+20+'px'}">
+							<view class="discounBox" v-for="(item,index) in list" :key="index"> 
 								<view class="fullsubtract">
-									<text class="fuprice"><text>{{item.price}}</text>元</text>
-									<text class="reduction">满{{item.Fullreduction}}元用</text>
+									<text class="fuprice"><text>{{item.money}}</text>元</text>
+									<text class="reduction">满{{item.at_full}}元用</text>
 								</view>
-								<view class="godraw">
+								<view class="godraw"
+								:data-s_id='item.store_id'
+								:data-c_id='item.coupon_type_id'
+								@tap="receive"
+								>
 									<text>立即领取</text>
 								</view>
 							</view>
@@ -22,31 +26,42 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data() {
 			return {
-				discountList:[
-					{
-						price:10,
-						Fullreduction:200
-					},
-					{
-						price:10,
-						Fullreduction:200
-					},
-					{
-						price:10,
-						Fullreduction:200
-					},
-					{
-						price:10,
-						Fullreduction:200
-					}
-				]
+				discountwidth:'',
 			}
 		},
 		methods: {
-			
+			receive(e){
+				let {s_id,c_id} = e.currentTarget.dataset
+				uni.getStorage({
+					key:'bindtokey',
+					success:function(res){
+						uni.request({
+							url:`${app.globalData.Requestpath}activity/userGetStoreCoupon`,
+							method:"POST",
+							data:{
+								token:res.data,
+								sid:s_id,
+								cid:c_id
+							},
+							success(res) {
+								if(res.data.code==0){
+									app.globalData.showtoastsame("领取成功")
+								}else{
+									app.globalData.showtoastsame(res.data.msg)
+								}
+							}
+						})
+					}
+				})
+			}
+		},
+		props:['list'],
+		created(){
+			this.discountwidth=this.list.length*180
 		}
 	}
 </script>

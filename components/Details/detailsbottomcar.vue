@@ -19,7 +19,7 @@
 					客服
 				</view>
 				<view class="btn-group">
-					<button class="cu-btn bg-orange round shadow-blur" @tap="Addcart(pic)">加入购物车</button>
+					<button class="cu-btn bg-orange round shadow-blur" v-if="parseInt(producttype)!==3" @tap="Addcart(pic)">加入购物车</button>
 					<button class="cu-btn bg-red round shadow-blur" @tap="Skiporder" data-target="bottomModal">立即订购</button>
 				</view>
 			</view>
@@ -182,6 +182,12 @@
 						good_freight:this.pic.good_freight,
 						good_type:this.couplebool
 					}
+					//如果是团长类型增加 属性值
+					if(parseInt(this.producttype)==3){
+						//这个分享码后期是动态的
+						SpecificationShopdetails.share_code = '0gfdfs'
+						SpecificationShopdetails.share_from = 3
+					}
 					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
 					
 				}
@@ -191,7 +197,7 @@
 				this.modalName = e
 			}
 		},
-		props:["pic","gid","storeid","couplebool","good_state","good_verify","good_delete"],
+		props:["pic","gid","storeid","couplebool","good_state","good_verify","good_delete","producttype"],
 		created(){
 			const _this = this
 			uni.getStorage({

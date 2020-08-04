@@ -1,5 +1,11 @@
 <template>
-	<view class="index-bg" :style="{'padding-top':statusBar+10+'rpx'}">
+	<view class="index-bg" :style="{'padding-top':statusBar+statusBarvalue+'rpx'}" :class="!livebool ? 'open':'close'">
+		<view class="live-entrance" :style="{'height':liveheight+'vh'}">
+			<image :src="this.$store.state.httpUrl+'index/indexone/livebg.png'" mode=""></image>
+		</view>
+		<view class="live-pendant" v-if="livebool">
+			<image :src="this.$store.state.httpUrl+'index/indexone/indexpendant.png'" mode="" @tap="clicklive"></image>
+		</view>
 		<search :showbtn="true"></search>
 		<scroll-view :scroll-y="true" class="top" @scrolltolower="scrolltolower">
 				<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
@@ -52,12 +58,13 @@
 	export default {
 		data() {
 			return {
-				nanlist:[
-				     
-				],
+				nanlist:[],
+				liveheight:0,//下拉直播组件的高度
+				livebool:true,//判断是否下拉
 				TabCur: 0,
 				scrollLeft: 0,
 				statusBar:0,
+				statusBarvalue:10,
 				list:[],
 				iconbool:true,
 				page:1,
@@ -165,7 +172,6 @@
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-				
 			},
 			indexshoplist(page){
 				const _this = this
@@ -173,7 +179,9 @@
 					url:`${app.globalData.Requestpath}good/getGoodList`,
 					data:{
 						page:_this.page,
-						pageSize:10
+						pageSize:10,
+						o_type:1,
+						o_rule:1
 					},
 					success(res) {
 						if(res.data.code==0){
@@ -257,6 +265,13 @@
 					})
 				// #endif
 			},
+			//用户下拉的组件
+			clicklive(){
+				this.liveheight = 100
+				this.livebool = false
+				this.statusBarvalue = 0
+				this.statusBar = 0
+			},
 		},
 		onLoad() {
 			// #ifdef MP-WEIXIN
@@ -336,5 +351,33 @@
 		color: #FFFFFF;
 		font-size: 36rpx;
 		border: 0 !important;
+	}
+	.open{
+			overflow: hidden;
+			height: 100vh;
+		}
+	.close{
+		overflow: visible;
+	}
+	.live-entrance{
+		height: 0;
+		overflow: hidden;
+		transition: 2s;
+		image{
+			width: 100%;
+			height: 100vh;
+		}
+	}
+	.live-pendant{
+		position: absolute;
+		top: 0;
+		left: 400rpx;
+		width: 100rpx;
+		height: 200rpx;
+		z-index: 99;
+		image{
+			width: 100%;
+			height: 100%;
+		}
 	}
 </style>

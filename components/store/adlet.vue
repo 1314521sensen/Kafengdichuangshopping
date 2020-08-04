@@ -2,7 +2,7 @@
 	<view class="adlet">
 		<view class="highlight">
 			<view class="high_img">
-				<image src="/static/store/directeme.png" mode=""></image>
+				<image :src="'http://hbk.huiboke.com'+livestreamingPri" mode=""></image>
 			</view>
 			<!-- 右边部分 -->
 			<view class="pleasantSurprise">
@@ -10,12 +10,9 @@
 					<view class="broadcastImgBox">
 						<image class="broadcastImg" :src="this.$store.state.httpUrl+'/store/broadcast.gif'" mode=""></image>
 					</view>
-					<view class="broad_text">福利不停发,惊喜不间断</view>
+					<view class="broad_text">{{livestreamingTltle}}</view>
 					<view class="broadcasImgS">
-						<image src="/static/groupbooking/belle.png"></image>
-						<image src="/static/groupbooking/belle.png"></image>
-						<image src="/static/groupbooking/belle.png"></image>
-						<image src="/static/groupbooking/belle.png"></image>
+						<image :src="'http://hbk.huiboke.com'+list.good_pic"></image>
 					</view>
 				</view>
 				<view class="plaeas_right">
@@ -27,6 +24,31 @@
 </template>
 
 <script>
+	const app = getApp()
+	export default{
+		data(){
+			return {
+				list:{}
+			}
+		},
+		props:["livestreamingId","livestreamingTltle","livestreamingPri"],
+		created() {
+			const _this = this
+			console.log(_this.livestreamingId)
+				uni.request({
+					url:`${app.globalData.Requestpath}live/getAnchorGoodInfo`,
+					data:{
+						uid:_this.livestreamingId
+					},
+					success(res){
+						if(res.data.code == 0){	
+							_this.list = res.data.data
+							console.log(_this.list)
+						}
+					}
+				})
+		}
+	}
 </script>
 
 <style lang="less" scoped>

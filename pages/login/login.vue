@@ -29,6 +29,10 @@
 						</view>
 					</form>
 				</view>
+				<view class="loginAgreement">
+					<text class="agreement-left">登录即代表同意</text>
+					<text class="agreement-right" @tap="loginArgument">惠播客用户协议</text>
+				</view>
 			</view>
 		<!-- 这是微信的登录的 微信登录需要在页面刚加载的时候就获取用户 -->
 	</view>
@@ -155,6 +159,12 @@
 						}
 					})
 				// #endif
+			},
+			//点击跳转到 用户登录的协议路由组件
+			loginArgument(){
+				uni.navigateTo({
+					url:`/pages/loginagreement/loginagreement`
+				})
 			}
 		},
 		components:{
@@ -253,4 +263,12 @@
 	 		 background-color: #fff;
 	 		 border-radius: 13px;
 	 }
+	.loginAgreement{
+		text-align: center;
+		margin-top: 100rpx;
+		.agreement-left{
+			color: #999999;
+			margin-right: 6rpx;
+		}
+	}
 </style>

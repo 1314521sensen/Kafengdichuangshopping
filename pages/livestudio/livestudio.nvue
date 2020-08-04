@@ -10,8 +10,8 @@
 			:muted="false"
 			:enable-camera="true"
 			:auto-focus="true"
-			:beauty="9"
-			:whiteness="9"
+			:beauty="beauty"
+			:whiteness="whiteness"
 			orientation="vertical"
 			audio-quality="high"
 			device-position="front"
@@ -26,7 +26,7 @@
 		</live-pusher>
 		<cover-view class="coverfather" :style="{width:windowwidth+'px',height:windowheight+'px','padding-top':statusBarHeight+'px'}" @click="Removeevent">
 			<cover-view class="coverfather-top" :style="{width:windowwidth+'px',height:(windowheight/2)+'px'}">
-				<liveroomtopinfo :Focusshow="false"></liveroomtopinfo>
+				<liveroomtopinfo :Focusshow="false" :room_id="room_id" :live_nick="live_nick" :live_pic="live_pic"></liveroomtopinfo>
 			</cover-view>
 			<!-- 这是商品列表 -->
 			<livemiddengoodshoplist 
@@ -87,7 +87,12 @@
 				shopbool:false,
 				//临时的变量
 				url:"",
-				
+				tokey:"",//tokey值
+				room_id:"",//房间号
+				live_nick:"",//主播的昵称
+				live_pic:"",//主播的房间图片
+				beauty:"",
+				whiteness:""
 			}
 		},
 		methods: {
@@ -123,15 +128,32 @@
 				})
 			},
 			Closeby(){
+				const _this = this
 				//点击关播 先把摄像头停止推流
-				this.context.stop()
-				//暂时跳到首页
-				uni.switchTab({
-					url:"/pages/index/index"
+				// console.log(this.tokey,this.live_nick,this.live_pic,"这是关播的时候")
+				uni.request({
+					url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
+					method:"POST",
+					data:{
+						token:this.tokey,
+						live_nick:this.live_nick,
+						live_pic:this.live_pic,
+						is_living:0
+					},
+					success(resclose) {
+						if(resclose.data.code==0){
+							_this.context.stop()
+							//取消预加载
+							// uni.unPreloadPage()
+							uni.switchTab({
+								url:"/pages/index/index"
+							})
+						}
+					}
 				})
 			},
 			netstatus(e){
-				console.log(JSON.stringify(e))
+				// console.log(JSON.stringify(e))
 			}
 		},
 		created(){
@@ -146,15 +168,16 @@
 			})
 		},
 		onReady(){
-			this.context = uni.createLivePusherContext("livePusher", this);
-			// // console.log(this.context)
-			// // console.log(this.context)
+			const _this = this
+			_this.context = uni.createLivePusherContext("livePusher", _this);
+			_this.context.start()
+			// console.log(this.context)
 			// //开启推流
-			this.context.start()
+			
 			//开启摄像头预览
 			// this.context.startPreview()
 			//切换前后摄像头
-			this.context.switchCamera()
+			// this.context.switchCamera()
 		},
 		components:{
 			liveroomtopinfo,
@@ -163,17 +186,32 @@
 		},
 		onLoad(opction) {
 			const _this = this
-			// 临时的
-			console.log(opction)
-			let {index,storeid} = opction
-			_this.url = `rtmp://49.232.153.178:1935/live/live0${parseInt(index)+1}`
 			//获取主播在开播前要直播的商品
 			_this.$store.commit("getliveshoplist")
+			let {index,storeid,beauty,whiteness,url,roomid,livenick,livepic} = opction
+			_this.url = url
+			_this.room_id = roomid
+			_this.live_nick = livenick
+			_this.live_pic = livepic
+			_this.beauty = beauty
+			_this.whiteness = whiteness
+			uni.getStorage({
+				key:"bindtokey",
+				success(restokey) {
+					_this.tokey = restokey.data
+				}
+			})
+			
 			
 		},
 		destroyed(){
 			console.log("组件已销毁")
 			this.context.stop()
+			//取消预加载
+			// uni.unPreloadPage()
+		},
+		onHide(){
+			this.context.start()
 		}
 	}
 </script>

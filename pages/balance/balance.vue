@@ -12,7 +12,7 @@
 					<text class="cny-two" >{{accounttext}}</text>
 				</view>
 				<view class="cny-right">
-					<button class="cu-btn bg-red margin-tb-sm lg">充值 </button>
+					<button class="cu-btn bg-red margin-tb-sm lg" @tap="showModal" data-target="ChooseModal">充值 </button>
 					<button class="cu-btn bg-red margin-tb-sm lg">提现 </button>
 				</view>
 			</view>
@@ -29,6 +29,29 @@
 			</scroll-view>
 			
 		</view>
+		<view class="cu-modal bottom-modal" :class="modalName=='ChooseModal'?'show':''" @tap="hideModal">
+			<view class="cu-dialog" @tap.stop="">
+				<!-- <view class="cu-bar bg-white">
+					<view class="action text-blue" @tap="hideModal">取消</view>
+					<view class="action text-green" @tap="hideModal">确定</view>
+				</view> -->
+				<view class="grid col-3 padding-sm">
+					<view v-for="(item,index) in checkbox" class="padding-xs" :key="index">
+						<!-- :class="item.checked?'bg-orange':'line-orange'"   :data-value="item.value"-->
+						<button 
+							class="cu-btn orange lg block" 
+							@tap="ChooseCheckbox" 
+							:data-indexs="index"
+							:class="radio==index?'bg-orange':'line-orange'"
+						> 
+							{{item.name+'元'}}
+							<!-- <view class="cu-tag sm round" :class="item.checked?'bg-white text-orange':'bg-orange'" v-if="item.hot">HOT</view> -->
+						</button>
+					</view>
+				</view>
+			</view>
+		</view>
+		
 	</view>
 </template>
 
@@ -39,13 +62,117 @@
 	export default {
 		data() {
 			return {
+				rechargeamount:null,  //充值金额
 				statusBar:"",
 				accounttext:"",
 				accountlist:[],
-				page:1
+				page:1,
+				// CustomBar: this.CustomBar,
+				modalName: null,
+				radio: '-1',
+				checkbox: [{
+					value: 0,
+					name: '0.01',
+					checked: false,
+					hot: false,
+				}, {
+					value: 1,
+					name: '20',
+					checked: true,
+					hot: false,
+				}, {
+					value: 2,
+					name: '30',
+					checked: true,
+					hot: true,
+				}, {
+					value: 3,
+					name: '60',
+					checked: false,
+					hot: true,
+				}, {
+					value: 4,
+					name: '80',
+					checked: false,
+					hot: false,
+				}, {
+					value: 5,
+					name: '100',
+					checked: false,
+					hot: false,
+				}]
 			}
 		},
 		methods:{
+			showModal(e) {
+				console.log(e)
+				this.modalName = e.currentTarget.dataset.target
+			},
+			hideModal(e) {
+				this.modalName = null  
+			},
+			ChooseCheckbox(e){
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey) {
+						_this.modalName = null  
+						let {indexs} = e.currentTarget.dataset
+						_this.radio = indexs
+						console.log(parseFloat(_this.checkbox[indexs].name).toFixed(2))
+						//当用户点击的时候 请求后台的支付接口进行请求
+						uni.request({
+							url:`${app.globalData.Requestpath}pay/wechatpay`,
+							method:"POST",
+							data:{
+								pay_type:2,
+								total:parseFloat(_this.checkbox[indexs].name).toFixed(2)
+							},
+							success(resget) {
+								console.log(resget.data)
+								if(resget.statusCode==200){
+									// package
+									let  {appid,noncestr,partnerid,prepayid,timestamp,sign,order_sn,bill} = resget.data
+									let packages = resget.data.package
+									let Beforepayment = {
+										appid,
+										noncestr,
+										package:packages,
+										partnerid,
+										prepayid,
+										timestamp,
+										sign
+									}
+									// console.log(Beforepayment)
+									uni.requestPayment({
+										provider:"wxpay",
+										orderInfo:Beforepayment,
+										success(res) {
+											console.log(res,"这是微信支付")
+											uni.request({
+												url:`${app.globalData.Requestpath}pay/insertlog`,
+												method:"POST",
+												data:{
+													order_sn,
+													bill,
+													price:parseFloat(_this.checkbox[indexs].name).toFixed(2),
+													token:restokey.data
+												},
+												success(respay) {
+													console.log(respay)
+												}
+											})
+										},
+										fail(err){
+											console.log(err)
+										}
+									})
+								}
+							}
+						})
+					}
+				})
+			},
 			scrolltolower(){
 				// console.log(111)
 				const _this = this
@@ -111,7 +238,7 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 	.detailBox{
 		background-color: #f8f8f8;
 	}
@@ -178,7 +305,7 @@
 			justify-content: space-between;
 			line-height: 74rpx;
 			.dtail-text-left{
-				font-size: 18rpx;
+				font-size: 28rpx;
 				font-weight: bold;
 			}
 			.dtail-text-right{

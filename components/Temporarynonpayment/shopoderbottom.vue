@@ -57,7 +57,7 @@
 								<label class="flex justify-between align-center flex-sub">
 									<view class="flex-sub">{{item}}</view>
 									<radio class="round" :class="radioname=='radio' + index?'checked':''" :checked="radioname=='radio' + index?true:false"
-									 :value="'radioname' + index"></radio>
+									 :value="'radio' + index"></radio>
 								</label>
 							</view>
 						</view>
@@ -109,11 +109,11 @@
 			},
 			RadioChange(e) {
 				this.radio = e.detail.value
-				// console.log(e.detail.value)
 			},
 			//这是付款时的单选
 			RadioChanges(e) {
 				this.radioname = e.detail.value
+				console.log(this.radioname)
 			},
 			//这是取消订单
 			Confirmcancel(radiovalue){
@@ -135,7 +135,7 @@
 				this.modalName = null
 				if(this.radioname=='radio0'){//微信支付
 					this.getOrderInfo()
-				}else if(this.radioname=='radioname5'){//支付宝支付
+				}else if(this.radioname=='radio5'){//支付宝支付
 					
 				}else{//余额支付
 					// console.log()
@@ -175,6 +175,10 @@
 								success(res) {
 									if(res.data.code==0){
 										app.globalData.showtoastsame(res.data.msg)
+										console.log(_this.$store.state.orderlistshop)
+										if(_this.$store.state.orderlistshop[0].share_from!==null){
+											_this.getorderconfiguration()
+										}
 									}else{
 										app.globalData.showtoastsame(res.data.msg)
 									}
@@ -202,8 +206,7 @@
 					url,
 					method:"POST",
 					data:{
-						payid:"wxpay",
-						appid,
+						pay_type:1,
 						swift_id:_this.swift_no
 					},
 					success(res) {
@@ -216,6 +219,9 @@
 									uni.showToast({
 										title:"支付完成"
 									})
+									if(_this.$store.state.orderlistshop[0].share_from!==null){
+										_this.getorderconfiguration()
+									}
 								},
 								fail: (e) => {
 									console.log('fail',e);
@@ -228,12 +234,56 @@
 						}
 					}
 				})
+			},
+			getorderconfiguration(){
+				const _this = this
+				let {order_sn,good_id,good_name,good_pic,good_price,good_num,share_from} = _this.$store.state.orderlistshop[0]
+				console.log(order_sn,_this.s_id,_this.s_name,good_id,good_name,good_pic,good_price,good_num,share_from)
+				uni.getStorage({
+					key: 'bindtokey',
+					success(restokey) {
+						uni.request({
+							url:`${app.globalData.Requestpath}good/getCmsSettlementConfigInfo`,
+							method:"POST",
+							data:{
+								token:restokey.data,
+								type:share_from,
+								gid:good_id
+							},
+							success(resconfiguration) {
+								// console.log(resconfiguration)
+								uni.request({
+									url:`${app.globalData.Requestpath}CmsSettlement/CommissionSettlement`,
+									method:"POST",
+									data:{
+										token:restokey.data,
+										order_sn:order_sn,
+										store_id:_this.s_id,
+										store_name:_this.s_name,
+										good_id:good_id,
+										good_title:good_name,
+										good_pic:good_pic,
+										good_price:good_price,
+										good_num:good_num,
+										total_price:_this.price,
+										cms_category: share_from,
+										settlement_type:resconfiguration.data.data.cms_type,
+										cms_rate:resconfiguration.data.data.cms_value
+									},
+									success(resSettlement) {
+										console.log(resSettlement)
+									}
+								})
+							}
+						})
+					}
+				})
 			}
 		},
 		components:{
 			paymoney
 		},
-		props:["price","order_sn","orderstatus","swift_no"]
+		props:["price","order_sn","orderstatus","swift_no","s_id","s_name"]
 	}
 </script>
 
