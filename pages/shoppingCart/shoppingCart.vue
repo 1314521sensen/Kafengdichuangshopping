@@ -58,6 +58,15 @@
 								>
 									{{items.spec_value}}
 								</text>
+								<text 
+									class="lg text-gray cuIcon-triangledownfill"
+									data-target="bottomModal"
+									@tap="getspecifications"
+									v-if="items.spec_value!==''"
+									:data-src="items.good_pic"
+									:data-sid="items.store_id"
+									:data-gid="items.good_id"
+								></text>
 								<view class="info-price-num">
 									<!-- 商品价格 -->
 									<text class="price" v-text="'¥'+items.good_price"></text>
@@ -300,11 +309,21 @@
 								}
 								.specificationstext{
 									display:inline-block;
+									max-width: 360rpx;
 									font-size: 24rpx;
 									color:#999;
-									background-color:#f2f2f2;
+									// background-color:#f2f2f2;
 									padding:5rpx;
 									margin-top:20rpx;
+									overflow: hidden;
+									text-overflow:ellipsis;
+									white-space: nowrap;
+									border-radius:16rpx;
+									border:2rpx solid red;
+								}
+								.cuIcon-triangledownfill{
+									margin-top: 20rpx !important;
+									font-size: 50rpx;
 								}
 								.info-price-num{
 									display:flex;

@@ -5,12 +5,14 @@
 		<live-pusher 
 			id='livePusher' 
 			ref="livePusher"
-			url=""
+			:url='url'
 			mode="SD"
 			aspect="3:2"
 			:muted="false"
 			:enable-camera="true"
 			:auto-focus="true"
+			:min-bitrate="200"
+			:max-bitrate="1000"
 			:beauty="beauty"
 			:whiteness="whiteness"
 			orientation="vertical"
@@ -22,9 +24,15 @@
 			audio-volume-type="media"
 			local-mirror="enable"
 			:style="{width:windowWidth+'px',height:windowHeight+'px'}"
+			@netstatus="netstatus"
 		>
 		</live-pusher>
-		<cover-view class="coverfather" :style="{width:windowWidth+'px',height:windowHeight+'px','padding-top':statusBarHeight+'px'}">
+		<!-- 这是开播前的布局 -->
+		<cover-view 
+			class="coverfather" 
+			:style="{width:windowWidth+'px',height:windowHeight+'px','padding-top':statusBarHeight+'px'}"
+			v-if="Broadcastlivestate==false"
+		>
 			<!-- <livecovetop></livecovetop> -->
 			<cover-view class="livecovetop">
 				<cover-view class="livecovetop-left">
@@ -69,6 +77,50 @@
 				</button>
 			</cover-view>
 		</cover-view>
+		
+		<!-- 这是直播后的布局 -->
+		<cover-view 
+			class="coverfather" 
+			:style="{width:windowWidth+'px',height:windowHeight+'px','padding-top':statusBarHeight+'px'}"
+			@click="Removeevent"
+			v-if="Broadcastlivestate"
+		>
+			<cover-view class="coverfather-top" :style="{width:windowWidth+'px',height:(windowHeight/2)+'px'}">
+				<liveroomtopinfo :Focusshow="false" :room_id="room_id" :live_nick="livenickname" :live_pic="Backcoverurl"></liveroomtopinfo>
+			</cover-view>
+			<!-- 这是商品列表 -->
+			<livemiddengoodshoplist 
+				:componentheight="windowHeight" 
+				:componentwidth="windowWidth" 
+				paddingbottom="50" 
+				v-if="shopbool" 
+				:Immediatelygrabbool="false"
+			></livemiddengoodshoplist>
+			<cover-view class="coverfather-bottom" :style="{width:windowWidth+'px',height:(windowHeight/2)+'px','padding-bottom':(windowBottom+40)+'px'}">
+				<conver-view class="coverfather-bottom-bottomlist">
+					<cover-view class="bottomevent parent-padding-leftAndright" :class="inpbool?'bottomeventcolor':'bottomeventweicolor'">
+						<cover-view class="bottomevent-imgs" v-if="inpbool==false">
+							<cover-image src="/static/liveplatfrom/car.png" class="bottomevent-img" @tap="zhiboshop"></cover-image>
+						</cover-view>
+						<cover-view class="inp" :class="inpbool?'inpflex':'inpwidth'">
+							<input type="text" v-model="inptvalue" @focus="focusinp" @blur="blurinp" placeholder="跟大家聊聊" class="font-size-thirty textcolorwrite inptext" :class="inpbool?'textcolor-black':'textcolorwrite'"></input>
+						</cover-view>
+						<cover-view class="share" @click="share" v-if="inpbool==false">
+							<cover-image src="/static/Pushflow/fenxiang.png" class="shareimgs"></cover-image>
+						</cover-view>
+						<cover-view class="share" @click="Closeby" v-if="inpbool==false">
+							<cover-image src="/static/Pushflow/Closeby.png" class="shareimgs"></cover-image>
+						</cover-view>
+						<cover-view class="btn"  v-if="inpbool==true">
+							<button class="button" @click="btnsend">发送</button>
+						</cover-view>
+					</cover-view>
+				</conver-view>
+				<cover-view class="coverfather-bottom-toplist">
+					<livechatlist :componentwidth="windowWidth" :list="list"></livechatlist>
+				</cover-view>
+			</cover-view>
+		</cover-view>
 	</view>
 	<!-- #endif -->
 </template>
@@ -77,6 +129,9 @@
 	// #ifdef APP-PLUS
 	// import livecovetop from "@/components/Livecoverfengmian/livecovetop.nvue" 
 	import livecovemidden from "@/components/Livecoverfengmian/livecovemidden.nvue"
+	import liveroomtopinfo from "@/components/liveplice/liveroomtopinfo.nvue"
+	import livemiddengoodshoplist from "@/components/livemiddencomponent/livemiddengoodshoplist.nvue"
+	import livechatlist from "@/components/liveplice/livechatlist.nvue"
 	const app = getApp()
 	export default {//这是直播的封面
 		data() {
@@ -103,9 +158,112 @@
 				storeid:"",//为了获得店铺id
 				tokey:"",//用户的tokey
 				livenickname:"",//用户直播的昵称
+				url:"",
+				room_id:"",
+				shopbool:false,
+				list:[],
+				Broadcastlivestate:false,
+				inpbool:false,//控制发送按钮是否显示
+				inptvalue:"",//获取inp的内容
+				webtime:null,//websoket的定时器
 			}
 		},
 		methods: {
+			// 这是转移过来的----开始
+			//当获取焦点的时候
+			focusinp(){
+				this.inpbool = true
+			},
+			//当失去焦点的时候
+			blurinp(){
+				this.inpbool = false
+				// console.log("当键盘弹起或收起的时候触发")
+			},
+			//当用户点击发送的时候
+			btnsend(){
+				this.inptvalue = ""
+			},
+			Removeevent(){
+				if(this.shopbool){
+					this.shopbool = false
+					return 
+				}
+			},
+			zhiboshop(e){
+				e.stopPropagation()
+				this.shopbool = true
+			},
+			share(){
+				// uni.shareWithSystem({
+				// 	type:"image",
+				// 	href:"https://uniapp.dcloud.io",
+				// 	imageUrl:"/static/logo.png"
+				// })
+				uni.share({
+					provider:"weixin",
+					type:2,
+					title:"正在测试分享",
+					scene:"WXSceneSession",
+					summary:"我正在测试分享",
+					imageUrl:"/static/logo.png",
+					success(res){
+						console.log(res,"成功")
+					},
+					fail(err){
+						console.log(err,"失败")
+					}
+				})
+			},
+			netstatus(e){
+				// console.log(JSON.stringify(e))
+			},
+			Closeby(){
+				const _this = this
+				//取消预加载
+				// uni.unPreloadPage()
+				//点击关播 先把摄像头停止推流
+				console.log(_this.tokey,_this.livenickname,_this.Backcoverurl,"这是关播的时候")
+				uni.request({
+					url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
+					method:"POST",
+					data:{
+						token:_this.tokey,
+						live_nick:_this.livenickname,
+						live_pic:_this.Backcoverurl,
+						is_living:0
+					},
+					success(resclose) {
+						if(resclose.data.code==0){
+							_this.context.stop()
+							
+							_this.context.stopPreview({
+								success(e){
+									console.log("关闭摄像头成功",JSON.stringify(e))
+								},
+								fail(err){
+									console.log("关闭失败")
+								}
+							})
+							//关闭连接
+							uni.closeSocket({
+								code:1000,
+								success(reswebclose) {
+									console.log(reswebclose)
+									clearInterval(_this.webtime)
+									uni.redirectTo({
+										url:"/pages/Closeby/Closeby"
+									})
+								}
+							})
+						}
+					}
+				})
+			},
+			
+			
+			//这是转移过来的----结束
+			
+			
 			dianji(e){
 				e.stopPropagation()
 			},
@@ -123,33 +281,33 @@
 					this.context.switchCamera()
 				}
 			},
-			covermodel(msgtitle,msgcotent){
-				const _this = this
-				uni.showModal({
-					title:msgtitle,
-					content:msgcotent,
-					showCancel:true,
-					cancelText:"稍后直播",
-					cancelColor:"#f00",
-					confirmText:"继续直播",
-					confirmColor:"#0f0",
-					success(res){
-						if(res.confirm){
-							//关闭摄像头预览
-							_this.context.stopPreview()
-							//开启推流
-							// _this.context.start()
-							// 后面添加参数的是临时的
-							_this.getliveinforoom()
-						}
-					}
-				})
-			},
+			// covermodel(msgtitle,msgcotent){
+			// 	const _this = this
+			// 	uni.showModal({
+			// 		title:msgtitle,
+			// 		content:msgcotent,
+			// 		showCancel:true,
+			// 		cancelText:"稍后直播",
+			// 		cancelColor:"#f00",
+			// 		confirmText:"继续直播",
+			// 		confirmColor:"#0f0",
+			// 		success(res){
+			// 			if(res.confirm){
+			// 				//关闭摄像头预览
+			// 				_this.context.stopPreview()
+			// 				//开启推流
+			// 				// _this.context.start()
+			// 				// 后面添加参数的是临时的
+			// 				_this.getliveinforoom()
+			// 			}
+			// 		}
+			// 	})
+			// },
 			//封装一个执行上面的模态框的方法
 			Detectionlive(_this){
 				if(_this.Backcoverurl!=="" && _this.Backinpvalue!=="" && _this.livenickname!==""){//如果两个值不为空的情况下
 					//关闭摄像头预览
-					_this.context.stopPreview()
+					// _this.context.stopPreview()
 					//开启推流
 					// _this.context.start()
 					//这里为了保存 用户开直播的信息
@@ -208,39 +366,102 @@
 			//封装个方法 用于请求后台的信息 保存直播间
 			getliveinforoom(){
 				const _this = this
-				// console.log(_this.tokey,_this.livenickname,_this.Backcoverurl,_this.Backinpvalue,"这是最后要更改的值")
-				uni.request({
-					url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
-					method:"POST",
-					data:{
-						token:_this.tokey,
-						live_nick:_this.livenickname,
-						live_pic:_this.Backcoverurl,
-						live_desc:_this.Backinpvalue,
-						is_living:1
-					},
-					success(res) {
-						if(res.data.code==0){
-							uni.request({
-								url:`${app.globalData.Requestpath}live_user/getLiveUserInfo`,
-								method:"POST",
-								data:{
-									token:_this.tokey
-								},
-								success(resinfo) {
-									// console.log(resinfo)
-									if(resinfo.data.code==0){
-										// console.log("已经进来了")
-										let {live_url,room_id,live_nick,live_pic} = resinfo.data.data
-										// console.log(live_url,room_id,live_nick,live_pic)
-										uni.redirectTo({
-											// 后面添加参数的是临时的
-											url:`/pages/livestudio/livestudio?storeid=${_this.storeid}&index=${_this.indexlinshi}&beauty=${_this.beauty}&whiteness=${_this.whiteness}&url=${live_url}&roomid=${room_id}&livenick=${live_nick}&livepic=${live_pic}`
-										})
-									}
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey) {
+						_this.tokey = restokey.data
+						// console.log(_this.tokey,_this.livenickname,_this.Backcoverurl,_this.Backinpvalue,"这是最后要更改的值")
+						uni.request({
+							url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
+							method:"POST",
+							data:{
+								token:_this.tokey,
+								live_nick:_this.livenickname,
+								live_pic:_this.Backcoverurl,
+								live_desc:_this.Backinpvalue,
+								is_living:1
+							},
+							success(res) {
+								// console.log(res)
+								if(res.data.code==0){
+									uni.request({
+										url:`${app.globalData.Requestpath}live_user/getLiveUserInfo`,
+										method:"POST",
+										data:{
+											token:_this.tokey
+										},
+										success(resinfo) {
+											console.log(resinfo)
+											if(resinfo.data.code==0){
+												// console.log("已经进来了")
+												let {live_url,room_id,live_nick,live_pic} = resinfo.data.data
+												// console.log(live_url,room_id,live_nick,live_pic)
+												let uid = resinfo.data.data.user_id
+												let livename = resinfo.data.data.live_nick
+												_this.url = live_url
+												_this.room_id = room_id
+												_this.livenickname = live_nick
+												_this.Backcoverurl = live_pic
+												_this.Broadcastlivestate = true
+												// uni.redirectTo({
+												// 	// 后面添加参数的是临时的
+												// 	url:`/pages/livestudio/livestudio?storeid=${_this.storeid}&index=${_this.indexlinshi}&beauty=${_this.beauty}&whiteness=${_this.whiteness}&url=${live_url}&roomid=${room_id}&livenick=${live_nick}&livepic=${live_pic}`
+												// })
+												//创建websoket的
+												console.log(uid,livename)
+												uni.connectSocket({
+													url:"ws://192.168.1.124:7272",
+													// #ifdef MP
+													header: {
+														'content-type': 'application/json'
+													},
+													// #endif
+													// #ifdef MP-WEIXIN
+													method: 'GET',
+													// #endif
+													success(resSocket) {
+														console.log(resSocket)
+														let liveobj = {
+															type: 'anchorInit',
+															uid,
+															name:livename,
+															avatar:'',
+															group:room_id,
+														}
+														console.log(JSON.stringify(liveobj))
+														setTimeout(()=>{
+															uni.sendSocketMessage({
+																data:JSON.stringify(liveobj),
+																success(res) {
+																	console.log(res)
+																},
+																fail(err){
+																	console.log(err)
+																}
+															})
+														},3000)
+														
+													},
+													fail(err){
+														console.log(err)
+													}
+												})
+												
+												//临时的
+												//这是开始推流
+												setTimeout(()=>{
+													_this.context.start()
+													console.log(_this.context)
+												},3000)
+												
+											}else{
+												app.globalData.showtoastsame("请前往设置开通")
+											}
+										}
+									})
 								}
-							})
-						}
+							}
+						})
 					}
 				})
 			},
@@ -295,6 +516,7 @@
 			}
 		},
 		created() {
+			console.log(111)
 			const _this = this
 			uni.getSystemInfo({
 				success(res) {
@@ -304,6 +526,7 @@
 					_this.windowBottom = res.windowBottom
 				}
 			})
+			//这是获取位置
 			// uni.getLocation({
 			// 	success(res) {
 			// 		// console.log(res)
@@ -316,13 +539,17 @@
 			// 		 })
 			// 	}
 			// })
+			// _this.getliveinforoom()
 		},
 		onShow(){
 			
 		},
+		updated(){
+			
+		},
 		onReady(){
 			this.context = uni.createLivePusherContext("livePusher", this);
-			// console.log(this.context)
+			console.log(this.context)
 			// console.log(this.context)
 			//开启推流
 			// this.context.start()
@@ -331,20 +558,41 @@
 			
 		},
 		components:{
-			livecovemidden
+			livecovemidden,
+			liveroomtopinfo,
+			livemiddengoodshoplist,
+			livechatlist
 		},
 		onLoad(opction) {
 			const _this = this
-			let {index,storeid} = opction
+			_this.$store.commit("getliveshoplist")
+			let {storeid} = opction
 			_this.storeid = storeid
-			_this.indexlinshi = index
-			uni.getStorage({
-				key:"bindtokey",
-				success(restokey) {
-					_this.tokey = restokey.data
+			// 监听WebSocket连接打开事件。
+			uni.onSocketOpen((res)=>{
+				let pingobj = {
+					type:'livePing'
 				}
+				_this.webtime = setInterval(function(){
+					uni.sendSocketMessage({
+						data:JSON.stringify(pingobj),
+						success(res){
+							console.log(res)
+						},
+						fail(err){
+							console.log(err)
+						}
+					})
+				},30000)
 			})
-		},
+			
+			uni.onSocketMessage(function(res){
+				console.log(JSON.parse(res.data).data)
+				// list
+				_this.list.push(JSON.parse(res.data).data)
+			})
+		}
+		
 	}
 	// #endif
 </script>
@@ -431,5 +679,97 @@
 		margin:15rpx 0;
 		border-radius:20rpx;
 	}
+	
+	
+	/* 这是直播的样式 */
+	.coverfather{
+			position: absolute;
+			top:0;
+			left:0;
+			/* background-color:red; */
+		}
+		.coverfather-top{
+			/* background-color:#f00; */
+		}
+		.coverfather-bottom{
+			flex-direction:column-reverse;
+		}
+		.coverfather-bottom-toplist{
+			/* background-color:pink; */
+			margin-bottom:20rpx;
+		}
+		.bottomevent{
+			justify-content: space-between;
+			flex-direction:row;
+			align-items: flex-end;
+			/* height:20px; */
+			/* background-color: yellow; */
+		}
+		.bottomevent-imgs{
+			width: 70rpx;
+			/* height:80rpx; */
+			/* background-color:red; */
+		}
+		.bottomevent-img{
+			width: 70rpx;
+			height:80rpx;
+			/* background-color:blue; */
+		}
+		.bottomeventweicolor{
+			background-color:transparent;
+		}
+		.bottomeventcolor{
+			background-color:#fff;
+		}
+		.inp{
+			/* width:300rpx; */
+			height:70rpx;
+			/* background-color:red; */
+			justify-content: flex-end;
+		}
+		.inptext{
+			height:70rpx;
+			/* line-height: */
+		}
+		.inpwidth{
+			width: 300rpx;
+		}
+		.inpflex{
+			flex:0.8;
+		}
+		.btn{
+			flex:0.2;
+			background-color:green;
+			height:70rpx;
+			/* line-height:70rpx; */
+		}
+		.button{
+			height:70rpx;
+			line-height:70rpx;
+			border-radius:0;
+			border-width: 0;
+		}
+		.share{
+			width: 60rpx;
+			height:60rpx;
+			/* background-color:green; */
+		}
+		.shareimgs{
+			position: relative;
+			width: 60rpx;
+			height:60rpx;
+		}
+		.report{
+			position: absolute;
+			top:0px;
+			left:0;
+			width: 70rpx;
+			height:70rpx;
+			background-color:yellow;
+			border-radius: 15px;
+		}
+		.reporttext{
+			line-height:70rpx;
+		}
 /* #endif */
 </style>

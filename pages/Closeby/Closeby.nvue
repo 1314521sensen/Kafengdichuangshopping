@@ -35,6 +35,7 @@
 </template>
 
 <script>
+	//这是主播关闭的页面
 	export default {
 		data() {
 			return {
@@ -70,7 +71,16 @@
 				}
 			})
 
-		}
+		},
+		//监听用户系统的返回键
+		// onBackPress(options){
+		// 	console.log(options)
+		// 	if(options.from==='backbutton'){
+		// 		uni.switchTab({
+		// 			url:"/pages/index/index"
+		// 		})
+		// 	}
+		// }
 	}
 </script>
 

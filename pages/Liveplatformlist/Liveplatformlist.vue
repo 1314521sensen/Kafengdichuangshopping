@@ -41,13 +41,18 @@
 			</view>
 		</view>
 		<view class="Livelist">
+			<!-- v-for="(item,index) in list 
+				:data-live_url="item.live_url"
+				:data-live_nick="item.live_nick"
+				:data-room_id="item.room_id"
+				:data-live_pic="item.live_pic"
+				:data-uid="item.user_id"-->
 			<view 
 				class="Livelist-item" 
 				:style="{'background-image':'url('+'http://hbk.huiboke.com'+item.live_pic+')'}"
-				v-for="(item,index) in list" 
+				v-for="(item,index) in list"
 				:key="index"
 				@tap="viewervideo"
-				:data-index="index"
 				:data-live_url="item.live_url"
 				:data-live_nick="item.live_nick"
 				:data-room_id="item.room_id"
@@ -125,10 +130,14 @@
 			//点击每一个直播项 跳到不同的主播
 			viewervideo(e){
 				let {index,live_url,live_nick,room_id,live_pic,uid} = e.currentTarget.dataset
-				console.log(e)
+				// let {index} = e.currentTarget.dataset
+				// console.log(e)
 				uni.navigateTo({
 					url:`/pages/Liveplatform/Liveplatform?indexs=${index}&live_url=${live_url}&livenick=${live_nick}&roomid=${room_id}&livepic=${live_pic}&uid=${uid}`
 				})
+				// uni.navigateTo({
+				// 	url:`/pages/Liveplatform/Liveplatform?indexs=${index}`
+				// })
 			},
 			getlivelist(){
 				const _this = this

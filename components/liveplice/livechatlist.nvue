@@ -2,7 +2,7 @@
 	<cover-view class="chat parent-padding-leftAndright" :style="{width:(componentwidth/2+30)+'px'}">
 		<scroller scroll-direction :show-scrollbar="false">
 			<cover-view class="bg-Black-gradient chat-item" v-for="(item,index) in list" :key="index">
-				<text class="font-size-twenty-flxed textcolor-Promptreply text-wrap">明天的你 &nbsp;这手速可以大萨达撒大师大多大大大大萨达撒</text>
+				<text class="font-size-twenty-flxed textcolor-Promptreply text-wrap">{{item.name}}&nbsp;{{item.content}}</text>
 			</cover-view>
 		</scroller>
 	</cover-view>

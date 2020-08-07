@@ -12,6 +12,7 @@
 </template>
 
 <script>
+	//这个用户观看主播下播的页面
 	export default {
 		data() {
 			return {

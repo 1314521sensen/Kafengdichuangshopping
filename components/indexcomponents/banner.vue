@@ -33,14 +33,16 @@
 			},
 			//查看大图
 			previewImage(e){
-				let {item} = e.currentTarget.dataset
-				var imgArr = [];
-				    imgArr.push('http://hbk.huiboke.com'+item);
-				    //预览图片
-				    uni.previewImage({
-				     urls: imgArr,
-				     current: imgArr[0]
-				    });
+				if(this.$store.state.bannerbool){
+					let {item} = e.currentTarget.dataset
+					var imgArr = [];
+					imgArr.push('http://hbk.huiboke.com'+item);
+					//预览图片
+					uni.previewImage({
+						urls: imgArr,
+						 current: imgArr[0]
+					})
+				}
 			}
 		},
 		props:["swiperList","height"]

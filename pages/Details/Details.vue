@@ -171,6 +171,10 @@
 					_this.tokey = res.data
 				},
 			})
+		},
+		created() {
+			const _this = this
+			_this.$store.state.bannerbool = true
 		}
 	}
 </script>

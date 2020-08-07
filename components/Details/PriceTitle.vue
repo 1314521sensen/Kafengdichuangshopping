@@ -24,10 +24,12 @@
 				<text>{{region[0]}}</text>
 			</view>
 		</view>
-		<storecoupon :tokey="tokey" :storeid="storeid" msg="领卷" Whatcoupon="0" titlemsg="领劵"></storecoupon>
-		<service></service>
-		<bottompopup parameter="参数" :storeid="storeid" :gid="gid"></bottompopup>
-		<evaluation :gid="gid"></evaluation>
+		<view v-if="this.$store.state.bannerbool">
+			<storecoupon :tokey="tokey" :storeid="storeid" msg="领卷" Whatcoupon="0" titlemsg="领劵"></storecoupon>
+			<service></service>
+			<bottompopup parameter="参数" :storeid="storeid" :gid="gid"></bottompopup>
+			<evaluation :gid="gid"></evaluation>
+		</view>
 	</view>
 </template>
 

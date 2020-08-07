@@ -1,7 +1,7 @@
 <template>
 	<view class="Livegoods">
-		<view class="liveActionbar">
-			<view class="cu-bar minheight" style="background-color: #55bae9">
+		<view class="liveActionbar" :style="{'padding-top':(statusBar+10)+'rpx','background-color': '#55bae9'}">
+			<view class="cu-bar minheight">
 				<view class="action" @tap="returnliveshoplist">
 					<text class="cuIcon-back text-gray"></text>
 				</view>
@@ -44,7 +44,8 @@
 				store_state:'',
 				goodsList:[],
 				page:1,
-				tokey:""
+				tokey:"",
+				statusBar:0
 			};
 		},
 		methods:{
@@ -112,6 +113,9 @@
 		},
 		created(){
 			this.liveshoplist()
+		},
+		onLoad() {
+			this.statusBar = app.globalData.statusBar
 		}
 	}
 </script>

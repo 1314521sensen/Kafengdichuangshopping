@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<!-- <canvas canvas-id="qrcode" style="width:  ;height: 256px;" v-show="QRcodebool"/> -->
 		<view class="store" v-if="loadingbool">
 			<!-- <pageheight :statusBar="statusBar"></pageheight> -->
 			<!-- 顶部 -->
@@ -117,6 +118,7 @@
 			</scroll-view>
 		</view>
 		<loading v-if="loadingbool==false"></loading>
+		<QRcodeA :isCode='isCode' v-if="isCode" @cancel="cancel"></QRcodeA>
 	</view>
 </template>
 
@@ -141,6 +143,8 @@
 	import boutiqueBarley  from "@/components/store/boutiquebarley.vue"
 	import adlet from "@/components/store/adlet.vue"
 	import liveMerchant from "@/components/store/liveMerchant.vue"
+	// 引入nvue二维码弹框
+	import QRcodeA from '@/components/QRcodeA/QRcodeA.vue'
 	const app = getApp()
 	export default {
 		//这是店铺    
@@ -174,6 +178,7 @@
 				livestreamingTltle:'',//直播间描述
 				livestreamingPri:'',//主播房间图片
 				loadingbool:false,
+				isCode:false
 			}
 		},
 		methods: {
@@ -276,20 +281,10 @@
 				
 			},
 			share(){
-				uni.share({
-					provider:"weixin",
-					type:1,
-					title:"测试分享的电铺",
-					scene:'WXSceneSession',
-					summary:`http://huiboke.com/uploads/adv/20200715/59e14118aa8d6cd445e9bef57b0225bb.apk`,
-					href:"http://huiboke.com/uploads/adv/20200715/59e14118aa8d6cd445e9bef57b0225bb.apk",
-					success(res){
-						console.log(res)
-					},
-					fail(err){
-						console.log(err)
-					}
-				})
+				this.isCode = true
+			},
+			cancel(){
+				this.isCode = false
 			},
 			Input(e){
 				const _this = this
@@ -376,7 +371,8 @@
 			storenewArrival,
 			boutiqueBarley,
 			adlet,
-			liveMerchant
+			liveMerchant,
+			QRcodeA
 		},
 		created() {
 			const _this = this
@@ -407,14 +403,17 @@
 							token:res.data
 						},
 						success(res){
+							console.log(res)
 							if(res.data.code == 0){
 								_this.livestreamingId	= res.data.data.user_id
 								_this.livestreamingTltle = res.data.data.live_desc
 								_this.livestreamingPri  = res.data.data.live_pic
 								parseInt(res.data.data.is_living)? _this.isWhetherlive = true : _this.isWhetherlive = false,
-								
+								console.log(11)
 								_this.loadingbool = true
 								console.log(_this.loadingbool)
+							}else{
+								_this.loadingbool = true
 							}
 						}
 					})

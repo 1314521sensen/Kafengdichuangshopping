@@ -1,6 +1,7 @@
 <template>
 	<view class="list">
 		<!-- <scroll-view scroll-y="true" @scrolltolower="scrolltolower"  class="scrolltolower-list"> -->
+			<Details v-if="this.$store.state.detailsbool" :DetailsList="DetailsList"></Details>
 			<view class="cu-list menu-avatar">
 				<!-- 这是背景图片 -->
 				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
@@ -8,7 +9,7 @@
 				<view class="cu-item" v-for="(item,index) in list" :key="index">
 					<view class="cu-item-left" 
 						@tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)"
-						@longpress="longpress"
+						@longpress="longpress(item.good_id?item.good_id:item.goods_id,item.store_id)"
 					>
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
 						<!-- :style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"> -->
@@ -40,9 +41,12 @@
 </template>
 
 <script>
+	const app = getApp()
+	import Details from "@/components/indexcomponents/indexDetails.vue"
 	export default {
 		data(){
 			return {
+				DetailsList:[]
 			}
 		},
 		methods:{
@@ -58,8 +62,24 @@
 					})
 			},
 			//长按事件
-			longpress(){
-				console.log(1111)
+			longpress(id,storeid){
+				const _this = this
+				let g_id = id
+				//在去请求详情页的其他数据
+				uni.request({
+					url:`${app.globalData.Requestpath}good/getGoodInfo?gid=${g_id}`,
+					data:{
+						gid:g_id
+					},
+					success(res) {
+						// console.log(res.data.data)
+						if(res.data.code==0){
+							_this.DetailsList = res.data.data
+							_this.$store.state.detailsbool = true
+							_this.$store.state.bannerbool = false
+						}
+					}
+				})
 			},
 			deletescollectionAndfootprint(e){
 				let index = e.currentTarget.dataset.index
@@ -97,7 +117,10 @@
 				
 			}
 		},
-		props:["list","display","deleteurl","tokey","deletelist"]
+		props:["list","display","deleteurl","tokey","deletelist"],
+		components:{
+			Details
+		}
 	}
 </script>
 

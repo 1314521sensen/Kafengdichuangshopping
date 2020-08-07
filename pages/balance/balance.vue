@@ -12,8 +12,18 @@
 					<text class="cny-two" >{{accounttext}}</text>
 				</view>
 				<view class="cny-right">
-					<button class="cu-btn bg-red margin-tb-sm lg" @tap="showModal" data-target="ChooseModal">充值 </button>
-					<button class="cu-btn bg-red margin-tb-sm lg">提现 </button>
+					<button 
+						class="cu-btn bg-red margin-tb-sm lg" 
+						@tap="showModal" 
+						data-target="ChooseModal" 
+						data-moneybool="1"
+					>充值 </button>
+					<button 
+						class="cu-btn bg-red margin-tb-sm lg" 
+						@tap="showModal" 
+						data-target="ChooseModal"
+						data-moneybool="0"
+					>提现 </button>
 				</view>
 			</view>
 		</view>
@@ -100,78 +110,108 @@
 					name: '100',
 					checked: false,
 					hot: false,
-				}]
+				}],
+				money:false
 			}
 		},
 		methods:{
 			showModal(e) {
-				console.log(e)
+				// console.log(e)
 				this.modalName = e.currentTarget.dataset.target
+				let {moneybool} = e.currentTarget.dataset
+				if(parseInt(moneybool)){
+					this.moneybool = true
+				}else{
+					this.moneybool = false
+				}
+				
 			},
 			hideModal(e) {
 				this.modalName = null  
 			},
 			ChooseCheckbox(e){
 				const _this = this
-				uni.getStorage({
-					key:"bindtokey",
-					success(restokey) {
-						_this.modalName = null  
-						let {indexs} = e.currentTarget.dataset
-						_this.radio = indexs
-						console.log(parseFloat(_this.checkbox[indexs].name).toFixed(2))
-						//当用户点击的时候 请求后台的支付接口进行请求
-						uni.request({
-							url:`${app.globalData.Requestpath}pay/wechatpay`,
-							method:"POST",
-							data:{
-								pay_type:2,
-								total:parseFloat(_this.checkbox[indexs].name).toFixed(2)
-							},
-							success(resget) {
-								console.log(resget.data)
-								if(resget.statusCode==200){
-									// package
-									let  {appid,noncestr,partnerid,prepayid,timestamp,sign,order_sn,bill} = resget.data
-									let packages = resget.data.package
-									let Beforepayment = {
-										appid,
-										noncestr,
-										package:packages,
-										partnerid,
-										prepayid,
-										timestamp,
-										sign
-									}
-									// console.log(Beforepayment)
-									uni.requestPayment({
-										provider:"wxpay",
-										orderInfo:Beforepayment,
-										success(res) {
-											console.log(res,"这是微信支付")
-											uni.request({
-												url:`${app.globalData.Requestpath}pay/insertlog`,
-												method:"POST",
-												data:{
-													order_sn,
-													bill,
-													price:parseFloat(_this.checkbox[indexs].name).toFixed(2),
-													token:restokey.data
+					//这是微信充值
+					uni.getStorage({
+						key:"bindtokey",
+						success(restokey) {
+							_this.modalName = null  
+							let {indexs} = e.currentTarget.dataset
+							_this.radio = indexs
+							console.log(parseFloat(_this.checkbox[indexs].name).toFixed(2))
+							//当用户点击的时候 请求后台的支付接口进行请求
+							if(_this.moneybool){
+								uni.request({
+									url:`${app.globalData.Requestpath}pay/wechatpay`,
+									method:"POST",
+									data:{
+										pay_type:2,
+										total:parseFloat(_this.checkbox[indexs].name).toFixed(2)
+									},
+									success(resget) {
+										console.log(resget.data)
+										if(resget.statusCode==200){
+											// package
+											let  {appid,noncestr,partnerid,prepayid,timestamp,sign,order_sn,bill} = resget.data
+											let packages = resget.data.package
+											let Beforepayment = {
+												appid,
+												noncestr,
+												package:packages,
+												partnerid,
+												prepayid,
+												timestamp,
+												sign
+											}
+											// console.log(Beforepayment)
+											uni.requestPayment({
+												provider:"wxpay",
+												orderInfo:Beforepayment,
+												success(res) {
+													console.log(res,"这是微信支付")
+													uni.request({
+														url:`${app.globalData.Requestpath}pay/insertlog`,
+														method:"POST",
+														data:{
+															order_sn,
+															bill,
+															price:parseFloat(_this.checkbox[indexs].name).toFixed(2),
+															token:restokey.data
+														},
+														success(respay) {
+															console.log(respay)
+														}
+													})
 												},
-												success(respay) {
-													console.log(respay)
+												fail(err){
+													console.log(err)
 												}
 											})
-										},
-										fail(err){
-											console.log(err)
 										}
-									})
-								}
+									}
+								})
+							}else{
+								//这是微信提现
+								uni.request({
+									url:`${app.globalData.Requestpath}user/withdraw`,
+									method:"POST",
+									data:{
+										token:restokey.data,
+										price:parseFloat(_this.checkbox[indexs].name).toFixed(2),
+										user_type:1
+									},
+									success(reswithdrawal) {
+										console.log(reswithdrawal)
+										if(reswithdrawal.data.code==0){
+											app.globalData.showtoastsame("已提交申请,请耐心等候")
+										}else{
+											app.globalData.showtoastsame(reswithdrawal.data.msg)
+										}
+									}
+								})
 							}
-						})
-					}
-				})
+						}
+					})
 			},
 			scrolltolower(){
 				// console.log(111)

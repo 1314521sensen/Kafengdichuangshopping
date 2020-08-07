@@ -5,6 +5,8 @@ Vue.use(Vuex)
 let Requestpath = "http://hbk.huiboke.com/api/"
 
 let state = {
+	detailsbool:false,//首页显示隐藏详情
+	bannerbool:true,//详情页显示信息判断
 	cartList:[],//购物车的数据
 	allSelected:false,//购物车的全选状态
 	count:0,//这是用来存储总价
@@ -58,6 +60,7 @@ let state = {
 	kf_name:"",//这是后台返回来的客服名字
 	sokettime:null,//客服的长连接定时器
 	isconnectserver:false, //联系客服的是否显示 
+	Qrcodeurl:"",//生成分享二维码的地址
 }
 //getters 用于计算
 let getters = {
@@ -114,6 +117,10 @@ let mutations = {
 			success(res) {
 				if(res.data.code==0){
 					let returnApplicationnum = res.data.data.data.version_id.split(".").join("")
+					// console.log(returnApplicationnum,"这是后台的版本号")
+					
+					state.Qrcodeurl = 'http://hbk.huiboke.com'+res.data.data.data.src
+					// console.log(state.Qrcodeurl,"这是下载地址")
 					// console.log(returnApplicationnum > version)
 					if(returnApplicationnum > version){
 						state.isdownload = true
@@ -123,7 +130,7 @@ let mutations = {
 					}else{
 						state.isdownload = false
 						state.wholeisdownload = false
-						_this.commit("getshowmodel",{msg:"已经是最新版本"})
+						// _this.commit("getshowmodel",{msg:"已经是最新版本"})
 					}
 				}
 			}

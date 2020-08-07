@@ -1,6 +1,7 @@
 <template>
  <!-- #ifdef APP-PLUS -->
-		<view>
+	<view>
+		<view v-if="liveanchorsowing">
 			 <video 
 				id="myVideo"
 				:src="url" 
@@ -14,6 +15,7 @@
 				@error="videoerr"
 				@waiting="waiting"
 				@progress="progress"
+				@timeupdate="timeupdate"
 				>
 				<cover-view :style="{width:wdith+'px',height :height+ 'px'}" class="cover-view-box">
 					<scroller scroll-direction="horizontal" :style="{width:wdith+'px',height :height+ 'px'}" class="covercomponent" >
@@ -33,6 +35,8 @@
 				</cover-view>
 			</video>
 		</view>
+		<!-- <liveusersowing v-if="liveanchorsowing==false"></liveusersowing> -->
+	</view>
 <!-- #endif --> 
 </template>
 
@@ -40,6 +44,8 @@
 	import liveleft from "@/components/live/lineleft.nvue"
 	import livemidden from "@/components/live/livemidden.nvue"
 	import liveright from "@/components/live/liveright.nvue"
+	//引入用户观看主播下播的页面
+	// import liveusersowing from "@/components/liveplice/liveuserSowing.vue"
 	export default {
 		// #ifdef APP-PLUS
 		data() {
@@ -53,25 +59,32 @@
 				url:"",
 				livenick:"",
 				roomid:"",
-				livepic:""
+				livepic:"",
+				liveanchorsowing:true,//判断主播是否下播
 			}
 		},
 		methods: {
 			videoerr(e){
 				console.log(e,"这是加载报错的时候")
+				// this.liveanchorsowing = false
 			},
 			waiting(e){
 				console.log(e,"这是加载缓冲的时候")
 			},
 			progress(e){
 				console.log(e,"加载进度")
+			},
+			timeupdate(e){
+				// console.log(e,"播放进度发生变化时"){
+				// this.liveanchorsowing = true
+				// console.log(this.liveanchorsowing)
 			}
 		},
 		components:{
 			liveleft,
 			livemidden,
-			liveright
-			
+			liveright,
+			// liveusersowing
 		},
 		created() {
 			let _this = this
@@ -90,6 +103,15 @@
 		onLoad(opction){
 			// console.log(opction)
 			let {indexs,live_url,livenick,roomid,livepic,uid} = opction
+			// let {indexs} = opction
+			// let url = ""
+			// if(indexs+1 >= 10){
+			// 	url = `rtmp://192.168.1.152:1935/live/live0${parseInt(indexs)+1}`
+			// }else{
+			// 	url = `rtmp://192.168.1.152:1935/live/live00${parseInt(indexs)+1}`
+			// }
+			// this.url = url
+			// console.log(this.url)
 			this.url = live_url
 			this.livenick = livenick
 			this.roomid = roomid

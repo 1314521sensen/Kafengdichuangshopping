@@ -12,6 +12,8 @@
 			:auto-focus="true"
 			:beauty="beauty"
 			:whiteness="whiteness"
+			:min-bitrate="200"
+			:max-bitrate="2000"
 			orientation="vertical"
 			audio-quality="high"
 			device-position="front"
@@ -46,6 +48,7 @@
 						<cover-view class="inp">
 							<input type="text" @focus="focusinp" @blur="blurinp" placeholder="跟大家聊聊" class="font-size-thirty textcolorwrite inptext"></input>
 						</cover-view>
+						
 						<cover-view class="share" @click="share">
 							<cover-image src="/static/Pushflow/fenxiang.png" class="shareimgs"></cover-image>
 						</cover-view>
@@ -129,31 +132,56 @@
 			},
 			Closeby(){
 				const _this = this
-				//点击关播 先把摄像头停止推流
-				// console.log(this.tokey,this.live_nick,this.live_pic,"这是关播的时候")
-				uni.request({
-					url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
-					method:"POST",
-					data:{
-						token:this.tokey,
-						live_nick:this.live_nick,
-						live_pic:this.live_pic,
-						is_living:0
+				_this.context.stop()
+				
+				_this.context.stopPreview({
+					success(e){
+						console.log("关闭摄像头成功",JSON.stringify(e))
 					},
-					success(resclose) {
-						if(resclose.data.code==0){
-							_this.context.stop()
-							//取消预加载
-							// uni.unPreloadPage()
-							uni.switchTab({
-								url:"/pages/index/index"
-							})
-						}
+					fail(err){
+						console.log("关闭失败")
 					}
 				})
+				//取消预加载
+				// uni.unPreloadPage()
+				uni.switchTab({
+					url:"/pages/index/index"
+				})
+				//点击关播 先把摄像头停止推流
+				// console.log(this.tokey,this.live_nick,this.live_pic,"这是关播的时候")
+				// uni.request({
+				// 	url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
+				// 	method:"POST",
+				// 	data:{
+				// 		token:this.tokey,
+				// 		live_nick:this.live_nick,
+				// 		live_pic:this.live_pic,
+				// 		is_living:0
+				// 	},
+				// 	success(resclose) {
+				// 		if(resclose.data.code==0){
+				// 			// _this.context.close()
+				// 			_this.context.stop()
+							
+				// 			_this.context.stopPreview({
+				// 				success(e){
+				// 					console.log("关闭摄像头成功",JSON.stringify(e))
+				// 				},
+				// 				fail(err){
+				// 					console.log("关闭失败")
+				// 				}
+				// 			})
+				// 			//取消预加载
+				// 			// uni.unPreloadPage()
+				// 			uni.switchTab({
+				// 				url:"/pages/index/index"
+				// 			})
+				// 		}
+				// 	}
+				// })
 			},
 			netstatus(e){
-				// console.log(JSON.stringify(e))
+				console.log(JSON.stringify(e))
 			}
 		},
 		created(){
@@ -168,9 +196,10 @@
 			})
 		},
 		onReady(){
-			const _this = this
-			_this.context = uni.createLivePusherContext("livePusher", _this);
-			_this.context.start()
+
+			this.context = uni.createLivePusherContext("livePusher", this);
+			
+			
 			// console.log(this.context)
 			// //开启推流
 			
@@ -185,16 +214,29 @@
 			livemiddengoodshoplist
 		},
 		onLoad(opction) {
+			console.log(3333)
 			const _this = this
 			//获取主播在开播前要直播的商品
-			_this.$store.commit("getliveshoplist")
-			let {index,storeid,beauty,whiteness,url,roomid,livenick,livepic} = opction
+			// _this.$store.commit("getliveshoplist")
+			// let {index,storeid,beauty,whiteness,url,roomid,livenick,livepic} = opction
+			let {index} = opction
+			let url = ""
+			if(index+1 >= 10){
+				 url = `rtmp://192.168.1.152:1935/live/live0${parseInt(index)+1}`
+			}else{
+				 url = `rtmp://192.168.1.152:1935/live/live00${parseInt(index)+1}`
+			}
+			
+			// //临时的
+			// console.log(index)
 			_this.url = url
-			_this.room_id = roomid
-			_this.live_nick = livenick
-			_this.live_pic = livepic
-			_this.beauty = beauty
-			_this.whiteness = whiteness
+			console.log(_this.url)
+			//正式的
+			// _this.room_id = roomid
+			// _this.live_nick = livenick
+			// _this.live_pic = livepic
+			// _this.beauty = beauty
+			// _this.whiteness = whiteness
 			uni.getStorage({
 				key:"bindtokey",
 				success(restokey) {
@@ -206,13 +248,21 @@
 		},
 		destroyed(){
 			console.log("组件已销毁")
-			this.context.stop()
+
+			// this.context.stop()		
+	
+			this.context = null
 			//取消预加载
 			// uni.unPreloadPage()
 		},
-		onHide(){
+		mounted() {
+			console.log(1111)
 			this.context.start()
-		}
+			
+		},
+		// onHide(){
+		// 	this.context.start()
+		// }
 	}
 </script>
 

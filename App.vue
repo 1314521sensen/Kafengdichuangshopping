@@ -72,7 +72,7 @@
 		},
 		//此生命周期只会app打开时 只会触发一次
 		onLaunch() {
-			console.log(111,"为了测试更新")
+			// console.log(111,"为了测试更新")
 			const _this = this
 			//这里为了设置状态栏的高 ----开始
 			uni.getSystemInfo({
@@ -103,9 +103,10 @@
 				
 				uni.getSystemInfo({
 					success(res){
-						console.log(plus.runtime.version)
+						
 						let version = plus.runtime.version
 						let Applicationnum = version.split('.').join('')
+						// console.log(Applicationnum,"这是手机的")
 						//判断用户是安卓还是苹果
 						if(res.platform=="android"){
 							//获取网络状态
@@ -119,18 +120,21 @@
 									}else if(resnetworkType.networkType=="none"){
 										// console.log("无网络")
 									}else{
-										uni.showModal({
-											title:`您正在使用${resnetworkType.networkType}网络`,
-											content:"您确定要更新APP吗",
-											showCancel:true,
-											cancelText:"稍后更新",
-											confirmText:"立即更新",
-											success(resbtn) {
-												if(resbtn.confirm){
-													_this.$store.commit("Appwholeupdate",{version:Applicationnum,modelboll:false})
-												}
-											}
-										})
+										_this.$store.commit("Appwholeupdate",{version:Applicationnum,modelboll:false})
+										// setTimeout(()=>{
+										// 	uni.showModal({
+										// 		title:`您正在使用${resnetworkType.networkType}网络`,
+										// 		content:"您确定要更新APP吗",
+										// 		showCancel:true,
+										// 		cancelText:"稍后更新",
+										// 		confirmText:"立即更新",
+										// 		success(resbtn) {
+										// 			if(resbtn.confirm){
+										// 				_this.$store.commit("Appwholeupdate",{version:Applicationnum,modelboll:false})
+										// 			}
+										// 		}
+										// 	})
+										// },10000)
 									}
 								}
 							})

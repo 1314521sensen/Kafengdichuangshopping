@@ -16,6 +16,8 @@
 				</view>
 			</view>
 		</view>
+		<!-- 这是临时的 -->
+		<!-- <button v-for="(item,index) in 10" style="margin-top:20rpx" @tap="jinru" :data-indexs="index">{{index+1}}</button> -->
 	</view>
 </template>
 

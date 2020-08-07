@@ -81,6 +81,10 @@
 					let arr = this.list.pop()
 					this.list = this.list
 				}
+				uni.setStorage({
+					key: 'searchArr',
+					data:this.list
+				});
 				uni.navigateTo({
 					url:`/pages/Sortinglist/Sortinglist?value=${this.value}`
 				})
@@ -91,14 +95,30 @@
 			delectrecord(){
 				this.list=[]
 				this.value=""
+				uni.removeStorage({ 
+					key:"searchArr",
+					success(res){
+						console.log(res)
+					}
+				})
 			},
 			assignment(item){
 				this.value=item;
+				const _this = this
+				uni.navigateTo({
+					url:`/pages/Sortinglist/Sortinglist?value=${_this.value}`
+				})
 			}
 		},
 		props:["value3"],
 		created() {
-			
+			const _this = this
+			uni.getStorage({
+				key:"searchArr",
+				success(res){
+					_this.list = res.data
+				}
+			})
 		}
 	}
 </script>
