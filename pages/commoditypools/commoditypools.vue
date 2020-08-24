@@ -13,7 +13,7 @@
 		<scroll-view scroll-y="true" class="goods-list" @scrolltolower="scrolltolower">
 			<view class="goods" v-for="(item,index) in goodsList" :key='index'>
 				<view class="img">
-					<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
+					<image :src="imgpath+item.good_pic" mode=""></image>
 				</view>
 				<view class="details">
 					<view class="details-text">
@@ -45,7 +45,8 @@
 				goodsList:[],
 				page:1,
 				tokey:"",
-				statusBar:0
+				statusBar:0,
+				imgpath:this.$store.state.imgyuming
 			};
 		},
 		methods:{

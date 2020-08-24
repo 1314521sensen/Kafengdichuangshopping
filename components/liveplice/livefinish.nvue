@@ -1,0 +1,54 @@
+<template>
+	<!-- #ifdef APP-PLUS -->
+	<cover-view class="livefinish" :style="{width:wdith+'px',height:height+'px'}">
+		<cover-view class="box" :style="{width:wdith+'px',height:height+'px'}">
+			<text class="finishtext font-size-flivety text-weight">直播已结束</text>
+			<text class="returnlive border-plice border-styles" @click="returnlive">返回直播列表</text>
+		</cover-view>
+	</cover-view>
+	<!-- #endif -->
+</template>
+
+<script>
+	// #ifdef APP-PLUS
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		methods: {
+			returnlive(){
+				this.$store.state.liveuserlist = []
+				uni.switchTab({
+					url:`/pages/Liveplatformlist/Liveplatformlist`
+				})
+			}
+		},
+		props:["wdith","height"]
+	}
+	// #endif
+</script>
+
+<style>
+	/* #ifdef APP-PLUS */
+	.box{
+		flex-direction:row;
+		background-color: rgba(0,0,0,.8);
+		justify-content: center;
+	}
+	.finishtext{
+		color: #FFFFFF;
+		position: absolute;
+		top: 560rpx;
+	}
+	.returnlive{
+		position: absolute;
+		bottom: 260rpx;
+		padding: 20rpx 100rpx;
+		border-radius: 60rpx;
+		border-color:#dd4857;
+		color: #FFFFFF;
+	}
+	/* #endif */
+</style>

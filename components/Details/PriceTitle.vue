@@ -6,27 +6,28 @@
 				<text>¥{{pic.good_promotion_price}}</text>
 			</view>
 			<view class="titleicon">
-				<text class="Whethernew" v-if="couplebool=='npt'">新人</text>
+				<text class="Whethernew" v-if="couplebool=='npt' || couplebool=='nlt'">新人</text>
 				<!-- v-if这里判断时候为正常的商品 -->
 				<text class="Whethernew"  v-if="parseInt(good_state)!==1 || parseInt(good_verify)!==1 || parseInt(good_delete)!==0">下架</text>
 				<text class="Whethernew" v-if="liveshopstate=='liveshopstate'">直播商品</text>
 			</view>
 			<view class="CommodityTitle">
 				<!-- 商品的标题 -->
-				<view class="liveicon">
+				<!-- <view class="liveicon">
 					<image :src="this.$store.state.httpUrl+'Details/broadcast.gif'"></image>
-				</view>
+				</view> -->
 				<text v-text="pic.good_title"></text>
 			</view>
 			<view class="sales">
 				<text>快递:{{pic.good_freight?pic.good_freight:'免运费'}}</text>
 				<text>月销{{pic.good_salenum?pic.good_salenum:0}}</text>
-				<text>{{region[0]}}</text>
+				<text>{{areaName}}</text>
 			</view>
 		</view>
 		<view v-if="this.$store.state.bannerbool">
 			<storecoupon :tokey="tokey" :storeid="storeid" msg="领卷" Whatcoupon="0" titlemsg="领劵"></storecoupon>
 			<service></service>
+			<member></member>
 			<bottompopup parameter="参数" :storeid="storeid" :gid="gid"></bottompopup>
 			<evaluation :gid="gid"></evaluation>
 		</view>
@@ -38,13 +39,14 @@
 	import storecoupon from "@/components/Details/storecoupon.vue"
 	import evaluation from "@/components/Details/evaluation.vue"
 	import service from "@/components/Details/service.vue"
+	import member from "@/components/Details/member.vue"
 	export default{
 		// 这是详情页面参数
 		data(){
 			return {
 				unitprice:78.8,
 				title:"coconordic意大利 SC(Square circle)同款茶几简约现代北欧小茶桌",
-				imgyuming:"http://hbk.huiboke.com/uploads/app/image/"
+				imgyuming:`${this.$store.state.imgyuming}/uploads/app/image/`
 			}
 		},
 		methods:{
@@ -54,9 +56,10 @@
 			bottompopup,
 			evaluation,
 			storecoupon,
-			service
+			service,
+			member
 		},
-		props:["pic","region","tokey","storeid","couplebool","good_state","good_verify","good_delete","gid","liveshopstate"],
+		props:["pic","areaName","tokey","storeid","couplebool","good_state","good_verify","good_delete","gid","liveshopstate"],
 	}
 </script>
 

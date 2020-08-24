@@ -1,18 +1,18 @@
 <template>
 	<cover-view class="Closeby parent-padding-leftAndright" :style="{width:windowwidth+'px',height:windowheight+'px','padding-top':statusBarHeight+'px'}">
-		<cover-view class="Shutdown">
+		<cover-view class="Shutdown" @click="closecha">
 			<image src="/static/Pushflow/cha.png" class="cha"></image>
 		</cover-view>
 		<cover-view class="Close-headersection">
 			<cover-view class="headersection-top">
 				<image src="/static/logo.png" class="headersection-top-imgs"></image>
-				<text class="textcolorwrite font-size-forty text-center headersectionshopname">老海家农产品</text>
+				<text class="textcolorwrite font-size-forty text-center headersectionshopname">{{livenickname}}</text>
 			</cover-view>
 			<cover-view class="headersection-bottom">
 				<text class="textcolorwrite font-size-flivety text-center">直播已结束</text>
 				<cover-view class="Closeby-time">
-					<text class="textcolor-Promptreply font-size-thirty">16:32~16:32</text>
-					<text class="textcolor-Promptreply font-size-thirty Close-min">共一分钟</text>
+					<!-- <text class="textcolor-Promptreply font-size-thirty">16:32~16:32</text> -->
+					<text class="textcolor-Promptreply font-size-thirty Close-min">共{{livendmin}}分钟</text>
 				</cover-view>
 			</cover-view>
 		</cover-view>
@@ -55,11 +55,17 @@
 						nums:5,
 						title:"新增粉丝数"
 					}
-				]
+				],
+				livendmin:"",
+				livenickname:""
 			}
 		},
 		methods: {
-			
+			//当主播点击了×的时候
+			closecha(){
+				this.$store.state.liveuserlist = []
+				uni.navigateBack()
+			}
 		},
 		created() {
 			let _this = this
@@ -72,6 +78,11 @@
 			})
 
 		},
+		onLoad(opction){
+			let {livendmin,livenickname} = opction
+			this.livendmin = livendmin
+			this.livenickname = livenickname
+		}
 		//监听用户系统的返回键
 		// onBackPress(options){
 		// 	console.log(options)

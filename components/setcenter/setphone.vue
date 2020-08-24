@@ -131,7 +131,7 @@
 				if(sms!==""){
 					//发起验证原手机的请求
 					uni.request({
-						url:"http://hbk.huiboke.com/api/user/validateOldMobile",
+						url:`${app.globalData.Requestpath}user/validateOldMobile`,
 						method:"POST",
 						data:{
 							token:this.tokey,
@@ -158,7 +158,7 @@
 										if(newssms!==""){
 											//发起绑定新手机的请求
 											uni.request({
-												url:"http://hbk.huiboke.com/api/user/bindNewMobile",
+												url:`${app.globalData.Requestpath}user/bindNewMobile`,
 												method:"POST",
 												data:{
 													token:this.tokey,

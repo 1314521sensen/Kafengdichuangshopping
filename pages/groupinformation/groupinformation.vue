@@ -37,15 +37,46 @@
 		data() {
 			return {
 				statusBar:0,
+				beesgrouplong:0,//团长的缓存
+				beesVip:0,
+				token:0,
 			}
 		},
 		methods: {
 			applyinfo(){
 				//点击请求后台数据
 				//请求完成 进行跳转/pages/headearnings/headearnings
-				uni.redirectTo({
-					url:"/pages/Littlebee/Littlebee?title=小蜜蜂&titlename=userTopupwithdrawal"
-				})
+				console.log(this.beesgrouplong)
+				if(parseInt(this.beesgrouplong)==0){
+					// console.log(parseInt(this.beesVip))
+					if(parseInt(this.beesVip)){
+						// console.log(this.token)
+						uni.request({
+							url:`${app.globalData.Requestpath}user/isCommander`,
+							method:"POST",
+							data:{
+								token:this.token
+							},
+							success(res) {
+								// console.log(res)
+								app.globalData.showtoastsame(res.data.msg)
+							}
+						})
+					}else{
+						uni.redirectTo({
+							url:"/pages/Littlebee/Littlebee?title=小蜜蜂&titlename=userTopupwithdrawal&field=groupinformation"
+						})
+					}
+					
+				}else if(parseInt(this.beesgrouplong)==1){
+					app.globalData.showtoastsame("正在审核申请,请耐心等候...")
+				}else{
+					//当用户支付完成的时候 跳到团长推广的页面
+					uni.redirectTo({
+						url:`/pages/headearnings/headearnings`
+					})
+				}
+				
 			},
 			returnicon(){
 				uni.switchTab({
@@ -58,6 +89,30 @@
 		},
 		components:{
 			// beemembers,
+		},
+		created() {
+			const _this = this
+			//取出团长的缓存 判断团长的有没有申请成功
+			uni.getStorage({
+				key:"beesgrouplong",
+				success(reslong){
+					_this.beesgrouplong = reslong.data
+					console.log(_this.beesgrouplong)
+				}
+			})
+			uni.getStorage({
+				key:"beesVip",
+				success(res) {
+					_this.beesVip = res.data
+				}
+			})
+			uni.getStorage({
+				key:"bindtokey",
+				success(res) {
+					console.log(res)
+					_this.token = res.data
+				}
+			})
 		}
 	}
 </script>

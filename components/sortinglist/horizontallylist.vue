@@ -2,7 +2,7 @@
 	<view class="horizontallylist">
 			<view class="horizontally">
 				<view class="list" v-for="(item,index) in horizontallylist" :key="index" @tap="horizontallydetails(item.good_id,item.store_id)">
-					<image :src="'http://hbk.huiboke.com'+item.good_pic"></image>
+					<image :src="imgpath+item.good_pic"></image>
 					<view class="list-titile">
 						<view class="item-title">{{item.good_title}}</view>
 						<text class="horizontallyprice">¥{{item.good_price}}</text>
@@ -21,7 +21,8 @@
 		data(){
 			return{
 				limit:10,
-				bottomlinetext:"我也是有底线的"
+				bottomlinetext:"我也是有底线的",
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

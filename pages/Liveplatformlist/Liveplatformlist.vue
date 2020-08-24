@@ -1,6 +1,7 @@
 <template>
 	<view class="Liveplatformlist">
-		<view class="Liveplatformlist-top-bg" :style="{'background-image':'url(/static/Liveplatformlist/bg.png)'}">
+		<pageheight :statusBar="statusBar"></pageheight>
+		<!-- <view class="Liveplatformlist-top-bg" :style="{'background-image':'url(/static/Liveplatformlist/bg.png)'}">
 			<pageheight :statusBar="statusBar"></pageheight>
 			<view class="region">
 				<view class="region-left">
@@ -25,76 +26,71 @@
 					</view>
 				</view>
 			</view>
-		</view>
-		<view class="Liveplatformlistbanner" v-show="swiperList.length>0">
+		</view> -->
+		<!-- <view class="Liveplatformlistbanner" v-show="swiperList.length>0">
 			<view class="Liveplatformbanner">
-				<!-- :autoplay="true" interval="5000" duration="500" -->
+				
 				<swiper class="card-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :autoplay="true" interval="5000" duration="500" :circular="true"
 				  @change="cardSwiper" indicator-color="#8799a3"
 				 indicator-active-color="#0081ff">
 					<swiper-item v-for="(item,index) in swiperList" :key="index" :class="cardCur==index?'cur':''">
 						<view class="swiper-item">
-							<image :src="'http://hbk.huiboke.com'+item.live_pic" mode="scaleToFill"></image>
+							<image :src="imgpath+item.live_pic" mode="scaleToFill"></image>
 						</view>
 					</swiper-item>
 				</swiper>
 			</view>
-		</view>
-		<view class="Livelist">
-			<!-- v-for="(item,index) in list 
-				:data-live_url="item.live_url"
-				:data-live_nick="item.live_nick"
-				:data-room_id="item.room_id"
-				:data-live_pic="item.live_pic"
-				:data-uid="item.user_id"-->
-			<view 
-				class="Livelist-item" 
-				:style="{'background-image':'url('+'http://hbk.huiboke.com'+item.live_pic+')'}"
-				v-for="(item,index) in list"
-				:key="index"
-				@tap="viewervideo"
-				:data-live_url="item.live_url"
-				:data-live_nick="item.live_nick"
-				:data-room_id="item.room_id"
-				:data-live_pic="item.live_pic"
-				:data-uid="item.user_id"
-			>
-				<view class="item-top item-plice">
-					<!-- <view class="watchimgs">
-						<image src="/static/Liveplatformlist/liveicon.gif"></image>
-						<text class="watchtext">{{100}}人观看</text>
-					</view> -->
-					<view class="watchimgs">
-						<view class="user_name">
-							<text>{{item.live_nick}}</text>
-						</view>
-						<view class="room_number">
-							<text>{{item.room_id}}</text>
+		</view> -->
+		<scroll-view :scroll-y="true" @scrolltolower="scrolltolower" style="height:95vh;">
+			<view class="Livelist">
+				<view 
+					class="Livelist-item" 
+					:style="{'background-image':'url('+imgpath+item.live_pic+')'}"
+					v-for="(item,index) in list"
+					:key="index"
+					@tap="viewervideo"
+					:data-live_url="item.live_url"
+					:data-live_nick="item.live_nick"
+					:data-room_id="item.room_id"
+					:data-live_pic="item.live_pic"
+				>
+					<view class="item-top item-plice">
+						<!-- <view class="watchimgs">
+							<image src="/static/Liveplatformlist/liveicon.gif"></image>
+							<text class="watchtext">{{100}}人观看</text>
+						</view> -->
+						<view class="watchimgs">
+							<view class="user_name">
+								<text>{{item.live_nick}}</text>
+							</view>
+							<view class="room_number">
+								<text>{{item.room_id}}</text>
+							</view>
 						</view>
 					</view>
-				</view>
-				<view class="item-bottom item-plice">
-					<view class="item-describe">
-						<view class="describe-top">
-							<view class="describe-top-imags">
-								<image :src="'http://hbk.huiboke.com'+item.shop_good_pic"></image>
-							</view>
-							<view class="describe-left">
-								<view class="describedianxin">
-									<image src="/static/liveplatfrom/dianxin.png"></image>
-									<text class="describedzan">155</text>
+					<view class="item-bottom item-plice">
+						<view class="item-describe">
+							<view class="describe-top">
+								<view class="describe-top-imags">
+									<image :src="imgpath+item.shop_good_pic"></image>
 								</view>
-								<text class="shopLivedescribe">{{item.shop_good_title}}</text>
+								<view class="describe-left">
+									<view class="describedianxin">
+										<image src="/static/liveplatfrom/dianxin.png"></image>
+										<text class="describedzan">155</text>
+									</view>
+									<text class="shopLivedescribe">{{item.shop_good_title}}</text>
+								</view>
 							</view>
-						</view>
-						<view class="describe-bottom">
-							<text class="describe-price">{{item.shop_good_price}}</text>
-							<text class="describe-shopstore">{{item.shop_store_name}}</text>
+							<view class="describe-bottom">
+								<text class="describe-price">{{item.shop_good_price}}</text>
+								<text class="describe-shopstore">{{item.shop_store_name}}</text>
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
-		</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -112,7 +108,11 @@
 				dotStyle: false,
 				cardCur: 0,
 				swiperList: [],
-				list:[]
+				list:[],
+				uid:"",
+				uname:"",
+				imgpath:this.$store.state.imgyuming,
+				pages:1
 			}
 		},
 		methods: {
@@ -129,11 +129,10 @@
 			},
 			//点击每一个直播项 跳到不同的主播
 			viewervideo(e){
-				let {index,live_url,live_nick,room_id,live_pic,uid} = e.currentTarget.dataset
+				let {index,live_url,live_nick,room_id,live_pic} = e.currentTarget.dataset
 				// let {index} = e.currentTarget.dataset
-				// console.log(e)
 				uni.navigateTo({
-					url:`/pages/Liveplatform/Liveplatform?indexs=${index}&live_url=${live_url}&livenick=${live_nick}&roomid=${room_id}&livepic=${live_pic}&uid=${uid}`
+					url:`/pages/Liveplatform/Liveplatform?indexs=${index}&live_url=${live_url}&livenick=${live_nick}&roomid=${room_id}&livepic=${live_pic}&uid=${this.uid}&uname=${this.uname}`
 				})
 				// uni.navigateTo({
 				// 	url:`/pages/Liveplatform/Liveplatform?indexs=${index}`
@@ -144,13 +143,17 @@
 				uni.request({
 					url:`${app.globalData.Requestpath}live_user/getLiveUserList`,
 					data:{
-						page:1,
+						page:_this.pages,
 						pageSize:10
 					},
 					success(res) {
 						console.log(res)
 						if(res.data.code==0){
-							_this.list = res.data.data.list
+							if(_this.pages>1){
+								_this.list = _this.list.concat(res.data.data.list)
+							}else{
+								_this.list = res.data.data.list
+							}
 							res.data.data.list.forEach((item,index)=>{
 								// console.log(item)
 								uni.request({
@@ -176,6 +179,11 @@
 						}
 					}
 				})
+			},
+			scrolltolower(){
+				// console.log(1111)
+				this.pages++
+				this.getlivelist()
 			}
 		},
 		onLoad() {
@@ -191,10 +199,30 @@
 					limit:5
 				},
 				success(res) {
-					console.log(res)
 					if(res.data.code==0){
 						_this.swiperList = res.data.data
 					}
+				}
+			})
+			//获取用户详情
+			uni.getStorage({
+				key:"bindtokey",
+				success(restokey){
+					app.globalData.Detectionupdatetokey(restokey.data)
+					uni.request({
+						url:`${app.globalData.Requestpath}user/getUserDetail`,
+						method:"POST",
+						data:{
+							token:restokey.data
+						},
+						success(res) {
+							if(res.data.code==0){
+								let {user_id,user_nick} = res.data.data
+								_this.uid = user_id
+								_this.uname = user_nick
+							}
+						}
+					})
 				}
 			})
 		},
@@ -298,7 +326,7 @@
 		.Livelist-item{
 			overflow: hidden;
 			width:48%;
-			height:500rpx;
+			height:440rpx;
 			// background-color:red;
 			margin-bottom:30rpx;
 			background-size: 100% 100%;

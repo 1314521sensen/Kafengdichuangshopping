@@ -37,6 +37,7 @@
 					uni.getStorage({
 						key:"userbindstate",
 						success:(resuserbindstate)=>{//如果取出了值  判断用户有没有绑定手机号邮箱
+							console.log(resuserbindstate,"这是取值")
 							if(resuserbindstate.data==1){//如果 用户绑定手机号的状态码 为1的话 证明用户已经绑定了 不用再弹出来
 								gengemail = "更换邮箱"
 								_this.list[0].textright = gengemail
@@ -47,7 +48,8 @@
 								_this.showphoneandemailstate(gengemail)
 							}
 						},
-						fail:()=>{//如果没取出来 证明用户还未绑定 就弹出用户绑定的框
+						fail:(err)=>{//如果没取出来 证明用户还未绑定 就弹出用户绑定的框
+							console.log(err)
 							gengemail = "绑定邮箱"
 							_this.showphoneandemailstate(gengemail)
 						}

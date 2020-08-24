@@ -117,8 +117,10 @@
 				key:"searchArr",
 				success(res){
 					_this.list = res.data
+					
 				}
 			})
+			_this.list = [...new Set(_this.list)]
 		}
 	}
 </script>

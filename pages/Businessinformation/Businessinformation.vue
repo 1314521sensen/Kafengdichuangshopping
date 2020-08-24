@@ -26,9 +26,9 @@
 						<!-- <input placeholder="请选择经营项目" name="input" placeholder-class="inpplaceholder"></input> -->
 						<operatingItems @selectiondata="selectiondata"></operatingItems>
 					</view>
-					<view class="ensuregold">
+					<!-- <view class="ensuregold">
 						保证金:<text class="text-red ensuregoldText" v-text="pricetext"></text>
-					</view>
+					</view> -->
 				</view>
 			</view>
 			<button class="Businessbtn" @tap="Businessbtn">下一步</button>
@@ -62,12 +62,12 @@
 				uni.getStorage({
 					key:"bindtokey",
 					success(res){
-						if(!_this.pricetext){
-							uni.showToast({
-								title:"价格不能为0",
-								icon:"none"
-							})
-						}else{
+						// if(!_this.pricetext){
+						// 	uni.showToast({
+						// 		title:"价格不能为0",
+						// 		icon:"none"
+						// 	})
+						// }else{
 							if(_this.message!==""){
 								//检查店铺名称是否存在
 								//这是判断用户选择的不能为空
@@ -99,7 +99,7 @@
 										app.globalData.showtoastsame("请填写完整信息")
 									}
 								}
-							}
+							// }
 					  }
 				})
 			},

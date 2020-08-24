@@ -6,13 +6,13 @@
 			<actionbar bg='false' message='提现' textcolor='#fff' url="/pages/headearnings/headearnings" :Jumpchoose="true"></actionbar>
 			<view class="particular">
 				<!-- 金额  -->
-				<view class="par_price">2000.00</view>
+				<view class="par_price">{{user_commission}}</view>
 				<view class="current_price">当前佣金</view>
-				<view class="withdraw">去提现</view>
+				<view class="withdraw"  @tap="withdrawal">去提现</view>
 			</view>
 		</view>
 		<!-- 提现明细 -->
-		<view class="withdrawalSubsidiary">
+		<!-- <view class="withdrawalSubsidiary">
 			<view class="moneyBox">
 				<scroll-view :scroll-y="true" :style="{'height':70+'vh'}">
 					<view class="scroll-view-item">
@@ -24,7 +24,7 @@
 						</view>
 				</scroll-view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -34,17 +34,54 @@
 	export default {
 		data() {  
 			return {
-				statusBar:0
+				statusBar:0,
+				user_commission:0
 			}
 		},
 		methods: {
-			
+			withdrawal(){
+				const _this = this
+				if(parseInt(_this.user_commission)!==0){
+					uni.getStorage({
+						key:"bindtokey",
+						success(res){
+							uni.request({
+								url:`${app.globalData.Requestpath}user/commission_withdrawal_balance`,
+								method:"POST",
+								data:{
+									token:res.data
+								},
+								success(res){
+									if(res.data.code==0){
+										_this.user_commission = 0
+									}else{
+										app.globalData.showtoastsame(res.data.msg)
+									}
+								}
+							})
+						}
+					})
+				}else{
+					app.globalData.showtoastsame("目前余额,无法提现")
+				}
+			}
 		},
 		components:{
 			actionbar
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		created() {
+			const _this = this
+			 // this.indexshoplist(this.page)
+			 uni.getStorage({
+				 key:"user_commission",
+				 success(res){
+					 // _this.user_commission = res.data
+					 _this.user_commission = res.data
+				 }
+			 })
 		}
 	}
 </script>

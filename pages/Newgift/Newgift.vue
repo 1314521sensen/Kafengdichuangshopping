@@ -43,7 +43,7 @@
 						<view class="commodity" v-for="(item,index) in list" :key="index">
 							<view class="commodity-img">
 								<!-- 这里放的图片 -->
-								<image :src="'http://hbk.huiboke.com'+item.good_pic" class="imgs"></image>
+								<image :src="imgpath+item.good_pic" class="imgs"></image>
 							</view>
 							<view class="commodity-bottom">
 								<view class="commodity-bottom-title">
@@ -93,9 +93,10 @@
 				couponspages:1,
 				couponspagesize:5,
 				couponslist:[],
-				yuming:"http://hbk.huiboke.com/uploads/app/image/",
+				yuming:`${this.$store.state.imgyuming}/uploads/app/image/`,
 				timenum:5000,
-				countswidth:168
+				countswidth:168,
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

@@ -25,19 +25,19 @@
 				// 商品等
 				particularComS:[
 					{
-						urls:"/static/headearning/Canpush.png",
+						urls:`${this.$store.state.httpUrl}headearning/Canpush.png`,
 						parText:"可推商品"
 					},
+					// {
+					// 	urls:`${this.$store.state.httpUrl}headearning/historyshop.png`,
+					// 	parText:"历史产品"
+					// },
+					// {
+					// 	urls:`${this.$store.state.httpUrl}headearning/shopdetails.png`,
+					// 	parText:"商品详细"
+					// },
 					{
-						urls:"/static/headearning/historyshop.png",
-						parText:"历史产品"
-					},
-					{
-						urls:"/static/headearning/shopdetails.png",
-						parText:"商品详细"
-					},
-					{
-						urls:"/static/headearning/withdrawal.png",
+						urls:`${this.$store.state.httpUrl}headearning/withdrawal.png`,
 						parText:"提现"
 					}	
 				]
@@ -51,15 +51,15 @@
 					uni.navigateTo({
 						url:"/pages/commodityshop/commodityshop"
 					})
-				}else if(indexs==1){
+				}else if(indexs==5){
 					uni.navigateTo({
 						url:"/pages/historyofgoods/historyofgoods"
 					})
-				}else if(indexs==2){
+				}else if(indexs==6){
 					uni.navigateTo({
 						url:"/pages/commoditydetails/commoditydetails"
 					})
-				}else if(indexs==3){
+				}else if(indexs==1){
 					uni.navigateTo({
 						url:"/pages/withdrawdeposit/withdrawdeposit"
 					})

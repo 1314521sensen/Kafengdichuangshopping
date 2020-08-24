@@ -11,6 +11,7 @@
 						:room_id="roomid"
 						:live_nick="livenick"
 						:live_pic="livepic"
+						:cont="cont"
 					>
 					</liveroomtopinfo>
 					<!--  -->
@@ -28,7 +29,7 @@
 			<cover-view class="midden-bottom" :style="{height:(componentheight/2)+'px','padding-bottom':(bottomheight+10)+'px'}">
 				<cover-view class="midden-bottom-childBottom">
 					
-					<livechatlist :componentwidth="componentwidth" :list="list"></livechatlist>
+					<livechatlist :componentwidth="componentwidth"></livechatlist>
 					<!-- 引入文本框 -->
 					<!-- <inptext :componentheight="componentheight" :keyboardheight="keyboardheight" :componentwidth="componentwidth"></inptext> -->
 					<cover-view class="bottomevent parent-padding-leftAndright" :style="{width:componentwidth+'px'}" :class="inpbool?'bottomeventcolor':'bottomeventweicolor'">
@@ -80,16 +81,6 @@
 	export default {
 		data(){
 			return {
-				list:[
-					"这手速可以大萨达撒大师大多大大大大萨达撒",
-					"这手速可以大萨达撒大师大多大大大大萨达撒",
-					"这手速可以大萨达撒大师大多大大大大萨达撒",
-					"这手速可以大萨达撒大师大多大大大大萨达撒",
-					"这手速可以大萨达撒大师大多大大大大萨达撒",
-					"这手速可以大萨达撒大师大多大大大大萨达撒",
-					"这手速可以大萨达撒大师大多大大大大萨达撒",
-					"这手速可以大萨达撒大师大多大大大大萨达撒"
-				],
 				shopbool:false,
 				keyboardheight:0,//键盘高度
 				reportbool:true,//举报bool值
@@ -99,7 +90,7 @@
 				inptvalue:"",//获取inp的内容
 			}
 		},
-		props:["componentwidth","componentheight","statusheight","bottomheight","livenick","roomid","livepic"],
+		props:["componentwidth","componentheight","statusheight","bottomheight","livenick","roomid","livepic","uname","uid","cont"],
 		methods:{
 			//这是点击了购物标图片
 			zhiboshop(e){
@@ -171,8 +162,32 @@
 			},
 			//当用户点击了消息发送按钮的时候
 			btnsend(){
+				const _this = this
 				// console.log(this.inptvalue)
-				this.inptvalue = ""
+				let btnmsg = {
+					type:'liveChatMessage',
+					data:{
+						to_id:"",
+						to_name:"",
+						to_group:_this.roomid,
+						content:_this.inptvalue,
+						from_name:_this.uname,
+						from_id:_this.uid,
+						from_avatar:""
+					}
+				}
+				let usermsg = {
+					name:_this.uname,
+					content:_this.inptvalue
+				}
+				// console.log(JSON.stringify(btnmsg))
+				uni.sendSocketMessage({
+					data:JSON.stringify(btnmsg),
+					success(resmsg) {
+						_this.$store.commit("livereceivemsg",{msg:usermsg})
+						_this.inptvalue = ""
+					}
+				})
 			}
 		},
 		components:{

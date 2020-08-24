@@ -1,113 +1,118 @@
 <template>
-	<view class="Purchasepage">
-		<pageheight :statusBar="statusBar"></pageheight>
-		<actionbar url="/pages/PersonalMy/PersonalMy" message="确认订单"></actionbar>
-		<view class="Buycontent">
-			<view class="Shippingaddress" @tap="Addressmodification">
-				<view class="Shippingaddress-left">
-					<view class="imgs">
-						<image src="/static/dingwei/dingwei.png"></image>
-					</view>
-				</view>
-				<view class="Shippingaddress-right">
-					<view class="Shippingaddress-right-title">
-						<text>{{Username}}</text>
-						<text>{{Userphone}}</text>
-					</view>
-					<view class="Receivingaddress">
-						<view class="address">
-							{{Userselect}}
+	<view>
+		<view class="Purchasepage" v-show="openidbool">
+			<pageheight :statusBar="statusBar"></pageheight>
+			<actionbar url="/pages/PersonalMy/PersonalMy" message="确认订单"></actionbar>
+			<view class="Buycontent">
+				<view class="Shippingaddress" @tap="Addressmodification">
+					<view class="Shippingaddress-left">
+						<view class="imgs">
+							<image src="/static/dingwei/dingwei.png"></image>
 						</view>
-						<text class="lg text-gray cuIcon-right"></text>
+					</view>
+					<view class="Shippingaddress-right">
+						<view class="Shippingaddress-right-title">
+							<text>{{Username}}</text>
+							<text>{{Userphone}}</text>
+						</view>
+						<view class="Receivingaddress">
+							<view class="address">
+								{{Userselect}}
+							</view>
+							<text class="lg text-gray cuIcon-right"></text>
+						</view>
 					</view>
 				</view>
 			</view>
-		</view>
-		<view class="Buycontent purchase-order">
-			<!-- 到时候循环这个order就可以 -->
-			<view class="order" v-for="(item,index) in orderinfolist" :key="index">
-				<view class="order-title">
-					{{item.store_name}}
-				</view>
-				<view class="shopgoosorder">
-					<view class="shopgoosorder-left">
-						<image :src="'http://hbk.huiboke.com'+item.good_pic"></image>
+			<view class="Buycontent purchase-order">
+				<!-- 到时候循环这个order就可以 -->
+				<view class="order" v-for="(item,index) in orderinfolist" :key="index">
+					<view class="order-title">
+						{{item.store_name}}
 					</view>
-					<view class="shopgoosorder-right">
-						<view class="shopgoosorder-title">
-							{{item.good_name}}
+					<view class="shopgoosorder">
+						<view class="shopgoosorder-left">
+							<image :src="imgpath+item.good_pic"></image>
 						</view>
-						<view class="shopgoosorder-pic">
-							<text>¥{{item.good_price}}</text>
-							<text>×{{item.good_num}}</text>
-						</view>
-					</view>
-				</view>
-				<view class="Deliverynote">
-					<view class="distribution">
-						<view class="distribution-left">
-							<text>配送方式</text>
-							<text>普通配送</text>
-						</view>
-						<view class="distribution-right">
-							<!-- {{parseInt(item.good_freight)}} -->
-							<text>{{parseInt(item.good_freight)?item.good_freight+'元':'包邮配送'}}</text>
-						</view>
-					</view>
-					<!-- 这是优惠券的组件 -->
-					<storecoupon msg="使用" titlemsg="使用优惠券" :tokey="tokey" :storeid="item.store_id" :couplebooltext="couplebooltext"
-					 Whatcoupon="1" :Orderpaymentamount="item.good_price*item.good_num" @dingdancoupon="dingdancoupon" v-if="orderinfolist.length<=1"></storecoupon>
-					<view class="distribution note">
-						<view class="cu-form-group">
-							<view class="title">订单备注</view>
-							<input placeholder="选填,请先和商家协商一致" name="input" v-model="value"></input>
-						</view>
-					</view>
-					<view class="Payprice">
-						<text>共{{item.good_num}}件</text>
-						<text>小计:</text>
-						<!-- Favorablebalance优惠卷的面额 有值的时候采用有值 没值的时候采用0 -->
-						<!--  -->
-						<text class="text-yellow" v-text="'¥'+(Number((item.good_price*item.good_num+Number(item.good_freight?item.good_freight:0))-(Favorablebalance?Favorablebalance:0)).toFixed(2))">
-						</text>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="detailscar">
-			<view class="detailscar-pic">
-				<text>共{{totalnumber}}件,</text>
-				<text>合计</text>
-				<!-- v-text="'¥'+((price*nums+freight)-(Favorablebalance?Favorablebalance:0)).toFixed(2)" -->
-				<text>{{Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2)}}</text>
-				<!-- @tap="priceorder showModal" -->
-				<button class="cu-btn round bg-orange" @tap="showModal" data-target="bottomModal" :data-total_price="String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2))">提交订单</button>
-			</view>
-		</view>
-		<!-- 底部弹出框 框里面嵌套单选-->
-		<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
-			<view class="cu-dialog">
-				<view class="cu-bar bg-white cu-modal-left-padding">
-					<view class="action text-blue" @tap="hideModal">取消支付</view>
-					<view class="action text-green" @tap="Determinepayment">确定支付</view>
-				</view>
-				<view class="padding-xl">
-					<radio-group class="block" @change="RadioChange">
-						<view class="cu-list menu text-left">
-							<view class="cu-item" v-for="(item,index) in list" :key="index">
-								<label class="flex justify-between align-center flex-sub">
-									<view class="flex-sub">{{item}}</view>
-									<radio class="round" :class="radio=='radio' + index?'checked':''" :checked="radio=='radio' + index?true:false"
-									 :value="'radio' + index"></radio>
-								</label>
+						<view class="shopgoosorder-right">
+							<view class="shopgoosorder-title">
+								{{item.good_name}}
+							</view>
+							<view class="shopgoosorder-pic">
+								<text>¥{{item.good_price}}</text>
+								<text>×{{item.good_num}}</text>
 							</view>
 						</view>
-					</radio-group>
+					</view>
+					<view class="Deliverynote">
+						<view class="distribution">
+							<view class="distribution-left">
+								<text>配送方式</text>
+								<text>普通配送</text>
+							</view>
+							<view class="distribution-right">
+								<!-- {{parseInt(item.good_freight)}} -->
+								<text>{{Number(item.good_freight)?item.good_freight+'元':'包邮配送'}}</text>
+							</view>
+						</view>
+						<!-- 这是优惠券的组件 -->
+						<storecoupon msg="使用" titlemsg="使用优惠券" :tokey="tokey" :storeid="item.store_id" :couplebooltext="couplebooltext"
+						 Whatcoupon="1" :Orderpaymentamount="item.good_price*item.good_num" @dingdancoupon="dingdancoupon" v-if="orderinfolist.length<=1 && good_type!=='nlt'"></storecoupon>
+						<view class="distribution note">
+							<view class="cu-form-group">
+								<view class="title">订单备注</view>
+								<input placeholder="选填,请先和商家协商一致" name="input" v-model="value"></input>
+							</view>
+						</view>
+						<view class="Payprice">
+							<text>共{{item.good_num}}件</text>
+							<text>小计:</text>
+							<!-- Favorablebalance优惠卷的面额 有值的时候采用有值 没值的时候采用0 -->
+							<!--  -->
+							<text class="text-yellow" v-text="'¥'+(Number((item.good_price*item.good_num+Number(item.good_freight?item.good_freight:0))-(Favorablebalance?Favorablebalance:0)).toFixed(2))">
+							</text>
+						</view>
+					</view>
 				</view>
 			</view>
+			<view class="detailscar">
+				<view class="detailscar-pic">
+					<text>共{{totalnumber}}件,</text>
+					<text>合计</text>
+					<!-- v-text="'¥'+((price*nums+freight)-(Favorablebalance?Favorablebalance:0)).toFixed(2)" -->
+					<text>{{Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2)}}</text>
+					<!-- @tap="priceorder showModal" -->
+					<button class="cu-btn round bg-orange" @tap="showModal" data-target="bottomModal" :data-total_price="String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2))">提交订单</button>
+				</view>
+			</view>
+			<!-- 底部弹出框 框里面嵌套单选-->
+			<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
+				<view class="cu-dialog">
+					<view class="cu-bar bg-white cu-modal-left-padding">
+						<view class="action text-blue" @tap="hideModal">取消支付</view>
+						<view class="action text-green" @tap="Determinepayment">确定支付</view>
+					</view>
+					<view class="padding-xl">
+						<radio-group class="block" @change="RadioChange">
+							<view class="cu-list menu text-left">
+								<view class="cu-item" v-for="(item,index) in list" :key="index">
+									<label class="flex justify-between align-center flex-sub">
+										<view class="flex-sub">{{item}}</view>
+										<radio class="round" :class="radio=='radio' + index?'checked':''" :checked="radio=='radio' + index?true:false"
+										 :value="'radio' + index"></radio>
+									</label>
+								</view>
+							</view>
+						</radio-group>
+					</view>
+				</view>
+			</view>
+			<passkeyborad :show="passwordzhifutanchuang" :isIphoneX="isIphoneX" @Enterpasswordcompletepayment="Enterpasswordcompletepayment"
+			 :balancetext="String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2))" @close="close"></passkeyborad>
 		</view>
-		<passkeyborad :show="passwordzhifutanchuang" :isIphoneX="isIphoneX" @Enterpasswordcompletepayment="Enterpasswordcompletepayment"
-		 :balancetext="String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2))" @close="close"></passkeyborad>
+		<!-- #ifdef APP-PLUS -->
+		<wxbindopen v-show="openidbool==false"></wxbindopen>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -119,6 +124,8 @@
 	//引入插件密码弹窗页面
 	import passkeyborad from '@/components/yzc-paykeyboard/yzc-paykeyboard.vue'
 	//这是购买订单页面
+	//引入微信绑定的页面
+	import wxbindopen from "@/components/myPersonal/wxbindopnid.vue"
 	const app = getApp();
 	export default {
 		data() {
@@ -168,7 +175,12 @@
 				passwordindex: 0, //用于判断用户输入错几次密码
 				share_code: "", //用于保存分享码
 				share_from: "", // 用于保存分享的来源
-				total_price: ''
+				total_price: '',
+				mali: 0, //运费
+				code: 0,
+				imgpath:this.$store.state.imgyuming,
+				openidbool:true,
+				good_type:"",//type类型看看优惠券显不显示
 			}
 		},
 		methods: {
@@ -244,96 +256,104 @@
 					}
 				})
 				//判断用户地址中有没有
-				if (parseInt(addresslength) !== 0) {
-					if (this.address_id !== "") { //判断新用户有没有地址
-						if (this.way == 1) { //购物车过来的时候发起的请求 购物车商品生成待付款订单
-							let str = _this.ordergidlist.substr(0, _this.ordergidlist.length - 1)
-							uni.request({
-								url: `${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
-								method: "POST",
-								data: {
-									token: this.tokey,
-									c_ids: str, //购物车选中的购物商品的id   _this.ordergidlist
-									o_from: this.o_from, //根据用户哪一端进来的
-									address_id: this.address_id, //地址对应的id
-									coupon_ids: this.coupondetails, //这是返回用户选择的那张优惠券
-									p_msg: Leavearr //用户的留言
-								},
-								success(res) {
-									// console.log(res)
-									if (res.data.code == 0) {
-										//获取订单编号数组
-										_this.orderSnArray = res.data.data.orderSnArray
-										//选择支付的框隐藏
-										if (payid == "wxpay") {
-											//拿到订单流水号 用于微信支付 传给后台
-											// console.log(res.data.data.swiftNo)
-											_this.payweixin(res.data.data.swiftNo)
-										} else if (payid == "YUE") {
-											_this.hideModal()
-											_this.Detectionpaymentpassword(_this)
-										}
-									} else if (res.data.code == 1 && res.data.msg == "无效的商品,返回上一步") { //当用户结算的时候 看看商品有没有问题
-										_this.hideModal()
-										app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
-									} else {
+				if (_this.code == 0) {
+					//判断用户地址中有没有
 
-									}
-								}
-							})
-						} else { //订单详情过来的
-							// console.log(this.orderinfolist)
-							if (this.coupondetails.length <= 0) {
-								this.cid = ""
-								this.ctype = ""
-							} else {
-								this.cid = this.coupondetails[0].c_id
-								this.ctype = this.coupondetails[0].c_type
-							}
-							uni.request({
-								url: `${app.globalData.Requestpath}order/createUnPayOrderInfo`,
-								method: "POST",
-								data: {
-									token: this.tokey,
-									gid: _this.orderinfolist[0].good_id, //商品的id
-									spec_id: _this.orderinfolist[0].spec_id,
-									quantity: _this.orderinfolist[0].good_num,
-									o_from: this.o_from, //根据用户哪一端进来的
-									address_id: this.address_id, //地址对应的id
-									p_msg: this.value, //用户的留言
-									c_id: this.c_ids, //这是返回用户选择的那张优惠券
-									c_type: this.ctype ? 'store' : 'platform',
-									share_code: this.share_code,
-									share_from: this.share_from
-								},
-								success(res) {
-									// console.log(res)
-									// console.log(res.data.data.orderSnArray)//订单编号
-									// console.log(res.data.data.swiftNo)//订单流水号
-									//orderSnArray订单的编组 支付的时候用到
-									if (res.data.code == 0) { //获取到支付前的数据
-										//获取订单编号数组
-										_this.orderSnArray = res.data.data.orderSnArray
-										if (payid == "wxpay") {
-											//拿到订单流水号 用于微信支付 传给后台
-											// console.log(res.data.data.swiftNo)
-											_this.payweixin(res.data.data.swiftNo)
-										} else if (payid == "YUE") {
+					if (parseInt(addresslength) !== 0) {
+						if (this.address_id !== "") { //判断新用户有没有地址
+							if (this.way == 1) { //购物车过来的时候发起的请求 购物车商品生成待付款订单
+								let str = _this.ordergidlist.substr(0, _this.ordergidlist.length - 1)
+								uni.request({
+									url: `${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
+									method: "POST",
+									data: {
+										token: this.tokey,
+										c_ids: str, //购物车选中的购物商品的id   _this.ordergidlist
+										o_from: this.o_from, //根据用户哪一端进来的
+										address_id: this.address_id, //地址对应的id
+										coupon_ids: this.coupondetails, //这是返回用户选择的那张优惠券
+										p_msg: Leavearr //用户的留言
+									},
+									success(res) {
+										// console.log(res)
+										if (res.data.code == 0) {
+											//获取订单编号数组
+											_this.orderSnArray = res.data.data.orderSnArray
 											//选择支付的框隐藏
+											if (payid == "wxpay") {
+												//拿到订单流水号 用于微信支付 传给后台
+												// console.log(res.data.data.swiftNo)
+												_this.payweixin(res.data.data.swiftNo)
+											} else if (payid == "YUE") {
+												_this.hideModal()
+												_this.Detectionpaymentpassword(_this)
+											}
+										} else if (res.data.code == 1 && res.data.msg == "无效的商品,返回上一步") { //当用户结算的时候 看看商品有没有问题
 											_this.hideModal()
-											//检测是否设置了支付密码
-											_this.Detectionpaymentpassword(_this)
+											app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
+										} else {
+
 										}
-									} else if (res.data.code == 1 && res.data.msg == "无效的商品,返回上一步") { //当用户结算的时候 看看商品有没有问题
-										_this.hideModal()
-										app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
 									}
+								})
+							} else { //订单详情过来的
+								// console.log(this.orderinfolist)
+								if (this.coupondetails.length <= 0) {
+									this.cid = ""
+									this.ctype = ""
+								} else {
+									this.cid = this.coupondetails[0].c_id
+									this.ctype = this.coupondetails[0].c_type
 								}
-							})
+								uni.request({
+									url: `${app.globalData.Requestpath}order/createUnPayOrderInfo`,
+									method: "POST",
+									data: {
+										token: this.tokey,
+										gid: _this.orderinfolist[0].good_id, //商品的id
+										spec_id: _this.orderinfolist[0].spec_id,
+										quantity: _this.orderinfolist[0].good_num,
+										o_from: this.o_from, //根据用户哪一端进来的
+										address_id: this.address_id, //地址对应的id
+										p_msg: this.value, //用户的留言
+										c_id: this.c_ids, //这是返回用户选择的那张优惠券
+										c_type: this.ctype ? 'store' : 'platform',
+										share_code: this.share_code,
+										share_from: this.share_from
+									},
+									success(res) {
+										console.log(res)
+										// console.log(res.data.data.orderSnArray)//订单编号
+										// console.log(res.data.data.swiftNo)//订单流水号
+										//orderSnArray订单的编组 支付的时候用到
+										if (res.data.code == 0) { //获取到支付前的数据
+											//获取订单编号数组
+											_this.orderSnArray = res.data.data.orderSnArray
+											console.log(payid)
+											if (payid == "wxpay") {
+												//拿到订单流水号 用于微信支付 传给后台
+												// console.log(res.data.data.swiftNo)
+												_this.payweixin(res.data.data.swiftNo)
+											} else if (payid == "YUE") {
+												//选择支付的框隐藏
+												_this.hideModal()
+												//检测是否设置了支付密码
+												_this.Detectionpaymentpassword(_this)
+											}
+										} else if (res.data.code == 1 && res.data.msg == "无效的商品,返回上一步") { //当用户结算的时候 看看商品有没有问题
+											_this.hideModal()
+											app.globalData.showtoastsame("此商品为无效商品,正在审核,请后期关注")
+										}
+									}
+								})
+							}
+						} else {
+							_this.hideModal()
+							app.globalData.showtoastsame("请选择地址进行支付")
 						}
 					} else {
 						_this.hideModal()
-						app.globalData.showtoastsame("请选择地址进行支付")
+						app.globalData.showtoastsame("请到地址栏中添加地址")
 					}
 				} else {
 					_this.hideModal()
@@ -418,7 +438,7 @@
 							uni.reLaunch({
 								url: "/pages/Paysuccess/Paysuccess"
 							})
-							if(_this.way==2){
+							if (_this.way == 2) {
 								_this.getcommission()
 							}
 						} else {
@@ -447,10 +467,9 @@
 				})
 			},
 			//封装个方法 用来处理活动佣金问题
-			getcommission(){
+			getcommission() {
 				const _this = this
-				console.log()
-				if(_this.share_from!==''){
+				if (_this.share_from !== '') {
 					uni.getStorage({
 						key: 'bindtokey',
 						success(restokey) {
@@ -463,34 +482,34 @@
 								good_price,
 								good_num
 							} = _this.orderinfolist[0]
-							console.log(_this.orderSnArray,"这是订单的号")
+							console.log(_this.orderSnArray, "这是订单的号")
 							uni.request({
-								url:`${app.globalData.Requestpath}good/getCmsSettlementConfigInfo`,
-								method:"POST",
-								data:{
-									token:restokey.data,
-									type:_this.share_from,
-									gid:good_id
+								url: `${app.globalData.Requestpath}good/getCmsSettlementConfigInfo`,
+								method: "POST",
+								data: {
+									token: restokey.data,
+									type: _this.share_from,
+									gid: good_id
 								},
 								success(rescommissionconfiguration) {
-									if(rescommissionconfiguration.data.code==0){
+									if (rescommissionconfiguration.data.code == 0) {
 										uni.request({
-											url:`${app.globalData.Requestpath}CmsSettlement/CommissionSettlement`,
-											method:"POST",
-											data:{
-												token:restokey.data,
-												order_sn:_this.orderSnArray[0],
-												store_id:store_id,
-												store_name:store_name,
-												good_id:good_id,
-												good_title:good_name,
-												good_pic:good_pic,
-												good_price:good_price,
-												good_num:good_num,
+											url: `${app.globalData.Requestpath}CmsSettlement/CommissionSettlement`,
+											method: "POST",
+											data: {
+												token: restokey.data,
+												order_sn: _this.orderSnArray[0],
+												store_id: store_id,
+												store_name: store_name,
+												good_id: good_id,
+												good_title: good_name,
+												good_pic: good_pic,
+												good_price: good_price,
+												good_num: good_num,
 												total_price: _this.total_price,
-												cms_category:rescommissionconfiguration.data.data.good_type,
-												settlement_type:rescommissionconfiguration.data.data.cms_type,
-												cms_rate:rescommissionconfiguration.data.data.cms_value
+												cms_category: rescommissionconfiguration.data.data.good_type,
+												settlement_type: rescommissionconfiguration.data.data.cms_type,
+												cms_rate: rescommissionconfiguration.data.data.cms_value
 											},
 											success(rescommissioninfo) {
 												console.log(rescommissioninfo)
@@ -501,12 +520,13 @@
 							})
 						}
 					})
-				}else{
+				} else {
 					return
 				}
 			},
 			//封装个微信支付
 			payweixin(swiftNo) {
+				console.log(1111)
 				const _this = this
 				let appid = 'wx0f9236b57d357dbb';
 				let payId = "wxpay"
@@ -519,25 +539,85 @@
 					},
 					success(res) {
 						console.log(res)
+						console.log(_this.way)
 						if (res.statusCode == 200) {
+							//临时---开始
+							let {
+								appid,
+								noncestr,
+								partnerid,
+								prepayid,
+								timestamp,
+								sign,
+								out_trade_no
+							} = res.data
+							let packages = res.data.package
+							let obj = {
+								appid,
+								noncestr,
+								package: packages,
+								partnerid,
+								prepayid,
+								timestamp,
+								sign
+							}
+							console.log(obj)
+							let str = out_trade_no
+							//临时---结束
 							uni.requestPayment({
 								provider: 'wxpay',
-								orderInfo: res.data,
+								orderInfo: obj,
 								success(e) {
 									console.log("success", e);
-									uni.showToast({
-										title: "支付完成"
+									
+									//微信支付 请求后端的接口进行更改订单状态
+									console.log(swiftNo)
+									uni.request({
+										url:`${app.globalData.Requestpath}notify/wechatpay`,
+										method:'POST',
+										data:{
+											pay_type: 1,
+											swift_id: swiftNo
+										},
+										success(res) {
+											console.log(res)
+											//只要支付成功以后就到订单页面
+											if(res.data.code==0){
+												uni.showToast({
+													title: "支付完成"
+												})
+												setTimeout(()=>{
+													uni.redirectTo({
+														url:`/pages/orderpageRouter/orderpageRouter`
+													})
+												},1000)
+											}else{
+												uni.showToast({
+													title: `${res.data.msg}`
+												})
+												setTimeout(()=>{
+													uni.redirectTo({
+														url:`/pages/orderpageRouter/orderpageRouter`
+													})
+												},1000)
+											}
+											_this.hideModal()
+										},
+										fail(err){
+											console.log(err)
+										}
 									})
-									if(_this.way==2){
+									if (_this.way == 2) {
 										_this.getcommission()
 									}
 								},
-								fail(e) {
-									console.log('fail', e);
-									uni.showModal({
-										content: "支付失败:" + JSON.stringify(e),
-										showCancel: false
-									})
+								fail(err) {
+									console.log(err)
+									setTimeout(()=>{
+										uni.redirectTo({
+											url:`/pages/orderpageRouter/orderpageRouter`
+										})
+									},1000)
 								}
 							})
 						}
@@ -592,16 +672,24 @@
 			uni.getStorage({
 				key: "orderinfo",
 				success(res) {
-					// console.log(res)
+					console.log(res)
 					_this.orderinfolist = res.data
+					let stoIdArr = [] //开始的数组
+					let stoIdSet = [] //去重后的店铺ID
 					_this.orderinfolist.forEach((item, index) => {
+						item.good_price = (item.good_price).replace(/,/g,'')
+						stoIdArr.push(item.store_id)
 						// console.log(item)
 						_this.totalnumber += item.good_num
 						// console.log(item.good_freight)
 						if (item.good_freight !== undefined) {
-							_this.totalprice += (item.good_price * item.good_num) + Number(item.good_freight)
+							console.log(111)
+							_this.totalprice += (item.good_price * item.good_num)
 						} else {
+							console.log(2222)
+							console.log(item.good_price,item.good_num)
 							_this.totalprice += item.good_price * item.good_num
+							console.log(_this.totalprice)
 						}
 						// console.log(item.way)
 						if (item.way) {
@@ -612,8 +700,10 @@
 							_this.ordergidlist += item.cart_id + ','
 						}
 						//这块的判断是不是新人  新人的话 就是1 否则就是0
-						if (item.good_type == 'npt' || item.good_type == 1) {
+						if (item.good_type == 'npt' || item.good_type == 1 || item.good_type=='nlt') {
 							_this.couplebooltext = 1
+							_this.good_type = item.good_type
+							console.log(_this.good_type)
 						} else {
 							_this.couplebooltext = 0
 						}
@@ -621,21 +711,46 @@
 							//这是直播
 							_this.share_code = item.share_code
 							_this.share_from = 1
-						} else if(item.share_code && item.share_from == 3){
+						} else if (item.share_code && item.share_from == 3) {
+							
 							//这是团长
 							_this.share_code = item.share_code
 							_this.share_from = 3
-						}else{
+							// console.log(_this.share_code,_this.share_from,"这是团长进来的")
+						} else {
+							// console.log("这是普通商品")
 							_this.share_code = ""
 							_this.share_from = ""
 						}
 					})
+					stoIdSet = ([...new Set(stoIdArr)])
+					console.log(stoIdSet,"22333")
+					for (var i = 0; i < stoIdSet.length; i++) {
+						let arr = []
+						_this.orderinfolist.forEach((item, index) => {
+							if (item.store_id == stoIdSet[i]) {
+								arr.push(item.good_freight)
+								// console.log(item.good_freight,i)
+								// item.good_freight.sort(a,b)
+							}
+						})
+						// console.log(arr)
+						let arrayMax = arr.sort()
+						// console.log(arrayMax[arrayMax.length-1],"排序")
+						_this.mali += Number(arrayMax[arrayMax.length - 1])
+
+					}
+					// console.log(  _this.mali.toFixed(2) ,'最终的价格')
+					_this.totalprice += Number(_this.mali)
 					let arr = String(_this.totalprice).split('.')
+					console.log(arr)
 					if (Boolean(arr[1])) {
 						let strtow = arr[1].substr(0, 2)
 						_this.totalprice = arr[0] + '.' + strtow
+						console.log(_this.totalprice,1111)
 					} else {
 						_this.totalprice = _this.totalprice
+						console.log(_this.totalprice,2222)
 					}
 				}
 			})
@@ -653,7 +768,8 @@
 		components: {
 			actionbar,
 			storecoupon,
-			passkeyborad
+			passkeyborad,
+			wxbindopen
 		},
 		onShow() {
 			// console.log("onsho先执行")
@@ -664,7 +780,46 @@
 					_this.tokey = res.data
 				}
 			})
-		}
+			//取出
+			// #ifdef APP-PLUS
+			uni.getStorage({
+				key:"bindopenid",
+				success(res){
+					// console.log(res)
+					_this.openidbool = true
+				},
+				fail(err){
+					_this.openidbool = false
+				}
+			})
+			// #endif
+		},
+		created() {
+			const _this = this
+			uni.getStorage({
+				key: "bindtokey",
+				success(res) {
+					uni.request({ //这个是获取一条收货地址的详情
+						url: `${app.globalData.Requestpath}user/getShippingAddressList`,
+						method: "POST",
+						data: {
+							token: res.data,
+							page: 1,
+							pageSize: 1,
+						},
+						success(reslove) {
+							console.log(reslove)
+							_this.code = reslove.data.code
+							if (reslove.data.code !== 0) {
+								_this.Username = ""
+								_this.Userphone = ""
+								_this.Userselect = ""
+							}
+						}
+					})
+				}
+			})
+		},
 	}
 </script>
 

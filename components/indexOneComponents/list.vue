@@ -1,20 +1,20 @@
 <template>
 	<view class="list">
 		<!-- <scroll-view scroll-y="true" @scrolltolower="scrolltolower"  class="scrolltolower-list"> -->
-			<Details v-if="this.$store.state.detailsbool" :DetailsList="DetailsList"></Details>
+			
 			<view class="cu-list menu-avatar">
 				<!-- 这是背景图片 -->
 				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
 				<!-- <button class="cu-btn bg-red margin-tb-sm lg" :style="{'display':display}">删除你不想要的商品</button> -->
+				<!-- 长按@longpress="longpress(item.good_id?item.good_id:item.goods_id,item.store_id)" -->
 				<view class="cu-item" v-for="(item,index) in list" :key="index">
 					<view class="cu-item-left" 
 						@tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)"
-						@longpress="longpress(item.good_id?item.good_id:item.goods_id,item.store_id)"
+						
 					>
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
-						<!-- :style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"> -->
 						<view class="cu-avatar round lg cu-item-left-bg"
-							:style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"
+							:style="{'background-image':'url('+imgpath+(item.good_pic?item.good_pic:item.goods_image)+')'}"
 						> 
 							
 						</view>
@@ -24,7 +24,7 @@
 							<!-- goods_name这个值和上面的值一样的返回的不一样 -->
 							<view class="text-grey">{{item.good_title?item.good_title:item.goods_name}}</view>
 							<view class="price">
-								￥{{item.good_price?item.good_price:(item.fav_price?item.fav_price:item.track_price)}}
+								￥{{item.good_promotion_price?item.good_promotion_price:(item.fav_price?item.fav_price:item.track_price)}}
 								<text 
 									class="lg text-gray cuIcon-delete"  
 									:style="{'display':display}" 
@@ -46,7 +46,8 @@
 	export default {
 		data(){
 			return {
-				DetailsList:[]
+				DetailsList:[],
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{
@@ -62,25 +63,25 @@
 					})
 			},
 			//长按事件
-			longpress(id,storeid){
-				const _this = this
-				let g_id = id
-				//在去请求详情页的其他数据
-				uni.request({
-					url:`${app.globalData.Requestpath}good/getGoodInfo?gid=${g_id}`,
-					data:{
-						gid:g_id
-					},
-					success(res) {
-						// console.log(res.data.data)
-						if(res.data.code==0){
-							_this.DetailsList = res.data.data
-							_this.$store.state.detailsbool = true
-							_this.$store.state.bannerbool = false
-						}
-					}
-				})
-			},
+			// longpress(id,storeid){
+			// 	const _this = this
+			// 	let g_id = id
+			// 	//在去请求详情页的其他数据
+			// 	uni.request({
+			// 		url:`${app.globalData.Requestpath}good/getGoodInfo?gid=${g_id}`,
+			// 		data:{
+			// 			gid:g_id
+			// 		},
+			// 		success(res) {
+			// 			if(res.data.code==0){
+			// 				_this.DetailsList = res.data.data
+			// 				_this.$store.state.detailsbool = true
+			// 				_this.$store.state.bannerbool = false
+			// 				_this.$emit("Detailsdata",_this.DetailsList)
+			// 			}
+			// 		}
+			// 	})
+			// },
 			deletescollectionAndfootprint(e){
 				let index = e.currentTarget.dataset.index
 				let deleteid = this.deletelist[index].fav_id?this.deletelist[index].fav_id:this.deletelist[index].track_id

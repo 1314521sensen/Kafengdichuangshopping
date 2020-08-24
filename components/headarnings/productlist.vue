@@ -13,7 +13,7 @@
 							:data-g_id = 'item.good_id'
 							:data-s_id = 'item.store_id'
 						>
-							<view class="particulars_bg" :style="{'background-image':'url('+'http://hbk.huiboke.com'+item.good_pic+')'}">
+							<view class="particulars_bg" :style="{'background-image':'url('+imgpath+item.good_pic+')'}">
 								
 								<view class="brokerage">
 									佣金: <text>￥{{item.brokerage}}</text>
@@ -56,7 +56,8 @@
 						originalprice:600,   //
 						presentprice:200     //
 					}
-				]
+				],
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		props:['lists'],

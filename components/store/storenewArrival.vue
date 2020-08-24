@@ -18,10 +18,10 @@
 				>
 					<!-- 左边图片展示 -->
 					<view class="exhibition">
-						<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
+						<image :src="imgpath+item.good_pic" mode=""></image>
 					</view>
 					<!-- 右边的详细内容  -->
-					<view class="detailMatter" style="background-image: url(/static/store/petal.png);">
+					<view class="detailMatter" :style="{'background-image':'url('+httpUrl+'store/petal.png'+')'}">
 						<view class="data_name">{{item.good_title}}</view>
 						<view class="deta_text">{{'畅销:'+item.good_click}}</view>
 						<view class="deta_price">{{'¥'+item.good_promotion_price}}</view>
@@ -38,7 +38,7 @@
 					@tap="randomshopdefault"
 				>
 					<!-- 左边图片展示 -->
-					<view class="detailMatter_right" style="background-image: url(http://hbk.huiboke.com/uploads/app/image/static/store/petal.png)">
+					<view class="detailMatter_right" :style="{'background-image':'url('+httpUrl+'store/petal.png'+')'}">
 						<view class="data_name">{{item.good_title}}</view>
 						<view class="deta_text">{{item.good_click+':销畅'}}</view>
 						<view class="deta_price">{{'¥'+item.good_promotion_price}}</view>
@@ -48,7 +48,7 @@
 					</view>
 					 <!-- 右边的详细内容 -->
 					<view class="exhibition">
-						<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
+						<image :src="imgpath+item.good_pic" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -61,6 +61,8 @@
 	export default {
 		data() {
 			return {
+				httpUrl:this.$store.state.httpUrl,
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {

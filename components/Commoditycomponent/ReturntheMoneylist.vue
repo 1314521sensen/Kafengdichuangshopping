@@ -17,14 +17,14 @@
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
 						<view 
 							class="cu-avatar round lg" 
-							:style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.store_logo)+')'}"></view>
+							:style="{'background-image':'url('+imgpath+(item.store_logo)+')'}"></view>
 					</view>
 					<view class="cu-item-right">
 						<view class="content">
 							<!-- goods_name这个值和上面的值一样的返回的不一样 -->
 							<view class="text-grey">{{item.store_name}}</view>
 							<view class="price">
-								￥{{item.good_price}}
+								￥{{item.change_price}}
 								
 								<text class="">{{item.refund_state==1?'退款':'退货退款'}}</text>
 							</view>
@@ -39,6 +39,7 @@
 	export default {
 		data(){
 			return {
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

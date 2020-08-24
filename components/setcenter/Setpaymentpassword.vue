@@ -26,11 +26,11 @@
 				//跳转
 				if(this.business=="pay"){//如果等于pay的话 就是订单页面跳转过来的
 					uni.navigateTo({
-						url:`/components/setcenter/SetChangeResetpassword?index=${this.setzhifumimabool}&tokey=${this.tokey}&phone=${this.userphone}&id=${this.userid}&business=${this.business}`
+						url:`/components/setcenter/SetChangeResetpassword?index=${this.setzhifumimabool}&tokey=${this.tokey}&phone=${this.userphone}&id=${this.userid}&business=${this.business}&Realnamebool=${this.Realnamebool}`
 					})
 				}else{
 					uni.navigateTo({
-						url:`/components/setcenter/SetChangeResetpassword?index=${this.setzhifumimabool}&tokey=${this.tokey}&phone=${this.userphone}&id=${this.userid}`
+						url:`/components/setcenter/SetChangeResetpassword?index=${this.setzhifumimabool}&tokey=${this.tokey}&phone=${this.userphone}&id=${this.userid}&Realnamebool=${this.Realnamebool}`
 					})
 				}
 			}
@@ -62,7 +62,7 @@
 				}
 			})
 		},
-		props:["tokey","userphone","userid","business"]
+		props:["tokey","userphone","userid","business","Realnamebool"]
 	}
 </script>
 

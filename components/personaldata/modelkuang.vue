@@ -158,7 +158,7 @@
 			},
 			srcurl(e){
 				console.log(e)
-				this.pathurl = `http://hbk.huiboke.com${e}`
+				this.pathurl = `${this.$store.state.imgyuming}${e}`
 				this.pathurls = e
 			}
 		},

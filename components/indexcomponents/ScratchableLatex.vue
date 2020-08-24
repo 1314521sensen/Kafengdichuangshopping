@@ -39,6 +39,10 @@
 						uni.navigateTo({
 							url:`${url}?title=${name}&titlename=${routinghopname}&statestore=0`
 						})
+					}else if(routinghopname=='userTopupwithdrawal'){
+						uni.navigateTo({
+							url:`${url}?title=${name}&titlename=${routinghopname}&field=littlebee`
+						})
 					}else{
 						uni.navigateTo({
 							url:`${url}?title=${name}&titlename=${routinghopname}`

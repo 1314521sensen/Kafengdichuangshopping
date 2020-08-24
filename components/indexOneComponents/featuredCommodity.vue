@@ -17,7 +17,7 @@
 						:data-s_id="item[16]"
 						@tap="materialpurchase"
 					>
-						<image :src="'http://hbk.huiboke.com'+item[2]" mode=""></image>
+						<image :src="imgpath+item[2]" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -38,7 +38,7 @@
 						:data-s_id="item[16]"
 						@tap="materialpurchase"
 					>
-						<image :src="'http://hbk.huiboke.com'+item[2]" mode=""></image>
+						<image :src="imgpath+item[2]" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -52,7 +52,7 @@
 				@tap="materialpurchase"
 			>
 				<text :style="{'color':item.color}">{{item.text}}</text>
-				<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
+				<image :src="imgpath+item.good_pic" mode=""></image>
 			</view>
 		</view>
 	</view>
@@ -95,6 +95,7 @@
 				purchaseListSum:[
 					
 				],
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

@@ -83,7 +83,7 @@
 			return{
 				evaluatenum:25,
 				statusBar:0,
-				httpurl:"http://hbk.huiboke.com/uploads/app/image/",
+				httpurl:`${this.$store.state.imgyuming}/uploads/app/image/`,
 				swiperList:[
 					{
 						imgs:"/static/indexbanner/banner1.jpg",

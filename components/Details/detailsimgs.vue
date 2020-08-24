@@ -1,7 +1,7 @@
 <template>
 	<view class="detailsimgs">
 		<view class="imgs" v-for="(item,index) in imglist" :key="index">
-			<image :src="'http://hbk.huiboke.com'+item" mode="widthFix"></image>
+			<image :src="imgpath+item" mode="widthFix"></image>
 		</view>
 	</view>
 </template>
@@ -11,7 +11,7 @@
 	export default{
 		data(){
 			return {
-				
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		props:["imglist"]

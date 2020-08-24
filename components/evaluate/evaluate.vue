@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<scroll-view class="evaluate" scroll-y="true" >
+		<scroll-view class="evaluate" scroll-y="true" @scrolltolower="tolower">
 			<view class="order-evaluation" 
 				v-for="(item,index) in this.$store.state.evaluationlist" 
 				:key="index" 
@@ -18,7 +18,7 @@
 								 :data-s_id="item.store_id"
 								  @tap="particulars"
 							>
-								<img :src="'http://hbk.huiboke.com'+items.good_pic" alt="">
+								<img :src="imgpath+items.good_pic" alt="">
 							</view>
 						</view>
 						<view class="bottom-right">
@@ -58,7 +58,17 @@
 <script>
 	const app = getApp()
 	export default {
+		data(){
+			return {
+				imgpath:this.$store.state.imgyuming,
+				pages:1
+			}
+		},
 		methods:{
+			tolower(){
+				this.pages++
+				this.$store.commit("getevaluationlist",{url:'order/getConfirmPayOrderList',pages:this.pages})
+			},
 			changevaluation(e){
 				let ordersnbianhao =  e.currentTarget.dataset.ordersn
 				let shopgooid = e.currentTarget.dataset.gooid

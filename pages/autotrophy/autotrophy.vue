@@ -1,17 +1,17 @@
 <template>
 	<view class="autotrophy">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<actionbar message="自营" url="/pages/index/index"></actionbar>
+		<actionbar :message="title" url="/pages/index/index"></actionbar>
 		<!-- 种类 -->
-		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft" style="height: 80rpx;">
+		<!-- <scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft" style="height: 80rpx;">
 			<view class="cu-item" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in navtabSelect" :key="index" @tap="tabSelect" :data-id="index">
 				 {{item}}
 			</view>
-		</scroll-view>
+		</scroll-view> -->
 		<!-- 展示图 -->
-		<view class="patternmaking" :style="{'background-image':'url(/static/index/autotrophy/Thefruitstore.png)'}"></view>
+		<view class="patternmaking" :style="{'background-image':'url('+this.$store.state.httpUrl+'Scratchablediagrams/banner.png'+')'}"></view>
 		<!-- 查看更多 -->
-		<view class="more">
+		<!-- <view class="more">
 			<view class="flashSale">限时拼购</view>
 			<view class="dataBox">
 				<text class="data">24</text>:
@@ -22,33 +22,49 @@
 				查看全部
 				<text class="lg text-gray cuIcon-right"></text>
 			</view>
-		</view>
+		</view> -->
 		<!-- 限时抢购 -->
 		<view class="flashSaleBoxS">
-			<scroll-view scroll-x="true" style="width: 100%;">
-				<view class="flashrollBox" :style="{width:230*10+'rpx'}">
-					<view class="singleCommoditiesBox" v-for="(item,index) in 10" :key="index">
+			<scroll-view scroll-x="true" style="width: 100%;" @scrolltolower="rendomscrolltolower">
+				<view class="flashrollBox" :style="{width:230*rendomlist.length+'rpx'}">
+					<view 
+						class="singleCommoditiesBox" 
+						v-for="(item,index) in rendomlist" 
+						:key="index"
+						@tap="shopdefault"
+						:data-gid="item.good_id"
+						:data-sid="item.store_id"
+					>
 						<!-- 展示图 -->
-						<view  class="purchaseUrl"></view>
+						<!-- <view  class="purchaseUrl" :style="{'background-image':'url('+'http://hbk.huiboke.com'+item.good_pic+')'}"></view> -->
+						<image style="width: 80%;height: 180rpx;margin-left: 25rpx;" :src="imgpath+item.good_pic" mode=""></image>
 						<!-- 描述 -->
-						<view class="describe">【超级盒子】猫王收音机MW-2...</view>
+						<view class="describe">{{item.good_title}}</view>
 						<view class="num">
 							<!-- 现价 -->
-							<text class="currentPrice">￥399</text>
+							<text class="currentPrice">{{'¥'+item.good_promotion_price}}</text>
 							<!-- 原价 -->
-							<text class="originalPrice">￥499</text>
+							<!-- <text class="originalPrice">{{'¥'+item.good_price}}</text> -->
 							<!-- 抢购 -->
-							<text class="PanicBuying">+</text>
+							<text 
+								class="PanicBuying"
+								@tap.stop="addcart"
+								:data-sid="item.store_id"
+								:data-gid="item.good_id"
+								:data-g_title="item.good_title"
+								:data-s_title="item.store_name"
+								:data-g_pic="item.good_pic"
+							>+</text>
 						</view>
 					</view>
 			</view>
 			</scroll-view>
 		</view>
 		<!--  -->
-		<view class="recommend_box">
-			<!-- 热门推荐 -->
+		<!-- <view class="recommend_box">
+			热门推荐 
 			<view class="recommend">
-				<!-- 推荐 -->
+				 推荐
 				<view class="recommend_left" style="background:url(/static/index/autotrophy/newProducts.png) no-repeat;background-size: 100% 100%;">
 					<view class="newProduct">新品推荐</view>
 					<view class="nicePresent">
@@ -63,7 +79,7 @@
 						<image src="/static/index/autotrophy/lipstick.png" mode=""></image>
 					</view>
 				</view>
-				<!-- 产品 -->
+				 产品
 				<view class="recommend_right">
 				<view class="recommend_thing" style="background: url(/static/index/autotrophy/purple_bg.png) no-repeat;background-size: 100% 100%;">
 						<view class="Box">
@@ -79,36 +95,53 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<!-- 活动图 -->
 		<bgbanner :swiperList='swiperList' :isRounddot="swiperList.length>1?true:false"></bgbanner>
 		<!-- 推荐 -->
-		<view class="recommendBox">
+		<!-- <view class="recommendBox">
 			<text></text>
 			<view class="recommendBox_name">推荐</view>
 			<text></text>
-		</view>
+		</view> -->
 		
 		<!-- 推荐产品 -->	
+		<scroll-view :scroll-y="true" style="width: 100%;" @scrolltolower="scroll">
 		<view class="recommendProduct">
 			<!-- 单个产品 -->
-			<view class="singleCommodities" v-for="(item,index) in 10" :key="index">
-				<!-- 展示图 :style="{'background-image':'url(/static/index/autotrophy/electronic.png)'}"-->
-				<view  class="purchaseUrl" ></view>
+			<view class="singleCommodities" 
+				v-for="(item,index) in recommendlist" 
+				:key="index" 
+				@tap="shopdefault"
+				:data-gid="item.good_id"
+				:data-sid="item.store_id"
+			>
+				<!-- 展示图 -->
+				<!-- <view  class="purchaseUrl" :style="{'background-image':'url('+'http://hbk.huiboke.com'+item.good_pic+')'}"></view> -->
+				<image style="width: 100%;height: 350rpx;" :src="imgpath+item.good_pic" mode=""></image>
 				<!-- 描述 -->
-				<view class="describe">【超级盒子】猫王收音机MW-2...</view>
+				<view class="describe">{{item.good_title}}</view>
 				<view class="num">
 					<!-- 现价 -->
-					<text class="currentPrice">￥399</text>
+					<text class="currentPrice">{{'¥'+item.good_promotion_price}}</text>
 					<!-- 原价 -->
-					<text class="originalPrice">￥499</text>
+					<text class="originalPrice">{{'¥'+item.good_price}}</text>
 					<!-- 抢购 -->
-					<text class="PanicBuying">+</text>
+					<text 
+						class="PanicBuying" 
+						@tap.stop="addcart"
+						:data-sid="item.store_id"
+						:data-gid="item.good_id"
+						:data-g_title="item.good_title"
+						:data-s_title="item.store_name"
+						:data-g_pic="item.good_pic"
+					>+</text>
 				</view>
 			</view>
 		</view>
+		</scroll-view>
 		<!-- 底部导航 -->
-		<view class="bar_bot">
+		<!-- <view class="bar_bot">
 			<view class="cu-bar tabbar margin-bottom-xl bg-white " >
 				<view class="action text-green">
 					<view class="cuIcon-homefill"></view> 首页
@@ -131,7 +164,7 @@
 					我的
 				</view>
 			</view>
-		</view>
+		</view> -->
 	<!--  -->
 	</view>
 </template>
@@ -144,7 +177,7 @@
 		data() {
 			return {
 				scrollTop: 0,
-				scrollLeft: 0,
+				// scrollLeft: 0,
 				TabCur: 0,
 				old: {
 					scrollTop: 0
@@ -154,31 +187,110 @@
 				 swiperList: [{
 				      id: 0,
 				      type: 'image',
-				      url: '/static/index/indexDailygood/activitybanner.gif'
-				 }]
+				      url: this.$store.state.httpUrl+'Scratchablediagrams/activitybanner.png'
+				 }],
+				 title:"",
+				 recommendlist:[],//推荐列表
+				 rendomlist:[],//随机列表
+				 tokey:"",
+				 randompage:10,
+				 pages:1,
+				 imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {
-		 scroll: function(e) {
-			console.log(e)
-			this.old.scrollTop = e.detail.scrollTop
+			//进入商品详情
+			shopdefault(e){
+				let {gid,sid} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${gid}&storeid=${sid}`
+				})
 			},
-			tabSelect(e) {
-				this.TabCur = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+		 // scroll: function(e) {
+			// console.log(e)
+			// this.old.scrollTop = e.detail.scrollTop
+			// },
+			// tabSelect(e) {
+			// 	this.TabCur = e.currentTarget.dataset.id;
+			// 	this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			// }
+			//加入购物车
+			addcart(e){
+				let {sid,gid,g_title,s_title,g_pic} = e.currentTarget.dataset
+				this.$store.commit("Addcart",{s_name:s_title,g_name:g_title,g_pic:g_pic,gid:gid,sid:sid,couplebool:'nt'})
+			},
+			getrendomlist(){
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}good/getRandomRecommendGoodsList`,
+					method:"POST",
+					data:{
+						limit:10
+					},
+					success(res) {
+						if(res.data.code==0){
+							if(_this.randompage>10){
+								_this.rendomlist = _this.rendomlist.concat(res.data.data)
+							}else{
+								_this.rendomlist = res.data.data
+							}
+						}
+					}
+				})
+			},
+			getthisgoodlist(){
+				const _this = this
+				uni.request({
+					url:`${app.globalData.Requestpath}good/getthisgoodlist`,
+					method:"POST",
+					data:{
+						name:_this.title,
+						page:_this.pages,
+						pageSize:5
+					},
+					success(res) {
+						if(res.data.code==0){
+							if(_this.pages>1){
+								_this.recommendlist = _this.recommendlist.concat(res.data.data.list)
+							}else{
+								_this.recommendlist = res.data.data.list
+							}
+							
+						}
+					}
+				})
+			},
+			//滚动列表
+			rendomscrolltolower(){
+				this.randompage+=10
+				this.getrendomlist()
+			},
+			scroll(){
+				this.pages++
+				this.getthisgoodlist()
 			}
 		},
-		onLoad() {
+		onLoad(opction) {
+			console.log(opction)
+			let {title} = opction
+			this.title = title
 			this.statusBar = app.globalData.statusBar
+			this.getthisgoodlist()
 		},
 		components:{
 			actionbar,
 			bgbanner
+		},
+		created() {
+			this.getrendomlist()
 		}
 	}
 </script>
 
 <style lang="less" scoped>
+	.autotrophy{
+		background-color: #f2f2f2;
+	}
 	  .nav{
 		  background-color: #f2f2f2;
 		  height: 65rpx;
@@ -192,7 +304,7 @@
 		  height: 310rpx;
 		  // background:url(/static/autotrophy/Thefruitstore.png) ;
 		  background-repeat:no-repeat ;
-		  background-size: cover;
+		  background-size: 100% 100%;
 	  }
 	  // 查看更多
 	  .more{
@@ -224,7 +336,9 @@
 	  // 限时抢购
 	  .flashSaleBoxS{
 		  display: flex;
-		  margin-left: 4rpx;
+		  // margin-left: 4rpx;
+		  // margin-top:10px;
+		  margin:30rpx 0 8rpx 4rpx;
 		  .flashrollBox{
 			  display: flex;
 			  width: 920rpx;
@@ -255,14 +369,14 @@
 				 -webkit-box-orient: vertical;
 				 -webkit-line-clamp: 2;
 				 overflow: hidden;
-				 margin-top: 64rpx;
+				 margin-top: 45rpx;
 			 }
 			 .currentPrice{
 			 	 color: red;
-				 font-size: 34rpx;
-				 margin-left: 2rpx;
+				 font-size: 34rpx;	
+				 margin-left: 15rpx;
 				 margin-top: 6rpx;
-			 }
+			 }	
 			 .originalPrice{
 				 color: #CCCCCC;
 				 font-size: 24rpx;
@@ -271,11 +385,12 @@
 				 text-decoration:line-through;
 			 }
 			 .PanicBuying{
+				 margin-left: auto;
 				 width: 40rpx;
 				 height: 40rpx;
 				 background-color: #f2f2f2;
 				 border-radius: 50%;
-				 margin-left: 15rpx;
+				 margin-right: 15rpx;
 				 margin-top: 8rpx;
 				 line-height: 40rpx;
 				 text-align: center;
@@ -413,7 +528,7 @@
 		flex-wrap: wrap;
 		justify-content: space-between;
 		padding: 0 25rpx 120rpx 25rpx;
-		
+		margin-top:10rpx;
 		// 单个商品盒子
 		.singleCommodities{
 			  margin-bottom:20rpx;
@@ -424,9 +539,9 @@
 			  
 			  .purchaseUrl{
 				  width: 292rpx;
-				  height: 150rpx;
+				  height: 260rpx;
 				  // background: url(/static/autotrophy/electronic.png) no-repeat;
-				  background-size: 100% 100%;
+				  // background-size: 100% 100%;
 				  margin: 100rpx auto 0;
 			  }
 			  .num{
@@ -437,7 +552,7 @@
 			 // 描述
 			 .describe{
 				 font-size: 32rpx;
-				 margin-top: 85rpx;
+				 margin-top: 10rpx;
 				 display: -webkit-box;
 				 -webkit-box-orient: vertical;
 				 -webkit-line-clamp: 2;
@@ -445,14 +560,14 @@
 			 }
 			 .currentPrice{
 				 color: red;
-				 font-size: 38rpx;
-				 margin-left: 2rpx;
+				 font-size: 35rpx;
+				 margin-left: 8rpx;
 				 margin-top: 6rpx;
 			 }
 			 .originalPrice{
 				 color: #CCCCCC;
-				 font-size: 30rpx;
-				 margin-top: 10rpx;
+				 font-size: 29rpx;
+				 margin-top: 10]rpx;
 				 margin-left: 25rpx;
 				 text-decoration:line-through;
 			 }
@@ -466,6 +581,8 @@
 				 text-align: center;
 				 color: #21bd00;
 				 font-size: 36rpx;
+				 margin-left: auto;
+				 margin-right: 10px;
 			 }
 		}
 	}

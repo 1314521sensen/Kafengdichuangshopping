@@ -6,7 +6,7 @@
 			id='livePusher' 
 			ref="livePusher"
 			:url='url'
-			mode="SD"
+			mode="FHD"
 			aspect="3:2"
 			:muted="false"
 			:enable-camera="true"
@@ -86,7 +86,7 @@
 			v-if="Broadcastlivestate"
 		>
 			<cover-view class="coverfather-top" :style="{width:windowWidth+'px',height:(windowHeight/2)+'px'}">
-				<liveroomtopinfo :Focusshow="false" :room_id="room_id" :live_nick="livenickname" :live_pic="Backcoverurl"></liveroomtopinfo>
+				<liveroomtopinfo :cont="cont" :Focusshow="false" :room_id="room_id" :live_nick="livenickname" :live_pic="Backcoverurl"></liveroomtopinfo>
 			</cover-view>
 			<!-- 这是商品列表 -->
 			<livemiddengoodshoplist 
@@ -103,7 +103,7 @@
 							<cover-image src="/static/liveplatfrom/car.png" class="bottomevent-img" @tap="zhiboshop"></cover-image>
 						</cover-view>
 						<cover-view class="inp" :class="inpbool?'inpflex':'inpwidth'">
-							<input type="text" v-model="inptvalue" @focus="focusinp" @blur="blurinp" placeholder="跟大家聊聊" class="font-size-thirty textcolorwrite inptext" :class="inpbool?'textcolor-black':'textcolorwrite'"></input>
+							<input type="text" v-model="inptvalue" @focus="focusinp" @blur="blurinp" placeholder="主播暂不能发消息" class="font-size-thirty textcolorwrite inptext" :class="inpbool?'textcolor-black':'textcolorwrite'" :disabled="true"></input>
 						</cover-view>
 						<cover-view class="share" @click="share" v-if="inpbool==false">
 							<cover-image src="/static/Pushflow/fenxiang.png" class="shareimgs"></cover-image>
@@ -118,6 +118,12 @@
 				</conver-view>
 				<cover-view class="coverfather-bottom-toplist">
 					<livechatlist :componentwidth="windowWidth" :list="list"></livechatlist>
+				</cover-view>
+				<!-- 这是直播中进入其他用户的时候 -->
+				<cover-view class="MidwaypromptBox" :style="{width:windowWidth+'px'}" v-if="midway">
+					<cover-view class="Midwayprompt border-radiusthirty" :style="{width:(windowWidth/2)+'px',transform:'translateX('+displacement+'%)'}">
+						<text class="textcolorwrite Midwayprompttext">{{midwayname}}&nbsp;来了</text>
+					</cover-view>
 				</cover-view>
 			</cover-view>
 		</cover-view>
@@ -155,7 +161,7 @@
 				Skincare:false,
 				// 临时变量
 				indexlinshi:0,
-				storeid:"",//为了获得店铺id
+				// storeid:"",//为了获得店铺id
 				tokey:"",//用户的tokey
 				livenickname:"",//用户直播的昵称
 				url:"",
@@ -166,6 +172,16 @@
 				inpbool:false,//控制发送按钮是否显示
 				inptvalue:"",//获取inp的内容
 				webtime:null,//websoket的定时器
+				uid:"",//用户的user
+				cont:0,
+				liveflowbool:false,
+				displacement:0,//一会 位移
+				midway:false,//判断用户是不是中途进来的 要不要显示中间dom结构
+				midwayname:"",//谁(名字)进入了当前的直播间
+				Nonetwork:null,//没网的状态
+				// Nonetworkbool:false//没网的情况的下 布尔值
+				startDate:"",//开始时间
+				Enddata:"",//结束时间
 			}
 		},
 		methods: {
@@ -181,7 +197,33 @@
 			},
 			//当用户点击发送的时候
 			btnsend(){
-				this.inptvalue = ""
+				const _this = this
+				
+				let livesendobj = {
+					type: 'liveChatMessage',
+					data:{
+						to_id:"",
+						to_name:"",
+						to_group:_this.room_id,
+						content:_this.inptvalue,
+						from_name:_this.livenickname,
+						from_id:_this.uid,
+						from_avatar:_this.$store.state.imgyuming+_this.Backcoverurl
+					}
+				}
+				console.log(JSON.stringify(livesendobj))
+				uni.sendSocketMessage({
+					data:JSON.stringify(livesendobj),
+					success(ressend){
+						console.log(ressend)
+						let obj = {
+							name:_this.livenickname,
+							content:_this.inptvalue
+						}
+						_this.$store.commit("livereceivemsg",{msg:obj})
+						_this.inptvalue = ""
+					}
+				})
 			},
 			Removeevent(){
 				if(this.shopbool){
@@ -223,47 +265,78 @@
 				// uni.unPreloadPage()
 				//点击关播 先把摄像头停止推流
 				console.log(_this.tokey,_this.livenickname,_this.Backcoverurl,"这是关播的时候")
-				uni.request({
-					url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
-					method:"POST",
-					data:{
-						token:_this.tokey,
-						live_nick:_this.livenickname,
-						live_pic:_this.Backcoverurl,
-						is_living:0
-					},
-					success(resclose) {
-						if(resclose.data.code==0){
-							_this.context.stop()
-							
-							_this.context.stopPreview({
-								success(e){
-									console.log("关闭摄像头成功",JSON.stringify(e))
-								},
-								fail(err){
-									console.log("关闭失败")
-								}
-							})
-							//关闭连接
-							uni.closeSocket({
-								code:1000,
-								success(reswebclose) {
-									console.log(reswebclose)
-									clearInterval(_this.webtime)
-									uni.redirectTo({
-										url:"/pages/Closeby/Closeby"
-									})
-								}
-							})
+				let closeobj = {
+					type:'anchorCloseRoom',
+					uid:_this.uid,
+					name:_this.livenickname,
+					group:_this.room_id
+				}
+				if(_this.liveflowbool){
+					console.log("当前的状态为true")
+					uni.request({
+						url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
+						method:"POST",
+						data:{
+							token:_this.tokey,
+							live_nick:_this.livenickname,
+							live_pic:_this.Backcoverurl,
+							is_living:0
+						},
+						success(resclose) {
+							if(resclose.data.code==0){
+								_this.context.stop()
+								
+								_this.context.stopPreview({
+									success(e){
+										console.log("关闭摄像头成功",JSON.stringify(e))
+									},
+									fail(err){
+										console.log("关闭失败")
+									}
+								})
+								//关闭直播前要给后端发送个消息
+								uni.sendSocketMessage({
+									data:JSON.stringify(closeobj),
+									success(res) {
+										// console.log("关闭前发送的消息",res)
+									}
+								})
+								//关闭连接
+								uni.closeSocket({
+									code:1000,
+									success(reswebclose) {
+										// startDate:"",//开始时间
+										// Enddata:"",//结束时间
+										// console.log(reswebclose)
+										clearInterval(_this.webtime)
+										_this.$store.state.liveuserlist = []
+										let endTime = new Date().getTime()
+										//将毫秒转成秒
+										let endtime = Math.floor((endTime - _this.startDate)/1000)
+										//将秒转转成分钟
+										let endmin = Number(endtime/60).toFixed(2)
+										console.log(parseFloat(Number(endtime/60)))
+										uni.redirectTo({
+											url:`/pages/Closeby/Closeby?livendmin=${endmin}&livenickname=${_this.livenickname}`
+										})
+										_this.liveflowbool = false
+									}
+								})
+							}
 						}
-					}
-				})
+					})
+				}else{
+					uni.closeSocket({
+						code:1000,
+						success(reswebclose) {
+							// console.log(reswebclose)
+							_this.$store.state.liveuserlist = []
+							_this.liveflowbool = false
+						}
+					})
+				}
 			},
-			
-			
 			//这是转移过来的----结束
-			
-			
 			dianji(e){
 				e.stopPropagation()
 			},
@@ -396,8 +469,7 @@
 												// console.log("已经进来了")
 												let {live_url,room_id,live_nick,live_pic} = resinfo.data.data
 												// console.log(live_url,room_id,live_nick,live_pic)
-												let uid = resinfo.data.data.user_id
-												let livename = resinfo.data.data.live_nick
+												_this.uid = resinfo.data.data.user_id
 												_this.url = live_url
 												_this.room_id = room_id
 												_this.livenickname = live_nick
@@ -408,9 +480,10 @@
 												// 	url:`/pages/livestudio/livestudio?storeid=${_this.storeid}&index=${_this.indexlinshi}&beauty=${_this.beauty}&whiteness=${_this.whiteness}&url=${live_url}&roomid=${room_id}&livenick=${live_nick}&livepic=${live_pic}`
 												// })
 												//创建websoket的
-												console.log(uid,livename)
+												console.log(_this.uid,_this.livenickname)
+												// ws://49.232.153.178:7272
 												uni.connectSocket({
-													url:"ws://192.168.1.124:7272",
+													url:"ws://49.232.153.178:7272",
 													// #ifdef MP
 													header: {
 														'content-type': 'application/json'
@@ -423,8 +496,8 @@
 														console.log(resSocket)
 														let liveobj = {
 															type: 'anchorInit',
-															uid,
-															name:livename,
+															uid:_this.uid,
+															name:_this.livenickname,
 															avatar:'',
 															group:room_id,
 														}
@@ -434,6 +507,8 @@
 																data:JSON.stringify(liveobj),
 																success(res) {
 																	console.log(res)
+																	//当用户开始直播的时候  记录直播的开始的时间
+																	_this.startDate = new Date().getTime()
 																},
 																fail(err){
 																	console.log(err)
@@ -451,6 +526,7 @@
 												//这是开始推流
 												setTimeout(()=>{
 													_this.context.start()
+													_this.liveflowbool = true
 													console.log(_this.context)
 												},3000)
 												
@@ -465,8 +541,6 @@
 					}
 				})
 			},
-			
-			
 			//这是子组件穿回来的值
 			coverurl(e){
 				this.Backcoverurl = e
@@ -526,6 +600,14 @@
 					_this.windowBottom = res.windowBottom
 				}
 			})
+			//把头像在缓存中取出来
+			// uni.getStorage({
+			// 	key:"userportrait",
+			// 	success(res) {
+			// 		console.log(res,"头像")
+					
+			// 	}
+			// })
 			//这是获取位置
 			// uni.getLocation({
 			// 	success(res) {
@@ -542,9 +624,6 @@
 			// _this.getliveinforoom()
 		},
 		onShow(){
-			
-		},
-		updated(){
 			
 		},
 		onReady(){
@@ -566,8 +645,8 @@
 		onLoad(opction) {
 			const _this = this
 			_this.$store.commit("getliveshoplist")
-			let {storeid} = opction
-			_this.storeid = storeid
+			// let {storeid} = opction
+			// _this.storeid = storeid
 			// 监听WebSocket连接打开事件。
 			uni.onSocketOpen((res)=>{
 				let pingobj = {
@@ -583,193 +662,315 @@
 							console.log(err)
 						}
 					})
+					
+					
 				},30000)
+				
+			})
+			//监听网络的状态
+			uni.onNetworkStatusChange(function(res){
+				console.log(_this.Nonetwork)
+				_this.liveflowbool = false
+				_this.context.pause(function(res){
+					console.log("暂停推流成功",res)
+				},function(err){
+					console.log("暂停推流失败",err)
+				})
+				//当用户网络发生变化的时候 如果之前的定时器有值的话 就先清除定时器
+				if(_this.Nonetwork!==null && _this.Nonetwork!==undefined){
+					console.log("清除成功")
+					clearTimeout(_this.Nonetwork)
+				}
+				if(_this.webtime!==null && _this.webtime!==undefined){
+					clearInterval(_this.webtime)
+				}
+				_this.Closeby()
+				
+				//当前是否有网络连接
+				let Connected = res.isConnected
+				//网络类型
+				let Type = res.networkType
+				_this.Nonetwork = setTimeout(()=>{
+					if(Type=='none'){
+						//当用户网络发生变化的时候 15秒钟当前的定时器  还是没网的情况下 只能直播间关闭了
+						_this.liveflowbool = true
+						_this.Closeby()
+						
+					}else{
+						//当用户网络发生变化的时候 如果当前的定时器 在有网的状态下 就继续推流
+						_this.context.resume(function(res){
+							console.log(res,"继续成功")
+						},function(err){
+							console.log(err,"继续失败")
+						})
+						uni.connectSocket({
+							url:"ws://49.232.153.178:7272",
+							// #ifdef MP
+							header: {
+								'content-type': 'application/json'
+							},
+							// #endif
+							// #ifdef MP-WEIXIN
+							method: 'GET',
+							// #endif
+							success(resSocket) {
+								console.log(resSocket)
+								_this.liveflowbool = true
+							},
+							fail(err){
+								console.log(err)
+							}
+						})
+					}
+					//不管上面的哪种情况 都会清除当前的定时器
+					clearTimeout(_this.Nonetwork)
+					_this.Nonetwork==null
+				},10000)
 			})
 			
+			//监听服务端发来的消息
 			uni.onSocketMessage(function(res){
-				console.log(JSON.parse(res.data).data)
-				// list
-				_this.list.push(JSON.parse(res.data).data)
+				console.log(JSON.parse(res.data))
+				let messagetype = JSON.parse(res.data).message_type
+				if(messagetype=="zb_online"){
+					//初始化 主播已上线
+				}else if(messagetype=="userLeaveRoom"){
+					//有用户退出直播间的时候 主播收到的消息
+				}else if(messagetype=="liveConnect"){
+					//当用户加入到直播间的时候返回的消息
+					//这是获取直播间的人数
+					_this.cont = JSON.parse(res.data).data.count
+					//这是获取 谁进入了当前的直播间
+					//开始的时候先清0
+					_this.displacement = 0
+					_this.midwayname = JSON.parse(res.data).data.user_name
+					_this.midway = true
+					let time = null
+					time = setInterval(()=>{
+						_this.displacement +=5
+						if(_this.displacement==100){
+							clearInterval(time)
+							_this.midway = false
+						}
+					},130)
+				}else if(messagetype=="liveChatMessage"){
+					_this.$store.commit("livereceivemsg",{msg:JSON.parse(res.data).data})
+				}else if(messagetype=="close_current_client"){
+					//当直播地址被占用的时候 直接让主播跳到关闭直播的页面
+					_this.$store.state.liveuserlist = []
+					uni.redirectTo({
+						url:"/pages/Closeby/Closeby"
+					})
+				}
 			})
+		},
+		//当用户不小心点击了系统的返回键的时候
+		onBackPress(e){
+			if(e.from=='backbutton'){
+				this.Closeby()
+			}
+		},
+		//当页面隐藏的时候 
+		onHide(){
+			console.log("当页面隐藏时候",this.liveflowbool)
+			if(this.liveflowbool){
+				console.log(1111)
+				this.context.resume()
+			}
 		}
-		
 	}
 	// #endif
 </script>
 
 <style>
 	/* #ifdef APP-PLUS */
-	.livecover{
-		/* background-color:yellow; */
-	}
-	.coverfather{
-		position: absolute;
-		top:0;
-		left:0;
-		/* background-color:red; */
-	}
-	.livecovetop{
-		/* height:30px; */
-		/* background-color:red; */
-		flex-direction: row;
-		padding:0 40rpx;
-	}
-	.livecovetop-left{
-		flex:1;
-		flex-direction: row;
-		/* background-color:pink; */
-	}
-	.livecovetop-right{
-		width: 60rpx;
-		/* background-color:yellow; */
-	}
-	.icon-imgs{
-		width: 60rpx;
-		height:60rpx;
-	}
-	.iconmargin{
-		margin-right:40rpx;
-	}
-	.iconmargin:last-child{
-		margin-right:0;
-	}
-	.livecover-bottom{
-		position: absolute;
-		bottom:0;
-		left:0;
-		/* width: 100px; */
-		height:100px;
-		/* background-color:red; */
-		justify-content: center;
-	}
-	.location{
-		flex-direction: row;
-	}
-	.locationicon{
-		/* background-color:yellow; */
-	}
-	.locationicontext{
-		margin:10rpx 0 0 10rpx;
-	}
-	.livecover-btn{
-		height:110rpx;
-		border-width:0;
-	}
-	.slider{
-		align-items: center;
-		position: absolute;
-		width: 100rpx;
-		/* height:60rpx; */
-		/* background-color:red; */
-		justify-content: center;
-	}
-	.slidertitletext{
-		margin-bottom:10rpx;
-	}
-	.sliderbtn{
-		width:80rpx;
-		height:50rpx;
-		border-width:0;
-		border-radius: 20rpx;
-	}
-	.sliderinp{
-		width: 100rpx;
-		height:40rpx;
-		border-color:#de4758;
-		margin:15rpx 0;
-		border-radius:20rpx;
-	}
+.livecover{
+	/* background-color:yellow; */
+}
+.coverfather{
+	position: absolute;
+	top:0;
+	left:0;
+	/* background-color:red; */
+}
+.livecovetop{
+	/* height:30px; */
+	/* background-color:red; */
+	flex-direction: row;
+	padding:0 40rpx;
+}
+.livecovetop-left{
+	flex:1;
+	flex-direction: row;
+	/* background-color:pink; */
+}
+.livecovetop-right{
+	width: 60rpx;
+	/* background-color:yellow; */
+}
+.icon-imgs{
+	width: 60rpx;
+	height:60rpx;
+}
+.iconmargin{
+	margin-right:40rpx;
+}
+.iconmargin:last-child{
+	margin-right:0;
+}
+.livecover-bottom{
+	position: absolute;
+	bottom:0;
+	left:0;
+	/* width: 100px; */
+	height:100px;
+	/* background-color:red; */
+	justify-content: center;
+}
+.location{
+	flex-direction: row;
+}
+.locationicon{
+	/* background-color:yellow; */
+}
+.locationicontext{
+	margin:10rpx 0 0 10rpx;
+}
+.livecover-btn{
+	height:110rpx;
+	border-width:0;
+}
+.slider{
+	align-items: center;
+	position: absolute;
+	width: 100rpx;
+	/* height:60rpx; */
+	/* background-color:red; */
+	justify-content: center;
+}
+.slidertitletext{
+	margin-bottom:10rpx;
+}
+.sliderbtn{
+	width:80rpx;
+	height:50rpx;
+	border-width:0;
+	border-radius: 20rpx;
+}
+.sliderinp{
+	width: 100rpx;
+	height:40rpx;
+	border-color:#de4758;
+	margin:15rpx 0;
+	border-radius:20rpx;
+}
 	
 	
-	/* 这是直播的样式 */
-	.coverfather{
-			position: absolute;
-			top:0;
-			left:0;
-			/* background-color:red; */
-		}
-		.coverfather-top{
-			/* background-color:#f00; */
-		}
-		.coverfather-bottom{
-			flex-direction:column-reverse;
-		}
-		.coverfather-bottom-toplist{
-			/* background-color:pink; */
-			margin-bottom:20rpx;
-		}
-		.bottomevent{
-			justify-content: space-between;
-			flex-direction:row;
-			align-items: flex-end;
-			/* height:20px; */
-			/* background-color: yellow; */
-		}
-		.bottomevent-imgs{
-			width: 70rpx;
-			/* height:80rpx; */
-			/* background-color:red; */
-		}
-		.bottomevent-img{
-			width: 70rpx;
-			height:80rpx;
-			/* background-color:blue; */
-		}
-		.bottomeventweicolor{
-			background-color:transparent;
-		}
-		.bottomeventcolor{
-			background-color:#fff;
-		}
-		.inp{
-			/* width:300rpx; */
-			height:70rpx;
-			/* background-color:red; */
-			justify-content: flex-end;
-		}
-		.inptext{
-			height:70rpx;
-			/* line-height: */
-		}
-		.inpwidth{
-			width: 300rpx;
-		}
-		.inpflex{
-			flex:0.8;
-		}
-		.btn{
-			flex:0.2;
-			background-color:green;
-			height:70rpx;
-			/* line-height:70rpx; */
-		}
-		.button{
-			height:70rpx;
-			line-height:70rpx;
-			border-radius:0;
-			border-width: 0;
-		}
-		.share{
-			width: 60rpx;
-			height:60rpx;
-			/* background-color:green; */
-		}
-		.shareimgs{
-			position: relative;
-			width: 60rpx;
-			height:60rpx;
-		}
-		.report{
-			position: absolute;
-			top:0px;
-			left:0;
-			width: 70rpx;
-			height:70rpx;
-			background-color:yellow;
-			border-radius: 15px;
-		}
-		.reporttext{
-			line-height:70rpx;
-		}
+/* 这是直播的样式 */
+.coverfather{
+	position: absolute;
+	top:0;
+	left:0;
+	/* background-color:red; */
+}
+.coverfather-top{
+	/* background-color:#f00; */
+}
+.coverfather-bottom{
+	flex-direction:column-reverse;
+}
+.coverfather-bottom-toplist{
+	/* background-color:pink; */
+	margin-bottom:20rpx;
+}
+.bottomevent{
+	justify-content: space-between;
+	flex-direction:row;
+	align-items: flex-end;
+	/* height:20px; */
+	/* background-color: yellow; */
+}
+.bottomevent-imgs{
+	width: 70rpx;
+	/* height:80rpx; */
+	/* background-color:red; */
+}
+.bottomevent-img{
+	width: 70rpx;
+	height:80rpx;
+	/* background-color:blue; */
+}
+.bottomeventweicolor{
+	background-color:transparent;
+}
+.bottomeventcolor{
+	background-color:#fff;
+}
+.inp{
+	/* width:300rpx; */
+	height:70rpx;
+	/* background-color:red; */
+	justify-content: flex-end;
+}
+.inptext{
+	height:70rpx;
+	/* line-height: */
+}
+.inpwidth{
+	width: 300rpx;
+}
+.inpflex{
+	flex:0.8;
+}
+.btn{
+	flex:0.2;
+	background-color:green;
+	height:70rpx;
+	/* line-height:70rpx; */
+}
+.button{
+	height:70rpx;
+	line-height:70rpx;
+	border-radius:0;
+	border-width: 0;
+}
+.share{
+	width: 60rpx;
+	height:60rpx;
+	/* background-color:green; */
+}
+.shareimgs{
+	position: relative;
+	width: 60rpx;
+	height:60rpx;
+}
+.report{
+	position: absolute;
+	top:0px;
+	left:0;
+	width: 70rpx;
+	height:70rpx;
+	background-color:yellow;
+	border-radius: 15px;
+}
+.reporttext{
+	line-height:70rpx;
+}
+/* 中途进来的人进来的样式 */
+.MidwaypromptBox{
+	/* height:100rpx; */
+	/* background-color:green; */
+}
+.Midwayprompt{
+	/* height:100rpx; */
+	/* background-color:red; */
+	background-image:linear-gradient(to right,#e53951,rgba(255,255,255,.6));
+	padding:5rpx 10rpx;
+	transition-duration:.8s;
+	transition-timing-function: linear;
+}
+.Midwayprompttext{
+	font-size:35rpx;
+}
 /* #endif */
 </style>

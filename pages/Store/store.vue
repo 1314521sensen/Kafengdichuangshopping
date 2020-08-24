@@ -4,7 +4,7 @@
 		<view class="store" v-if="loadingbool">
 			<!-- <pageheight :statusBar="statusBar"></pageheight> -->
 			<!-- 顶部 -->
-			<view class="kepala" :style="{'background-image':'url('+this.$store.state.httpUrl+'/store/store_bg.png)','padding-top':statusBar+20+'rpx'}">
+			<view class="kepala" :style="{'background-image':'url('+this.$store.state.httpUrl+'store/store_bg.png)','padding-top':statusBar+20+'rpx'}">
 				<!-- 导航 -->
 				<view class="kep_nav">
 					<view class="cu-bar">
@@ -34,7 +34,7 @@
 					<!-- 店铺上面的左边信息 -->
 					<view class="store_presentationLeft">
 						<view class="logoBox">
-							<image class="logo" :src="'http://hbk.huiboke.com'+store_logo"></image>
+							<image class="logo" :src="imgpath+store_logo"></image>
 						</view>
 						<view class="store_nameBox">
 							<view class="storeName_text">{{Shopname}}</view>
@@ -93,9 +93,14 @@
 					<!-- 直播间  小广告 -->
 					<!-- v-show="isWhetherlive"  -->
 					<adlet 
-						:livestreamingId="livestreamingId"
-						:livestreamingTltle="livestreamingTltle"
-						:livestreamingPri="livestreamingPri"
+						:live_url="live_url"
+						:livenick="livenick"
+						:roomid="roomid"
+						:livepic="livepic"
+						:uname="uname"
+						:uid="uid"
+						:livedesc="livedesc"
+						v-if="adletbool"
 					></adlet>
 					<!-- 新品活动xxx等  可能是轮播图 -->
 					<storebanner></storebanner>
@@ -112,11 +117,13 @@
 				<view class="navshowitem" v-if="parseInt(TabCur)==2">
 					<boutiqueBarley msg="推荐新品" :horizontallylist="newslist"></boutiqueBarley>
 				</view>
+				<!-- && userstoreid==storeid -->
 				<view v-if="parseInt(TabCur)==3">
 					<liveMerchant :storeid="storeid"></liveMerchant>
 				</view>
 			</scroll-view>
 		</view>
+		<!--  -->
 		<loading v-if="loadingbool==false"></loading>
 		<QRcodeA :isCode='isCode' v-if="isCode" @cancel="cancel"></QRcodeA>
 	</view>
@@ -174,11 +181,18 @@
 				bool:false,
 				keyword:"",
 				isWhetherlive:false,
-				livestreamingId:-1,//主播ID 
-				livestreamingTltle:'',//直播间描述
-				livestreamingPri:'',//主播房间图片
+				live_url:"",
+				livenick:"",
+				roomid:"",
+				livepic:"",
+				uname:"",
+				uid:"",
+				livedesc:"",
 				loadingbool:false,
-				isCode:false
+				isCode:false,
+				userstoreid:0,//获取用户的店铺id和当前的店铺id进行比较
+				adletbool:false,
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {
@@ -309,26 +323,56 @@
 			_this.storeid = opction.storeid
 			_this.statusBar = app.globalData.statusBar
 			// console.log(_this.Month,_this.day)
+			
 			uni.request({
 				url:`${app.globalData.Requestpath}store/getStoreInfo`,
 				data:{
 					sid:_this.storeid
 				},
 				success(res) {
+					console.log(res)
 					if(res.data.code==0){
-						let {store_name,is_platform_store,store_servicecredit,store_credit,fav_count,store_logo} = res.data.data
-						// console.log(fav_count)
+						let {store_name,user_id,is_platform_store,store_servicecredit,store_credit,fav_count,store_logo,live_desc} = res.data.data
+						console.log(user_id)
 						_this.store_logo = store_logo
 						_this.fav_count = fav_count
 						_this.Shopname = store_name
 						_this.score = store_servicecredit
 						_this.storecredit = store_credit
+						_this.livedesc = live_desc
+						_this.loadingbool = true
 						//判断是否自营
 						if(is_platform_store){
 							_this.Whetherproprietary = true
 						}else{
 							_this.Whetherproprietary = false
 						}
+						//根据店铺id请求主播详情信息
+						uni.request({
+							url:`${app.globalData.Requestpath}live_user/getLiveUserInfoByUid`,
+							data:{
+								uid:user_id
+							},
+							success(res) {
+								console.log(res)
+								if(res.data.code==0){
+									let {live_url,live_nick,room_id,live_pic,user_name,user_id,is_living} = res.data.data
+									_this.live_url = live_url
+									_this.livenick = live_nick
+									_this.roomid = room_id
+									_this.livepic = live_pic
+									_this.uname = user_name
+									_this.uid = user_id
+									if(parseInt(is_living)==1){
+										_this.adletbool = true
+									}else{
+										_this.adletbool = false
+									}
+								}else{
+									_this.adletbool = false
+								}
+							}
+						})
 					}
 					
 				}
@@ -336,6 +380,7 @@
 			//获取推荐
 			_this.getrecommended(1)
 			_this.getbabylist(1)
+			console.log(_this.storeid)
 			//获取商品的新品信息系
 			uni.request({
 				url:`${app.globalData.Requestpath}store/getNewStoreGoodList`,
@@ -344,6 +389,7 @@
 					limit:10
 				},
 				success(res) {
+					console.log(res)
 					_this.newslist = res.data.data
 				}
 			})
@@ -391,34 +437,33 @@
 							if(res.data.code==0){
 								_this.list = res.data.data.list
 								_this.bool = true
+								
 							}else{
 								_this.bool = false
 							}
 						}
 					})
-					uni.request({
-						url:`${app.globalData.Requestpath}live_user/getLiveUserInfo`,
-						method:"POST",
-						data:{
-							token:res.data
-						},
-						success(res){
-							console.log(res)
-							if(res.data.code == 0){
-								_this.livestreamingId	= res.data.data.user_id
-								_this.livestreamingTltle = res.data.data.live_desc
-								_this.livestreamingPri  = res.data.data.live_pic
-								parseInt(res.data.data.is_living)? _this.isWhetherlive = true : _this.isWhetherlive = false,
-								console.log(11)
-								_this.loadingbool = true
-								console.log(_this.loadingbool)
-							}else{
-								_this.loadingbool = true
-							}
-						}
-					})
+					
 				}
 			})
+			//获取缓存中用户的店铺id
+			uni.getStorage({
+				key:"userstoreid",
+				success(resuserstore) {
+					_this.userstoreid = resuserstore.data
+					
+				},
+				fail(){
+					_this.userstoreid = 0
+				}
+			})
+			//判断用户的店铺id和店铺的id是不是相等 不相等 就隐藏 相等就显示
+			let userstoreidbool = parseInt(_this.storeid)==parseInt(_this.userstoreid) ? true : false
+			if(!userstoreidbool){
+				// console.log(111)
+				_this.navlist.pop()
+			}
+			
 		},
 	}
 </script>

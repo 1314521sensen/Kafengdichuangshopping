@@ -1,7 +1,7 @@
 <template>
 	<view class="boutiquebarley">
 		   <view class="titie_Logo">
-			 <view class="Logo_url" style="background-image: url(/static/store/signboard.png);" mode="">
+			 <view class="Logo_url" :style="{'background-image':'url('+this.$store.state.httpUrl+'store/signboard.png'+')'}" mode="">
 				<view>{{msg}}</view> 
 			 </view>
 		   </view>
@@ -18,7 +18,7 @@
 							@tap="storeshopdefault"
 						>
 						   <view>
-								<image class="shoPrice" :src="'http://hbk.huiboke.com'+item.good_pic"></image>
+								<image class="shoPrice" :src="imgpath+item.good_pic"></image>
 						   </view>
 						   <!-- 详细介绍 -->
 						   <view class="particularBox">
@@ -45,7 +45,7 @@
 	export default {
 		data() {
 			return {
-				
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {

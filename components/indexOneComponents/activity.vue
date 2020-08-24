@@ -44,7 +44,7 @@
 	export default {
 		data() {
 			return {
-				imgyuming:"http://hbk.huiboke.com/uploads/app/image/index/indexone/",
+				imgyuming:`${this.$store.state.imgyuming}/uploads/app/image/index/indexone/`,
 				list:[
 					{
 						textleft:"惠播客直播",
@@ -66,8 +66,8 @@
 						textLeft:"畅想所爱",
 						textRight:"纵向奢华",
 						imgright:[
-							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_left_shopsign.png",
-							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_right_shopsign.png"
+							`${this.$store.state.imgyuming}/uploads/app/image/index/indexactivity/big_left_shopsign.png`,
+							`${this.$store.state.imgyuming}/uploads/app/image/index/indexactivity/big_right_shopsign.png`
 						]
 					},
 					{
@@ -90,8 +90,8 @@
 						textLeft:"显示甩卖",
 						textRight:"抢即是赚",
 						imgright:[
-							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_left_shopsign.png",
-							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_right_shopsign.png"
+							`${this.$store.state.imgyuming}/uploads/app/image/index/indexactivity/big_left_shopsign.png`,
+							`${this.$store.state.imgyuming}/uploads/app/image/index/indexactivity/big_right_shopsign.png`
 						]
 					},
 					{
@@ -114,8 +114,8 @@
 						textLeft:"惊喜优惠",
 						textRight:"好货不断",
 						imgright:[
-							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_left_shopsign.png",
-							"http://hbk.huiboke.com/uploads/app/image/index/indexactivity/big_right_shopsign.png"
+							`${this.$store.state.imgyuming}/uploads/app/image/index/indexactivity/big_left_shopsign.png`,
+							`${this.$store.state.imgyuming}/uploads/app/image/index/indexactivity/big_right_shopsign.png`
 						]
 					}
 				]

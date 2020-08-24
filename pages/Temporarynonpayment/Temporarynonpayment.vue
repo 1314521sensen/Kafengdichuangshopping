@@ -7,11 +7,12 @@
 				<view class="bg-title">
 					<!-- orderstatus -->
 					<text class="non-payment" v-if="orderstatus==-1">订单已取消</text>
-					<text class="non-payment" v-if="orderstatus==0">等待买家付款</text>
+					<text class="non-payment" v-if="orderstatus==0 && this.$store.state.remainingTime>0">等待买家付款</text>
 					<text class="non-payment" v-if="orderstatus==1">订单已付款</text>
 					<text class="non-payment" v-if="orderstatus==2">订单已发货</text>
 					<text class="non-payment" v-if="orderstatus==3">订单已完成</text>
-					<text v-if="orderstatus==0">{{this.$store.state.remainingTime}}分钟内自动取消订单</text>
+					<text v-if="orderstatus==0 && this.$store.state.remainingTime>0">{{this.$store.state.remainingTime}}分钟内自动取消订单</text>
+					<text v-if="orderstatus==0 && this.$store.state.remainingTime<=0" style="color: #FF0000;font-size: 40rpx;">订单已超时自动取消</text>
 					<!-- <xqcountdown 
 						:startTime="String(this.$store.state.Notcreated)" 
 						:endTime="String(this.$store.state.Notpaying)"
@@ -48,7 +49,7 @@
 		                  :data-s_id="item.store_id"
 					>
 						<view class="shop-img">
-							<image :src="'http://hbk.huiboke.com'+item.good_pic" mode=""></image>
+							<image :src="imgpath+item.good_pic" mode=""></image>
 						</view>
 						<view class="shopgoosorder-right">
 							<view class="shopgoosorder-title">
@@ -138,7 +139,8 @@
 				endTime:"",//订单的发货时间
 				Completiontime:"",//订单的完成时间
 				s_id:0,
-				s_name:''
+				s_name:'',
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		components:{
@@ -277,7 +279,7 @@
 <style lang="less" scoped>
 	.TheOrderDetails{
 		.top{
-			background-color: #F8F8F8;
+			background-color: #fe7a00;
 			.bg-title{
 				width: 100%;
 				padding: 60rpx 0 40rpx 60rpx;

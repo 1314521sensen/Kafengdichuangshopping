@@ -9,7 +9,7 @@
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
 						<view 
 							class="cu-avatar round lg" 
-							:style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.store_logo)+')'}"></view>
+							:style="{'background-image':'url('+imgpath+(item.store_logo)+')'}"></view>
 					</view>
 					<view class="cu-item-right">
 						<view class="content">
@@ -37,6 +37,7 @@
 	export default {
 		data(){
 			return {
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

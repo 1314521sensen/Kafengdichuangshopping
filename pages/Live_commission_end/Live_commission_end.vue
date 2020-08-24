@@ -91,7 +91,7 @@
 		},
 		created(){
 			uni.request({
-				url: 'http://hbk.huiboke.com/api/live/getLiveGoodCmsSettlementList',
+				url: `${app.globalData.Requestpath}live/getLiveGoodCmsSettlementList`,
 				method: 'POST',
 				data: {
 						token: '07d9b06c0a7de0ea2c16832a62eef512',

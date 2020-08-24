@@ -123,6 +123,8 @@
 			},
 			selectiondata(e){
 				this.selectiondatalist = e
+				this.$emit("changebool",false)
+				this.$emit("changetext","确认修改")
 			},
 			//当用户点击了保存了以后
 			btnsave(e){ //e是表单中的信息
@@ -147,9 +149,9 @@
 							num = 1
 						}
 						if(!(regusernick.test(usernick))){
-							this.toast("请填写5到20个字符")
+							this.toast("昵称请填写5到20个字符")
 						}else if(!(regusername.test(username))){
-							this.toast("请填写2到10个字符")
+							this.toast("姓名请填写2到10个字符")
 						}else if(!(regsex.test(usersex))){
 							this.toast("亲！请选择正确的性别哦")
 						}
@@ -171,33 +173,36 @@
 								// console.log(this.selectiondatalist[0][0].area_id,this.selectiondatalist[1][0].area_id,this.selectiondatalist[2][0].area_id)
 								// console.log(this.tokey)
 			// 					//当全部的验证成功了  就发起请求
-								uni.request({
-									url:`${app.globalData.Requestpath}user/updateUserDetail`,
-									method:"POST",
-									data:{
-										token:this.tokey,
-										user_nick:usernick,
-										real_name:username,
-										user_sex:num,
-										province:this.selectiondatalist[0][0].area_id,
-										city:this.selectiondatalist[1][0].area_id,
-										area:this.selectiondatalist[2][0].area_id,
-										user_pic:src
-									},
-									success:(res)=>{
-										// console.log(res,"已经请求用户信息成功")
-										if(res.data.code==0){
-											uni.switchTab({
-												url:"/pages/PersonalMy/PersonalMy"
-											})
+								if(this.selectiondatalist.length){
+									uni.request({
+										url:`${app.globalData.Requestpath}user/updateUserDetail`,
+										method:"POST",
+										data:{
+											token:this.tokey,
+											user_nick:usernick,
+											real_name:username,
+											user_sex:num,
+											province:this.selectiondatalist[0][0].area_id,
+											city:this.selectiondatalist[1][0].area_id,
+											area:this.selectiondatalist[2][0].area_id,
+											user_pic:src
+										},
+										success:(res)=>{
+											// console.log(res,"已经请求用户信息成功")
+											if(res.data.code==0){
+												uni.switchTab({
+													url:"/pages/PersonalMy/PersonalMy"
+												})
+											}
+										},
+										fail(err){
+											// console.log("请求失败")
+											// console.log(err)
 										}
-									},
-									fail(err){
-										// console.log("请求失败")
-										// console.log(err)
-									}
-								})
-								
+									})
+								}else{
+									this.toast("请选择地址")
+								}
 							}else{
 								this.toast("请上传你的头像")
 							}

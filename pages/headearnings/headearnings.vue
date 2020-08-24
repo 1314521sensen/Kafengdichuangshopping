@@ -1,17 +1,17 @@
 <template>
 	<!--  style="height: 100vh;overflow: auto;" -->
 	<view class="headeadnings">
-		   <scroll-view :scroll-y='true' @scrolltolower='scrolltolower' style="height: 95vh;">
+		   <scroll-view :scroll-y='true' style="height: 95vh;">
 				<!-- 头部 -->
-				<view class="witder" style="background-image: url(/static/headearning/headnav_bg.png)" :style="{'padding-top':statusBar+'rpx'}">
+				<view class="witder" :style="{'background-image':'url('+this.$store.state.httpUrl+'headearning/headnav_bg.png'+')','padding-top':statusBar+'rpx'}">
 					<view class="header_nav">
 						<text class="lg text-gray cuIcon-back" @tap="returnmypeoby"></text>
 					</view>
 				</view>
 				<!-- 头像和名字 -->
 				<view class="PhonenameBox">
-					<view><image class="LO_Phone" src="/static/headearning/beautyace.png" mode=""></image></view>
-					<view class="name">美了美了美了</view>
+					<view><image class="LO_Phone" :src="this.$store.state.imgyuming+userportrait" mode=""></image></view>
+					<view class="name">{{user_nick}}</view>
 				</view>
 				<!-- 详细收益等 -->
 				<view class="earnings_flex">
@@ -25,12 +25,12 @@
 				<!-- 商品  详细 提现等   -->
 				<elaborate></elaborate>
 				<!-- 剩余团购数量 -->
-				<productlist :lists='list'></productlist>
+				<!-- <productlist :lists='list'></productlist> -->
 			</scroll-view>
 			<!-- 到底没有数据显示的 -->
-			<view class="bottom-text" v-if="textbool">
+			<!-- <view class="bottom-text" v-if="textbool">
 				<text>{{hinttext}}</text>
-			</view>
+			</view> -->
 	</view>	
 </template>
 	
@@ -44,15 +44,15 @@
 		data() {
 			return {
 			   ThepromotingBoxs:[{
-					   Thetext:100,
+					   Thetext:0,
 					   Theearnings:'推广人数'
 				   },
+				 //   {
+					//    Thetext:'RMB200',
+					//    Theearnings:'昨日收益'
+					// },
 				   {
-					   Thetext:'RMB200',
-					   Theearnings:'昨日收益'
-					},
-				   {
-					   Thetext:'RMB200',
+					   Thetext:0,
 					   Theearnings:'积累佣金 '  
 				    }],
 					statusBar:0,
@@ -60,45 +60,79 @@
 					list:[],//存储的数据
 					iconbool:true,
 					textbool:false,
-					hinttext:'暂无数据'  
+					hinttext:'暂无数据',
+					userportrait:"",//用户头像
+					user_nick:"",//用户昵称
 			   } 
 		 },
 	    created(){
-			 this.indexshoplist(this.page)
+			const _this = this
+			 // this.indexshoplist(this.page)
+			 uni.getStorage({
+				 key:"user_commission",
+				 success(res){
+					 // console.log(res)
+					 // _this.user_commission = res.data
+					 _this.ThepromotingBoxs[1].Thetext = res.data
+				 }
+			 })
+			 //取出缓存中的邀请人数
+			 uni.getStorage({
+				 key:"invite_num",
+				 success(res){
+					 // console.log(res)
+					 // _this.user_commission = res.data
+					 _this.ThepromotingBoxs[0].Thetext = res.data
+				 }
+			 })
+			 //用户头像
+			 uni.getStorage({
+				 key:"userportrait",
+				 success(res){
+					 _this.userportrait = res.data
+				 }
+			 })
+			 //用户昵称
+			 uni.getStorage({
+				 key:"ni_cheng",
+				 success(res){
+					 _this.user_nick = res.data
+				 }
+			 })
 	    },
 		methods: {
-			scrolltolower(){
-				 this.page+=1
-				 this.indexshoplist(this.page)
-			},
-			indexshoplist(page){
-				const _this = this
-				uni.request({
-					url:`${app.globalData.Requestpath}good/getCommanderGoodList`,
-					data:{
-						page:_this.page,
-						pageSize:6
-					},
-					success(res) {
-						console.log(res)
-						if(res.data.code==0){
-							if(_this.page>1){
-								_this.list = _this.list.concat(res.data.data.list)
-								// console.log(_this.list)
-							}else{
-								_this.list = res.data.data.list
-							}
-						}else{
-							// app.globalData.showtoastsame("数据暂无")
-							 if(_this.page > 1){
-								 _this.hinttext = '我也是有底线的'
-							 }
-							_this.textbool = true
-						}
-						// _this.iconbool = false  
-					}  
-				})
-			},
+			// scrolltolower(){
+			// 	 this.page+=1
+			// 	 this.indexshoplist(this.page)
+			// },
+			// indexshoplist(page){
+			// 	const _this = this
+			// 	uni.request({
+			// 		url:`${app.globalData.Requestpath}good/getCommanderGoodList`,
+			// 		data:{
+			// 			page:_this.page,
+			// 			pageSize:6
+			// 		},
+			// 		success(res) {
+			// 			console.log(res)
+			// 			if(res.data.code==0){
+			// 				if(_this.page>1){
+			// 					_this.list = _this.list.concat(res.data.data.list)
+			// 					// console.log(_this.list)
+			// 				}else{
+			// 					_this.list = res.data.data.list
+			// 				}
+			// 			}else{
+			// 				// app.globalData.showtoastsame("数据暂无")
+			// 				 if(_this.page > 1){
+			// 					 _this.hinttext = '我也是有底线的'
+			// 				 }
+			// 				_this.textbool = true
+			// 			}
+			// 			// _this.iconbool = false  
+			// 		}  
+			// 	})
+			// },
 			returnmypeoby(){
 				uni.switchTab({
 					url:"/pages/PersonalMy/PersonalMy"

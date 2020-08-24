@@ -3,12 +3,14 @@
 		<view class="live-entrance" :style="{'height':liveheight+'vh'}">
 			<image :src="this.$store.state.httpUrl+'index/indexone/livebg.png'" mode=""></image>
 		</view>
-		<view class="live-pendant" v-if="livebool">
+		<!-- <view class="live-pendant" v-if="livebool">
 			<image :src="this.$store.state.httpUrl+'index/indexone/indexpendant.png'" mode="" @tap="clicklive"></image>
-		</view>
+		</view> -->
 		<search :showbtn="true"></search>
-		<scroll-view :scroll-y="true" class="top" @scrolltolower="scrolltolower">
-				<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
+		<scroll-view :scroll-y="true" class="top" @scrolltolower="scrolltolower" @scroll="scroll">
+				<!-- 这是商品详情的弹窗 -->
+				<!-- <Details v-if="this.$store.state.detailsbool" :DetailsList="DetailsList"></Details> -->
+				<!-- <scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
 					<view 
 						class="cu-item" 
 						:class="index==TabCur?'nav-color cur':''" 
@@ -19,21 +21,30 @@
 					>
 					      {{item.gc_short}}
 					     </view>
-				</scroll-view>
+				</scroll-view> -->
 				<banner v-if="TabCur<1" :swiperList="swiperList"></banner>
+				<Oneyuanbuys v-show="one_yuan_cha==false"></Oneyuanbuys>
+				<Oneyuanbuy @oneyuancha="oneyuancha"></Oneyuanbuy>
 				<ScratchableLatex :cuIconList="cuIconList"></ScratchableLatex>
-				<faddish></faddish>
-				<activity></activity>
+				<!-- <faddish></faddish> -->
+				<!-- 后期解开 -->
+				<!-- <activity></activity> -->
+				<!-- 临时用的开始-->
+				<activityimg></activityimg>
+				<linshi></linshi>
+				<!-- 临时用的结束 -->
 				<feature></feature>
 				<featuredCommodity></featuredCommodity>
 				<!-- <exhibitionBanner></exhibitionBanner> -->
 			<view class="shopingList" style="margin-top:28rpx">
 				<!-- <listNav></listNav> -->
-				<list :list='list' :page='page' style="background-color: transparent" display="none"></list>
+				
+				<list :list='list' :page='page' style="background-color: transparent" display="none" @Detailsdata="Detailsdata"></list>
 				<view class="bottom-text" v-if="textbool">
 					<text>我也是有底线的</text>
 				</view>
 			</view>
+			
 		</scroll-view>
 		<!-- 这是更新app的组件 -->
 		<Downloadprompt></Downloadprompt>
@@ -46,7 +57,7 @@
 	import banner from "@/components/indexOneComponents/banner.vue"
 	import ScratchableLatex from "@/components/indexOneComponents/ScratchableLatex.vue"
 	import faddish from "@/components/indexOneComponents/faddish.vue"
-	import activity from "@/components/indexOneComponents/activity.vue"
+	// import activity from "@/components/indexOneComponents/activity.vue"
 	import feature from "@/components/indexOneComponents/feature.vue"
 	import featuredCommodity from "@/components/indexOneComponents/featuredCommodity.vue"
 	// import exhibitionBanner from "@/components/indexOneComponents/exhibitionBanner.vue"
@@ -55,6 +66,15 @@
 	
 	import list from "@/components/indexOneComponents/list.vue"
 	import Downloadprompt from "@/components/indexOneComponents/Downloadprompt.vue"
+	// import Details from "@/components/indexcomponents/indexDetails.vue"
+	//临时的---开始
+	import linshi from "@/components/indexOneComponents/linshi.vue"
+	import activityimg from "@/components/indexOneComponents/activityimg.vue"
+	//这是弹窗的一元购
+	import Oneyuanbuy from "@/components/indexOneComponents/Oneyuanbuy.vue"
+	//这是横条的一元购
+	import Oneyuanbuys from "@/components/indexOneComponents/Oneyuanbuys.vue"
+	//临时的---结束
 	export default {
 		data() {
 			return {
@@ -75,62 +95,62 @@
 					color: 'red',
 					badge: 120,
 					name: '休闲零食',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Leisuresnacks.png",
-					url:"/pages/groupbooking/groupbooking"
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/Leisuresnacks.png`,
+					url:"/pages/autotrophy/autotrophy"
 				},
 				{
 					cuIcon: 'recordfill',
 					color: 'orange',
 					badge: 1,
 					name: '应季水果',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Seasonalfruit.png",
-					url:"/pages/grouppurchase/grouppurchase"
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/Seasonalfruit.png`,
+					url:"/pages/autotrophy/autotrophy"
 				}, {
 					cuIcon: 'picfill',
 					color: 'yellow',
 					badge: 0,
 					name: '地方美食',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Localdelicacies.png",
-					url:"/pages/discount/discount"
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/Localdelicacies.png`,
+					url:"/pages/autotrophy/autotrophy"
 				}, 
 				{
 					cuIcon: 'discoverfill',
 					color: 'purple',
 					badge: 0,
 					name: '牛奶饮品',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Milkdrinks.png",
-					url:"/pages/brand/brand"
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/Milkdrinks.png`,
+					url:"/pages/autotrophy/autotrophy"
 				},
 				{
 					cuIcon: 'questionfill',
 					color: 'mauve',
 					badge: 0,
 					name: '生鲜速食',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Freshvegetarian.png",
-					url:"/pages/limitedtimesecondskill/limitedtimesecondskill"
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/Freshvegetarian.png`,
+					url:"/pages/autotrophy/autotrophy"
 				},
 				{
 					cuIcon: 'clothesfill',
 					color: 'blue',
 					badge: 0,
 					name: '老字号',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/old.png",
-					url:"/pages/topicpage/topicpage"
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/old.png`,
+					url:"/pages/autotrophy/autotrophy"
 				}, 
 				{
 					cuIcon: 'upstagefill',
 					color: 'cyan',
 					badge: 0,
-					name: '进品食品',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Importedfood.png",
-					url:"/pages/integralstore/integralstore"
+					name: '进口食品',
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/Importedfood.png`,
+					url:"/pages/autotrophy/autotrophy"
 				},
 				{
 					cuIcon: 'questionfill',
 					color: 'mauve',
 					badge: 0,
 					name: '粮油米面',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Grain.png",
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/Grain.png`,
 					url:"/pages/autotrophy/autotrophy"
 				},
 				{
@@ -138,7 +158,7 @@
 					color: 'olive',
 					badge: 22,
 					name: '新人专区',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/Newgift.gif",
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/Newgift.gif`,
 					url:"/pages/Newgift/Newgift",
 					Routinghopname:"Newgift"
 				},
@@ -147,11 +167,13 @@
 					color: 'mauve',
 					badge: 0,
 					name: '帮助',
-					imgs:"http://hbk.huiboke.com/uploads/app/image/newindexScratchable/help.png",
-					url:"/pages/help/help"
+					imgs:`${this.$store.state.httpUrl}newindexScratchable/help.png`
+					// url:""///pages/help/help
 				}
 				],
-				swiperList:[]
+				swiperList:[],
+				DetailsList:[],
+				one_yuan_cha:true,//一元专区是否显示
 			}
 		},
 		components:{
@@ -159,16 +181,29 @@
 			banner,
 			ScratchableLatex,
 			faddish,
-			activity,
+			// activity,
 			feature,
 			featuredCommodity,
 			// exhibitionBanner,
 			// listNav,
 			list,
 			//这是更新的组件
-			Downloadprompt
+			Downloadprompt,
+			// Details
+			//临时的--开始
+			linshi,
+			activityimg,
+			//临时的结束
+			//一元购
+			Oneyuanbuy,
+			Oneyuanbuys
 		},
 		methods:{
+			//****一元专区---开始****
+			oneyuancha(){
+				this.one_yuan_cha = false
+			},
+			//****一元专区---结束****
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
@@ -233,7 +268,7 @@
 						success(res){
 							// console.log(res.data) //这是openid的值
 							uni.request({
-								url:`http://hbk.huiboke.com/api/login_and_register/userLogin`,
+								url:`${app.globalData.Requestpath}login_and_register/userLogin`,
 								method:"POST",
 								data:{
 									login_type:"weixin",
@@ -272,6 +307,15 @@
 				this.statusBarvalue = 0
 				this.statusBar = 0
 			},
+			//这是列表长按时弹窗的数据
+			Detailsdata(e){
+				// console.log(e)
+				this.DetailsList = e
+			},
+			//当列表滚动时 就让弹窗关闭
+			scroll(){
+				// this.$store.state.detailsbool = false
+			},
 		},
 		onLoad() {
 			// #ifdef MP-WEIXIN
@@ -293,6 +337,7 @@
 					limit:5
 				},
 				success(res) {
+					console.log(res)
 					if(res.data.code==0){
 						_this.swiperList = res.data.data
 					}
@@ -309,7 +354,7 @@
 				 _this.nanlist = res.data.data
 				}
 			})
-		}
+		},
 	}
 </script>
 

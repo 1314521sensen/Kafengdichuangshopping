@@ -4,7 +4,7 @@
 		<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
 		 :autoplay="true" interval="5000" duration="500">
 			<swiper-item v-for="(item,index) in swiperList" :key="index">
-				<image :src="'http://hbk.huiboke.com'+item.adv_thumb" mode="aspectFill"></image>
+				<image :src="imgpath+item.adv_thumb" mode="scaleToFill"></image>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -15,6 +15,7 @@
 		data(){
 			return {
 				dotStyle: false,
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

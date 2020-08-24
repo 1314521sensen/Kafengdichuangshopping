@@ -22,7 +22,12 @@
 					>
 						重置密码
 					</button>
-					<view class="cu-modal drawer-modal justify-start" :class="modalName=='DrawerModalL'?'show':''" @tap="hideModal">
+					<view 
+						class="cu-modal drawer-modal justify-start" 
+						:class="modalName=='DrawerModalL'?'show':''" 
+						@tap="hideModal"
+						:style="{'padding-top':statusBar+'rpx'}"
+					>
 						<view class="cu-dialog basis-lg" @tap.stop="" :style="[{top:CustomBar+'px',height:'calc(100vh - ' + CustomBar + 'px)'}]">
 							<view class="cu-list menu text-left">
 								<form @submit="changeform">
@@ -105,7 +110,8 @@
 						titleplaceholder:"请设置新支付密码",
 						name:"newpaypassword"
 					}
-				]
+				],
+				Realnamebool:true,//重置密码的时候 是否实名
 			}
 		},
 		methods:{
@@ -216,25 +222,29 @@
 				}
 			},
 			changepassword(e){
-				let arr = []
-				let arr1 = []
-				for(let i=0;i<this.phonetext.length;i++){
-					if(i<3){
-						arr.push(this.phonetext[i])
+				if(this.Realnamebool){
+					let arr = []
+					let arr1 = []
+					for(let i=0;i<this.phonetext.length;i++){
+						if(i<3){
+							arr.push(this.phonetext[i])
+						}
+						if(i>this.phonetext.length-5){
+							arr1.push(this.phonetext[i])
+						}
 					}
-					if(i>this.phonetext.length-5){
-						arr1.push(this.phonetext[i])
-					}
+					this.phonestring = `${[...arr]}****${[...arr1]}`
+					this.modalName = e.currentTarget.dataset.target
+				}else{
+					app.globalData.showtoastsame("请返回设置中心进行实名认证")
 				}
-				this.phonestring = `${[...arr]}****${[...arr1]}`
-				this.modalName = e.currentTarget.dataset.target
 			},
 			//这是左侧弹窗短信验证码
 			leftcode(){
 					this.disabled = true
 					this.codetext = "已发送"
 					let json = {
-						token:this.tokey,
+						mobile:this.phonetext,
 						type:3,
 						userid:this.id
 					}
@@ -291,6 +301,12 @@
 			this.id=opction.id
 			this.phonetext = opction.phone
 			this.statusBar = app.globalData.statusBar
+			if(opction.Realnamebool=='true'){
+				this.Realnamebool = true
+			}else{
+				this.Realnamebool = false
+			}
+			
 		}
 	}
 </script>

@@ -37,7 +37,7 @@
 							:data-finish_time="item.finish_time"
 							:data-cancel_time="item.cancel_time"
 						>
-							<image :src="'http://hbk.huiboke.com'+item.store_logo" mode=""></image>
+							<image :src="imgpath+item.store_logo" mode=""></image>
 						</view>
 						<view class="title-text">
 							<view class="item-text">
@@ -91,7 +91,8 @@
 				indexs:"",
 				page:1,
 				geturls:'',
-				judge:true
+				judge:true,
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		components:{

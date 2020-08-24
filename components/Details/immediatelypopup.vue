@@ -3,7 +3,7 @@
 		<view class="cu-dialog">
 			<view class="immediately-top">
 				<view class="immediately-top-image">
-					<image :src="'http://hbk.huiboke.com'+pic.good_pic"></image>
+					<image :src="this.$store.state.imgyuming+pic.good_pic"></image>
 				</view>
 				<view class="immediately-top-describe">
 					<view class="price">
@@ -67,6 +67,7 @@
 		methods:{
 			//这是当用户点击规格items,index,indexs,item
 			choose(e){
+				console.log(1111)
 				this.specid = e.currentTarget.dataset.specid
 				this.indexs = e.currentTarget.dataset.index
 				//这是存储用户点击规格的值
@@ -125,7 +126,7 @@
 					// uni.navigateTo({
 					// 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=${this.specid}&specname=${JSON.stringify(this.datalist)}&num=${this.num}&way=2&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
 					// })
-					// console.log(this.datalist)
+					console.log(this.producttype)
 					console.log(this.couplebool)
 					let SpecificationShopdetails = {
 						good_id:this.gid,
@@ -140,7 +141,13 @@
 						good_freight:this.pic.good_freight,
 						good_type:this.couplebool
 					}
-					
+					//如果是团长类型增加 属性值
+					if(parseInt(this.producttype)==3){
+						//这个分享码后期是动态的
+						SpecificationShopdetails.share_code = this.code
+						SpecificationShopdetails.share_from = 3
+					}
+					console.log(SpecificationShopdetails)
 					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
 				}
 				//这些先留着 为后期用
@@ -167,7 +174,7 @@
 				this.$emit("hiddends",null)
 			}
 		},
-		props:["immediatelylist","bool","gid","pic","storeid","couplebool"],
+		props:["immediatelylist","bool","gid","pic","storeid","couplebool","code","producttype"],
 		created() {
 			// console.log(this.immediatelylist)
 		}

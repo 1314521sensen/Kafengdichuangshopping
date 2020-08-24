@@ -30,7 +30,8 @@
 						name:"已评价",
 						url:'order/getHaveEvaluationOrderList'
 					}
-				] 
+				],
+				pages:1
 			};
 		},
 		methods: {
@@ -39,7 +40,7 @@
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 				let url = e.currentTarget.dataset.url
 				// this.Evaluationdata(url)
-				this.$store.commit("getevaluationlist",{url})
+				this.$store.commit("getevaluationlist",{url,pages:this.pages})
 			},
 		},
 		components:{
@@ -49,7 +50,7 @@
 			this.statusBar = app.globalData.statusBar
 		},
 		created(){
-			this.$store.commit("getevaluationlist",{url:'order/getConfirmPayOrderList'})
+			this.$store.commit("getevaluationlist",{url:'order/getConfirmPayOrderList',pages:this.pages})
 		}
 	}
 </script>

@@ -18,7 +18,7 @@
 						<view class="room_tit">房间图片:</view>
 						<view class="boxPrice" @tap="selectimage">
 							<!-- <view :style="{'background-image':'url('+pathurl+')'}"></view>  -->
-							<image style="width: 100%;height: 100%;" :src="'http://hbk.huiboke.com'+pathurl" mode=""></image>
+							<image style="width: 100%;height: 100%;" :src="this.$store.state.imgyuming+pathurl" mode=""></image>
 						</view>
 					</view>
 				</view>

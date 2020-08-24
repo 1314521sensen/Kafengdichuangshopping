@@ -1,110 +1,146 @@
+
 <template>
 	<view class="commodityshop">
-		<view class="commodityshop-bg" :style="{'background-image':'url(/static/headearning/Headwithdrawal.png)','padding-top':statusBar+'rpx'}">
-			<actionbar bg="aa" message="可推商品" textcolor="#fff" url="/pages/headearnings/headearnings" :Jumpchoose="true"></actionbar>
-			<!-- 这个banner必须要有后端配合 -->
-			<!-- <banner :swiperList="bannerlist"></banner> -->
-		</view>
-		<view class="notice">
-			<view class="notice-box">
-				<view class="notice-icon">
-					<image src="/static/headearning/noticeicon.png" class="images"></image>
-				</view>
-				<text class="notice-title">优秀商家</text>
-				<text class="noticedescribe">
-					佣金大赏,货源优秀,货源优秀
-				</text>
+		<view v-if="qractivebool==false">
+			<view class="commodityshop-bg" :style="{'background-image':'url('+this.$store.state.httpUrl+'headearning/Headwithdrawal.png'+')','padding-top':statusBar+'rpx'}">
+				<actionbar bg="aa" message="可推商品" textcolor="#fff" url="/pages/headearnings/headearnings" :Jumpchoose="true"></actionbar>
+				<!-- 这个banner必须要有后端配合 -->
+				<!-- <banner :swiperList="bannerlist"></banner> -->
 			</view>
-		</view>
-		<view class="Criticalpush">
-			<view class="Criticalpush-left">
-				<text class="Criticalpush-title">爆推好货</text>
-				<view class="Criticalpush-images">
-					<image src="/static/headearning/Criticalpush.png" class="Criticalpush-img"></image>
-				</view>
-				<view class="Criticalpush-info">
-					联想耳机
-				</view>
-				<view class="Criticalpush-price">
-					<text class="price">¥200.00</text>
-					<view class="Criticalpush-commission">
-						佣金<text class="text-red">50</text>
+			<view class="notice">
+				<view class="notice-box">
+					<view class="notice-icon">
+						<image :src="this.$store.state.httpUrl+'headearning/noticeicon.png'" class="images"></image>
 					</view>
+					<text class="notice-title">优秀商家</text>
+					<text class="noticedescribe">
+						佣金大赏,货源优秀,货源优秀
+					</text>
 				</view>
 			</view>
-			<view class="Criticalpush-right">
-				<view class="Criticalpush-right-top" v-for="(item,index) in 2" :key="index">
-					<view class="Criticalpush-top">
-						<text class="Criticalpush-top-title">发现好货</text>
-						<text class="Criticalpush-top-info">团长口碑推荐</text>
+			<!-- <view class="Criticalpush">
+				<view class="Criticalpush-left">
+					<text class="Criticalpush-title">爆推好货</text>
+					<view class="Criticalpush-images">
+						<image src="/static/headearning/Criticalpush.png" class="Criticalpush-img"></image>
 					</view>
-					<view class="Criticalpush-bottom">
-						<view class="Criticalpush-bottom-imgs">
-							<image src="/static/headearning/Criticalpush.png"></image>
-							<image src="/static/headearning/Criticalpush.png"></image>
+					<view class="Criticalpush-info">
+						联想耳机
+					</view>
+					<view class="Criticalpush-price">
+						<text class="price">¥200.00</text>
+						<view class="Criticalpush-commission">
+							佣金<text class="text-red">50</text>
+						</view>
+					</view>
+				</view>
+				<view class="Criticalpush-right">
+					<view class="Criticalpush-right-top" v-for="(item,index) in 2" :key="index">
+						<view class="Criticalpush-top">
+							<text class="Criticalpush-top-title">发现好货</text>
+							<text class="Criticalpush-top-info">团长口碑推荐</text>
+						</view>
+						<view class="Criticalpush-bottom">
+							<view class="Criticalpush-bottom-imgs">
+								<image src="/static/headearning/Criticalpush.png"></image>
+								<image src="/static/headearning/Criticalpush.png"></image>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view> -->
+			<view class="Singleblastingbox">
+				<!-- :style="{'background-image':'url(/static/headearning/masklayerbg.jpg)'}" -->
+				<view class="Singleblasting" :style="{'background-image':'url('+this.$store.state.httpUrl+'headearning/masklayerbg.jpg'+')'}">
+					<view class="masklayer-bg">
+						<view class="masklayerTop">
+							<text class="masklayerTop-title">推广爆单</text>
+							<text>推广上榜好物,佣金拿到手抽筋</text>
 						</view>
 					</view>
 				</view>
 			</view>
-		</view>
-		<view class="Singleblastingbox">
-			<!-- :style="{'background-image':'url(/static/headearning/masklayerbg.jpg)'}" -->
-			<view class="Singleblasting" :style="{'background-image':'url(/static/headearning/masklayerbg.jpg)'}">
-				<view class="masklayer-bg">
-					<view class="masklayerTop">
-						<text class="masklayerTop-title">推广爆单</text>
-						<text>推广上榜好物,佣金拿到手抽筋</text>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="Singleblastingrollingbox">
-			<view class="Singleblastingrolling">
-				<scroll-view class="scrollview" :scroll-x="true">
-					<view class="scrollviewmidden" :style="{width:252*10+15+'rpx'}">
-						<view class="scrollviewitem" v-for="(item,index) in 10" :key="index">
-							<view class="scrollviewitem-image">
-								<image src="/static/headearning/item.png"></image>
-							</view>
-							<view class="scrollviewitem-info">
-								<text class="scrollviewiteminfotext">李宁休闲鞋男Mapk经典秋冬打打杀杀大多撒</text>
-								<view class="scrollviewiteminfoprice">
-									<text class="text-red">¥200.00</text>
-									<view class="scrollviewitemshare">
-										<text class="text-gray cuIcon-share"></text>
+			<view class="Singleblastingrollingbox">
+				<view class="Singleblastingrolling">
+					<scroll-view class="scrollview" :scroll-x="true">
+						<view class="scrollviewmidden" :style="{width:252*detective.length+15+'rpx'}">
+							<view 
+								class="scrollviewitem" 
+								v-for="(item,index) in detective" 
+								:key="index" 
+								@tap="shopitem"
+								:data-gid="item.good_id"
+								:data-sid="item.store_id"
+							>
+								<view class="scrollviewitem-image">
+									<image :src="imgpath+item.good_pic"></image>
+								</view>
+								<view class="scrollviewitem-info">
+									<text class="scrollviewiteminfotext">{{item.good_title}}</text>
+									<view class="scrollviewiteminfoprice">
+										<text class="text-red">¥{{item.good_promotion_price}}</text>
+										<view 
+											class="scrollviewitemshare"
+											@tap.stop="goodpromote"
+											:data-gid="item.good_id"
+										>
+											<text class="text-gray cuIcon-share"></text>
+										</view>
 									</view>
 								</view>
 							</view>
 						</view>
-					</view>
-				</scroll-view>
-			</view>
-		</view>
-		<Recommend title="推荐" bg="#f2f2f2" bordercolor="#000" height="62"></Recommend>
-		<view class="Promoterecommended_box">
-			<view class="Promoterecommended" v-for="(item,index) in 10" :key="index">
-				<view class="Promoterecommended-left">
-					<image src="/static/headearning/item.png"></image>
+					</scroll-view>
 				</view>
-				<view class="Promoterecommended-right">
-					<view class="Promoterecommended-title">
-						<text>李宁休闲鞋男鞋001 T1000支撑时尚潮流男士运动鞋大发撒奥奥所大所大撒所多多撒大飒飒</text>
+			</view>
+			<Recommend title="推荐" bg="#f2f2f2" bordercolor="#000" height="62"></Recommend>
+			<view class="Promoterecommended_box">
+				<view 
+					class="Promoterecommended" 
+					v-for="(item,index) in recommendGoodS" 
+					:key="index"
+					@tap="shopitem"
+					:data-gid="item.good_id"
+					:data-sid="item.store_id"
+				>
+					<view class="Promoterecommended-left">
+						<image :src="imgpath+item.good_pic"></image>
 					</view>
-					<view class="Promoterecommended-store">
-							<text class="Promoterecommended-storetext">官方旗舰店</text>
-					</view>
-					<view class="Promotioncommended_price">
-						<text class="text-red">¥200.00</text>
-						<view class="Promotioncommended_commission">
-							佣金<text class="text-red">20</text>
+					<view class="Promoterecommended-right">
+						<view class="Promoterecommended-title">
+							<text>{{item.good_title}}</text>
+						</view>
+						<view class="Promoterecommended-store">
+								<text class="Promoterecommended-storetext">{{item.store_name}}</text>
+						</view>
+						<view class="Promotioncommended_price">
+							<text class="text-red">¥{{item.good_promotion_price}}</text>
+							<view class="Promotioncommended_commission">
+								佣金<text class="text-red">{{item.commission}}</text>
+							</view>
+						</view>
+						<view 
+							class="Promotioncommended-btn" 
+							@tap.stop="goodpromote"
+							:data-gid="item.good_id"
+						>
+							<button class="cu-btn line-orange">推广</button>
 						</view>
 					</view>
-					<view class="Promotioncommended-btn">
-						<button class="cu-btn line-orange">推广</button>
-					</view>
 				</view>
 			</view>
 		</view>
+		<QRAcgood 
+			:good_images="good_images" 
+			:promotion_price="promotion_price"
+			:good_title="good_title"
+			:gid="gid"
+			:sid="sid"
+			:url="url"
+			v-if="qractivebool"
+			:statusBar="statusBar"
+			@areclose="areclose"
+		></QRAcgood>
 	</view>
 </template>
 
@@ -112,28 +148,119 @@
 	import actionbar from "@/components/actionbar/actionbar.vue"
 	import banner from "@/components/indexcomponents/banner.vue"
 	import Recommend from '@/components/indexcomponents/Recommend.vue'
+	// 二维码弹框
+	import QRAcgood from '@/components/commodityshop/QRActivitgood.vue'
+	
 	const app = getApp()
 	export default {
 		data() {
 			return {
 				statusBar:0,
+				detective:[],//切割的第一个数组
+				recommendGoodS:[],//第二个推荐的数组
+				
 				bannerlist:[
 					{
 						good_img_url:"/static/indexbanner/banner4.jpg"
 					}
-				]
+				],
+				promotion_price:"",
+				good_images:"",
+				good_title:"",
+				gid:"",
+				sid:"",
+				qractivebool:false,
+				unl:"",
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {
-			
+			//当用户分享成功或者失败时 就让页面为false
+			areclose(e){
+				// console.log("父组件返回来的",e)
+				this.qractivebool = e
+			},
+			shopitem(e){
+				let {gid,sid} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${gid}&storeid=${sid}&type=3`
+				})
+			},
+			goodpromote(e){
+				const _this = this
+				let {gid} = e.currentTarget.dataset
+				// console.log(gid)
+				uni.request({
+					url:`${app.globalData.Requestpath}good/getGoodInfo`,
+					data:{
+						gid
+					},
+					success(res) {
+						console.log(res)
+						if(res.data.code==0){
+							let {good_images,good_promotion_price,good_title,good_id,store_id,url} = res.data.data
+							_this.good_images = JSON.parse(good_images)[0]
+							_this.promotion_price = good_promotion_price
+							_this.good_title = good_title
+							_this.gid = good_id
+							_this.sid = store_id
+							_this.url = url
+							_this.qractivebool = true
+						}
+					}
+				})
+			}
 		},
 		components:{
 			actionbar,
 			banner,
-			Recommend
+			Recommend,
+			QRAcgood
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+			
+			const _this = this
+			uni.request({
+				url:`${app.globalData.Requestpath}good/getCommanderGoodList`,
+				data:{
+					page:_this.page,
+					pageSize:8
+				},
+				success(res) {
+					if(res.data.code == 0){
+						// console.log(res.data.data.list)
+						//切割成二个数组
+						//第一个
+						_this.detective = res.data.data.list.slice(0,4)
+						// console.log(_this.detective)
+						// 第二个数组  推荐的数组
+						_this.recommendGoodS = res.data.data.list.slice(4,res.data.data.list.length)
+						
+						// console.log(_this.recommendGoodS)
+					}
+					
+					
+					
+					// console.log(res)
+					// if(res.data.code==0){
+					// 	if(_this.page>1){
+					// 		_this.list = _this.list.concat(res.data.data.list)
+					// 		// console.log(_this.list)
+					// 	}else{
+					// 		_this.list = res.data.data.list
+					// 	}
+					// }else{
+					// 	// app.globalData.showtoastsame("数据暂无")
+					// 	 if(_this.page > 1){
+					// 		 _this.hinttext = '我也是有底线的'
+					// 	 }
+					// 	_this.textbool = true
+					// }
+					// _this.iconbool = false  
+				}  
+			})
+			
 		}
 	}
 </script>

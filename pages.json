@@ -6,16 +6,6 @@
 			"style" : {}
 		},
 		// #endif
-		// #ifdef APP-PLUS
-		{
-		    "path" : "pages/Startpage/Startpage",
-		    "style" : {}
-		},
-		{
-		    "path" : "pages/Guidepage/Guidepage",
-		    "style" : {}
-		},
-		// #endif
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -132,10 +122,6 @@
 			"path":"components/setcenter/Applicationeaming"
 		},
 		{
-            "path" : "pages/Allrightsreserved/Allrightsreserved",
-            "style" : {}
-        },
-		{
 			"path":"pages/integral/integral"
 		},
 		{
@@ -163,10 +149,6 @@
         }
         ,{
             "path" : "pages/Livecover/Livecover",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/livestudio/livestudio",
             "style" : {}
         },
 		{
@@ -307,6 +289,14 @@
 		},
 		{
 		    "path" : "pages/WeChatLanding/WeChatLanding",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/sharecode/sharecode",
+		    "style" : {}
+		},
+		{
+		    "path" : "components/login/agreement",
 		    "style" : {}
 		}
     ],

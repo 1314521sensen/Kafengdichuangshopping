@@ -22,7 +22,7 @@
 					@tap="tabSelect" 
 					:data-id="index">
 					<view class="icon">
-						<image :src="'http://hbk.huiboke.com/uploads/app/image/'+item.imgs" alt="">
+						<image :src="imgpath+'/uploads/app/image/'+item.imgs" alt="">
 					</view>
 					{{item.name}}
 				</view>
@@ -107,6 +107,7 @@
 					imgs:"integralstore/hotcakes.png",
 				}],
 				statusBar:0,
+				imgpath:this.$store.state.imgyuming
 			};
 		},
 		onShow() {

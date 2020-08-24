@@ -2,7 +2,7 @@
 	<cover-view class="Specificationsprops bg-write" :style="{width:componentwidth+'px',height:700+'px'}">
 		<cover-view class="SpecificationTop">
 			<cover-view class="SpecificationImgLeft">
-				<cover-image class="liveshopimg" :src="'http://hbk.huiboke.com'+this.$store.state.liveshopspecifications[0].g_pic"></cover-image>
+				<cover-image class="liveshopimg" :src="this.$store.state.imgyuming+this.$store.state.liveshopspecifications[0].g_pic"></cover-image>
 			</cover-view>
 			<cover-view class="Specificationtextright text-paddingOrsotwenty">
 				<cover-view class="SpecificationtextrightTitle">
@@ -82,6 +82,7 @@
 						good_name:this.$store.state.liveshopspecifications[0].g_le,
 						store_id:this.$store.state.liveshopspecifications[0].sid,
 						share_code:this.$store.state.liveshopspecifications[0].share_code,
+						good_freight:this.$store.state.liveshopspecifications[0].good_freight,
 						share_from:1
 					}
 					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})

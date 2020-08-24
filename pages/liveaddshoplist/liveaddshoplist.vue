@@ -28,7 +28,7 @@
 				<view class="scroll-view">
 					<view class="addlist-item" v-for="(item,index) in liveshoplist" :key="index">
 						<view class="img-left">
-							<image class="left-image" :src="'http://hbk.huiboke.com'+item.good_pic"></image>
+							<image class="left-image" :src="imgpath+item.good_pic"></image>
 						</view>
 						<view class="right-shop-info">
 							<view class="shoptitle">{{item.good_title}}</view>
@@ -59,24 +59,29 @@
 				liveshoplist:[],
 				Shop_g_idlist:[],
 				storeid:"",
-				type:""
+				type:"",
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {
-			//封装一个请求列表的方法
+			//封装一个请求列表的方法storetype storelive
 			getliveshoplist(){
 				const _this = this
+				let json = {
+					token:_this.tokey,
+					page:_this.pages,
+					pageSize:10,
+					gkey:_this.value,
+				}
+				if(_this.type=="storetype"){
+					json.sid = _this.storeid
+				}
 				uni.request({
 					url:`${app.globalData.Requestpath}live/getLiveGoodList`,
 					method:'POST',
-					data:{
-						token:_this.tokey,
-						page:_this.pages,
-						pageSize:10,
-						gkey:_this.value,
-						sid:_this.storeid
-					},
+					data:json,
 					success(res) {
+						console.log(res)
 						if(res.data.code==0){
 							//实现下拉加载
 							if(_this.pages>1){

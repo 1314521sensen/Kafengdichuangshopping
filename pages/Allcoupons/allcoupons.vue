@@ -10,7 +10,7 @@
 					</view>
 				</view>
 				<!--  v-if="items==coupons[TabCur]" :couponslist="couponslist" -->
-			<securitiesbottom @storeIsStillAndPlatform="storeIsStillAndPlatform" :TabCur="TabCur"></securitiesbottom>
+			<securitiesbottom @storeIsStillAndPlatform="storeIsStillAndPlatform" :TabCur="TabCur" :bottomindex="bottomindex"></securitiesbottom>
 			</scroll-view>
 		<!-- </view> -->
 	</view>
@@ -34,6 +34,8 @@
 					"已过期"
 				],
 				bottomindex:0,
+				pages:1,
+				
 			}
 		},
 		methods:{
@@ -42,12 +44,12 @@
 				this.items = items
 				this.TabCur = id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex)})
+				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex),pages:this.pages})
 			},
 			//这是子组件传过来的 判断点击了平台 还是店铺
 			storeIsStillAndPlatform(e){
 				this.bottomindex = e
-				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex)})
+				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex),pages:this.pages})
 			}
 		},
 		components:{
@@ -55,7 +57,7 @@
 		},
 		created() {
 			//初始化 优惠券列表
-			this.$store.commit("getallcouponslist",{topindex:0,bottomindex:0})
+			this.$store.commit("getallcouponslist",{topindex:0,bottomindex:0,pages:this.pages})
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar

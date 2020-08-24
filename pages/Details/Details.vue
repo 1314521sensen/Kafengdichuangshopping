@@ -3,7 +3,7 @@
 		<detailsbanner :swiperList="swiperList" height="720"></detailsbanner>
 		<pricetitle 
 			:pic="pic" 
-			:region="region" 
+			:areaName="areaName"
 			:storeid="storeid" 
 			:gid="gid" 
 			:tokey="tokey" 
@@ -24,6 +24,7 @@
 			:good_verify="good_verify"
 			:good_delete="good_delete"
 			:producttype="producttype"
+			:code="code"
 		></bottomcar>
 	</view>
 </template>
@@ -48,7 +49,8 @@
 				//这是详情页的图片的数据
 				//这是标题和价格数据
 				pic:{},
-				region:[],
+				// region:[],
+				areaName:'',//商品的地址
 				tokey:"",
 				gid:"",
 				storeid:"",
@@ -59,6 +61,7 @@
 				good_delete:"",//是否删除
 				liveshopstate:"",
 				producttype:"",//判断商品是不是团长类型
+				code:0,//团长分享码
 			}
 		},
 		methods: {
@@ -74,7 +77,7 @@
 		},
 		onLoad(opction){
 			// couplebool
-			console.log(opction)
+			// console.log(opction)
 			let {id,storeid,goodtype,liveshopstate,type} = opction
 			const _this = this
 			//这是商品的id
@@ -82,25 +85,32 @@
 			//店铺id
 			this.storeid = storeid
 			this.liveshopstate = liveshopstate
+			let shopJSON = {
+				gid:opction.id
+			}
 			//判断是不是新人
 			if(goodtype=="npt"){
 				this.couplebool = "npt"
+			}else if(goodtype=="nlt"){
+				this.couplebool = "nlt"
+				shopJSON.gtype = "nlt"
 			}else{
 				this.couplebool = "nt"
 			}
 			//判断是不是团长商品
 			if(parseInt(type)==3){
 				this.producttype = type
+				this.code = opction.code
 			}else{
 				this.producttype = ""
 			}
 			//在去请求详情页的其他数据
+			console.log(shopJSON)
 			uni.request({
 				url:`${app.globalData.Requestpath}good/getGoodInfo`,
-				data:{
-					gid:opction.id
-				},
+				data:shopJSON,
 				success(res) {
+					// console.log(res)
 					// console.log(res.data.data.good_content_images)
 					if(res.data.code==0){
 						_this.good_state = res.data.data.good_state
@@ -145,17 +155,14 @@
 						//商品规格结束
 						
 						//在这里请求店家的地址信息
-						let arr = []
-						let url = `${app.globalData.Requestpath}common/getAreas`
-						uni.request({//地址这块还是有些问题
-							url,
+						uni.request({
+							url:`${app.globalData.Requestpath}store/getStoreInfo`,
 							data:{
-								parent_id:res.data.data.area_id2
+								sid:_this.storeid
 							},
-							success(resprovince) {
-								if(resprovince.data.code==0){
-									arr.push(resprovince.data.data[0].area_name)
-									_this.region = arr
+							success(res) {
+								if(res.data.code == 0){
+									_this.areaName = res.data.data.area_name
 								}
 							}
 						})

@@ -21,23 +21,23 @@
 			return {
 				iconList:[
 					{
-						images:"/static/my/Forpayment.png",
+						images:`${this.$store.state.httpUrl}my/orders/Forpayment.png`,
 						textname:"待付款"
 					},
 					{
-						images:"/static/my/sendgoods.png",
+						images:`${this.$store.state.httpUrl}my/orders/sendgoods.png`,
 						textname:"待发货"
 					},
 					{
-						images:"/static/my/beenshipped.png",
+						images:`${this.$store.state.httpUrl}my/orders/beenshipped.png`,
 						textname:"已发货"
 					},
 					{
-						images:"/static/my/evaluation.png",
+						images:`${this.$store.state.httpUrl}my/orders/evaluation.png`,
 						textname:"评价"
 					},
 					{
-						images:"/static/my/refundafter.png",
+						images:`${this.$store.state.httpUrl}my/orders/refundafter.png`,
 						textname:"退款售后"
 					}
 				]

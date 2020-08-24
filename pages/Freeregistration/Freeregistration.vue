@@ -57,7 +57,8 @@
 				Confirmpassword:"",
 				referrer_sc: '',
 				referrer_mobile:'',
-				bool:true
+				bool:false,
+				code:0,//分享人的code码
 			}
 		},
 		methods: {
@@ -150,7 +151,8 @@
 							mobile_phone:phone,
 							code:phonecode,
 							referrer_sc:this.referrer_sc,
-							referrer_mobile:referrer_mobile
+							referrer_mobile:referrer_mobile,
+							referrer_sc:this.code
 						}
 						//将用户微信与微信绑定的参数
 						let bingjson = {
@@ -171,14 +173,14 @@
 									bingjson.opened = res.data
 									// console.log(bingjson)
 									uni.request({
-										url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
+										url:`${app.globalData.Requestpath}login_and_register/userRegister`,
 										method:"POST",
 										data:registeredjson,
 										success(ress){//请求成功的时候
 											// console.log(ress)
 											if(ress.data.code==0){
 													uni.request({
-														url:"http://hbk.huiboke.com/api/login_and_register/userLogin",
+														url:`${app.globalData.Requestpath}login_and_register/userLogin`,
 														method:"POST",
 														data:bingjson,
 														success(resquicklogin) {
@@ -230,7 +232,7 @@
 						//这里进行请求
 						// #ifdef APP-PLUS || H5
 						uni.request({
-							url:"http://hbk.huiboke.com/api/login_and_register/userRegister",
+							url:`${app.globalData.Requestpath}login_and_register/userRegister`,
 							method:"POST",
 							data:registeredjson,
 							success(res){//请求成功的时候
@@ -268,10 +270,21 @@
 			}
 		},
 		onLoad(opction) {
+			console.log(opction)
 			const _this = this
 			if(opction.type==1){
 				_this.bool = false
 			}
+			//这是扫码进来的-----开始
+			let {code} = opction
+			
+			if(code){
+				_this.bool = false
+				_this.code = code
+			}else{
+				_this.bool = true
+			}
+			//这是扫码进来的---结束
 		}
 	}
 </script>

@@ -7,7 +7,7 @@
 					<view class="plicevalue" v-for="(item,index) in valueiconlist" :key="index">
 						<view class="icon-box">
 							<view class="icon">
-								<image :src="'http://hbk.huiboke.com/uploads/app/image/'+item.imgs" class="imgs"></image>
+								<image :src="imgpath+'/uploads/app/image/'+item.imgs" class="imgs"></image>
 							</view>
 							<text class="iconvalue" :style="{'color':item.textcolor}">{{item.value}}</text>
 						</view>
@@ -24,7 +24,7 @@
 				<view class="activity">
 					<view 
 						class="sun activityvalue" 
-						:style="{'background-image':'url('+'http://hbk.huiboke.com/uploads/app/image/'+item.imgs+')','margin-top':item.marginTop+'rpx'}" 
+						:style="{'background-image':'url('+imgpath+'/uploads/app/image/'+item.imgs+')','margin-top':item.marginTop+'rpx'}" 
 						v-for="(item,index) in activitylist" 
 						:key="index"
 						@tap="activityicon"
@@ -34,11 +34,12 @@
 				</view>
 			</view>
 		</view>
-		<beemembers></beemembers>
+		<beemembers :field="field" :vipbool="vipbool"></beemembers>
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	import beemembers from "@/components/beemembers/beemembers.vue"
 	export default {
 		data() {
@@ -56,32 +57,50 @@
 				valueiconlist:[
 					{
 						imgs:"littlebee/sun.png",
-						value:1000,
+						value:0,
 						textcolor:"#febc51"
 					},
 					{
 						imgs:"littlebee/smailrain.png",
-						value:1000,
+						value:0,
 						textcolor:"#4fb5e5"
 					}
-				]
+				],
+				imgpath:this.$store.state.imgyuming,
+				field:"",//判断是团长还是小蜜蜂进来的
+				vipbool:0
 			}
 		},
 		methods: {
 			activityicon(e){
-				let time = null
-				let indexs = e.currentTarget.dataset.indexs
-				const _this = this
-				time = setInterval(function(){
-					_this.activitylist[indexs].marginTop +=20
-					if(_this.activitylist[indexs].marginTop>120){
-						clearInterval(time)
-					}
-				},100)
+				app.globalData.showtoastsame("功能正在开发,敬请期待")
+				// let time = null
+				// let indexs = e.currentTarget.dataset.indexs
+				// const _this = this
+				// time = setInterval(function(){
+				// 	_this.activitylist[indexs].marginTop +=20
+				// 	if(_this.activitylist[indexs].marginTop>120){
+				// 		clearInterval(time)
+				// 	}
+				// },100)
 			}
 		},
 		components:{
 			beemembers,
+		},
+		onLoad(option) {
+			console.log(option)
+			let {field} = option
+			this.field = field
+		},
+		onShow() {
+			const _this = this
+			uni.getStorage({
+				key:'beesVip',
+				success(resVip) {
+					_this.vipbool = resVip.data
+				}
+			})
 		}
 	}
 </script>

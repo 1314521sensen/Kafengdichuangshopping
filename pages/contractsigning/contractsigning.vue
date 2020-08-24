@@ -18,7 +18,7 @@
 						<view class="informationitem-text">{{itemcard.itemname}}</view>
 						<view class="cu-form-group">
 							<view class="grid col-4 grid-square flex-sub">
-								<image class="identityPir" :src="'http://hbk.huiboke.com'+itemcard.bgurl" mode="aspectFill"></image>
+								<image class="identityPir" :src="imgpath+itemcard.bgurl" mode="aspectFill"></image>
 							</view>
 						</view>
 					</view>
@@ -164,6 +164,7 @@
 				contacts_name:"",//联系人姓名
 				store_mobile:"",//联系人电话
 				contacts_email:"",//联系人邮箱
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {

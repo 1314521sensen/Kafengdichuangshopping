@@ -1,7 +1,7 @@
 <template>
 	<cover-view class="chat parent-padding-leftAndright" :style="{width:(componentwidth/2+30)+'px'}">
 		<scroller scroll-direction :show-scrollbar="false">
-			<cover-view class="bg-Black-gradient chat-item" v-for="(item,index) in list" :key="index">
+			<cover-view class="bg-Black-gradient chat-item" v-for="(item,index) in this.$store.state.liveuserlist" :key="index">
 				<text class="font-size-twenty-flxed textcolor-Promptreply text-wrap">{{item.name}}&nbsp;{{item.content}}</text>
 			</cover-view>
 		</scroller>
@@ -10,7 +10,7 @@
 
 <script>
 	export default {
-		props:["componentwidth","list"]
+		props:["componentwidth"],
 	}
 </script>
 

@@ -27,6 +27,9 @@
 							:livenick="livenick"
 							:roomid="roomid"
 							:livepic="livepic"
+							:uname="uname"
+							:uid="uid"
+							:cont="cont"
 						>
 						</livemidden>
 						<!-- <liveleft :componentwidth="width" :componentheight="height"></liveleft> -->
@@ -35,7 +38,7 @@
 				</cover-view>
 			</video>
 		</view>
-		<!-- <liveusersowing v-if="liveanchorsowing==false"></liveusersowing> -->
+		<livefinish v-if="liveanchorsowing==false" :wdith="wdith" :height="height"></livefinish>
 	</view>
 <!-- #endif --> 
 </template>
@@ -45,7 +48,7 @@
 	import livemidden from "@/components/live/livemidden.nvue"
 	import liveright from "@/components/live/liveright.nvue"
 	//引入用户观看主播下播的页面
-	// import liveusersowing from "@/components/liveplice/liveuserSowing.vue"
+	import livefinish from "@/components/liveplice/livefinish.nvue"
 	export default {
 		// #ifdef APP-PLUS
 		data() {
@@ -61,6 +64,10 @@
 				roomid:"",
 				livepic:"",
 				liveanchorsowing:true,//判断主播是否下播
+				userlivetime:null,
+				uname:"",
+				uid:"",
+				cont:0,//直播的人数
 			}
 		},
 		methods: {
@@ -84,10 +91,13 @@
 			liveleft,
 			livemidden,
 			liveright,
-			// liveusersowing
+			livefinish
 		},
 		created() {
 			let _this = this
+			//商品规格弹窗----开始 默认值false
+			_this.$store.state.livespecificationsbool = false
+			//商品规格弹窗---结束
 			uni.getSystemInfo({
 				success(res) {
 					//获取手机宽度
@@ -101,23 +111,109 @@
 			})
 		},
 		onLoad(opction){
+			const _this = this
+			
 			// console.log(opction)
-			let {indexs,live_url,livenick,roomid,livepic,uid} = opction
-			// let {indexs} = opction
-			// let url = ""
-			// if(indexs+1 >= 10){
-			// 	url = `rtmp://192.168.1.152:1935/live/live0${parseInt(indexs)+1}`
-			// }else{
-			// 	url = `rtmp://192.168.1.152:1935/live/live00${parseInt(indexs)+1}`
-			// }
-			// this.url = url
-			// console.log(this.url)
-			this.url = live_url
-			this.livenick = livenick
-			this.roomid = roomid
-			this.livepic = livepic
-			this.$store.commit('userliveshoplist',uid)
-		}
+			let {indexs,live_url,livenick,roomid,livepic,uid,uname} = opction
+			_this.url = live_url
+			_this.livenick = livenick
+			_this.roomid = roomid
+			_this.livepic = livepic
+			_this.uname = uname
+			_this.uid = uid
+			_this.$store.commit('userliveshoplist',uid)
+			//初始化用户一进入直播间的数据
+			let userInitialize = {
+				type:'liveUserInit',
+				uid:uid,
+				name:uname,
+				avatar:'',
+				group:roomid
+			}
+			console.log(JSON.stringify(userInitialize),"这是初始化的数据")
+			uni.connectSocket({
+				url:"ws://49.232.153.178:7272",
+				// #ifdef MP
+				header: {
+					'content-type': 'application/json'
+				},
+				// #endif
+				// #ifdef MP-WEIXIN
+				method: 'GET',
+				// #endif
+				success(resconnect){
+					console.log(resconnect)
+					//初始化用户进入直播间的数据
+					setTimeout(()=>{
+						console.log(123)
+						uni.sendSocketMessage({
+							data:JSON.stringify(userInitialize),
+							success(ressendmsg) {
+								console.log(ressendmsg,"这是初始化的发送成功")
+							},
+							fail(err){
+								console.log(err)
+							}
+						})
+					},3000)
+				}
+			})
+			//liveuserlist
+			//监听WebSocket连接打开事件。
+			uni.onSocketOpen(function(res){
+				// console.log("监听连接状态")
+				let pingobj = {
+					type:'livePing'
+				}
+				// console.log(JSON.stringify(pingobj))
+				_this.userlivetime = setInterval(function(){
+					uni.sendSocketMessage({
+						data:JSON.stringify(pingobj),
+						success(res) {
+							// console.log("心跳")
+						}
+					})
+				},30000)
+			})
+			uni.onSocketMessage(function(resmsg){
+				// console.log("监听接收服务器的状态",resmsg)
+				console.log(JSON.parse(resmsg.data))
+				let messagetype = JSON.parse(resmsg.data).message_type
+				if(messagetype=="liveConnect"){
+					//当用户加入到直播间的时候
+					_this.cont = JSON.parse(resmsg.data).data.count
+				}else if(messagetype=="liveChatMessage"){
+					//当用户接收到服务器消息的时候 
+					_this.$store.commit("livereceivemsg",{msg:JSON.parse(resmsg.data).data})
+				}else if(messagetype=="anchorCloseRoom"){
+					//当主播下播的时候
+					_this.liveanchorsowing = false
+				}else if(messagetype=="liveWait"){
+					_this.liveanchorsowing = false
+				}
+			})
+		},
+		//当组件销毁前
+		beforeDestroy(){
+			const _this = this
+			console.log("组件销毁前")
+			uni.closeSocket({
+				code:1000,
+				success(resuserclose) {
+					console.log(resuserclose)
+					clearInterval(_this.userlivetime)
+					//当用户退出直播间的时候 将数据清空
+					_this.$store.state.liveuserlist = []
+				}
+			})
+		},
+		onHide() {
+			//当用户加入到后台的时候继续播放
+			this.videoContext.play()
+		},
+		onReady(res){
+			this.videoContext = uni.createVideoContext('myVideo')
+		},
 	// #endif
 	}
 </script>

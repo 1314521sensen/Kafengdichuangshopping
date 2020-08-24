@@ -18,7 +18,7 @@
 								{{item.street_number}}
 							</view> </view>
 					</view>
-					<view class="action">
+					<view class="action" v-if="!way">
 						<text class="lg text-gray text-red cuIcon-delete" @tap="Deleteaddress(index,item.address_id)"></text>
 					</view>
 				</view>

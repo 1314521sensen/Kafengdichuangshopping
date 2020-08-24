@@ -1,17 +1,24 @@
 <template>
-	<view class="PersonalMy-big-bg">
-		<pageheight :statusBar="statusBar"></pageheight>
-		<!-- :amount="amount" :integral="integral" -->
-		<information :couponslistdata="couponslistdata" :tokey="tokey" :nickname="nickname" :images="images" :moneylist="moneylist"></information>
-		<orders></orders>
-		<!-- <setup></setup> -->
-		<view class="Mynine-cell-operation">
-			<view class="Mynine-cell-operation-midden">
-				<myScratchableLatex></myScratchableLatex>
+	<view>
+		<view class="PersonalMy-big-bg" v-show="openidbool">
+			<pageheight :statusBar="statusBar"></pageheight>
+			<!-- :amount="amount" :integral="integral" -->
+			<information :couponslistdata="couponslistdata" :tokey="tokey" :nickname="nickname" :images="images" :moneylist="moneylist"></information>
+			<orders></orders>
+			<!-- <setup></setup> -->
+			<view class="Mynine-cell-operation">
+				<view class="Mynine-cell-operation-midden">
+					<myScratchableLatex></myScratchableLatex>
+				</view>
 			</view>
+			<Selectionrecommended></Selectionrecommended>
 		</view>
-		<Selectionrecommended></Selectionrecommended>	
+		<!-- 绑定openid以后就不让他显示 -->
+		<!-- #ifdef APP-PLUS -->
+		<wxbindopen v-show="openidbool==false"></wxbindopen>
+		<!-- #endif -->
 	</view>
+	
 </template>
 
 <script>
@@ -21,6 +28,8 @@
 	// import setup from "@/components/myPersonal/setup.vue"
 	//这是精选推荐
 	import Selectionrecommended from "@/components/myPersonal/Selectionrecommended.vue"
+	//引入绑定微信openid的组件
+	import wxbindopen from "@/components/myPersonal/wxbindopnid.vue"
 	const app = getApp();
 	export default {
 		//这是个人中心
@@ -53,14 +62,16 @@
 						miao:"优惠券",
 						url:"/pages/Allcoupons/allcoupons"
 					}
-				]
+				],
+				openidbool:true
 			}
 		},
 		components:{
 			orders,
 			myScratchableLatex,
 			information,
-			Selectionrecommended
+			Selectionrecommended,
+			wxbindopen
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
@@ -83,17 +94,96 @@
 							token:_this.tokey
 						},
 						success(resinfo) {
+							console.log(resinfo)
 							if(resinfo.data.code==0){
-								let {user_nick,user_pic,user_amount,user_integral} = resinfo.data.data
+								let {user_nick,user_pic,user_amount,user_integral,is_commander,is_member,user_sid,user_commission,invite_num,share_code,app_openid} = resinfo.data.data
+								// console.log(app_openid)openidbool
+								// console.log(user_commission)
+								// console.log(is_commander,"是不是团长")
+								// console.log(is_member,"是不是会员")
 								// console.log(user_nick,user_pic)
 								_this.nickname = user_nick
-								_this.images = `http://hbk.huiboke.com${user_pic}`
+								_this.images = `${_this.$store.state.imgyuming}${user_pic}`
 								_this.moneylist[0].num = user_amount
 								_this.moneylist[1].num = user_integral
+								//这里的缓存是不是会员
+								
 								uni.setStorage({
 									key:'beesVip',
-									data:resinfo.data.data.is_member
+									data:is_member
 								})
+								//是不是团长加入到缓存
+								uni.setStorage({
+									key:"beesgrouplong",
+									data:is_commander
+								})
+								//把头像加入到缓存 为了直播中使用
+								uni.setStorage({
+									key:'userportrait',
+									data:user_pic
+								})
+								//将店铺id保存到缓存中判断用户是不是这个店铺的
+								uni.setStorage({
+									key:"userstoreid",
+									data:user_sid
+								})
+								//将佣金加入到缓存
+								uni.setStorage({
+									key:"user_commission",
+									data:user_commission
+								})
+								//将昵称加入到缓存
+								uni.setStorage({
+									key:"ni_cheng",
+									data:user_nick
+								})
+								//将邀请的人数加入到缓存invite_num
+								uni.setStorage({
+									key:"invite_num",
+									data:invite_num
+								})
+								//将用户的邀请码加入到缓存
+								uni.setStorage({
+									key:"share_code",
+									data:share_code
+								})
+								//请求用户的手机号和邮箱 如果邮箱有的话就 加入到key为userbindstate的1 没有就是0 为了用户更改邮箱号用
+								uni.request({
+									url:`${app.globalData.Requestpath}user/getUserBindInfo`,
+									method:"POST",
+									data:{
+										token:_this.tokey
+									},
+									success(resemail) {
+										// console.log(resemail)
+										if(resemail.data.code==0){
+											let {user_email} = resemail.data.data
+											if(user_email){
+												uni.setStorage({
+													key:"userbindstate",
+													data:1
+												})
+											}else{
+												uni.setStorage({
+													key:"userbindstate",
+													data:0
+												})
+											}
+										}
+									}
+								})
+								console.log(app_openid)
+								// #ifdef APP-PLUS
+								if(app_openid){
+									_this.openidbool = true
+									uni.setStorage({
+										key:"bindopenid",
+										data:app_openid,
+									})
+								}else{
+									_this.openidbool = false
+								}
+								// #endif
 							}else{
 								app.globalData.Requestmethod(resinfo.data.code,resinfo.data.msg)
 							}
@@ -104,23 +194,28 @@
 						url:`${app.globalData.Requestpath}activity/getUserStoreCouponList`,
 						method:"POST",
 						data:{
-							token:res.data
+							token:res.data,
+							sid:-2
 						},
 						success(Storecoupon) {//这是获取到店铺的优惠券
-							if(Storecoupon.data.code==0){
+								// console.log(Storecoupon)
+								let sidnum = 0
+								//当用户 获取店铺优惠券数量成功的时候 就获取对应的数据 否则为0
+								Storecoupon.data.code==0 ? sidnum = Storecoupon.data.data.total : sidnum = 0
 								uni.request({
 									url:`${app.globalData.Requestpath}activity/getUserPlatformCouponList`,
 									method:"POST",
 									data:{
-										token:res.data
+										token:res.data,
 									},
 									success(Platformcoupon) {//这是获取了平台的优惠券
-										if(Platformcoupon.data.code==0){
-											_this.moneylist[2].num = Storecoupon.data.data.list.length+Platformcoupon.data.data.list.length
-										}
+										let Platformcouponnuma = 0
+										
+										Platformcoupon.data.code==0 ? Platformcouponnuma = Platformcoupon.data.data.total : Platformcouponnuma = 0
+										_this.moneylist[2].num = Platformcouponnuma + sidnum
 									}
 								})
-							}
+							
 						}
 					})
 				},

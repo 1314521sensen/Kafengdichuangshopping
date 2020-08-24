@@ -26,13 +26,13 @@
 		data() {
 			return {
 				liveList:[
+					// {
+					// 	img:'http://hbk.huiboke.com/uploads/app/image/storeimg/live1.png',
+					// 	title:'点击直播',
+					// 	text:'开始我的本场直播'
+					// },
 					{
-						img:'http://hbk.huiboke.com/uploads/app/image/storeimg/live1.png',
-						title:'点击直播',
-						text:'开始我的本场直播'
-					},
-					{
-						img:'http://hbk.huiboke.com/uploads/app/image/storeimg/live2.png',
+						img:`${this.$store.state.imgyuming}/uploads/app/image/storeimg/live2.png`,
 						title:'直播带货商品',
 						text:'添加本次直播带货商品'
 					}
@@ -43,17 +43,17 @@
 			Livepreview(e){
 				// console.log(e.currentTarget.dataset)
 				let {indexs} = e.currentTarget.dataset
-				if(parseInt(indexs)==0){
-					//点击跳进直播
-					uni.navigateTo({
-						url:`/pages/Livecover/Livecover?storeid=${this.storeid}`
-					})
-				}else{
+				// if(parseInt(indexs)==0){
+				// 	//点击跳进直播
+				// 	uni.navigateTo({
+				// 		url:`/pages/Livecover/Livecover?storeid=${this.storeid}`
+				// 	})
+				// }else{
 					//点击跳进直播商品列表
 					uni.navigateTo({
 						url:`/pages/liveaddshoplist/liveaddshoplist?storeid=${this.storeid}&type=storetype`
 					})
-				}
+				// }
 			}
 		},
 		props:["storeid"],

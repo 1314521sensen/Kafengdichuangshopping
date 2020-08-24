@@ -31,7 +31,7 @@
 									@tap="Brandonlistshopdefault"
 								>
 									<!-- 展示图片 -->
-									<view class="goodsImg" :style="{backgroundImage:'url('+'http://hbk.huiboke.com'+itemSales.good_pic+')'}">
+									<view class="goodsImg" :style="{backgroundImage:'url('+imgpath+itemSales.good_pic+')'}">
 										<!-- <image class="plate" :src="item.platImg" mode=""></image> -->
 									</view>
 									<!-- 详细介绍 -->
@@ -57,7 +57,7 @@
 							:data-s_id="itemlists.store_id"
 							@tap="Brandonlistsshopdefault"
 						>
-							<image :src="'http://hbk.huiboke.com'+itemlists.good_pic" mode=""></image>
+							<image :src="imgpath+itemlists.good_pic" mode=""></image>
 							<view class="Gootext">{{itemlists.good_title}}</view>
 						</view>
 					</view>
@@ -74,8 +74,7 @@
 	export default {
 		data() {
 			return {
-				// BrandList:[],
-				// Brandloadbool:false
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {
@@ -200,13 +199,14 @@
 				flex: 1;
 			// 大盒子  
 			.produBox{
-				width: 710rpx;
+				// width: 710rpx;
 				display: flex;
-				// justify-content: space-between;
+				// justify-content:center;
 				flex-wrap: wrap;
+				padding-left:64rpx;
 				// 每个商品的盒子
 				.goodsBox{
-					width: 235rpx;
+					width: 30%;
 					// height: 290rpx;
 					background-color: #fff;
 					display: flex;

@@ -15,7 +15,7 @@
 				>{{item}}</view>
 			</view>
 			<view class="discount_coupon">
-				<scroll-view scroll-y="true" class="scroll-Y">
+				<scroll-view scroll-y="true" class="scroll-Y" @scrolltolower="tolower">
 					<view class="demo_fa" v-for="(item,index) in this.$store.state.couponslist" :key="index">
 						<view class="discount_coupon_demo" v-if="item.status==parseInt(TabCur)+1">
 							<view class="demo_left">
@@ -75,12 +75,15 @@
 				couponstindex:0,
 				show:false,
 				tabcurindex:-1,
+				pages:1
 			}
 		},
 		methods:{
 			CouponClassification(e){
+				this.pages = 1
 				//判断点击的店铺的  还是平台的
 				// console.log(e)
+				this.$store.state.couponslist = []
 				let {indexs} = e.currentTarget.dataset
 				this.couponstindex = indexs
 				this.$emit("storeIsStillAndPlatform",indexs)
@@ -101,9 +104,14 @@
 			particularsClick(e){
 				let {indexs,bool} = e.currentTarget.dataset
 			    this.tabcurindex = indexs
-			}
+			},
+			tolower(){
+				this.pages++
+				console.log(this.TabCur,this.bottomindex)
+				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex),pages:this.pages})
+			},
 		},
-		props:["TabCur"]
+		props:["TabCur","bottomindex"]
 	}
 </script>
 

@@ -21,7 +21,7 @@
 						:data-g_id="item.good_id"
 						:data-s_id="item.store_id"
 					>
-						<cover-image :src="'http://hbk.huiboke.com'+item.good_pic" class="item-imgs"></cover-image>
+						<cover-image :src="imgpath+item.good_pic" class="item-imgs"></cover-image>
 						<cover-view class="itemshopid bg-write border-radiusthirty">
 							<text class="font-size-thirty">{{item.good_id}}</text>
 						</cover-view>
@@ -51,6 +51,7 @@
 					:data-g_pic="item.good_pic"
 					:data-store_name="item.store_name"
 					:data-share_code="item.share_code"
+					:data-good_freight="item.good_freight"
 				>
 					<text class="item-button border-plice border-styles text-center font-size-thirty textcolorwrite">马上抢</text>
 				</cover-view>
@@ -62,18 +63,29 @@
 
 <script>
 	//这是直播商品组件
-	
+	const app = getApp()
 	export default {
 		data(){
 			return {
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{
 			liveshopdefault(e){
 				let {g_id,s_id} = e.currentTarget.dataset
-				uni.navigateTo({
-					url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}&liveshopstate=liveshopstate`
-				})
+				// uni.navigateTo({
+				// 	url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}&liveshopstate=liveshopstate`
+				// })
+				//借助Immediatelygrabbool这个变量 来控制 是用户还是主播 
+				//如果主播的话 就不让他 点击跳转到商品详情页 
+				//如果是用户的话 就让用户点击跳转
+				if(this.Immediatelygrabbool){
+					uni.navigateTo({
+						url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}&liveshopstate=liveshopstate`
+					})
+				}else{
+					app.globalData.showtoastsame("主播不能进行点击")
+				}
 			},
 			//当滚动到底部的时候
 			loadmore(e){
@@ -83,11 +95,11 @@
 			Immediatelygrab(e){
 				console.log("马上抢")
 				const _this = this
-				let {gid,s_id,g_le,g_price,g_pic,store_name,share_code} = e.currentTarget.dataset
+				let {gid,s_id,g_le,g_price,g_pic,store_name,share_code,good_freight} = e.currentTarget.dataset
 				uni.getStorage({
 					key:"bindtokey",
 					success(restokey){
-						_this.$store.commit("Immediatelygrab",{gid,s_id,g_le,g_price,g_pic,tokey:restokey.data,store_name,share_code})
+						_this.$store.commit("Immediatelygrab",{gid,s_id,g_le,g_price,g_pic,tokey:restokey.data,store_name,share_code,good_freight})
 					}
 				})
 			}

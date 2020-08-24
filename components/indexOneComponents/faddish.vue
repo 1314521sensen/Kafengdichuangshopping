@@ -47,7 +47,7 @@
 	export default {
 		data() {
 			return {
-				imghttp:"http://hbk.huiboke.com/uploads/app/image/index/indexone/",
+				imghttp:`${this.$store.state.imgyuming}/uploads/app/image/index/indexone/`,
 				demonstrating:[],//这是上面的随机的商品
 				httpurl:"",
 				loadbool:false

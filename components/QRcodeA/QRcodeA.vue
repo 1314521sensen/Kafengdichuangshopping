@@ -1,21 +1,24 @@
 <template>
-	<view >
+	<view @longtap="longtap">
 		<view 
 			class="QRcodeA" 
-			:style="{width:posterswidth+'vh',height:postersheight+'vh'}"
+			:style="{
+					width:posterswidth+'vh',
+					height:postersheight+'vh',
+					top:topnum+'%',
+					left:leftnum+'%',
+					'background-image':'url('+this.$store.state.httpUrl+'qrcode/code.jpg'+')'
+			}"
 		>
-			<canvas canvas-id="qrcode"   style="width: 140rpx;height: 140rpx;" class="qrcodea" />
-			<image class="activitygraph" src='/static/qrcode/code.jpg'></image>
+			<canvas canvas-id="qrcode" :style="{width:150+'rpx',height:150+'rpx',top:qrcodeatop+'rpx',left:qrcodealeft+'rpx'}" class="qrcodea" />
+			<!-- <image class="activitygraph" src='/static/qrcode/code.jpg'></image> -->
 			<text class="cancel" @tap="cancel">X</text>
-			<!-- <button @tap="send" type="default">确认分享</button> -->
-			<!-- #i fdef APP-PLUS -->
-			<!-- <button class="info" @tap="capture">点击保存我哦~</button> -->
-			<!-- #e ndif --> 
 		</view>
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	//进入二维码    
 	import uQRCode from '@/components/Sansnn-uQRCode/uqrcode.js'
 	// 截图组件
@@ -26,7 +29,11 @@
 				Activitygraph:'',//路径
 				Sharedpath:'',   //分享的路径
 				posterswidth:43,
-				postersheight:60
+				postersheight:60,
+				leftnum:8,
+				topnum:20,
+				qrcodeatop:458,
+				qrcodealeft:240
 			}
 		},
 		created() {
@@ -57,7 +64,7 @@
 									filePath: i.target,
 									success: function(res) {
 										console.log(res,'返回值')	
-											
+										_this.send()
 										uni.showToast({
 											title: '保存图片成功',
 											mask: false,
@@ -81,18 +88,20 @@
 					type: 2,
 					imageUrl: _this.Sharedpath,
 					success: function(res) {
-						console.log("success:" + JSON.stringify(res), 111);
+						// console.log("success:" + JSON.stringify(res), 111);
+						_this.$emit('cancel')
 					}, 
 					fail: function(err) {
-						console.log("fail:" + JSON.stringify(err), 2222);
+						// console.log("fail:" + JSON.stringify(err), 2222);
 					}
 				});
 			},		
-			make() { 
+			make() {
+				console.log(this.$store.state.Qrcodeurl)
 				uQRCode.make({
 					canvasId: 'qrcode',
 					componentInstance: this,
-					text: 'http://hbk.huiboke.com/uploads/app/image/Webpageindex/Webpageindex.html',
+					text:`${this.$store.state.imgyuming}/uploads/app/image/Webpageindex/Webpageindex.html`,
 					size: 70,
 					margin: 10,
 					backgroundColor: '#ffffff',
@@ -108,8 +117,30 @@
 			//点击关闭
 			cancel(){
 				this.$emit('cancel')
+			},
+			longtap(){
+				//长按改变 分享样式
+				// #ifdef H5
+					this.posterswidth = 57
+				// #endif
+				// #ifdef APP-PLUS
+					this.posterswidth = 50
+				// #endif
+				this.postersheight = 100
+				this.leftnum = 0
+				this.topnum = 0
+				this.qrcodeatop = 800
+				this.qrcodealeft = 300
+				// #ifdef APP-PLUS
+				setTimeout(()=>{
+					this.capture()
+				},1500)
+				// #endif
 			}
-			
+		},
+		created() {
+			console.log(111)
+			this.make()
 		}
 	}
 </script> 
@@ -119,19 +150,20 @@
 		// position: relative;
 		// width: 600rpx;// 
 		// height: 800rpx; 
-		background-color: #808080;  
+		// background-color: #808080;  
 		position: absolute;
-		/* #ifdef APP-PLUS */
-		left:8%;
-		/* #endif*/
-		/* #ifdef H5 */
-		left:11%;
-		/* #endif */
-		// margin-left: -300rpx;
-		top:20%; 
+		// /* #ifdef APP-PLUS */
+		// left:8%;
+		// /* #endif*/
+		// /* #ifdef H5 */
+		// left:11%;
+		// /* #endif */
+		// // margin-left: -300rpx;
+		// top:20%; 
 		// margin-top: -400rpx;  
 		// left: 0;
 		// top: 0;
+		background-size: 100% 100%;
 	}
 	.activitygraph{
 		width: 100%;
@@ -139,8 +171,8 @@
 	}
 	.qrcodea{ 
 		position: absolute; 
-		left: 230rpx;
-		top: 458rpx; 
+		// left: 240rpx;
+		// top: 458rpx; 
 	}
 	.cancel{
 		font-size: 40rpx; 

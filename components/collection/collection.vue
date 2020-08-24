@@ -2,7 +2,7 @@
 	<view class="collection">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<actionbar url="/pages/PersonalMy/PersonalMy" :message="message"></actionbar>
-		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom" v-if="list.length!==0">
+		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom" v-show="list.length!==0">
 			<!-- <list :list="list" display="block" :deleteurl="deleteurl" :tokey="tokey" :deletelist="deletelist" :title="title" :titlename="titlename"></list> -->
 			<view class="list">
 				<view class="cu-list menu-avatar">
@@ -12,9 +12,8 @@
 					<view class="cu-item" v-for="(item,index) in list" :key="index">
 						<view class="cu-item-left" @tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)">
 							<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
-							<!-- :style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"> -->
 							<view class="cu-avatar round lg cu-item-left-bg"
-								:style="{'background-image':'url('+'http://hbk.huiboke.com'+(item.good_pic?item.good_pic:item.goods_image)+')'}"
+								:style="{'background-image':'url('+imgpath+(item.good_pic?item.good_pic:item.goods_image)+')'}"
 							> 
 								
 							</view>
@@ -44,7 +43,8 @@
 			</view>
 			<!-- <uniLoadMore :iconSize="20" :contentText="{contentdown:text}" v-if="list.length>=10"></uniLoadMore> -->
 		</scroll-view>
-		<Nopage v-if="list.length==0"></Nopage>
+		<Nopage v-show="list.length==0"></Nopage>
+		<loading v-if="loadingbool==false"></loading>
 	</view>
 </template>
 
@@ -72,7 +72,9 @@
 				deleteurl:"",//这是删除的地址
 				geturl:"",//这是请求的地址
 				deletelist:[],
-				Delete:false
+				Delete:false,
+				loadingbool:false,
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		components:{
@@ -110,6 +112,7 @@
 										_this.list = []
 									}
 								}
+								_this.loadingbool = true
 							}
 						})
 					}

@@ -34,7 +34,7 @@
 								:data-g_id="items.good_id"
 								:data-s_id="item.store_id"
 							>
-								<image :src="'http://hbk.huiboke.com'+items.good_pic" class="imgs"></image>
+								<image :src="imgpath+items.good_pic" class="imgs"></image>
 							</view>
 							<view class="item-info">
 								<!-- 商品的名称 -->
@@ -113,7 +113,7 @@
 					<view class="specifications-top">
 						<view class="specificationstopLeft">
 							<!-- 规格的图片 -->
-							<image :src="'http://hbk.huiboke.com'+specificationsrc" class="imgs"></image>
+							<image :src="imgpath+specificationsrc" class="imgs"></image>
 						</view>
 						<view class="specificationstopright">
 							<view class="specifications-plice">
@@ -161,6 +161,7 @@
 				modalName:null,
 				//规格的src
 				specificationsrc:"",
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

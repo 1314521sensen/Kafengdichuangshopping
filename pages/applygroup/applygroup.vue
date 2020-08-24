@@ -8,12 +8,12 @@
 	export default {
 		data() {
 			return {
-				vipvalue:0
+				beesgrouplong:0,//这是团长的
 			}
 		},
 		methods: {
 			applygroup(){
-				if(this.vipvalue==0){
+				if(parseInt(this.beesgrouplong)!==2){
 					//当用户还未支付369或3690的时候 跳到申请团长页面
 					uni.redirectTo({
 						url:`/pages/groupinformation/groupinformation`
@@ -28,10 +28,11 @@
 		},
 		created(){
 			const _this = this
+			//取出团长的缓存 判断团长的有没有申请成功
 			uni.getStorage({
-				key:"beesVip",
-				success(resvip) {
-					_this.vipvalue = resvip.data
+				key:"beesgrouplong",
+				success(reslong){
+					_this.beesgrouplong = reslong.data
 				}
 			})
 		}

@@ -160,7 +160,7 @@
 					if(ordinaryoldpssword!=="" && regnewspassword.test(ordinaryonewspssword)){
 						// console.log(this.tokey)
 						uni.request({
-							url:"http://hbk.huiboke.com/api/user/editLoginPassword",
+							url:`${app.globalData.Requestpath}user/editLoginPassword`,
 							method:"POST",
 							data:{
 								token:this.tokey,
@@ -188,7 +188,7 @@
 						this.disabled = false
 						this.codetext = "验证码"
 						uni.request({
-							url:"http://hbk.huiboke.com/api/user/resetLoginPasswordByPhone",
+							url:`${app.globalData.Requestpath}user/resetLoginPasswordByPhone`,
 							method:"POST",
 							data:{
 								token:this.tokey,
@@ -214,7 +214,7 @@
 						this.disabled = false
 						this.codetext = "验证码"
 						uni.request({
-							url:"http://hbk.huiboke.com/api/user/resetLoginPasswordByEmail",
+							url:`${app.globalData.Requestpath}user/resetLoginPasswordByEmail`,
 							method:"POST",
 							data:{
 								token:this.tokey,

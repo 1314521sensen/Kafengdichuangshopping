@@ -60,6 +60,7 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default{
 		data(){
 			return {
@@ -110,7 +111,7 @@
 					//进行上传图片
 
 					uni.uploadFile({
-						url:"http://hbk.huiboke.com/api/common/uploadImage?type=user",
+						url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
 						method:"POST",
 						filePath:this.imgList[0],
 						name:'file',
@@ -120,7 +121,7 @@
 								let resdata = JSON.parse(resimg.data).data.src
 								// resdata//这是返回了第一次图片
 								uni.uploadFile({
-									url:"http://hbk.huiboke.com/api/common/uploadImage?type=user",
+									url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
 									method:"POST",
 									filePath:this.imgList[1],
 									name:'file',
@@ -131,7 +132,7 @@
 											// resdata//这是返回了第一次图片
 											//发起请求
 											uni.request({
-												url:"http://hbk.huiboke.com/api/user/submitRealNameAuthentication",
+												url:`${app.globalData.Requestpath}user/submitRealNameAuthentication`,
 												method:"POST",
 												data:{
 													token:_this.tokey,

@@ -4,7 +4,7 @@
 			<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
 			 :autoplay="true" interval="5000" duration="500" style="height: 200px;">
 				<swiper-item v-for="(item,index) in swiperList" :key="index">
-					<image class="imgsLog" :src="'http://hbk.huiboke.com'+item" mode="scaleToFill"></image>
+					<image class="imgsLog" :src="imgpath+item" mode="scaleToFill"></image>
 				</swiper-item>
 			</swiper>
 		</view>
@@ -18,6 +18,7 @@
 				cardCur: 0,
 				swiperList: [],
 				dotStyle: false,
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {

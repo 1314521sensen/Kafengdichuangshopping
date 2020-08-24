@@ -149,8 +149,9 @@
 			},
 			//封装一个绑定邮箱和更换邮箱的功能
 			bindNewEmail(tokey,account,sms){
+				console.log(tokey)
 				uni.request({
-					url:"http://hbk.huiboke.com/api/user/bindNewEmail",
+					url:`${app.globalData.Requestpath}user/bindNewEmail`,
 					method:"POST",
 					data:{
 						token:tokey,
@@ -170,6 +171,8 @@
 							uni.navigateTo({
 								url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 							})
+						}else{
+							app.globalData.showtoastsame(res.data.msg)
 						}
 					},
 					fail(err){
@@ -182,7 +185,7 @@
 				console.log(smsregs)
 				this.regsms(smsregs)
 				// this.disabled = true
-				if(this.regbool){//验证全部通过就向用户发送验证码 //http://hbk.huiboke.com/api/common/getEmailCaptcha
+				if(this.regbool){//验证全部通过就向用户发送验证码 
 				// console.log(this.id)
 					//这里不管是下标0还是下1都要这行
 					let json = {
@@ -190,22 +193,26 @@
 							type:5,
 							userid:this.id
 						}
+						//一会解开 发送验证码的
 					app.globalData.emailreg(json)
-					this.list[0][0].righttext = "验证码已发送"
+					// console.log()
+					this.list[this.xiabiao][0].righttext = "验证码已发送"
+					console.log(this.list)
 				}
 			},
 			bindlogin(e){
+				console.log("确定更改")
 				console.log(e)
 				let {account,sms} = e.detail.value
 				this.regsms(account)
 				this.disabled = false
 				// console.log(this.xiabiao)
 				if(sms!==""){//验证码不为空就发起请求绑定
-					//http://hbk.huiboke.com/api/user/bindNewEmail
 					// console.log(this.tokey )
 					if(this.xiabiao==1){
+						//这是验证原邮箱
 						uni.request({
-							url:"http://hbk.huiboke.com/api/user/validateOldEmail",
+							url:`${app.globalData.Requestpath}user/validateOldEmail`,
 							method:"POST",
 							data:{
 								token:this.tokey,
@@ -213,7 +220,9 @@
 								code:sms
 							},
 							success:(res)=> {
+								console.log(res)
 								if(res.data.code==0){
+									//这是控制绑定新邮箱的input出不出来
 									this.stylebool = "block"
 									this.list[1][0].Modaltitle = "请绑定新邮箱"
 									this.submmit = "获取新邮箱验证码"
@@ -222,6 +231,8 @@
 									var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
 									if(reg.test(newsaccount)){
 										console.log(newsaccount,newssms)
+										console.log("该邮箱已被验证")
+										
 										this.disabled = false
 										this.smsreg(newsaccount)
 										this.submmit = "确定"
@@ -237,6 +248,7 @@
 								}else{
 									this.styleregbool = 'block'
 									this.submmit = "确定"
+									app.globalData.showtoastsame(res.data.msg)
 								}
 							}
 						})
@@ -244,6 +256,7 @@
 						//在这里请求
 						this.bindNewEmail(this.tokey,account,sms)
 					}
+					 
 				}else{
 					this.showtext("验证码不能为空")
 					this.hideModal()
@@ -252,7 +265,7 @@
 		},
 		onLoad(option) {
 			this.xiabiao = option.bind
-			// console.log(this.xiabiao)
+			console.log(this.xiabiao)
 			//这个来控制高度的
 			this.statusBar = app.globalData.statusBar
 		},
@@ -266,12 +279,14 @@
 					_this.tokey = res.data
 					//开始加载的时候获取用户手机号或者邮箱
 						uni.request({
-							url:"http://hbk.huiboke.com/api/user/getUserBindInfo",
+							url:`${app.globalData.Requestpath}user/getUserBindInfo`,
 							method:"POST",
 							data:{
 								token:res.data
 							},
 							success(resinfo) {
+								console.log(resinfo.data.data.user_email)
+								//如果邮箱有值的情况下  就让第一个数组里面的值 直接赋值 让用户无法点击
 								if(resinfo.data.data.user_email){
 									_this.bindbtn = "更换邮箱"
 									_this.list[1][0].value = resinfo.data.data.user_email
@@ -291,7 +306,7 @@
 				success(res){
 					// console.log(res.data)//取出tokey
 					uni.request({
-						url:"http://hbk.huiboke.com/api/user/getUserDetail",
+						url:`${app.globalData.Requestpath}user/getUserDetail`,
 						method:"POST",
 						data:{
 							token:res.data

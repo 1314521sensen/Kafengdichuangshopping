@@ -34,7 +34,7 @@
 							:data-gc_id="item.gc_id"
 							:data-gc_level="item.gc_level"
 						>
-							<image :src="'http://hbk.huiboke.com'+item.pic" class="imgs"></image>
+							<image :src="imgpath+item.pic" class="imgs"></image>
 							<view class="right-list-text">
 								{{item.gc_short}}
 							</view>
@@ -55,6 +55,7 @@
 				leftindex:0,
 				statusBar:0,
 				showbool:false,
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

@@ -23,7 +23,7 @@
 					<view class="padding">
 						<!-- 头像动态的获取 -->
 						<view class="cu-avatar sm round margin-left" 
-							:style="{'background-image':'url('+'http://hbk.huiboke.com'+item.user_pic+')'}">
+							:style="{'background-image':'url('+imgpath+item.user_pic+')'}">
 						</view>
 					</view>
 					<text>{{item.user_name}}</text>
@@ -36,7 +36,7 @@
 				    <image 
 						v-for="(items,indexs) in item.ge_image" 
 						:key="indexs" 
-						:src="'http://hbk.huiboke.com'+items"
+						:src="imgpath+items"
 					></image>
 				</view>
 			</view>
@@ -49,7 +49,8 @@
 	export default{
 		data(){
 			return {
-				listone:[]
+				listone:[],
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods:{

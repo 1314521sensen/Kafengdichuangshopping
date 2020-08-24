@@ -109,7 +109,8 @@
 				yuming:"",
 				neirongtext:"",
 				imgreturnlist:[],//后台返回的图片数组
-				arraylastimages:[]
+				arraylastimages:[],
+				pages:1
 			}
 		},
 		components:{
@@ -206,7 +207,7 @@
 							console.log(res)
 							if(res.data.code==0){
 								//请求成功跳到评价的页面
-								_this.$store.commit("getevaluationlist",{url:'order/getConfirmPayOrderList'})
+								_this.$store.commit("getevaluationlist",{url:'order/getConfirmPayOrderList',pages:1})
 								uni.redirectTo({
 									url:`/pages/evaluate/evaluate`
 								})

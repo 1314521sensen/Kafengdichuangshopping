@@ -72,6 +72,10 @@
 		},
 		//此生命周期只会app打开时 只会触发一次
 		onLaunch() {
+			//设置h5的title标题
+			// #ifdef H5
+			document.title = "惠播客"
+			// #endif
 			// console.log(111,"为了测试更新")
 			const _this = this
 			//这里为了设置状态栏的高 ----开始
@@ -200,7 +204,27 @@
 			// #endif
 			//push推送结束---结束
 			/*****/
-			
+			//一元专区 设置开关缓存 当app一打开的时候 就显示
+			uni.setStorage({
+				key:"one_yuan_bool",
+				data:true
+			})
+			//控制登录弹窗是否显示
+			//如果 用户同意以后 就让弹窗隐藏 如果没有值的 就让弹窗显示
+			uni.getStorage({
+				key:'loginprop',
+				success(res){
+					console.log(res)
+				},
+				fail(err){
+					// console.log(err)
+					//如果没有值的情况下 就让login里面的弹窗显示
+					uni.setStorage({
+						key:"loginprop",
+						data:0
+					})
+				}
+			})
 		},
 		onShow: function() {
 			

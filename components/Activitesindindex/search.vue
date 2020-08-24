@@ -1,7 +1,7 @@
 <template>
 	<view class="searchBox">
 		<view class="photo" v-if="bool">
-			<image :src="'http://hbk.huiboke.com'+user_pic" mode=""></image>
+			<image :src="this.$store.state.imgyuming+user_pic" mode=""></image>
 		</view>
 		<view class="cu-bar search bg-white">
 			<view class="search-form round" :class="showbtn?'':'search-radius'" @tap="InputFocus">
@@ -43,13 +43,40 @@
 			},
 			scanQRcode(){
 				uni.scanCode({
+					onlyFromCamera:false,
+					scanType:["qrCode"],
 				    success: function (res) {
-				        console.log('条码类型：' + res.scanType);
-				        console.log('条码内容：' + res.result);
-						uni.navigateTo({
-							url: '/pages/Freeregistration/Freeregistration?type=1'
-						});
-				    }
+						// console.log(res)
+				        // console.log('条码类型：' + res.scanType);
+				        // console.log('条码内容：' + res.result);
+						let arr = res.result.split("&")
+						console.log(arr[arr.length-1])
+						if(arr[arr.length-1]=="type=1"){
+							//这是注册的二维码
+							// console.log(arr,"这是注册")
+							let code = arr[0]
+							uni.navigateTo({
+								url:`/pages/Freeregistration/Freeregistration?code=${code}`
+							})
+						}else if(arr[arr.length-1]=="type=3"){
+							//这是商品的二维码
+							let arr1 = []
+							 arr.forEach((item,index)=>{
+								// console.log(item)
+								// console.log(item.split("="))
+								return arr1[index] = item.split("=")[1]
+							})
+							if(arr1.length>0){
+								// console.log(arr1)
+								uni.navigateTo({
+									url:`/pages/Details/Details?id=${arr1[0]}&storeid=${arr1[1]}&code=${arr1[2]}&type=${parseInt(arr1[3])}`
+								})
+							}
+						}
+				    },
+					fail(err){
+						console.log(err)
+					},
 				});
 			}
 		},
@@ -67,9 +94,15 @@
 						},
 						success(res) {
 							if(res.data.code == 0){
+								let {user_sid} = res.data.data
 								_this.code = res.data.data.code
 								_this.user_pic = res.data.data.user_pic
 								_this.bool = true
+								//将店铺id保存到缓存中判断用户是不是这个店铺的
+								uni.setStorage({
+									key:"userstoreid",
+									data:user_sid
+								})
 							}
 							
 						}

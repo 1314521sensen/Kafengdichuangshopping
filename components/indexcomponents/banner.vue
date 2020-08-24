@@ -10,7 +10,7 @@
 				:data-item="item"
 			>
 				<!-- 如果type是image就显示图片 -->
-				<image :src="'http://hbk.huiboke.com'+item" mode="aspectFill"></image>
+				<image :src="imgpath+item" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -20,8 +20,9 @@
 	export default{
 		data(){
 			return {
-				
 				dotStyle: false,
+				imgpath:this.$store.state.imgyuming
+				
 			}
 		},
 		methods:{
@@ -36,7 +37,7 @@
 				if(this.$store.state.bannerbool){
 					let {item} = e.currentTarget.dataset
 					var imgArr = [];
-					imgArr.push('http://hbk.huiboke.com'+item);
+					imgArr.push(this.imgpath+item);
 					//预览图片
 					uni.previewImage({
 						urls: imgArr,

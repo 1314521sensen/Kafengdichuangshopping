@@ -1,7 +1,7 @@
 <template>
 	<view class="feature">
 		<view class="feature-img" :style="{'background-image':'url('+imgyuming+'feature.png'+')'}">
-			<text>惠物购</text>
+			<text>惠购物</text>
 		</view>
 		
 	</view>
@@ -11,7 +11,7 @@
 	export default {
 		data() {
 			return {
-				imgyuming:"http://hbk.huiboke.com/uploads/app/image/index/indexone/",
+				imgyuming:`${this.$store.state.imgyuming}/uploads/app/image/index/indexone/`,
 			}
 		}
 	}

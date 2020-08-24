@@ -1,7 +1,7 @@
 <template>
 	<view class="detailBox">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<view class="balance" style="background-image: url(/static/balance/1.png);">
+		<view class="balance" :style="{'background-image':'url('+this.$store.state.httpUrl+'balance/balancebg.png'+')'}">
 			<!-- <view class="my-balance">
 				我的余额
 			</view> -->
@@ -82,7 +82,7 @@
 				radio: '-1',
 				checkbox: [{
 					value: 0,
-					name: '0.01',
+					name: '10',
 					checked: false,
 					hot: false,
 				}, {
@@ -191,24 +191,27 @@
 									}
 								})
 							}else{
-								//这是微信提现
-								uni.request({
-									url:`${app.globalData.Requestpath}user/withdraw`,
-									method:"POST",
-									data:{
-										token:restokey.data,
-										price:parseFloat(_this.checkbox[indexs].name).toFixed(2),
-										user_type:1
-									},
-									success(reswithdrawal) {
-										console.log(reswithdrawal)
-										if(reswithdrawal.data.code==0){
-											app.globalData.showtoastsame("已提交申请,请耐心等候")
-										}else{
-											app.globalData.showtoastsame(reswithdrawal.data.msg)
+								if(_this.accounttext >= parseFloat(_this.checkbox[indexs].name).toFixed(2)){
+									uni.request({
+										url:`${app.globalData.Requestpath}user/withdraw`,
+										method:"POST",
+										data:{
+											token:restokey.data,
+											price:parseFloat(_this.checkbox[indexs].name).toFixed(2),
+											user_type:1
+										},
+										success(reswithdrawal) {
+											// console.log(reswithdrawal)
+											if(reswithdrawal.data.code==0){
+												app.globalData.showtoastsame("已提交申请,请耐心等候")
+											}else{
+												app.globalData.showtoastsame(reswithdrawal.data.msg)
+											}
 										}
-									}
-								})
+									})
+								}else{
+									app.globalData.showtoastsame("当前总收入小于提现金额")
+								}
 							}
 						}
 					})

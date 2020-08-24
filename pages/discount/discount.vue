@@ -6,8 +6,8 @@
 		
 		</view>
 		<!-- 分类 -->
-		<view class="classify">
-			<!-- tabactive -->
+		<!-- <view class="classify">
+			 tabactive
 			<view 
 				:class="indexs==index?'tabactive':''"
 				v-for="(item,index) in discountnavlist" 
@@ -15,29 +15,36 @@
 				@tap="navTab" 
 				:data-index="index"
 			>{{item}}</view>
-		 </view>
+		 </view> -->
 		<!-- 马上抢 -->
 		<view class="ImmediatelyGrab">
 			<scroll-view>
-				<!-- 单个产品 -->
-				<view class="singleProduct">
-					<image src="/static/discount/discountshop.png"></image>
+				<!-- 单个产品 nlt -->
+				<view 
+					class="singleProduct" 
+					v-for="(item,index) in singleProductlist" 
+					:key="index"
+					@tap="discount"
+					:data-sid="item.sid"
+					:data-gid="item.gid"
+				>
+					<image :src="imgpath+item.good_pic"></image>
 					<!-- 介绍以及抢购数量 -->
 					<view class="introduce">
-						<view class="cream"> 抖音爆款泡泡面膜补水美白保湿排毒深层...</view>
-						<view class="cream-bottom"> 
-						    <text class="robbed">已抢1754件</text>
-							<view class="cu-progress radius striped active">
+						<view class="cream">{{item.good_title}}</view>
+						<!-- <view class="cream-bottom"> 
+						     <text class="robbed">已抢1754件</text> 
+							 <view class="cu-progress radius striped active">
 								<view class="bg-red" :style="[{ width:loading?'70%':''}]">70%</view>
-							</view>
-						</view>
+							</view> 
+						</view> -->
 					</view>
 					<!-- 马上抢购 -->
 					<view class="Snapped">
-						<view class="current ">￥8.9</view>
-						<view class="original">￥599.9</view>
+						<view class="current ">￥{{item.limit_price}}</view>
+						<view class="original">￥{{item.good_price}}</view>
 						<view class="Immediately">
-							<text >马上抢</text>
+							<text>马上抢</text>
 						</view>
 					</view>
 				</view>
@@ -47,30 +54,85 @@
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data() {
 			return {
 				loading: false,
-				discountnavlist:[
-					"精选",
-					"百货家访",
-					"手机数码",
-					"女装男装",
-				],
+				// discountnavlist:[
+				// 	"精选",
+				// 	"百货家访",
+				// 	"手机数码",
+				// 	"女装男装",
+				// ],
 				indexs:0,
+				singleProductlist:[],
+				imgpath:this.$store.state.imgyuming
 			}
 		},
 		methods: {
 			navTab(e){
 				this.indexs = parseInt(e.currentTarget.dataset.index)
+			},
+			discount(e){
+				// console.log(e.currentTarget.dataset)
+				let {gid,sid} = e.currentTarget.dataset
+				//请求是不是新人那个接口
+				uni.getStorage({
+					key:"bindtokey",
+					success(res) {
+						uni.request({
+							url:`${app.globalData.Requestpath}user/isNewRegisterUser`,
+							method:"POST",
+							data:{
+								token:res.data
+							},
+							success(res) {
+								if(res.data.code==0 && res.data.msg=="YES"){
+									uni.navigateTo({
+										url:`/pages/Details/Details?id=${gid}&storeid=${sid}&goodtype=nlt`
+									})
+								}else if(res.data.code==1 && res.data.msg=='NO'){
+									app.globalData.showtoastsame("活动只限新用户")
+								}else{
+									uni.redirectTo({
+										url:`/pages/login/login`
+									})
+								}
+							}
+						})
+					},
+					fail(err){
+						uni.redirectTo({
+							url:`/pages/login/login`
+						})
+					}
+				})
+				
+				
 			}
 		},
 		onLoad() {
-			let that = this;
-			setTimeout(function() {
-				that.loading = true
-			}, 500)
+			// let that = this;
+			// setTimeout(function() {
+			// 	that.loading = true
+			// }, 500)
 		},
+		created() {
+			const _this = this
+			uni.request({
+				url:`${app.globalData.Requestpath}platform_shopping/getPFShoppingGoodList`,
+				data:{
+					limit:10
+				},
+				success(res) {
+					// console.log(res)
+					if(res.data.code==0){
+						_this.singleProductlist = res.data.data
+					}
+				}
+			})
+		}
 	}
 </script>
 
