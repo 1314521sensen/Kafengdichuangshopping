@@ -103,7 +103,7 @@
 							token:_this.tokey
 						},
 						success(resinfophoneAndemail){
-							console.log(resinfophoneAndemail)
+							// console.log(resinfophoneAndemail)
 							_this.userphone = resinfophoneAndemail.data.data.user_phone
 							_this.useremail = resinfophoneAndemail.data.data.user_email
 						}
@@ -116,7 +116,7 @@
 							token:_this.tokey
 						},
 						success(resRealname) {
-							console.log(resRealname)
+							// console.log(resRealname)
 							if(resRealname.data.code==0){
 								if(resRealname.data.data.idcard==null){//如果为null证明用户还未实名 
 									_this.Realnamebool = false
@@ -153,11 +153,11 @@
 				uni.getStorage({
 					key:"bindopenid",
 					success(resopen){
-						console.log(resopen)
+						// console.log(resopen)
 						_this.wxopenidbool = false
 					},
 					fail(err){
-						console.log(err)
+						// console.log(err)
 						_this.wxopenidbool = true
 					}
 				})

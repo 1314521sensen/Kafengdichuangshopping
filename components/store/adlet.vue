@@ -53,7 +53,7 @@
 			},
 			methods:{
 				livefrom(e){
-					console.log(e.currentTarget.dataset)
+					// console.log(e.currentTarget.dataset)
 					let {live_url,livenick,roomid,livepic,uname} = e.currentTarget.dataset
 					uni.navigateTo({
 						url:`/pages/Liveplatform/Liveplatform?live_url=${live_url}&livenick=${livenick}&roomid=${roomid}&livepic=${livepic}&uid=${this.uid}&uname=${uname}`
@@ -63,7 +63,7 @@
 			props:["live_url","livenick","roomid","livepic","uname","uid","livedesc"],
 			mounted(){
 				const _this = this
-				console.log(_this.live_url,_this.livenick,_this.roomid,_this.livepic,_this.uname,_this.uid,_this.livedesc)
+				// console.log(_this.live_url,_this.livenick,_this.roomid,_this.livepic,_this.uname,_this.uid,_this.livedesc)
 				uni.request({
 					url:`${app.globalData.Requestpath}live/getAnchorGoodListNoToken`,
 					data:{

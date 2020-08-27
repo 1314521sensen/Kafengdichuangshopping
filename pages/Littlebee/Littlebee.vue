@@ -89,7 +89,7 @@
 			beemembers,
 		},
 		onLoad(option) {
-			console.log(option)
+			// console.log(option)
 			let {field} = option
 			this.field = field
 		},

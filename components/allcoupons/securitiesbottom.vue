@@ -107,7 +107,7 @@
 			},
 			tolower(){
 				this.pages++
-				console.log(this.TabCur,this.bottomindex)
+				// console.log(this.TabCur,this.bottomindex)
 				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex),pages:this.pages})
 			},
 		},

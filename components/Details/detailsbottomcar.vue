@@ -113,7 +113,7 @@
 				//this.Noteinformation收藏信息
 						//在这里添加数据
 					if(this.collectionbool==false){//如果为false的话代表用户为添加收藏 
-						console.log("当前为true")
+						// console.log("当前为true")
 						this.collectionbool = true
 						this.collection = "已收藏"
 						uni.request({//请求添加收藏信息的接口
@@ -194,7 +194,7 @@
 						SpecificationShopdetails.share_code = this.code
 						SpecificationShopdetails.share_from = 3
 					}
-					console.log(SpecificationShopdetails)
+					// console.log(SpecificationShopdetails)
 					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
 					
 				}

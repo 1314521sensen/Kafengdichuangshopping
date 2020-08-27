@@ -330,10 +330,10 @@
 					sid:_this.storeid
 				},
 				success(res) {
-					console.log(res)
+					// console.log(res)
 					if(res.data.code==0){
 						let {store_name,user_id,is_platform_store,store_servicecredit,store_credit,fav_count,store_logo,live_desc} = res.data.data
-						console.log(user_id)
+						// console.log(user_id)
 						_this.store_logo = store_logo
 						_this.fav_count = fav_count
 						_this.Shopname = store_name
@@ -354,7 +354,7 @@
 								uid:user_id
 							},
 							success(res) {
-								console.log(res)
+								// console.log(res)
 								if(res.data.code==0){
 									let {live_url,live_nick,room_id,live_pic,user_name,user_id,is_living} = res.data.data
 									_this.live_url = live_url
@@ -380,7 +380,7 @@
 			//获取推荐
 			_this.getrecommended(1)
 			_this.getbabylist(1)
-			console.log(_this.storeid)
+			// console.log(_this.storeid)
 			//获取商品的新品信息系
 			uni.request({
 				url:`${app.globalData.Requestpath}store/getNewStoreGoodList`,
@@ -389,7 +389,7 @@
 					limit:10
 				},
 				success(res) {
-					console.log(res)
+					// console.log(res)
 					_this.newslist = res.data.data
 				}
 			})

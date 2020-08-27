@@ -197,7 +197,7 @@
 					success: (res) => {
 						if (this.imgList.length != 0) {
 							this.imgList = this.imgList.concat(res.tempFilePaths)
-							console.log(2)
+							// console.log(2)
 						} else {
 							this.imgList = res.tempFilePaths
 							uni.uploadFile({

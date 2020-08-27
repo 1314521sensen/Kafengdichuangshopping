@@ -39,7 +39,7 @@
 			Enterpasswordcompletepayment(e){
 				const _this = this
 				_this.zhifuppastext = e
-				console.log(e)
+				// console.log(e)
 				//当输入完密码时
 				uni.request({
 					url:`${app.globalData.Requestpath}order/confirmPayOrder`,
@@ -50,7 +50,7 @@
 						pay_password:_this.zhifuppastext
 					},
 					success(res) {
-						console.log(res)
+						// console.log(res)
 						if(res.data.code==0){
 							_this.show = false,
 							_this.isIphoneX = false

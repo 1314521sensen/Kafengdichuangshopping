@@ -161,7 +161,7 @@
 			// 				this.$emit("jsons",this.json)
 							// console.log(this.json)//就拿到了父组件里面的值
 							let {code} = this.json
-							console.log(code,"已经获取到code码")
+							// console.log(code,"已经获取到code码")
 			// 				//如果code==0的时候代表tokey没过期 
 							if(this.pathurl){
 								if(code == 0){

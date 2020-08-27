@@ -158,7 +158,7 @@
 		onLoad(opctrion) {
 			this.message = opctrion.storename
 			this.statusBar = app.globalData.statusBar
-			console.log(opctrion.titlename)
+			// console.log(opctrion.titlename)
 			if(opctrion.titlename=='Individuals'){
 				//证明个人的
 				this.businesstype = 0

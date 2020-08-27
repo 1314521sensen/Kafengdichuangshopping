@@ -7,13 +7,13 @@
 			logintokeybool:false,
 			Guidepagebool:false,//这是用于判断 用户的引导页
 			VerificationCode(json){//封装一个方法来获取验证码
-				console.log(json)
+				// console.log(json)
 				uni.request({
 					url:"http://hbk.huiboke.com/api/common/getSMSCaptcha",
 					method:"POST",
 					data:json,
 					success(res){//成功的回调
-						console.log(res)
+						// console.log(res)
 					}
 				})
 			},
@@ -146,7 +146,7 @@
 						}
 					},
 					fail(err){
-						console.log(err)
+						// console.log(err)
 					}
 				})
 			// #endif
@@ -209,22 +209,15 @@
 				key:"one_yuan_bool",
 				data:true
 			})
-			//控制登录弹窗是否显示
-			//如果 用户同意以后 就让弹窗隐藏 如果没有值的 就让弹窗显示
-			uni.getStorage({
-				key:'loginprop',
-				success(res){
-					console.log(res)
-				},
-				fail(err){
-					// console.log(err)
-					//如果没有值的情况下 就让login里面的弹窗显示
-					uni.setStorage({
-						key:"loginprop",
-						data:0
-					})
-				}
-			})
+			//首页app弹窗是否显示
+			//#ifdef APP-PLUS
+				uni.getStorage({
+					key:'indexpopupbool',
+					success(res){
+						_this.$store.state.indexpopupbool = false
+					}
+				})
+			// #endif
 		},
 		onShow: function() {
 			

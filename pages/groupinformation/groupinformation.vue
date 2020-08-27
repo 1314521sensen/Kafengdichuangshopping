@@ -46,7 +46,7 @@
 			applyinfo(){
 				//点击请求后台数据
 				//请求完成 进行跳转/pages/headearnings/headearnings
-				console.log(this.beesgrouplong)
+				// console.log(this.beesgrouplong)
 				if(parseInt(this.beesgrouplong)==0){
 					// console.log(parseInt(this.beesVip))
 					if(parseInt(this.beesVip)){
@@ -97,7 +97,7 @@
 				key:"beesgrouplong",
 				success(reslong){
 					_this.beesgrouplong = reslong.data
-					console.log(_this.beesgrouplong)
+					// console.log(_this.beesgrouplong)
 				}
 			})
 			uni.getStorage({
@@ -109,7 +109,7 @@
 			uni.getStorage({
 				key:"bindtokey",
 				success(res) {
-					console.log(res)
+					// console.log(res)
 					_this.token = res.data
 				}
 			})

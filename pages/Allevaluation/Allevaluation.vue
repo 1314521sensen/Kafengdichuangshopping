@@ -71,7 +71,7 @@
 						pageSize:10
 					},
 					success(res) {
-						console.log(res)
+						// console.log(res)
 						if(res.data.code==0){
 							if(_this.pages>1){
 								
@@ -99,7 +99,7 @@
 			},
 			pullUp(e){
 				this.pages++
-				console.log(this.pages)
+				// console.log(this.pages)
 				this.getevaluationlist()
 			},
 			previewImage(e){

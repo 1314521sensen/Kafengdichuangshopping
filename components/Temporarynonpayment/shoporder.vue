@@ -179,7 +179,7 @@
 			//参数  password支付密码  returnordertype 退货的类型 Courierid 快递公司的id CourierSerialnumber 快递的编号
 			returnCancelordersteps(password,returnordertype,Courierid,CourierSerialnumber){
 				const _this = this
-				console.log()
+				// console.log()
 				uni.request({
 					url:`${app.globalData.Requestpath}order/applyForRefundOrder`,
 					method:"POST",
@@ -195,7 +195,7 @@
 					},
 					success(res) {
 						if(res.data.code==0){//当退款成功
-							console.log(res)
+							// console.log(res)
 							_this.disabled = true
 							_this.passwordzhifutanchuang = false//是否弹出输入支付密码弹窗
 							_this.isIphoneX = false//Iphone全面屏系列底部适配
@@ -257,7 +257,7 @@
 								},
 								success(ordershopinglist) {
 									if(ordershopinglist.data.code==0){
-										console.log(ordershopinglist)
+										// console.log(ordershopinglist)
 										_this.ordershopinglist = ordershopinglist.data.data.list[0]
 										_this.$emit("orderNotpayingdefault",_this.ordershopinglist.good_pay_price)
 										_this.$emit("orderNotpayingnums",_this.ordershopinglist.good_num)

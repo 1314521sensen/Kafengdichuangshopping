@@ -98,7 +98,7 @@
 				uni.removeStorage({ 
 					key:"searchArr",
 					success(res){
-						console.log(res)
+						// console.log(res)
 					}
 				})
 			},

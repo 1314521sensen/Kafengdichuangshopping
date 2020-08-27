@@ -103,7 +103,7 @@
 								if(res.data.code==0){
 									
 									//pages/addressTo/addressTo?title=收货地址
-									console.log(_this.way)
+									// console.log(_this.way)
 									if(_this.way==1){
 										uni.navigateTo({
 											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}&freight=${_this.freight}`
@@ -194,7 +194,7 @@
 			// console.log(opction.titleparameter)
 			if(opction.titleparameter=='orderaddress'){
 				let {way,gid,img,num,storename,price,goodtitle,storeid,freight,spec_id} = opction
-				console.log(spec_id)
+				// console.log(spec_id)
 				this.way = way
 				if(this.way==1){//这是购物车过来的
 					let {cids} = opction

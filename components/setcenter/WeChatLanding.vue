@@ -18,7 +18,7 @@
 		},
 		methods:{
 			WeChatlink(){
-				console.log(1111)
+				// console.log(1111)
 				uni.navigateTo({
 				    url:'/pages/WeChatLanding/WeChatLanding'
 				});

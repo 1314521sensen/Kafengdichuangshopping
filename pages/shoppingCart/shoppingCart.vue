@@ -234,7 +234,7 @@
 			},
 			//当滚动底部的时候
 			scrolltolower(){
-				console.log("触发了")
+				// console.log("触发了")
 				this.$store.commit("shopcarscrolltolower")
 			}
 		},

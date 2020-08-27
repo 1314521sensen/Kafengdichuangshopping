@@ -1,7 +1,7 @@
 <template>
 	<cover-view style="color:#fff" class="midden-cover-view" :style="{width:componentwidth+'px',height:componentheight+'px'}" @click="Hidescreen">
 		<cover-view class="midden-view-box">
-			<!-- 上面占一半 在让他们的子元素占上面还是占下面-->
+			<!-- 上面占一半 在让他们的子元素占上面还是占下面 -->
 			<cover-view class="midden-top" :style="{height:(componentheight/2)+'px','padding-top':statusheight+'px'}" >
 				<cover-view class="midden-top-childTop">
 					<!-- 顶部的结构 -->
@@ -14,14 +14,14 @@
 						:cont="cont"
 					>
 					</liveroomtopinfo>
-					<!--  -->
-					<cover-view class="midden-childtopmidden-info">
+					
+					<!-- <cover-view class="midden-childtopmidden-info">
 						<cover-view class="intimacy border-radiusthirty bg-Black-gradient">
 							<cover-image src="/static/liveplatfrom/xin.png" class="topbottomimgs border-radiusOnehundred"></cover-image>
 							<text class="font-size-twenty-senve textcolor-Promptreply">亲密度</text>
 							<text class="font-size-twenty-senve textcolor-Promptreply">999+</text>
 						</cover-view>
-					</cover-view>
+					</cover-view> -->
 				</cover-view>
 				
 			</cover-view>
@@ -78,6 +78,7 @@
 	import livechatlist from "../liveplice/livechatlist.nvue"
 	//引入商品规格
 	import Specificationsprops from "@/components/liveplice/Specificationsprops.nvue"
+	const app = getApp()
 	export default {
 		data(){
 			return {
@@ -109,9 +110,10 @@
 				if(this.reportbool==false){
 					this.reportbool = true
 					if(this.reportbool){//如果用户点击了举报的时候
-						uni.navigateTo({
-							url:`/pages/livereport/returnsthe`
-						})
+						// uni.navigateTo({
+						// 	url:`/pages/livereport/returnsthe`
+						// })
+						app.globalData.showtoastsame("功能正在开发")
 					}
 					return 
 				}
@@ -143,22 +145,23 @@
 				// 	href:"https://uniapp.dcloud.io",
 				// 	imageUrl:"/static/logo.png",
 				// })
-				// #ifdef APP-PLUS
-					uni.share({
-						provider:"weixin",
-						type:1,
-						title:"正在测试分享",
-						scene:"WXSceneSession",
-						summary:"我正在测试分享",
-						imageUrl:"/static/logo.png",
-						success(res){
-							console.log(res,"成功")
-						},
-						fail(err){
-							console.log(err,"失败")
-						}
-					})
-				// #endif
+				// // #ifdef APP-PLUS
+				// 	uni.share({
+				// 		provider:"weixin",
+				// 		type:1,
+				// 		title:"正在测试分享",
+				// 		scene:"WXSceneSession",
+				// 		summary:"我正在测试分享",
+				// 		imageUrl:"/static/logo.png",
+				// 		success(res){
+				// 			console.log(res,"成功")
+				// 		},
+				// 		fail(err){
+				// 			console.log(err,"失败")
+				// 		}
+				// 	})
+				// // #endif
+				app.globalData.showtoastsame("功能正在开发")
 			},
 			//当用户点击了消息发送按钮的时候
 			btnsend(){

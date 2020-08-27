@@ -52,7 +52,7 @@
 		},
 		methods:{
 			scrolltolower(){
-				console.log("移到底部组件")
+				// console.log("移到底部组件")
 			},
 			linkDetails(id,storeid){
 				// console.log(storeid)

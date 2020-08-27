@@ -19,7 +19,7 @@
 		},
 		methods:{
 			openlivelink(){
-				console.log('进入开启直播页面')
+				// console.log('进入开启直播页面')
 				uni.navigateTo({
 				    url: '/pages/Livecover/Livecover'
 				});

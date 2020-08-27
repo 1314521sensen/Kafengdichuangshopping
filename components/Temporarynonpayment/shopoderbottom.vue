@@ -113,13 +113,13 @@
 			//这是付款时的单选
 			RadioChanges(e) {
 				this.radioname = e.detail.value
-				console.log(this.radioname)
+				// console.log(this.radioname)
 			},
 			//这是取消订单
 			Confirmcancel(radiovalue){
 				const _this = this
 				//这是为什么要取消的内容
-				console.log(radiovalue)
+				// console.log(radiovalue)
 				_this.$store.commit("Confirmcancel",{order_sn:_this.order_sn})
 				//并关闭弹出框
 				this.modalName = null
@@ -175,7 +175,7 @@
 								success(res) {
 									if(res.data.code==0){
 										app.globalData.showtoastsame(res.data.msg)
-										console.log(_this.$store.state.orderlistshop)
+										// console.log(_this.$store.state.orderlistshop)
 										if(_this.$store.state.orderlistshop[0].share_from!==null){
 											_this.getorderconfiguration()
 										}
@@ -215,7 +215,7 @@
 								provider:'wxpay',
 								orderInfo:res.data,
 								success: (e) => {
-									console.log("success",e);
+									// console.log("success",e);
 									uni.showToast({
 										title:"支付完成"
 									})
@@ -224,7 +224,7 @@
 									}
 								},
 								fail: (e) => {
-									console.log('fail',e);
+									// console.log('fail',e);
 									uni.showModal({
 										content:"支付失败:" + JSON.stringify(e),
 										showCancel:false
@@ -238,7 +238,7 @@
 			getorderconfiguration(){
 				const _this = this
 				let {order_sn,good_id,good_name,good_pic,good_price,good_num,share_from} = _this.$store.state.orderlistshop[0]
-				console.log(order_sn,_this.s_id,_this.s_name,good_id,good_name,good_pic,good_price,good_num,share_from)
+				// console.log(order_sn,_this.s_id,_this.s_name,good_id,good_name,good_pic,good_price,good_num,share_from)
 				uni.getStorage({
 					key: 'bindtokey',
 					success(restokey) {
@@ -271,7 +271,7 @@
 										cms_rate:resconfiguration.data.data.cms_value
 									},
 									success(resSettlement) {
-										console.log(resSettlement)
+										// console.log(resSettlement)
 									}
 								})
 							}

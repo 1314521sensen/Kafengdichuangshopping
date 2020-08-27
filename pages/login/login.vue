@@ -34,7 +34,6 @@
 					<text class="agreement-right" @tap="loginArgument">惠播客用户协议</text>
 				</view>
 			</view>
-			<agreement></agreement>
 		<!-- 这是微信的登录的 微信登录需要在页面刚加载的时候就获取用户 -->
 	</view>
 </template>
@@ -44,8 +43,6 @@
 	import logobg from "@/components/login/loginbg.vue"
 	//引入登录的标题
 	import logintitle from "@/components/login/logintitle.vue"
-	//协议弹窗
-	import agreement from "@/components/login/agreement.vue"
 	const app = getApp()
 	export default {
 		data() {
@@ -172,8 +169,7 @@
 		},
 		components:{
 			logobg,
-			logintitle,
-			agreement
+			logintitle
 		},
 	}
 </script>

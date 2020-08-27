@@ -63,7 +63,7 @@
 								uni.saveImageToPhotosAlbum({
 									filePath: i.target,
 									success: function(res) {
-										console.log(res,'返回值')	
+										// console.log(res,'返回值')	
 										_this.send()
 										uni.showToast({
 											title: '保存图片成功',
@@ -73,10 +73,10 @@
 									} 
 								});
 							}, function(e) {
-								console.log('保存图片失败：' + JSON.stringify(e)); 
+								// console.log('保存图片失败：' + JSON.stringify(e)); 
 							});
 						}, function(e) {
-							console.log('截屏绘制图片失败：' + JSON.stringify(e));
+							// console.log('截屏绘制图片失败：' + JSON.stringify(e));
 						});
 						//currentWebview.append(amway_bit); 
 					},
@@ -97,7 +97,7 @@
 				});
 			},		
 			make() {
-				console.log(this.$store.state.Qrcodeurl)
+				// console.log(this.$store.state.Qrcodeurl)
 				uQRCode.make({
 					canvasId: 'qrcode',
 					componentInstance: this,
@@ -109,7 +109,7 @@
 					fileType: 'png',
 					correctLevel: uQRCode.errorCorrectLevel.H,
 					success: res => {
-						console.log(res)
+						// console.log(res)
 						this.QRcode = res
 					}
 				})
@@ -139,7 +139,7 @@
 			}
 		},
 		created() {
-			console.log(111)
+			// console.log(111)
 			this.make()
 		}
 	}

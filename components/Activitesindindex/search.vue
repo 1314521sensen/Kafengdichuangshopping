@@ -50,7 +50,7 @@
 				        // console.log('条码类型：' + res.scanType);
 				        // console.log('条码内容：' + res.result);
 						let arr = res.result.split("&")
-						console.log(arr[arr.length-1])
+						// console.log(arr[arr.length-1])
 						if(arr[arr.length-1]=="type=1"){
 							//这是注册的二维码
 							// console.log(arr,"这是注册")
@@ -75,7 +75,7 @@
 						}
 				    },
 					fail(err){
-						console.log(err)
+						// console.log(err)
 					},
 				});
 			}

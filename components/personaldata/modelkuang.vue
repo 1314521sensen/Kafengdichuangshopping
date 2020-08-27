@@ -157,7 +157,7 @@
 				// console.log(this.json)
 			},
 			srcurl(e){
-				console.log(e)
+				// console.log(e)
 				this.pathurl = `${this.$store.state.imgyuming}${e}`
 				this.pathurls = e
 			}

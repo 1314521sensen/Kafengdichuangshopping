@@ -1,7 +1,7 @@
 <template>
 	<view class="loginAgreement" :style="{'padding-top':statusBar+20+'rpx'}">
 		<text class="loginAgreementText">
-			<text class="loginagreementTitle">惠播客用户协议和隐私协议</text>
+			<text class="loginagreementTitle">惠播客用户协议</text>
 			山东卡风迪创信息科技有限公司（注册地址：山东省德州市经济开发区宋官屯街道办事处三八东路董子文化街汇智街28号一层）一直以来都非常重视个人信息的保护。在您浏览访问惠播客平台网站、应用程序、微信小程序等或者注册登录使用惠播客的任何产品和服务时，我们将按照法律法规要求，采取相应安全保护措施，尽力保护您的个人信息安全可控。
 			
 			一、本协议内容、生效、变更

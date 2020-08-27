@@ -138,7 +138,7 @@
 							_this.modalName = null  
 							let {indexs} = e.currentTarget.dataset
 							_this.radio = indexs
-							console.log(parseFloat(_this.checkbox[indexs].name).toFixed(2))
+							// console.log(parseFloat(_this.checkbox[indexs].name).toFixed(2))
 							//当用户点击的时候 请求后台的支付接口进行请求
 							if(_this.moneybool){
 								uni.request({
@@ -149,7 +149,7 @@
 										total:parseFloat(_this.checkbox[indexs].name).toFixed(2)
 									},
 									success(resget) {
-										console.log(resget.data)
+										// console.log(resget.data)
 										if(resget.statusCode==200){
 											// package
 											let  {appid,noncestr,partnerid,prepayid,timestamp,sign,order_sn,bill} = resget.data
@@ -168,7 +168,7 @@
 												provider:"wxpay",
 												orderInfo:Beforepayment,
 												success(res) {
-													console.log(res,"这是微信支付")
+													// console.log(res,"这是微信支付")
 													uni.request({
 														url:`${app.globalData.Requestpath}pay/insertlog`,
 														method:"POST",
@@ -179,12 +179,12 @@
 															token:restokey.data
 														},
 														success(respay) {
-															console.log(respay)
+															// console.log(respay)
 														}
 													})
 												},
 												fail(err){
-													console.log(err)
+													// console.log(err)
 												}
 											})
 										}

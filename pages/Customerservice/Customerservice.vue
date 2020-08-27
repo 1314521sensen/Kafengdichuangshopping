@@ -503,8 +503,8 @@
 						face:this.expressionlist[swiperitemindex][imgindex].name
 					},
 					success: function() {
-						console.log('insert image success')
-						console.log('点击图片')
+						// console.log('insert image success')
+						// console.log('点击图片')
 						
 					}
 				})
@@ -528,8 +528,8 @@
 			}
 		},
 		onLoad(opction){
-			console.log(this.expressionlist)
-			console.log("已经入onload的事件")
+			// console.log(this.expressionlist)
+			// console.log("已经入onload的事件")
 			const _this = this
 			let {shoplink,statestore} = opction
 			_this.shoplinknew = shoplink
@@ -571,6 +571,7 @@
 		},
 		//销毁前
 		beforeDestroy(){
+			console.log(1111)
 			this.$store.commit("soketclose")
 			this.$store.state.chatlist = []
 			this.$store.state.Customersendmsglist = []

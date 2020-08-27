@@ -93,7 +93,7 @@
 			},
 			//点击马上抢
 			Immediatelygrab(e){
-				console.log("马上抢")
+				// console.log("马上抢")
 				const _this = this
 				let {gid,s_id,g_le,g_price,g_pic,store_name,share_code,good_freight} = e.currentTarget.dataset
 				uni.getStorage({

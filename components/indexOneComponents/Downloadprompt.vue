@@ -78,7 +78,7 @@
 			//当用户点击了整包立即更新
 			AppUpdate(){
 				this.isprogressbar = true
-				console.log(this.isprogressbar)
+				// console.log(this.isprogressbar)
 				this.$store.commit("AppUpdate")
 				
 			},

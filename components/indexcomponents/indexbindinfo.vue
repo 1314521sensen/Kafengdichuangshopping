@@ -149,7 +149,7 @@
 			},
 			//封装一个绑定邮箱和更换邮箱的功能
 			bindNewEmail(tokey,account,sms){
-				console.log(tokey)
+				// console.log(tokey)
 				uni.request({
 					url:`${app.globalData.Requestpath}user/bindNewEmail`,
 					method:"POST",
@@ -159,8 +159,8 @@
 						code:sms
 					},
 					success:(res)=> {
-						console.log(account,sms)
-						console.log(res)
+						// console.log(account,sms)
+						// console.log(res)
 						if(res.data.code==0){//表示已经绑定成功了
 							//就把缓存中的值改了 下次进来的是用户更改邮箱
 							uni.setStorage({
@@ -176,13 +176,13 @@
 						}
 					},
 					fail(err){
-						console.log(err)
+						// console.log(err)
 					}
 				})
 			},
 			//这是验证码
 			smsreg(smsregs){
-				console.log(smsregs)
+				// console.log(smsregs)
 				this.regsms(smsregs)
 				// this.disabled = true
 				if(this.regbool){//验证全部通过就向用户发送验证码 
@@ -197,12 +197,12 @@
 					app.globalData.emailreg(json)
 					// console.log()
 					this.list[this.xiabiao][0].righttext = "验证码已发送"
-					console.log(this.list)
+					// console.log(this.list)
 				}
 			},
 			bindlogin(e){
-				console.log("确定更改")
-				console.log(e)
+				// console.log("确定更改")
+				// console.log(e)
 				let {account,sms} = e.detail.value
 				this.regsms(account)
 				this.disabled = false
@@ -220,7 +220,7 @@
 								code:sms
 							},
 							success:(res)=> {
-								console.log(res)
+								// console.log(res)
 								if(res.data.code==0){
 									//这是控制绑定新邮箱的input出不出来
 									this.stylebool = "block"
@@ -230,8 +230,8 @@
 									let {newsaccount,newssms} = e.detail.value
 									var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
 									if(reg.test(newsaccount)){
-										console.log(newsaccount,newssms)
-										console.log("该邮箱已被验证")
+										// console.log(newsaccount,newssms)
+										// console.log("该邮箱已被验证")
 										
 										this.disabled = false
 										this.smsreg(newsaccount)
@@ -265,7 +265,7 @@
 		},
 		onLoad(option) {
 			this.xiabiao = option.bind
-			console.log(this.xiabiao)
+			// console.log(this.xiabiao)
 			//这个来控制高度的
 			this.statusBar = app.globalData.statusBar
 		},
@@ -285,7 +285,7 @@
 								token:res.data
 							},
 							success(resinfo) {
-								console.log(resinfo.data.data.user_email)
+								// console.log(resinfo.data.data.user_email)
 								//如果邮箱有值的情况下  就让第一个数组里面的值 直接赋值 让用户无法点击
 								if(resinfo.data.data.user_email){
 									_this.bindbtn = "更换邮箱"

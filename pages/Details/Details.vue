@@ -105,7 +105,7 @@
 				this.producttype = ""
 			}
 			//在去请求详情页的其他数据
-			console.log(shopJSON)
+			// console.log(shopJSON)
 			uni.request({
 				url:`${app.globalData.Requestpath}good/getGoodInfo`,
 				data:shopJSON,

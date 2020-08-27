@@ -8,9 +8,9 @@
 				<text class="textcolorwrite textsize text-center margin-top-firchild">{{live_nick}}</text>
 				<text class="textcolorwrite textsize text-center margin-top font-size-twenty-four">{{cont}}观看|中国</text>
 			</cover-view>
-			<cover-view class="midden-left-Focuson bg-deepink border-radiusthirty" v-if="Focusshow">
+			<!-- <cover-view class="midden-left-Focuson bg-deepink border-radiusthirty" v-if="Focusshow">
 				<text class="textcolor-Promptreply textsize text-center">关注</text>
-			</cover-view>
+			</cover-view> -->
 		</cover-view>
 		<cover-view class="midden-childTop-right">
 			<cover-view class="midden-childTop-right-title bg-Black-gradient border-radiusthirty">

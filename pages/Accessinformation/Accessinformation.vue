@@ -92,7 +92,7 @@
 											},100)
 										},
 										fail(err){
-											console.log(err)
+											// console.log(err)
 										}
 									})
 								}

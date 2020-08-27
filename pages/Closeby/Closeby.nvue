@@ -16,13 +16,13 @@
 				</cover-view>
 			</cover-view>
 		</cover-view>
-		<cover-view class="Close-nums parent-padding-leftAndright border-radiusthirty bg-Black-gradient">
+	<!-- 	<cover-view class="Close-nums parent-padding-leftAndright border-radiusthirty bg-Black-gradient">
 			<cover-view class="Close-nums-item" v-for="(item,index) in clonselist" :key="index">
 				<text class="textcolorwrite nums text-center font-size-forty text-weight">{{item.nums}}</text>
 				<text class="textcolorwrite nums font-size-thirty text-center">{{item.title}}</text>
 			</cover-view>
-		</cover-view>
-		<cover-view class="close-problem bg-Black-gradient border-radiusthirty parent-padding-leftAndright">
+		</cover-view> -->
+	<!-- 	<cover-view class="close-problem bg-Black-gradient border-radiusthirty parent-padding-leftAndright">
 			<cover-view class="rich-title">
 				<text class="textcolorwrite font-size-thirty">您在本次直播中遇到了哪些问题?</text>
 			</cover-view>
@@ -30,7 +30,7 @@
 				<textarea cols="30" rows="10" class="textcolorwrite font-size-thirty text-padding-plice text-padding-leftshis" placeholder="请描述你的问题..."></textarea>
 			</cover-view>
 			<button class="btn bg-Lightgrey"><text class="textcolorwrite">提交</text></button>
-		</cover-view>
+		</cover-view> -->
 	</cover-view>
 </template>
 

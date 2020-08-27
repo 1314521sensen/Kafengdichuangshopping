@@ -81,7 +81,7 @@
 					method:'POST',
 					data:json,
 					success(res) {
-						console.log(res)
+						// console.log(res)
 						if(res.data.code==0){
 							//实现下拉加载
 							if(_this.pages>1){
@@ -149,7 +149,7 @@
 			})
 		},
 		onLoad(opction) {
-			console.log(opction)
+			// console.log(opction)
 			let {storeid,type} = opction
 			const _this = this
 			_this.storeid = storeid

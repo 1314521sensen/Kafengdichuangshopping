@@ -57,7 +57,7 @@
 								name:"file",
 								fileType:"image",
 								success(resimg){
-									console.log(resimg,"这是返回的")
+									// console.log(resimg,"这是返回的")
 									// console.log(JSON.parse(resimg.data))
 									let json = JSON.parse(resimg.data)
 									if(json.code==0){

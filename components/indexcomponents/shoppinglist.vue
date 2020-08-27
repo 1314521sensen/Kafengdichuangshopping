@@ -34,7 +34,7 @@
 						pageSize:10
 					},
 					success(res) {
-						console.log(res)
+						// console.log(res)
 						if(res.data.code==0){
 							if(_this.page>1){
 								_this.list = _this.list.concat(res.data.data.list)

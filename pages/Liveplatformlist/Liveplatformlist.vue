@@ -144,10 +144,10 @@
 					url:`${app.globalData.Requestpath}live_user/getLiveUserList`,
 					data:{
 						page:_this.pages,
-						pageSize:10
+						pageSize:10,
+						is_living:1
 					},
 					success(res) {
-						console.log(res)
 						if(res.data.code==0){
 							if(_this.pages>1){
 								_this.list = _this.list.concat(res.data.data.list)

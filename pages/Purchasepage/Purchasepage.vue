@@ -190,13 +190,13 @@
 			Addressmodification() {
 				//1是购物车过来的
 				//2是详情过来的
-				console.log(this.way)
+				// console.log(this.way)
 				if (this.way == 1) {
 					uni.navigateTo({
 						url: `/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
 					})
 				} else {
-					console.log(this.spec_id)
+					// console.log(this.spec_id)
 					uni.navigateTo({
 						url: `/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}&freight=${this.freight}&spec_id=${this.spec_id}`
 					})
@@ -226,7 +226,7 @@
 					//H5端支付---开始
 					//H5端支付---结束
 				} else if (this.radio == 'radio5') { //支付宝支付
-					console.log("支付宝支付")
+					// console.log("支付宝支付")
 					//app端支付宝支付---开始&product_code='' &notify_url=''
 					//app端支付宝支付---结束
 				} else {
@@ -322,14 +322,14 @@
 										share_from: this.share_from
 									},
 									success(res) {
-										console.log(res)
+										// console.log(res)
 										// console.log(res.data.data.orderSnArray)//订单编号
 										// console.log(res.data.data.swiftNo)//订单流水号
 										//orderSnArray订单的编组 支付的时候用到
 										if (res.data.code == 0) { //获取到支付前的数据
 											//获取订单编号数组
 											_this.orderSnArray = res.data.data.orderSnArray
-											console.log(payid)
+											// console.log(payid)
 											if (payid == "wxpay") {
 												//拿到订单流水号 用于微信支付 传给后台
 												// console.log(res.data.data.swiftNo)
@@ -482,7 +482,7 @@
 								good_price,
 								good_num
 							} = _this.orderinfolist[0]
-							console.log(_this.orderSnArray, "这是订单的号")
+							// console.log(_this.orderSnArray, "这是订单的号")
 							uni.request({
 								url: `${app.globalData.Requestpath}good/getCmsSettlementConfigInfo`,
 								method: "POST",
@@ -512,7 +512,7 @@
 												cms_rate: rescommissionconfiguration.data.data.cms_value
 											},
 											success(rescommissioninfo) {
-												console.log(rescommissioninfo)
+												// console.log(rescommissioninfo)
 											}
 										})
 									}
@@ -526,7 +526,7 @@
 			},
 			//封装个微信支付
 			payweixin(swiftNo) {
-				console.log(1111)
+				// console.log(1111)
 				const _this = this
 				let appid = 'wx0f9236b57d357dbb';
 				let payId = "wxpay"
@@ -538,8 +538,8 @@
 						swift_id: swiftNo
 					},
 					success(res) {
-						console.log(res)
-						console.log(_this.way)
+						// console.log(res)
+						// console.log(_this.way)
 						if (res.statusCode == 200) {
 							//临时---开始
 							let {
@@ -561,17 +561,17 @@
 								timestamp,
 								sign
 							}
-							console.log(obj)
+							// console.log(obj)
 							let str = out_trade_no
 							//临时---结束
 							uni.requestPayment({
 								provider: 'wxpay',
 								orderInfo: obj,
 								success(e) {
-									console.log("success", e);
+									// console.log("success", e);
 									
 									//微信支付 请求后端的接口进行更改订单状态
-									console.log(swiftNo)
+									// console.log(swiftNo)
 									uni.request({
 										url:`${app.globalData.Requestpath}notify/wechatpay`,
 										method:'POST',
@@ -580,7 +580,7 @@
 											swift_id: swiftNo
 										},
 										success(res) {
-											console.log(res)
+											// console.log(res)
 											//只要支付成功以后就到订单页面
 											if(res.data.code==0){
 												uni.showToast({
@@ -604,7 +604,7 @@
 											_this.hideModal()
 										},
 										fail(err){
-											console.log(err)
+											// console.log(err)
 										}
 									})
 									if (_this.way == 2) {
@@ -612,7 +612,7 @@
 									}
 								},
 								fail(err) {
-									console.log(err)
+									// console.log(err)
 									setTimeout(()=>{
 										uni.redirectTo({
 											url:`/pages/orderpageRouter/orderpageRouter`
@@ -672,7 +672,7 @@
 			uni.getStorage({
 				key: "orderinfo",
 				success(res) {
-					console.log(res)
+					// console.log(res)
 					_this.orderinfolist = res.data
 					let stoIdArr = [] //开始的数组
 					let stoIdSet = [] //去重后的店铺ID
@@ -683,13 +683,13 @@
 						_this.totalnumber += item.good_num
 						// console.log(item.good_freight)
 						if (item.good_freight !== undefined) {
-							console.log(111)
+							// console.log(111)
 							_this.totalprice += (item.good_price * item.good_num)
 						} else {
-							console.log(2222)
-							console.log(item.good_price,item.good_num)
+							// console.log(2222)
+							// console.log(item.good_price,item.good_num)
 							_this.totalprice += item.good_price * item.good_num
-							console.log(_this.totalprice)
+							// console.log(_this.totalprice)
 						}
 						// console.log(item.way)
 						if (item.way) {
@@ -703,7 +703,7 @@
 						if (item.good_type == 'npt' || item.good_type == 1 || item.good_type=='nlt') {
 							_this.couplebooltext = 1
 							_this.good_type = item.good_type
-							console.log(_this.good_type)
+							// console.log(_this.good_type)
 						} else {
 							_this.couplebooltext = 0
 						}
@@ -724,7 +724,7 @@
 						}
 					})
 					stoIdSet = ([...new Set(stoIdArr)])
-					console.log(stoIdSet,"22333")
+					// console.log(stoIdSet,"22333")
 					for (var i = 0; i < stoIdSet.length; i++) {
 						let arr = []
 						_this.orderinfolist.forEach((item, index) => {
@@ -743,14 +743,14 @@
 					// console.log(  _this.mali.toFixed(2) ,'最终的价格')
 					_this.totalprice += Number(_this.mali)
 					let arr = String(_this.totalprice).split('.')
-					console.log(arr)
+					// console.log(arr)
 					if (Boolean(arr[1])) {
 						let strtow = arr[1].substr(0, 2)
 						_this.totalprice = arr[0] + '.' + strtow
-						console.log(_this.totalprice,1111)
+						// console.log(_this.totalprice,1111)
 					} else {
 						_this.totalprice = _this.totalprice
-						console.log(_this.totalprice,2222)
+						// console.log(_this.totalprice,2222)
 					}
 				}
 			})
@@ -808,7 +808,7 @@
 							pageSize: 1,
 						},
 						success(reslove) {
-							console.log(reslove)
+							// console.log(reslove)
 							_this.code = reslove.data.code
 							if (reslove.data.code !== 0) {
 								_this.Username = ""

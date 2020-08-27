@@ -50,7 +50,7 @@
 				this.regphone()
 				//这个发起请求获取验证码
 				if(this.phone.match(userphone)){
-					console.log("验证成功")
+					// console.log("验证成功")
 					
 					let json = {
 						mobile:this.phone,
@@ -150,7 +150,7 @@
 										token:token
 									},
 									success:(resinfo)=>{
-										console.log(resinfo)
+										// console.log(resinfo)
 										if(resinfo.data.code==0){
 											//不管微信还是app都要加入缓存
 											uni.setStorage({
@@ -165,7 +165,7 @@
 										}
 									},
 									fail(err){
-										console.log(err)
+										// console.log(err)
 									}
 								})
 								

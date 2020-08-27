@@ -270,7 +270,7 @@
 			}
 		},
 		onLoad(opction) {
-			console.log(opction)
+			// console.log(opction)
 			const _this = this
 			if(opction.type==1){
 				_this.bool = false

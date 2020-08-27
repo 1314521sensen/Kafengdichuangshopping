@@ -254,7 +254,7 @@
 					_this.plicestarevaluation(_this.arraylastimages)
 					
 				}else{
-					console.log(imgreturnlistarr)
+					// console.log(imgreturnlistarr)
 					_this.plicestarevaluation(_this.arraylastimages)
 				}
 			}

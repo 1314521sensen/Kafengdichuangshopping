@@ -42,7 +42,7 @@
 										uni.request({
 											url:`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${rescode.code}&grant_type=authorization_code`,
 											success(resopenid) {
-												console.log(resopenid,"获取到openid")
+												// console.log(resopenid,"获取到openid")
 												uni.request({
 													url:`${app.globalData.Requestpath}user/bindopenid`,
 													method:"POST",
@@ -51,7 +51,7 @@
 														openid:resopenid.data.openid
 													},
 													success(bindopenid) {
-														console.log(bindopenid)
+														// console.log(bindopenid)
 														if(bindopenid.data.code==0){
 															app.globalData.showtoastsame("绑定成功")
 															uni.setStorage({
@@ -67,12 +67,14 @@
 										})
 										
 									},function(errcode){
-										console.log(errcode,"获取失败")
+										// console.log(errcode,"获取失败")
 									},)
 								}else{  
-									console.log('已经登陆认证');
+									// console.log('已经登陆认证');
 								}
-							}, function(e){console.log("获取服务列表失败："+JSON.stringify(e));})  
+							}, function(e){
+								// console.log("获取服务列表失败："+JSON.stringify(e));
+							})  
 						}
 					})
 				// #endif

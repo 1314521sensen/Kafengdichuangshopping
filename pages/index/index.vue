@@ -48,6 +48,9 @@
 		</scroll-view>
 		<!-- 这是更新app的组件 -->
 		<Downloadprompt></Downloadprompt>
+		<!-- #ifdef APP-PLUS -->
+			<indexpopup v-if="this.$store.state.indexpopupbool"></indexpopup>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -75,6 +78,8 @@
 	//这是横条的一元购
 	import Oneyuanbuys from "@/components/indexOneComponents/Oneyuanbuys.vue"
 	//临时的---结束
+	//引入第一次打开App的时候显示服务弹窗
+	import indexpopup from "@/components/indexcomponents/indexpopup.vue"
 	export default {
 		data() {
 			return {
@@ -196,7 +201,9 @@
 			//临时的结束
 			//一元购
 			Oneyuanbuy,
-			Oneyuanbuys
+			Oneyuanbuys,
+			//首页服务的弹窗
+			indexpopup
 		},
 		methods:{
 			//****一元专区---开始****
@@ -337,7 +344,7 @@
 					limit:5
 				},
 				success(res) {
-					console.log(res)
+					// console.log(res)
 					if(res.data.code==0){
 						_this.swiperList = res.data.data
 					}

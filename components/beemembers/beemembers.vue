@@ -1,20 +1,25 @@
 <template>
-	<view class="LittlebeeWindow" v-if="vipbool==0">
-		<view class="Window_top" :style="{'background-image':'url('+this.$store.state.httpUrl+'littlebee/mifengbg.png'+')'}">
-			<view class="close">
-				<text class="lg text-gray cuIcon-close" @tap="close"></text>
+	<view>
+		<!--  -->
+		<view class="LittlebeeWindow" v-if="vipbool==0 && loadbool==true">
+			<view class="Window_top" :style="{'background-image':'url('+this.$store.state.httpUrl+'littlebee/mifengbg.png'+')'}">
+				<view class="close">
+					<text class="lg text-gray cuIcon-close" @tap="close"></text>
+				</view>
+			</view>
+			<view class="Window_bottom">
+				<button 
+					class="cu-btn bg-red round" 
+					v-for="(item,index) in viplist"
+					:key="index"
+					:data-indexs="index"
+					@tap="VipPay"
+				>{{item.name}}</button>
 			</view>
 		</view>
-		<view class="Window_bottom">
-			<button 
-				class="cu-btn bg-red round" 
-				v-for="(item,index) in viplist"
-				:key="index"
-				:data-indexs="index"
-				@tap="VipPay"
-			>{{item.name}}</button>
-		</view>
+		<loading v-if="loadbool==false"></loading>
 	</view>
+	
 </template>
 
 <script>
@@ -35,6 +40,7 @@
 				// vipbool:0,
 				indexs:0,
 				// bool:true
+				loadbool:false
 			}
 		},
 		methods:{
@@ -42,7 +48,7 @@
 				let {indexs} = e.currentTarget.dataset
 				// console.log(indexs)
 				let total = this.viplist[indexs].value.toFixed(2)
-				console.log(total)
+				// console.log(total)
 				if(indexs==0){
 					//点击了vip
 					this.getwxplay(total,1)
@@ -53,7 +59,7 @@
 			},
 			//封装个支付
 			getwxplay(total,num){
-				console.log(this.field)
+				// console.log(this.field)
 				const _this = this
 				uni.request({
 					url:`${app.globalData.Requestpath}pay/wechatpay`,
@@ -76,7 +82,7 @@
 								timestamp,
 								sign
 							}
-							// console.log(payobj)
+							console.log(payobj)
 							uni.requestPayment({
 								provider:'wxpay',
 								orderInfo:payobj,
@@ -125,6 +131,7 @@
 																						data:num,
 																						success(resVip) {
 																							_this.vipbool = num
+																							
 																						}
 																					})
 																				}
@@ -135,7 +142,9 @@
 																			key:"beesVip",
 																			data:num,
 																			success(resVip) {
+																				// _this.$watch('num',)
 																				_this.vipbool = num
+																				
 																			}
 																		})
 																	}
@@ -149,7 +158,7 @@
 									})
 								},
 								fail(err){
-									console.log(err)
+									// console.log(err)
 								}
 							})
 						}
@@ -168,7 +177,8 @@
 			uni.getStorage({
 				key:'beesVip',
 				success(resVip) {
-					_this.vipbool = resVip.data
+					// _this.vipbool = resVip.data
+					_this.loadbool = true
 				}
 			})
 		},

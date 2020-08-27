@@ -36,7 +36,7 @@
 				</view>
 			</view>
 			<Selectexpresscompany v-if="orderstatus==3"></Selectexpresscompany>
-			<deliveryaddressshow v-if="orderstatus>1"></deliveryaddressshow>
+			<deliveryaddressshow :order_sn="order_sn" :buyer_mobile="buyer_mobile" v-if="orderstatus>1"></deliveryaddressshow>
 			<view class="shoporder">
 				<view class="shoporder-list" v-for="(item,index) in this.$store.state.orderlistshop" :key='index'>
 					<view class="order-title">
@@ -70,7 +70,7 @@
 					<view class="Deliverynote">
 						<view class="actual-payment">
 							<text class="actual-payment-text">实付款</text>
-							<text class="actual-payment-price" v-text="'￥'+(item.good_pay_price*item.good_num+Number(dispatch_price))"></text>
+							<text class="actual-payment-price" v-text="'￥'+((item.good_pay_price*item.good_num+Number(dispatch_price)).toFixed(2))"></text>
 						</view>
 					</view>
 				</view>

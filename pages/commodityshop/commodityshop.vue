@@ -196,7 +196,7 @@
 						gid
 					},
 					success(res) {
-						console.log(res)
+						// console.log(res)
 						if(res.data.code==0){
 							let {good_images,good_promotion_price,good_title,good_id,store_id,url} = res.data.data
 							_this.good_images = JSON.parse(good_images)[0]

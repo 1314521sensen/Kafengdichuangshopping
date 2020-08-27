@@ -68,6 +68,7 @@ let state = {
 	Qrcodeurl: "", //生成分享二维码的地址
 	liveuserlist: [], //这是直播聊天记录
 	verifyStatus: '', //直播状态显示权限
+	indexpopupbool:true,//首页弹窗是不是显示
 }
 //getters 用于计算
 let getters = {
@@ -171,7 +172,7 @@ let mutations = {
 						const downloadTask = uni.downloadFile({
 							url: `http://hbk.huiboke.com${src}`,
 							success(resfile) {
-								console.log(resfile)
+								// console.log(resfile)
 								//当下载完强制安装
 								plus.runtime.install(resfile.tempFilePath, {
 									force: true
@@ -187,8 +188,8 @@ let mutations = {
 						})
 						//监听下载的进度
 						downloadTask.onProgressUpdate((resjindu) => {
-							console.log('下载进度' + resjindu.progress);
-							console.log('已经下载的数据长度' + resjindu.totalBytesWritten);
+							// console.log('下载进度' + resjindu.progress);
+							// console.log('已经下载的数据长度' + resjindu.totalBytesWritten);
 							// console.log('预期需要下载的数据总长度' + resjindu.totalBytesExpectedToWrite);
 						})
 					}
@@ -206,7 +207,7 @@ let mutations = {
 				plus.runtime.install(wholeupdate.tempFilePath, {}, function() {}, function() {});
 			},
 			fail(err) {
-				console.log(err)
+				// console.log(err)
 			}
 		})
 		downloadTask.onProgressUpdate((resprogress) => {
@@ -235,73 +236,82 @@ let mutations = {
 		const _this = this
 		//先获取tokey 通过tokey去获取用户的详情 把用户的信息
 		_this.commit("gettokey")
-		uni.request({
-			url: `${Requestpath}user/getUserDetail`,
-			method: "POST",
-			data: {
-				token: state.tokey
-			},
-			success(res) {
+		uni.getStorage({
+			key:"bindtokey",
+			success(restokey){
+				uni.request({
+					url: `${Requestpath}user/getUserDetail`,
+					method: "POST",
+					data: {
+						token:restokey.data
+					},
+					success(res) {
 
-				// console.log(res)
-				if (res.data.code == 0) {
-					console.log("先进入请求者")
-					let {
-						user_id,
-						user_username,
-						user_pic
-					} = res.data.data
-					state.uid = user_id
-					state.uname = user_username
-					state.avatar = user_pic
-					uni.connectSocket({
-						// wss://echo.websocket.org
-						url: 'ws://49.232.153.178:7272',
-						// #ifdef MP
-						header: {
-							'content-type': 'application/json'
-						},
-						// #endif
-						// #ifdef MP-WEIXIN
-						method: 'GET',
-						// #endif
-						success(res) {
-							console.log(res, "开始创建连接")
-							state.linkstate = "正在创建连接...."
-							// 这里是接口调用成功的回调，不是连接成功的回调，请注意
-							let initobj = {
-								type: "userInit",
-								uid: state.uid,
-								name: state.uname,
-								avatar: state.imgyuming + state.avatar,
-								group: 1,
-								store: typestore,
-							}
-							console.log(initobj)
-							setTimeout(() => {
-								console.log("已进入一次性定时器")
-
-								uni.sendSocketMessage({
-									data: JSON.stringify(initobj),
-									success(resinit) {
-										state.linkstate = "正在连接中"
-										state.isconnectserver = false
-									},
-									fail(err) {
-										state.linkstate = "连接中断"
-										state.isconnectserver = true
+						// console.log(res)
+						if (res.data.code == 0) {
+							// console.log("先进入请求者")
+							let {
+								user_id,
+								user_username,
+								user_pic
+							} = res.data.data
+							state.uid = user_id
+							state.uname = user_username
+							state.avatar = user_pic
+							uni.connectSocket({
+								// wss://echo.websocket.org49.232.153.178:7272
+								url: 'ws://49.232.153.178:7272',
+								// #ifdef MP
+								header: {
+									'content-type': 'application/json'
+								},
+								// #endif
+								// #ifdef MP-WEIXIN
+								method: 'GET',
+								// #endif
+								success(res) {
+									// console.log(res, "开始创建连接")
+									// console.log(state.uid)
+									state.linkstate = "正在创建连接...."
+									// 这里是接口调用成功的回调，不是连接成功的回调，请注意
+									let initobj = {
+										type: "userInit",
+										uid: state.uid,
+										name: state.uname,
+										avatar: state.imgyuming + state.avatar,
+										group: 1,
+										store: typestore,
 									}
-								})
-							}, 3000)
-						},
-						fail(err) {
-							console.log(err)
-							state.linkstate = "连接失败"
-							state.isconnectserver = true
-							// 这里是接口调用失败的回调，不是连接失败的回调，请注意
+									// console.log(initobj)
+									setTimeout(() => {
+										// console.log("已进入一次性定时器")
+
+										uni.sendSocketMessage({
+											data: JSON.stringify(initobj),
+											success(resinit) {
+												state.linkstate = "正在连接中"
+												state.isconnectserver = false
+											},
+											fail(err) {
+												state.linkstate = "连接中断"
+												state.isconnectserver = true
+											}
+										})
+									}, 3000)
+								},
+								fail(err) {
+									// console.log(err)
+									state.linkstate = "连接失败"
+									state.isconnectserver = true
+									// 这里是接口调用失败的回调，不是连接失败的回调，请注意
+								}
+							})
 						}
-					})
-				}
+					}
+				})
+			},
+			fail(err){
+				// console.log(err)
 			}
 		})
 		// 监听WebSocket连接打开事件。
@@ -315,11 +325,10 @@ let mutations = {
 				uni.sendSocketMessage({
 					data: JSON.stringify(pingobj),
 					success(res) {
-						console.log(res)
-
+						// console.log(res)
 					},
 					fail(err) {
-						console.log(err)
+						// console.log(err)
 					}
 				})
 			}, 30000)
@@ -336,7 +345,7 @@ let mutations = {
 			let resparse = JSON.parse(res.data)
 			//这是处理图片的正则
 			let regimg = /img[\S]/gi
-			console.log(resparse)
+			// console.log(resparse)
 			if (resparse.message_type == 'wait') {
 				state.linkstate = resparse.data.content
 			} else if (resparse.message_type == 'kf_offline') {
@@ -393,7 +402,7 @@ let mutations = {
 						limit: 10
 					},
 					success(res) {
-						console.log(res, 789)
+						// console.log(res, 789)
 						if (res.data.code == 0) {
 							state.chattotal = res.data.data.total
 							state.chatpages = (parseInt(state.chattotal / 10)) + 1
@@ -411,7 +420,7 @@ let mutations = {
 		uni.closeSocket({
 			code: 1000,
 			success(res) {
-				console.log(res, "关闭成功")
+				// console.log(res, "关闭成功")
 				clearInterval(state.sokettime)
 			}
 		})
@@ -430,8 +439,8 @@ let mutations = {
 				limit: 7
 			},
 			success(res) {
-				console.log(state.kf_id)
-				console.log(res, 789)
+				// console.log(state.kf_id)
+				// console.log(res, 789)
 				if (res.data.code == 0) {
 					let tl = (parseInt(res.data.data.total / 7)) + 1
 					if (pages == tl) {
@@ -472,7 +481,7 @@ let mutations = {
 				if (res.data.code == 0) {
 					if (orderstatus == 0) {
 						//未付款的开始的时间
-						console.log(startTime)
+						// console.log(startTime)
 						//这是未付款的 =  未付款的时间 *1000(得到毫秒)  + 创建时间的秒数
 						state.Notpaying = (res.data.data.buy_close_time * 1000) + startTime
 						let dataTime = new Date()
@@ -488,7 +497,7 @@ let mutations = {
 									o_sns: [order_sn]
 								},
 								success(res) {
-									console.log(res)
+									// console.log(res)
 									state.remainingTime = 0
 								}
 							})
@@ -498,7 +507,7 @@ let mutations = {
 						//计算 店家发货时间+配置的收货时间 -new date时间
 						//这是发货
 						//这是发货的时间
-						console.log(endTime)
+						// console.log(endTime)
 						let sendtime = new Date(endTime.replace(/-/g, '/'))
 
 						// console.log(sendtime)
@@ -515,7 +524,7 @@ let mutations = {
 									o_sn: order_sn
 								},
 								success(res) {
-									console.log(res)
+									// console.log(res)
 								}
 							})
 						}
@@ -535,7 +544,7 @@ let mutations = {
 									o_sns: order_sn
 								},
 								success(res) {
-									console.log(res)
+									// console.log(res)
 								}
 							})
 						}
@@ -551,7 +560,7 @@ let mutations = {
 	//加入购物车
 	Addcart(state, addObj) {
 		const _this = this
-		console.log(addObj)
+		// console.log(addObj)
 		let {
 			s_name,
 			g_name,
@@ -604,7 +613,7 @@ let mutations = {
 						pageSize: 10
 					},
 					success(res) {
-						console.log(res)
+						// console.log(res)
 						if (res.data.code == 0) {
 							if (_this.state.pages > 1) {
 								_this.state.cartList = _this.state.cartList.concat(res.data.data)
@@ -722,7 +731,7 @@ let mutations = {
 				}
 			})
 		})
-		console.log(arr)
+		// console.log(arr)
 		uni.request({
 			url: `${Requestpath}shopping_cart/deleteMultiShoppingCartInfo`,
 			method: "POST",
@@ -782,7 +791,7 @@ let mutations = {
 	},
 	//跳到订单页面获取订单里面的值逻辑
 	Saveorder(state, shopvalue) {
-		console.log(shopvalue)
+		// console.log(shopvalue)
 		const _this = this
 		//将传过来的值 进行结构出来
 		let {
@@ -831,7 +840,7 @@ let mutations = {
 					index,
 					geturl
 				} = TabCurindex
-				console.log(geturl)
+				// console.log(geturl)
 				uni.request({
 					url: Requestpath + geturl,
 					method: "POST",
@@ -841,11 +850,11 @@ let mutations = {
 						pageSize: 10,
 					},
 					success(res) {
-						console.log(res.data.code)
+						// console.log(res.data.code)
 						//   .$forceUpdate()  
 						if (res.data.code == 0) {
-							console.log('令牌正确')
-							console.log(state.tokey)
+							// console.log('令牌正确')
+							// console.log(state.tokey)
 							// console.log(state.tokey)   
 							// console.log(state.orderpage)
 							state.Temporarynonpaymentlist = state.Temporarynonpaymentlist.concat(res.data.data.list)
@@ -858,7 +867,7 @@ let mutations = {
 							//  state.Temporarynonpaymentlist =state.Temporarynonpaymentlist.concat(res.data.data.list)  
 							// console.log(state.tokey)
 							// console.log(state.orderpage)   
-							console.log(res.data.msg)
+							// console.log(res.data.msg)
 						}
 					},
 				})
@@ -984,7 +993,7 @@ let mutations = {
 						pageSize: 10
 					},
 					success(res) {
-						console.log(res)
+						// console.log(res)
 						// console.log(res.data.data.list)
 						if (res.data.code == 0) {
 							state.orderlistshop = res.data.data.list
@@ -1028,7 +1037,7 @@ let mutations = {
 							good_id: state.orderlistshop[0].good_id
 						},
 						success(res) {
-							console.log(res)
+							// console.log(res)
 						}
 					})
 				} else {
@@ -1188,7 +1197,7 @@ let mutations = {
     		 	url,
 				pages
     		 } = evaluationobj
-			 console.log(evaluationobj,111)
+			 // console.log(evaluationobj,111)
     		 _this.commit("gettokey")
     		 //这是请求的订单评价超时的时间
     		 uni.request({
@@ -1236,7 +1245,7 @@ let mutations = {
     										o_sns:arr
     									},
     									success(res) {
-    										console.log(res)
+    										// console.log(res)
     									}
     								})
     							}
@@ -1285,7 +1294,7 @@ let mutations = {
 				pageSize: 10
 			}, 
 			success(res) {
-				console.log(res)
+				// console.log(res)
 				if (res.data.code == 0) {
 					state.refundreturnlist = res.data.data.list
 					uni.request({
@@ -1297,7 +1306,7 @@ let mutations = {
 							pageSize: 10
 						},
 						success(res) {
-							console.log(res)
+							// console.log(res)
 							//因为退货和退款退款两个接口同时的 所以要把他们的数据进行合并
 							if (res.data.code == 0) {
 								state.refundreturnlist.concat(res.data.data.list)
@@ -1498,7 +1507,7 @@ let mutations = {
 				pageSize: 3,
 			},
 			success(res) {
-				console.log(res)
+				// console.log(res)
 				if (res.data.code == 0) {
 					if (state.userlivepages > 1) {
 						state.liveshoplist = state.liveshoplist.concat(res.data.data.list)
@@ -1534,7 +1543,7 @@ let mutations = {
 				gid: gid
 			},
 			success(res) {
-				console.log(res,"商品规格信息")
+				// console.log(res,"商品规格信息")
 				//因为有些没规格的所以不管失败成功都要变成true
 				if (res.data.code == 0) {
 					state.livespecificationsbool = true
@@ -1565,7 +1574,7 @@ let mutations = {
 						good_freight : good_freight,
 						share_from: 1
 					}
-					console.log(SpecificationShopdetails)
+					// console.log(SpecificationShopdetails)
 					_this.commit("Saveorder", {
 						fromvalue: 0,
 						publicShopdetails: SpecificationShopdetails
@@ -1584,9 +1593,9 @@ let mutations = {
 		let {
 			msg
 		} = livemsgobj
-		console.log(msg)
+		// console.log(msg)
 		state.liveuserlist.push(msg)
-		console.log(state.liveuserlist, "这是index.js里面的")
+		// console.log(state.liveuserlist, "这是index.js里面的")
 	},
 	/******直播*****/
 
@@ -1625,7 +1634,7 @@ let mutations = {
 				data: JSON.stringify(obj),
 				success(res) {
 					// Customersendmsglist
-					console.log(res, "这是发送成功")
+					// console.log(res, "这是发送成功")
 					state.Customersendmsglist.push({
 						'sendmsgdata': textvalue,
 						'msgtype': 'usersend',
@@ -1633,10 +1642,10 @@ let mutations = {
 					})
 				},
 				fail(err) {
-					console.log(err, "这是发送失败")
+					// console.log(err, "这是发送失败")
 				}
 			});
-			console.log(state.Customersendmsglist)
+			// console.log(state.Customersendmsglist)
 		} else {
 			_this.commit('getshowmodel', {
 				msg: "文字不能为空"

@@ -75,7 +75,7 @@
 					if(res.data.code==0){
 						_this.listone = res.data.data.list
 						_this.listone.forEach((item,index)=>{
-							console.log(item)
+							// console.log(item)
 							if(item.ge_image!="" && item.ge_image!=null){
 								let url = item.ge_image.split(",")
 								_this.listone[index].ge_image = url

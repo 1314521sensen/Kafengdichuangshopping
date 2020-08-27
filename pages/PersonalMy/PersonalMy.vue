@@ -94,7 +94,7 @@
 							token:_this.tokey
 						},
 						success(resinfo) {
-							console.log(resinfo)
+							// console.log(resinfo)
 							if(resinfo.data.code==0){
 								let {user_nick,user_pic,user_amount,user_integral,is_commander,is_member,user_sid,user_commission,invite_num,share_code,app_openid} = resinfo.data.data
 								// console.log(app_openid)openidbool
@@ -172,7 +172,7 @@
 										}
 									}
 								})
-								console.log(app_openid)
+								// console.log(app_openid)
 								// #ifdef APP-PLUS
 								if(app_openid){
 									_this.openidbool = true

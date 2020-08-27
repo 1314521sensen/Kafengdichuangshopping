@@ -298,7 +298,12 @@
 		{
 		    "path" : "components/login/agreement",
 		    "style" : {}
+		},
+		{
+			"path": "pages/Privacyagreement/Privacyagreement",
+			"style" : {}
 		}
+			
     ],
 	
 	"globalStyle": {

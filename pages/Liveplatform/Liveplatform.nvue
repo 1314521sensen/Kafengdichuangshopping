@@ -72,14 +72,14 @@
 		},
 		methods: {
 			videoerr(e){
-				console.log(e,"这是加载报错的时候")
+				// console.log(e,"这是加载报错的时候")
 				// this.liveanchorsowing = false
 			},
 			waiting(e){
-				console.log(e,"这是加载缓冲的时候")
+				// console.log(e,"这是加载缓冲的时候")
 			},
 			progress(e){
-				console.log(e,"加载进度")
+				// console.log(e,"加载进度")
 			},
 			timeupdate(e){
 				// console.log(e,"播放进度发生变化时"){
@@ -130,7 +130,7 @@
 				avatar:'',
 				group:roomid
 			}
-			console.log(JSON.stringify(userInitialize),"这是初始化的数据")
+			// console.log(JSON.stringify(userInitialize),"这是初始化的数据")
 			uni.connectSocket({
 				url:"ws://49.232.153.178:7272",
 				// #ifdef MP
@@ -142,17 +142,17 @@
 				method: 'GET',
 				// #endif
 				success(resconnect){
-					console.log(resconnect)
+					// console.log(resconnect)
 					//初始化用户进入直播间的数据
 					setTimeout(()=>{
-						console.log(123)
+						// console.log(123)
 						uni.sendSocketMessage({
 							data:JSON.stringify(userInitialize),
 							success(ressendmsg) {
-								console.log(ressendmsg,"这是初始化的发送成功")
+								// console.log(ressendmsg,"这是初始化的发送成功")
 							},
 							fail(err){
-								console.log(err)
+								// console.log(err)
 							}
 						})
 					},3000)
@@ -177,7 +177,7 @@
 			})
 			uni.onSocketMessage(function(resmsg){
 				// console.log("监听接收服务器的状态",resmsg)
-				console.log(JSON.parse(resmsg.data))
+				// console.log(JSON.parse(resmsg.data))
 				let messagetype = JSON.parse(resmsg.data).message_type
 				if(messagetype=="liveConnect"){
 					//当用户加入到直播间的时候
@@ -186,6 +186,7 @@
 					//当用户接收到服务器消息的时候 
 					_this.$store.commit("livereceivemsg",{msg:JSON.parse(resmsg.data).data})
 				}else if(messagetype=="anchorCloseRoom"){
+					// console.log()
 					//当主播下播的时候
 					_this.liveanchorsowing = false
 				}else if(messagetype=="liveWait"){
@@ -196,11 +197,11 @@
 		//当组件销毁前
 		beforeDestroy(){
 			const _this = this
-			console.log("组件销毁前")
+			// console.log("组件销毁前")
 			uni.closeSocket({
 				code:1000,
 				success(resuserclose) {
-					console.log(resuserclose)
+					// console.log(resuserclose)
 					clearInterval(_this.userlivetime)
 					//当用户退出直播间的时候 将数据清空
 					_this.$store.state.liveuserlist = []

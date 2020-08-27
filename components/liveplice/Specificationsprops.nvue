@@ -56,7 +56,7 @@
 		},
 		methods:{
 			liveImmediateText(e){
-				console.log(111)
+				// console.log(111)
 				let {spec_value,indexs,spec_price,spec_id} = e.currentTarget.dataset
 				// console.log(spec_value)
 				this.ImmediateText = spec_value
@@ -70,7 +70,7 @@
 			Buynow(e){
 				let {gid} = e.currentTarget.dataset
 				if(this.ImmediateText!=="" && this.ImmediateText!=="请选择规格"){
-					console.log(this.$store.state.liveshopspecifications[0])
+					// console.log(this.$store.state.liveshopspecifications[0])
 					let SpecificationShopdetails = {
 						good_id:gid,
 						spec_id:this.spec_id,

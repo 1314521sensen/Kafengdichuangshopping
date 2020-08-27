@@ -12,16 +12,32 @@
 	export default {
 		data(){
 			return {
-				
+				 encrypted:'',
 			}
 		},
+		props:["buyer_mobile"],
 		methods:{
+			// Logisticsinformation(){
+			// 	// console.log(111)
+			// 	uni.navigateTo({
+			// 		url:`/pages/logistics/logistics`
+			// 	})
+			// }
 			Logisticsinformation(){
-				console.log(111)
-				uni.navigateTo({
-					url:`/pages/logistics/logistics`
-				})
-			}
+				const _this = this 
+					uni.getStorage({
+						key:"express_sn",
+						success(res){
+							_this.order_sn = res.data[0]
+							
+							_this.encrypted = btoa(_this.buyer_mobile)
+							uni.navigateTo({ 
+								url:`/pages/logistics/logistics?order_sn=${_this.order_sn}&mobile=${_this.encrypted}`
+							})
+							// console.log(_this.order_sn,'雨淋湿的天空，毁的很讲究')
+						}
+					})
+				}
 		},
 		
 	}

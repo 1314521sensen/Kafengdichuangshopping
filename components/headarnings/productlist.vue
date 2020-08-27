@@ -104,7 +104,7 @@
 							token:res.data,
 						},
 						success(res) {
-							console.log(res,456)
+							// console.log(res,456)
 							if(res.data.code==0){
 								
 							}

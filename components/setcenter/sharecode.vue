@@ -33,7 +33,7 @@
 			uni.getStorage({
 				key:"share_code",
 				success(res){
-					console.log(res,"分享码")
+					// console.log(res,"分享码")
 					_this.code = res.data
 				}
 			})

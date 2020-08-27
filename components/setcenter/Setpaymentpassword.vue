@@ -48,7 +48,7 @@
 							token:restokey.data
 						},
 						success(reszhifu){
-							console.log(reszhifu)
+							// console.log(reszhifu)
 							if(reszhifu.data.code==0){//code等于0 代表密码存在
 								
 								 _this.setzhifumimabool = reszhifu.data.data.flag //1

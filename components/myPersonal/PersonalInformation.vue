@@ -60,7 +60,7 @@
 							uni.removeStorage({
 								key:"bindtokey",
 								success(res) {
-									console.log(res)
+									// console.log(res)
 									uni.reLaunch({
 										url:"/pages/login/login"
 									})

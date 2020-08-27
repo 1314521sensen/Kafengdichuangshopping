@@ -18,7 +18,7 @@
 		},
 		methods:{
 			make() {
-				console.log(this.code)
+				// console.log(this.code)
 				const _this = this
 				uQRCode.make({
 					canvasId: 'qrcode',
@@ -31,7 +31,7 @@
 					fileType: 'png',
 					correctLevel: uQRCode.errorCorrectLevel.H,
 					success: res => {
-						console.log(res)
+						// console.log(res)
 						_this.QRcode = res
 						
 					}

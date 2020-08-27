@@ -101,7 +101,7 @@
 		},
 		methods:{
 			scrollBottom(){
-				console.log("划到底部")	
+				// console.log("划到底部")	
 				this.page++
 				this.$store.commit("scrollBottom",{pages:parseInt(this.page)})
 				if(this.judge){

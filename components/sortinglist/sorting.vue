@@ -62,23 +62,23 @@
 				// console.log(this.TabCur)
 				switch(parseInt(this.TabCur)){
 					case 0:
-						console.log("这是0")
+						// console.log("这是0")
 						break;
 
 					case 1:
 						//这是销量
 						this.sortinglistshop(0,0)
-						console.log("这是销量")
+						// console.log("这是销量")
 						break;
 					
 					case 2:
 						//这是价格
 						this.sortinglistshop(1,0)
-						console.log("这是2")
+						// console.log("这是2")
 						break;
 					
 					case 3:
-						console.log("这是3")
+						// console.log("这是3")
 						break;
 				}
 			}

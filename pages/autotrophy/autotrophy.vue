@@ -271,7 +271,7 @@
 			}
 		},
 		onLoad(opction) {
-			console.log(opction)
+			// console.log(opction)
 			let {title} = opction
 			this.title = title
 			this.statusBar = app.globalData.statusBar
