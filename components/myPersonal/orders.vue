@@ -30,7 +30,7 @@
 					},
 					{
 						images:`${this.$store.state.httpUrl}my/orders/beenshipped.png`,
-						textname:"已发货"
+						textname:"待收货"
 					},
 					{
 						images:`${this.$store.state.httpUrl}my/orders/evaluation.png`,
@@ -49,7 +49,7 @@
 		methods:{
 			jumporder(){
 				uni.navigateTo({
-					url:"/pages/orderpageRouter/orderpageRouter"
+					url:"/pages/orderpageRouter/orderpageRouter?is_order=is_order"
 				})
 			},
 		}

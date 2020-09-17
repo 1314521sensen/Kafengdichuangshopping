@@ -8,7 +8,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="cu-modal" :class="modalName=='RadioModal'?'show':''" @tap="hideModal">
+		<view class="cu-modal" :class="modalName=='RadioModal'?'show':''">
 			<view class="cu-dialog" @tap.stop="">
 				<radio-group class="block" @change="RadioChange">
 					<view class="cu-list menu text-left">
@@ -22,7 +22,8 @@
 					</view>
 				</radio-group>
 				<view class="action">
-					<button class="cu-btn bg-green shadow" @tap="returnlogin(radio,tokey,userid)" data-target="RadioModal" :style="{'width':'100%'}">确定</button>
+					<button class="cu-btn round bg-red shadow" @tap="hideModal" :style="{'width':'50%'}">取消</button>
+					<button class="cu-btn round bg-green shadow" @tap="returnlogin(radio,tokey,userid)" data-target="RadioModal" :style="{'width':'50%'}">确定</button>
 				</view>
 			</view>
 		</view>

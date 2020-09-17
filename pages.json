@@ -44,10 +44,11 @@
             "path" : "pages/Sortinglist/Sortinglist",
             "style" : {}
         }
-        ,{
-            "path" : "pages/Personaldata/Personaldata",
-            "style" : {}
-        }
+        ,
+		{
+			"path" : "pages/Personaldata/Personaldata",
+			"style" : {}
+		}
         ,{
             "path" : "pages/orderpageRouter/orderpageRouter",
             "style" : {}
@@ -304,6 +305,46 @@
 			"style" : {}
 		}
 			
+        ,{
+            "path" : "pages/regards/regards",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/loginForgotpassword/loginForgotpassword",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/loginresetpassword/loginresetpassword",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/storecollection/storecollection",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/Detailsofrefund/Detailsofrefund",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/commissionsubsidiary/commissionsubsidiary",
+            "style" : {}
+        },
+		{
+		    "path" : "pages/Detailspromoters/Detailspromoters",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/refund/refund",
+		    "style" : {}
+		}
+        ,{
+            "path" : "pages/shareshop/shareshop",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/withdrawal/withdrawal",
+            "style" : {}
+        }
     ],
 	
 	"globalStyle": {
@@ -313,45 +354,7 @@
 		"backgroundColor": "#F2F2F2",
 		"navigationStyle": "custom"
 	},
-	
-	"tabBar": {
-		    "color": "#7A7E83",
-		    "selectedColor": "#eb246d",
-		    "borderStyle": "black",
-		    "backgroundColor": "#ffffff",
-		    "list": [
-				{
-		        "pagePath": "pages/index/index",
-		        "iconPath": "static/tabber/indexwei.png",
-		        "selectedIconPath": "static/tabber/index.gif",
-		        "text": "首页"
-		    }, 
-			{
-			    "pagePath": "pages/classification/classification",
-			    "iconPath": "static/tabber/classificationwei.png",
-			    "selectedIconPath": "static/tabber/classification.gif",
-			    "text": "分类"
-			}, 
-			{
-			    "pagePath": "pages/Liveplatformlist/Liveplatformlist",
-			    "iconPath": "static/tabber/Liveplatform.png",
-			    "selectedIconPath": "static/tabber/Liveplatform.gif",
-			    "text": "直播"
-			}, 
-			{
-		        "pagePath": "pages/shoppingCart/shoppingCart",
-		        "iconPath": "static/tabber/carwei.png",
-		        "selectedIconPath": "static/tabber/car.gif",
-		        "text": "购物车"
-		    },
-			{
-			    "pagePath": "pages/PersonalMy/PersonalMy",
-			    "iconPath": "static/tabber/mywei.png",
-			    "selectedIconPath": "static/tabber/my.gif",
-			    "text": "我的"
-			}
-			]
-		},
+
 	"condition" : { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [

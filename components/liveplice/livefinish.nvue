@@ -20,9 +20,10 @@
 		methods: {
 			returnlive(){
 				this.$store.state.liveuserlist = []
-				uni.switchTab({
-					url:`/pages/Liveplatformlist/Liveplatformlist`
-				})
+				// uni.redirectTo({
+				// 	url:`/pages/Liveplatformlist/Liveplatformlist`
+				// })
+				uni.navigateBack()
 			}
 		},
 		props:["wdith","height"]

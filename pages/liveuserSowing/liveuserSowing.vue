@@ -21,7 +21,7 @@
 		},
 		methods: {
 			RetuernLiveplatformlist(){
-				uni.switchTab({
+				uni.redirectTo({
 					url:`/pages/Liveplatformlist/Liveplatformlist`
 				})
 			}

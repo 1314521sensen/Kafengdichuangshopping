@@ -9,6 +9,7 @@
 			</view>
 		</scroll-view> -->
 		<!-- 展示图 -->
+		<scroll-view :scroll-y="true" style="height: 100vh; width: 100%;" @scrolltolower="scroll">
 		<view class="patternmaking" :style="{'background-image':'url('+this.$store.state.httpUrl+'Scratchablediagrams/banner.png'+')'}"></view>
 		<!-- 查看更多 -->
 		<!-- <view class="more">
@@ -106,7 +107,7 @@
 		</view> -->
 		
 		<!-- 推荐产品 -->	
-		<scroll-view :scroll-y="true" style="width: 100%;" @scrolltolower="scroll">
+		<!-- <scroll-view :scroll-y="true" style="width: 100%;" @scrolltolower="scroll"> -->
 		<view class="recommendProduct">
 			<!-- 单个产品 -->
 			<view class="singleCommodities" 
@@ -125,7 +126,7 @@
 					<!-- 现价 -->
 					<text class="currentPrice">{{'¥'+item.good_promotion_price}}</text>
 					<!-- 原价 -->
-					<text class="originalPrice">{{'¥'+item.good_price}}</text>
+					<text class="originalPrice">{{'¥'+item.good_marketprice}}</text>
 					<!-- 抢购 -->
 					<text 
 						class="PanicBuying" 
@@ -166,6 +167,7 @@
 			</view>
 		</view> -->
 	<!--  -->
+	<suspensionshopcart></suspensionshopcart>
 	</view>
 </template>
 
@@ -173,6 +175,7 @@
 	const app = getApp()
 	import actionbar from "@/components/actionbar/actionbar.vue"
 	import bgbanner from "@/components/indexcomponents/menswearaaner.vue"
+	import suspensionshopcart from "@/components/actionbar/suspensionshopcart.vue"
 	export default {
 		data() {
 			return {
@@ -249,6 +252,7 @@
 						pageSize:5
 					},
 					success(res) {
+						// console.log(res)
 						if(res.data.code==0){
 							if(_this.pages>1){
 								_this.recommendlist = _this.recommendlist.concat(res.data.data.list)
@@ -279,7 +283,8 @@
 		},
 		components:{
 			actionbar,
-			bgbanner
+			bgbanner,
+			suspensionshopcart
 		},
 		created() {
 			this.getrendomlist()

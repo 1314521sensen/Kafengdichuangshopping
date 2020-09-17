@@ -1,9 +1,9 @@
 <template>
 	<view class="Realnameauthentication">
 		<view class="orders">
-			<view class="orders-title-name">
+			<view class="orders-title-name" @tap="showModal" data-target="setphonetan">
 				<text>实名认证</text>
-				<view class="mintext"  @tap="showModal" data-target="setphonetan">
+				<view class="mintext">
 					<text>实名</text>
 					<text class="lg text-gray cuIcon-right"></text>
 				</view>

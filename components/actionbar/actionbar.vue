@@ -22,18 +22,27 @@
 		methods:{
 			returnsmy(e){
 				let url = e.currentTarget.dataset.url
-				if(this.Jumpchoose){
+				// console.log(this.isorder)
+				if(this.isorder){
 					uni.redirectTo({
-						url
+						url:url
 					})
 				}else{
-					uni.switchTab({
-						url
-					})
+					if(this.Jumpchoose){
+						// uni.redirectTo({
+						// 	url
+						// })
+						uni.navigateBack()
+					}else{
+						// uni.redirectTo({
+						// 	url
+						// })
+						uni.navigateBack()
+					}
 				}
 			}
 		},
-		props:["url","message","bg","textcolor",'Jumpchoose']
+		props:["url","message","bg","textcolor",'Jumpchoose',"isorder"]
 	}
 </script>
 

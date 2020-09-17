@@ -1,5 +1,6 @@
 <template>
 	<view class="shareCode" :style="{'background-image':'url('+this.$store.state.httpUrl+'sharecode/commissionbg.png'+')'}">
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 			<!-- <canvas canvas-id="qrcode" :style="{width:200+'rpx',height:200+'rpx'}"  class="qrcodea" /> -->
 			<!-- <view > -->
 				<canvas canvas-id="qrcode" :style="{width:200+'rpx',height:200+'rpx'}"  class="qrcodea" />
@@ -10,6 +11,7 @@
 
 <script>
 	import uQRCode from '@/components/Sansnn-uQRCode/uqrcode.js'
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	export default {
 		data() {
 			return {
@@ -50,6 +52,9 @@
 				}
 			})
 		},
+		components:{
+			defaultbgblackcolorwhitebar
+		}
 	}
 </script>
 
@@ -70,7 +75,7 @@
 			/* #endif */
 			/* #ifdef APP-PLUS */
 				top:49vh;
-				left:18vh;
+				left:19vh;
 			/* #endif */
 		}
 	}

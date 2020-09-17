@@ -1,7 +1,18 @@
 <template>
 	<view class="orderForm">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<actionbar  message="订单列表" :Jumpchoose="false" url="/pages/PersonalMy/PersonalMy"></actionbar>
+		<!-- <actionbar  
+			message="退款列表" 
+			:Jumpchoose="false" 
+			url="/pages/PersonalMy/PersonalMy"
+			:isorder="isoder"
+		></actionbar> -->
+		<actionbar  
+			:message="orderstatus" 
+			:Jumpchoose="false" 
+			url="/pages/PersonalMy/PersonalMy"
+			:isorder="isoder"
+		></actionbar>
 		<scroll-view scroll-x class="bg-white nav" v-if="indexs!=5">
 			<view class="flex text-center">
 				<view 
@@ -22,21 +33,20 @@
 					class="orderFormList" 
 					v-for="(item,index) in this.$store.state.Temporarynonpaymentlist" 
 					:key='index'
+					@tap="linkDetails"
+					:data-order_sn="item.order_sn"
+					:data-title="item.store_name"
+					:data-dispatch_price="item.change_dispatch_price"
+					:data-swift_no="item.swift_no"
+					:data-address_id="item.address_id"
+					:data-buyer_name="item.buyer_name"
+					:data-price="item.price"
+					:data-create_time="item.create_time"
+					:data-send_time="item.send_time"
+					:data-finish_time="item.finish_time"
+					:data-cancel_time="item.cancel_time"
 				>
-						<view class="img" 
-							@tap="linkDetails" 
-							:data-order_sn="item.order_sn"
-							:data-title="item.store_name"
-							:data-dispatch_price="item.change_dispatch_price"
-							:data-swift_no="item.swift_no"
-							:data-address_id="item.address_id"
-							:data-buyer_name="item.buyer_name"
-							:data-price="item.price"
-							:data-create_time="item.create_time"
-							:data-send_time="item.send_time"
-							:data-finish_time="item.finish_time"
-							:data-cancel_time="item.cancel_time"
-						>
+						<view class="img">
 							<image :src="imgpath+item.store_logo" mode=""></image>
 						</view>
 						<view class="title-text">
@@ -47,7 +57,7 @@
 								<text v-text="'￥'+item.price"></text>
 								<text 
 									class="text-gray cuIcon-delete deletesize" 
-									@tap="deletescollectionAndfootprint"
+									@tap.stop="deletescollectionAndfootprint"
 									:data-order_sn="item.order_sn"
 									v-if="item.status==-1 || item.status==3"
 								></text>
@@ -67,6 +77,7 @@
 	export default {
 		data() {
 			return {
+				orderstatus:"",
 				statusBar:0,
 				TabCur: 0,
 				Myorder:[
@@ -92,7 +103,9 @@
 				page:1,
 				geturls:'',
 				judge:true,
-				imgpath:this.$store.state.imgyuming
+				imgpath:this.$store.state.imgyuming,
+				isoder:false,
+				TabCurBool:0
 			}
 		},
 		components:{
@@ -111,15 +124,19 @@
 				}
 			},
 			tabSelect(e) {
-				this.$store.state.orderpage = 1
-				this.page = 1
-				this.judge = false
-				this.$store.state.Temporarynonpaymentlist = []
-				let {geturl} = e.currentTarget.dataset
-				this.geturls = geturl
 				this.TabCur = e.currentTarget.dataset.id;
-				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-				this.$store.commit("getTemporarynonpayment",{index:parseInt(this.TabCur),geturl:this.geturls})
+				if(!(this.TabCurBool == this.TabCur)){
+					this.$store.state.orderpage = 1
+					this.page = 1
+					this.judge = false
+					this.$store.state.Temporarynonpaymentlist = []
+					let {geturl} = e.currentTarget.dataset
+					this.geturls = geturl
+					this.TabCurBool = this.TabCur
+					this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+					this.$store.commit("getTemporarynonpayment",{index:parseInt(this.TabCur),geturl:this.geturls})
+				}
+				
 			},
 			linkDetails(e){
 				// console.log(e.currentTarget.dataset.order_sn)title
@@ -138,11 +155,23 @@
 			this.$store.state.Temporarynonpaymentlist = []
 		},
 		onLoad(opction){
+			// console.log(opction.index)
+			 if(opction.index == 5){
+				 this.orderstatus = "退款列表"
+			 }else{
+				 this.orderstatus = "订单列表"
+			 }
 			const _this = this
-			let {index} = opction
+			let {index,is_order} = opction
 			//如果index等等于undefined就让index等于0
 			if(index==undefined){
 				index=0
+			}
+			//这里为了判断 是不是要跳转的路由
+			if(is_order=="is_order"){
+				_this.isoder = false
+			}else{
+				_this.isoder = true
 			}
 			//每次进来的时候改变nav的导航
 			_this.TabCur = index

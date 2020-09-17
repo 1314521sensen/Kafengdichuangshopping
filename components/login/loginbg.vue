@@ -2,7 +2,7 @@
 	<view class="logobg">
 		<view class="logo">
 			<!-- 这里是平台的logo -->
-			<view class="cu-avatar xl round margin-left logHeadportrait" style="background-image:url('/static/logo.png')"></view>
+			<view class="cu-avatar xl round margin-left logHeadportrait" :style="{'background-image':'url('+this.$store.state.httpUrl+'logo.png'+')'}"></view>
 		</view>
 	</view>
 </template>

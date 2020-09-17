@@ -16,7 +16,7 @@
 				<view class="goodtitle">{{good_title}}</view>
 			</view>
 			<view class="right">
-				<canvas canvas-id="qrcode" style="width: 140rpx;height: 140rpx;" class="qrcodea" />
+				<canvas canvas-id="qrcode" style="width: 170rpx;height: 170rpx;" class="qrcodea" />
 			</view>
 		</view>
 	</view>
@@ -59,8 +59,8 @@
 				uQRCode.make({
 					canvasId: 'qrcode',
 					componentInstance: this,
-					text:`gid=${this.gid}&sid=${this.sid}&code=${this.code}&type=3`,
-					size: 70,
+					text:`gid=${this.gid}&sid=${this.sid}&code=${this.code}&type=2`,
+					size: 85,
 					margin: 10,
 					backgroundColor: '#ffffff',
 					foregroundColor: '#000000',
@@ -103,11 +103,11 @@
 										scene:"WXSceneSession",
 										success(resare) {
 											// console.log("分享成功",resare)
-											_this.$emit("areclose",false)
+											_this.$emit("areclose",{bool:false,storetext:"分享成功"})
 										},
 										fail(err){
 											// console.log("分享失败",err)
-											_this.$emit("areclose",false)
+											_this.$emit("areclose",{bool:false,storetext:"分享失败"})
 										}
 									})
 							 	},
@@ -162,7 +162,7 @@
 		}
 		//要展示的背景图片
 		.bg_logo{
-			height:78vh;
+			height:75vh;
 			width: 100%;
 		}
 		// 底部的介绍

@@ -11,7 +11,7 @@
 			</view>
 		</view>
 		<!-- 这是底部的弹出的窗口 -->
-		<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
+		<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''" @tap="hideModal">
 			<view class="cu-zidingyi cu-dialog">
 				<view class="padding-xl">
 					<scroll-view scroll-y="true" style="height: 60vh;overflow: hidden;">

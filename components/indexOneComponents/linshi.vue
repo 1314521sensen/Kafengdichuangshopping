@@ -19,7 +19,6 @@
 					<text :style="{'background-image':'url('+item.bgbtn+')'}">{{item.button}}</text>
 				</view>
 			</view>
-			
 		</view>
 	</view>
 </template>
@@ -31,7 +30,7 @@
 				list:[
 					{
 						title:"惠播客直播",
-						button:"水果大采购",
+						button:"主播新选",
 						color:"#f35425",
 						shadow:"#fd441b",
 						bgcolor:"#fee6dc",
@@ -41,7 +40,7 @@
 					},
 					{
 						title:"品质大牌",
-						button:"化妆品仅1299",
+						button:"惠聚全球美食",
 						color:"#e347af",
 						shadow:"#e83ca8",
 						bgcolor:"#ffe5f8",
@@ -56,7 +55,7 @@
 			clicklink(e){
 				let {link,index} = e.currentTarget.dataset
 				if(index == 0){
-					uni.switchTab({
+					uni.navigateTo({
 						url: link
 					})
 				}else{

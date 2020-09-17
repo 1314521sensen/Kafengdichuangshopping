@@ -10,13 +10,27 @@
 				</view>
 				<!-- 头像和名字 -->
 				<view class="PhonenameBox">
-					<view><image class="LO_Phone" :src="this.$store.state.imgyuming+userportrait" mode=""></image></view>
+					<view class="PhonenameBox_imgs">
+						<image class="LO_Phone" :src="this.$store.state.imgyuming+userportrait"></image>
+						<view class="isVip">
+							<image 
+								:src="this.$store.state.httpUrl+'my/orders/Vip.png'" 
+								class="vipimg"
+							></image>
+						</view>
+					</view>
 					<view class="name">{{user_nick}}</view>
 				</view>
 				<!-- 详细收益等 -->
 				<view class="earnings_flex">
 					<view class="earnings">
-						<view class="ThepromotingBox" v-for="(item,index) in ThepromotingBoxs" :key='index'>
+						<view 
+							class="ThepromotingBox" 
+							v-for="(item,index) in ThepromotingBoxs" 
+							:key='index'
+							@tap="Thepromoting"
+							:data-indexs="index"
+						>
 							<text class="Thetext">{{item.Thetext}}</text>
 							<text class="Theearnings">{{item.Theearnings}}</text>
 						</view>
@@ -134,9 +148,22 @@
 			// 	})
 			// },
 			returnmypeoby(){
-				uni.switchTab({
+				uni.redirectTo({
 					url:"/pages/PersonalMy/PersonalMy"
 				})
+			},
+			
+			Thepromoting(e){
+				let {indexs} = e.currentTarget.dataset
+				if(parseInt(indexs)==1){
+					uni.navigateTo({
+						url:`/pages/commissionsubsidiary/commissionsubsidiary`
+					})
+				}else{
+					uni.navigateTo({
+						url:`/pages/Detailspromoters/Detailspromoters`
+					})
+				}
 			}
 		},
 		components:{
@@ -146,6 +173,18 @@
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		onShow() {
+			const _this = this
+			 // this.indexshoplist(this.page)
+			 uni.getStorage({
+				 key:"user_commission",
+				 success(res){
+					 // console.log(res)
+					 // _this.user_commission = res.data
+					 _this.ThepromotingBoxs[1].Thetext = res.data
+				 }
+			 })
 		}
 	}
 </script>
@@ -204,6 +243,7 @@
 					align-items: center;
 					justify-content: space-evenly;
 					margin-top: 20rpx;
+					// background-color: red;
 					.Theearnings{
 						color: #666666;
 						font-size: 30rpx;
@@ -217,6 +257,20 @@
 	}
 	.bottom-text{
 		text-align: center;
+	}
+	.PhonenameBox_imgs{
+		position: relative;
+		.isVip{
+			position: absolute;
+			bottom:-20rpx;
+			right:0;
+			width: 50rpx;
+			height:50rpx;
+			.vipimg{
+				width: 100%;
+				height:100%;
+			}
+		}
 	}
 	
 </style>

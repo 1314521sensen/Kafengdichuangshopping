@@ -75,7 +75,7 @@
 				let imgs = e.currentTarget.dataset.img
 				let goodname = e.currentTarget.dataset.goodname
 				uni.navigateTo({
-					url:`/pages/starevaluation/starevaluation?ordersnbianhao=${btoa(ordersnbianhao)}&shopgooid=${btoa(shopgooid)}&img=${imgs}&goodname=${goodname}`
+					url:`/pages/starevaluation/starevaluation?ordersnbianhao=${btoa(ordersnbianhao)}&shopgooid=${shopgooid}&img=${imgs}&goodname=${goodname}`
 				})
 			},
 			particulars(e){

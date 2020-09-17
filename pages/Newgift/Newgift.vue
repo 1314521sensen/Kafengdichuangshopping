@@ -7,6 +7,7 @@
 		</view>
 		<view class="new" :style="{'background-image':'url('+this.$store.state.httpUrl+'Newgift/bg.png'+')'}">
 			<pageheight :statusBar="statusBar"></pageheight>
+			<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 			<scroll-view class="fa-new" scroll-y="true" >
 				<view class="new-top-img" :style="{'background-image':'url('+this.$store.state.httpUrl+'/Newgift/bgtitle.png'+')'}"></view>
 				<view class="new-bottom">
@@ -40,7 +41,15 @@
 					<NewPeople></NewPeople>
 					<!-- <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom"> -->
 					<view class="commodity-list">
-						<view class="commodity" v-for="(item,index) in list" :key="index">
+						<view class="commodity" 
+							v-for="(item,index) in list" 
+							:key="index"
+							@tap="Snapped"
+							:data-id="item.good_id"
+							:data-storeid="item.store_id"
+							:data-specialtype="item.special_type_id"
+							:data-good_type="item.good_type"
+						>
 							<view class="commodity-img">
 								<!-- 这里放的图片 -->
 								<image :src="imgpath+item.good_pic" class="imgs"></image>
@@ -56,11 +65,6 @@
 									</view>
 									<button 
 										class="cu-btn" 
-										@tap="Snapped"
-										:data-id="item.good_id"
-										:data-storeid="item.store_id"
-										:data-specialtype="item.special_type_id"
-										:data-good_type="item.good_type"
 									>立即抢购</button>
 								</view>
 							</view>
@@ -80,6 +84,7 @@
 </template>
 
 <script>
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	import NewPeople from "@/components/Newgift/Newgifttitletext.vue"
 	const app = getApp()
 	export default {
@@ -188,7 +193,8 @@
 			}
 		},
 		components:{
-			NewPeople
+			NewPeople,
+			defaultbgblackcolorwhitebar
 		},
 		onLoad() {
 			const _this = this

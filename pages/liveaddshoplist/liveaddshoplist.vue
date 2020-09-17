@@ -26,15 +26,26 @@
 		<view class="addshoplist">
 			<scroll-view class="scroll-view-box" @scrolltolower="scrolltolower" :scroll-y="true">
 				<view class="scroll-view">
-					<view class="addlist-item" v-for="(item,index) in liveshoplist" :key="index">
+					<view 
+						class="addlist-item" 
+						v-for="(item,index) in liveshoplist" 
+						:key="index"
+						@tap="aningood"
+						:data-gid="item.good_id"
+						:data-sid="item.store_id"
+					>
 						<view class="img-left">
 							<image class="left-image" :src="imgpath+item.good_pic"></image>
 						</view>
 						<view class="right-shop-info">
 							<view class="shoptitle">{{item.good_title}}</view>
 							<view class="right-shop-add_price">
-								<text class="shop-info-price" v-text="'¥'+item.good_promotion_price">355.00</text>
-								<text class="addshop text-white cuIcon-add" @tap="addCommoditypools" :data-g_id="item.good_id"></text>
+								<!-- 佣金值 如果==0的情况下 直接取佣金值 如果为1的情况下 佣金值*价格/100 -->
+								<view class="shop_commission">
+									佣金值:{{item.live_cms_type==0?item.live_cms:(Number((item.live_cms*item.good_promotion_price)/100).toFixed(2))}}
+								</view>
+								<text class="shop-info-price" v-text="'¥'+item.good_promotion_price"></text>
+								<text class="addshop text-white cuIcon-add" @tap.stop="addCommoditypools" :data-g_id="item.good_id"></text>
 							</view>
 						</view>
 					</view>
@@ -64,6 +75,12 @@
 			}
 		},
 		methods: {
+			aningood(e){
+				let {gid,sid} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${gid}&storeid=${sid}`
+				})
+			},
 			//封装一个请求列表的方法storetype storelive
 			getliveshoplist(){
 				const _this = this
@@ -81,7 +98,7 @@
 					method:'POST',
 					data:json,
 					success(res) {
-						// console.log(res)
+						console.log(res)
 						if(res.data.code==0){
 							//实现下拉加载
 							if(_this.pages>1){
@@ -212,6 +229,12 @@
 							justify-content: flex-end;
 							align-items:center;
 							margin-top:20rpx;
+							.shop_commission{
+								flex:1;
+								text-align: left;
+								font-weight: bold;
+								color:#666;
+							}
 							.shop-info-price{
 								color:#f00;
 								margin-right:40rpx;

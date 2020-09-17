@@ -57,7 +57,7 @@
 			ordershow:{
 				type:String,
 				default:""
-			}
+			},
 		},
 		data() {
 			return {
@@ -87,8 +87,10 @@
 				if (this.password.length > 0) {
 					this.password = this.password.substring(0, this.password.length - 1);
 				}
-			}
-		}
+			},
+			
+		},
+		// props:["balancetext"]
 	}
 </script>
 

@@ -1,9 +1,13 @@
 <template>
 	<view>
-		<view class="Purchasepage" v-show="openidbool">
+		<view class="Purchasepage">
 			<pageheight :statusBar="statusBar"></pageheight>
-			<actionbar url="/pages/PersonalMy/PersonalMy" message="确认订单"></actionbar>
-			<view class="Buycontent">
+			<actionbar 
+				url="/pages/index/index" 
+				message="确认订单"
+				:isorder="isorder"
+			></actionbar>
+			<!-- <view class="Buycontent">
 				<view class="Shippingaddress" @tap="Addressmodification">
 					<view class="Shippingaddress-left">
 						<view class="imgs">
@@ -23,7 +27,38 @@
 						</view>
 					</view>
 				</view>
+			</view> -->
+			<!-- 新的订单地址 -->
+			<view class="TheordercolumnBox">
+				<view class="Theordercolumn">
+					<view class="Theordercolumn_left">
+						<view class="message">
+							<text>{{Username}}</text>
+							<text class="dercophone">{{Userphone}}</text>
+						</view>
+						<view class="dercolocationBox" @tap="Addressmodification">
+							<view class="dercolocation-left">
+								<text class="dercolocation">{{Userselect}}</text>
+							</view>
+						   <view class="dercolocation-right">
+							    <text class="lg text-gray cuIcon-right"></text></view>
+						   </view>
+						  
+					</view>
+					<!-- 底下的颜色 -->
+					<view class="Theordercolumn_right">
+						<!-- <view v-for="(item,index) in 5" class="violet active">13</view> -->
+						 <view class="activeBox" v-for="(item,index) in 5" :key="index">
+							 <view class="violet active"></view>
+							<view class="white active"></view>
+							<view class="red active"></view>
+							<view class="white active"></view>
+						 </view>
+							
+					</view>
+				</view>	
 			</view>
+			
 			<view class="Buycontent purchase-order">
 				<!-- 到时候循环这个order就可以 -->
 				<view class="order" v-for="(item,index) in orderinfolist" :key="index">
@@ -36,7 +71,7 @@
 						</view>
 						<view class="shopgoosorder-right">
 							<view class="shopgoosorder-title">
-								{{item.good_name}}
+								<text class="shopgoosorder-title_text">{{item.good_name}}</text>
 							</view>
 							<view class="shopgoosorder-pic">
 								<text>¥{{item.good_price}}</text>
@@ -61,7 +96,8 @@
 						<view class="distribution note">
 							<view class="cu-form-group">
 								<view class="title">订单备注</view>
-								<input placeholder="选填,请先和商家协商一致" name="input" v-model="value"></input>
+								<!-- <input placeholder="选填,请先和商家协商一致" name="input" v-model="value"></input> -->
+								<textarea  rows="5" cols="20"  placeholder="选填,请先和商家协商一致" v-model="value"></textarea> 
 							</view>
 						</view>
 						<view class="Payprice">
@@ -109,10 +145,8 @@
 			</view>
 			<passkeyborad :show="passwordzhifutanchuang" :isIphoneX="isIphoneX" @Enterpasswordcompletepayment="Enterpasswordcompletepayment"
 			 :balancetext="String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2))" @close="close"></passkeyborad>
+			<loading v-show="loadingbool==false"></loading>
 		</view>
-		<!-- #ifdef APP-PLUS -->
-		<wxbindopen v-show="openidbool==false"></wxbindopen>
-		<!-- #endif -->
 	</view>
 </template>
 
@@ -181,33 +215,109 @@
 				imgpath:this.$store.state.imgyuming,
 				openidbool:true,
 				good_type:"",//type类型看看优惠券显不显示
+				isorder:true,
+				loadingbool:true,//加载图标显示
 			}
 		},
 		methods: {
+			//封装个方法 如果用户点击微信绑定确定或者功能
+			showtotal(){
+				//如果用户没有绑定openid的话 就让用户跳到绑定openid的页面
+				uni.showModal({
+					title:"请进行绑定微信",
+					content:"为了您的正常提现",
+					showCancel:true,
+					cancelText:"取消",
+					cancelColor:"#ff0000",
+					confirmText:"确定绑定",
+					confirmColor:"#00ff00",
+					success(res) {
+						if(res.confirm){
+							uni.navigateTo({
+								url:`/pages/WeChatLanding/WeChatLanding`
+							})
+						}else{
+							uni.navigateBack()
+						}
+					}
+				})
+			},
+			//封装个方法 判断用户有没有绑定微信的openid
+			getopenid(){
+				const _this = this
+				uni.getStorage({
+					key:"bindopenid",
+					success(res){
+						if(res.data!==""){
+							_this.openidbool = true
+						}else{
+							_this.openidbool =false
+							_this.showtotal()
+						}
+					},
+					fail(err){
+						_this.openidbool = false
+						_this.showtotal()
+					}
+				})
+			},
 			RadioChange(e) {
 				this.radio = e.detail.value
 			},
 			Addressmodification() {
+				const _this = this
 				//1是购物车过来的
 				//2是详情过来的
 				// console.log(this.way)
-				if (this.way == 1) {
+				if (_this.way == 1) {
 					uni.navigateTo({
-						url: `/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
+						url: `/pages/addressTo/addressTo?title=orderaddress&gid=${_this.gid}&num=${_this.nums}&way=${_this.way}&img=${JSON.stringify(_this.img)}&storename=${_this.storename}&goodtitle=${_this.goodtitle}&price=${_this.price}&cids=${_this.cids}&storeid=${_this.storeid}&freight=${_this.freight}`
 					})
 				} else {
 					// console.log(this.spec_id)
 					uni.navigateTo({
-						url: `/pages/addressTo/addressTo?title=orderaddress&gid=${this.gid}&specname=${JSON.stringify(this.data)}&num=${this.nums}&way=${this.way}&img=${JSON.stringify(this.img)}&storename=${this.storename}&goodtitle=${this.goodtitle}&price=${this.price}&storeid=${this.storeid}&freight=${this.freight}&spec_id=${this.spec_id}`
+						url: `/pages/addressTo/addressTo?title=orderaddress&gid=${_this.gid}&specname=${JSON.stringify(_this.data)}&num=${_this.nums}&way=${_this.way}&img=${JSON.stringify(_this.img)}&storename=${_this.storename}&goodtitle=${_this.goodtitle}&price=${_this.price}&storeid=${_this.storeid}&freight=${_this.freight}&spec_id=${_this.spec_id}`
 					})
 				}
 			},
 			showModal(e) {
-				let {
-					total_price
-				} = e.currentTarget.dataset
-				this.modalName = e.currentTarget.dataset.target
-				this.total_price = total_price
+				
+				const _this = this
+				//取出缓存中的数据的地址的长度
+				let addresslength = ""
+				uni.getStorage({
+					key: "addresslength",
+					success(resaddress) {
+						// console.log(resaddress)
+						// console.log(123)
+						addresslength = resaddress.data
+						
+						if(addresslength !==0 && addresslength!==""){
+							let {
+								total_price
+							} = e.currentTarget.dataset
+							
+							_this.modalName = e.currentTarget.dataset.target
+							_this.total_price = total_price
+						}else{
+							uni.showModal({
+								title:"当前地址为空",
+								content:"是否要新增地址",
+								showCancel:true,
+								cancelText:"取消新增",
+								cancelColor:"#ff0000",
+								confirmText:"确定新增",
+								confirmColor:"#00ff00",
+								success(resadd) {
+									// console.log(resadd)
+									if(resadd.confirm){
+										_this.Addressmodification()
+									}
+								},
+							})
+						}
+					}
+				})
 			},
 			hideModal(e) {
 				this.modalName = null
@@ -219,8 +329,14 @@
 
 				let payid = ""; //给后端进行返回
 				if (this.radio == 'radio0') { //微信支付
-					payid = "wxpay"
-					this.GetorderdetailsData(payid)
+					if(this.address_id == ""){
+						app.globalData.showtoastsame("请到地址栏中添加地址")
+					}else{
+						payid = "wxpay"
+						this.GetorderdetailsData(payid)
+						//当用户点击微信支付的时候 加载图标出来
+						this.loadingbool = false
+					}
 					//app端微信端---结束
 
 					//H5端支付---开始
@@ -449,8 +565,8 @@
 							if (_this.passwordindex >= 3) {
 								_this.passwordzhifutanchuang = null
 								_this.isIphoneX = null
-								uni.reLaunch({
-									url: `/pages/orderpageRouter/orderpageRouter`
+								uni.redirectTo({
+									url: `/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 								})
 							}
 						}
@@ -463,13 +579,15 @@
 				this.isIphoneX = e
 				// console.log(this.orderSnArray[0])
 				uni.reLaunch({
-					url: `/pages/orderpageRouter/orderpageRouter`
+					url: `/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 				})
 			},
 			//封装个方法 用来处理活动佣金问题
 			getcommission() {
 				const _this = this
+				// console.log(_this.share_from)
 				if (_this.share_from !== '') {
+					// console.log(1111,"走第一步")
 					uni.getStorage({
 						key: 'bindtokey',
 						success(restokey) {
@@ -480,9 +598,11 @@
 								good_name,
 								good_pic,
 								good_price,
-								good_num
+								good_num,
+								good_purchase_price
 							} = _this.orderinfolist[0]
-							// console.log(_this.orderSnArray, "这是订单的号")
+							// console.log(good_purchase_price, "这是订单的号")
+							// console.log(22,"走第二部")
 							uni.request({
 								url: `${app.globalData.Requestpath}good/getCmsSettlementConfigInfo`,
 								method: "POST",
@@ -492,7 +612,10 @@
 									gid: good_id
 								},
 								success(rescommissionconfiguration) {
+									// console.log(3333,"走第三部")
 									if (rescommissionconfiguration.data.code == 0) {
+										// console.log(444,"走第四步")
+										// console.log(restokey.data,_this.orderSnArray[0],store_id,store_name,good_id,good_name,good_pic,good_price,good_purchase_price,good_num,_this.total_price,rescommissionconfiguration.data.data.good_type,rescommissionconfiguration.data.data.cms_type,rescommissionconfiguration.data.data.cms_value)
 										uni.request({
 											url: `${app.globalData.Requestpath}CmsSettlement/CommissionSettlement`,
 											method: "POST",
@@ -505,14 +628,16 @@
 												good_title: good_name,
 												good_pic: good_pic,
 												good_price: good_price,
+												good_purchase_price:good_purchase_price,
 												good_num: good_num,
 												total_price: _this.total_price,
 												cms_category: rescommissionconfiguration.data.data.good_type,
 												settlement_type: rescommissionconfiguration.data.data.cms_type,
-												cms_rate: rescommissionconfiguration.data.data.cms_value
+												cms_rate: rescommissionconfiguration.data.data.cms_value,
+												share_code: _this.share_code,
 											},
 											success(rescommissioninfo) {
-												// console.log(rescommissioninfo)
+												// console.log(rescommissioninfo,"左后异步")
 											}
 										})
 									}
@@ -580,6 +705,7 @@
 											swift_id: swiftNo
 										},
 										success(res) {
+											_this.loadingbool = true
 											// console.log(res)
 											//只要支付成功以后就到订单页面
 											if(res.data.code==0){
@@ -588,7 +714,7 @@
 												})
 												setTimeout(()=>{
 													uni.redirectTo({
-														url:`/pages/orderpageRouter/orderpageRouter`
+														url:`/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 													})
 												},1000)
 											}else{
@@ -597,25 +723,28 @@
 												})
 												setTimeout(()=>{
 													uni.redirectTo({
-														url:`/pages/orderpageRouter/orderpageRouter`
+														url:`/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 													})
 												},1000)
 											}
 											_this.hideModal()
 										},
 										fail(err){
+											_this.loadingbool = true
 											// console.log(err)
 										}
 									})
 									if (_this.way == 2) {
+										_this.loadingbool = true
 										_this.getcommission()
 									}
 								},
 								fail(err) {
+									_this.loadingbool = true
 									// console.log(err)
 									setTimeout(()=>{
 										uni.redirectTo({
-											url:`/pages/orderpageRouter/orderpageRouter`
+											url:`/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 										})
 									},1000)
 								}
@@ -630,7 +759,10 @@
 			// let {way} = opction
 			// this.way = way//判断是从购物车来的 还是详情来的
 			const _this = this
+			// console.log(JSON.parse(decodeURI(opction.selectitem)))
+			// console.log(opction.selectitem)
 			if (opction.selectitem) {
+				// console.log(2222)
 				let {
 					consignee_name,
 					consignee_phone,
@@ -641,7 +773,12 @@
 				this.Userphone = consignee_phone
 				this.Userselect = street_number
 				this.address_id = address_id
+				uni.setStorage({
+					key: "addresslength",
+					data:1
+				})
 			} else {
+				// console.log(111)
 				// console.log(opction.selectitem)
 				uni.getStorage({
 					key: "bindtokey",
@@ -652,16 +789,36 @@
 							data: {
 								token: res.data,
 								page: 1,
-								pageSize: 1,
+								pageSize: 999,
 							},
 							success(reslove) {
-								// console.log(reslove.data.data[0])
+								// console.log(reslove)
 								// consignee_name consignee_phone street_number
 								if (reslove.data.code == 0) {
-									_this.Username = reslove.data.data[0].consignee_name
-									_this.Userphone = reslove.data.data[0].consignee_phone
-									_this.Userselect = reslove.data.data[0].street_number
-									_this.address_id = reslove.data.data[0].address_id
+									//如果有默认地址 就取默认地址 没有默认地址 就取第一个地址
+									reslove.data.data.forEach((item,index)=>{
+										if(item.is_default){
+											_this.Username = item.consignee_name
+											_this.Userphone = item.consignee_phone
+											_this.Userselect = item.street_number
+											_this.address_id = item.address_id
+										}else{
+											_this.Username = reslove.data.data[0].consignee_name
+											_this.Userphone = reslove.data.data[0].consignee_phone
+											_this.Userselect = reslove.data.data[0].street_number
+											_this.address_id = reslove.data.data[0].address_id
+										}
+									})
+									uni.setStorage({
+										key: "addresslength",
+										data:1
+									})
+									
+								}else{
+									uni.setStorage({
+										key: "addresslength",
+										data:0
+									})
 								}
 							}
 						})
@@ -672,11 +829,11 @@
 			uni.getStorage({
 				key: "orderinfo",
 				success(res) {
-					// console.log(res)
 					_this.orderinfolist = res.data
 					let stoIdArr = [] //开始的数组
 					let stoIdSet = [] //去重后的店铺ID
 					_this.orderinfolist.forEach((item, index) => {
+						// console.log(item)
 						item.good_price = (item.good_price).replace(/,/g,'')
 						stoIdArr.push(item.store_id)
 						// console.log(item)
@@ -711,11 +868,11 @@
 							//这是直播
 							_this.share_code = item.share_code
 							_this.share_from = 1
-						} else if (item.share_code && item.share_from == 3) {
+						} else if (item.share_code && item.share_from == 2) {
 							
 							//这是团长
 							_this.share_code = item.share_code
-							_this.share_from = 3
+							_this.share_from = 2
 							// console.log(_this.share_code,_this.share_from,"这是团长进来的")
 						} else {
 							// console.log("这是普通商品")
@@ -780,25 +937,16 @@
 					_this.tokey = res.data
 				}
 			})
-			//取出
+			//取出openid 如果用户没绑定openid 就让用户绑定 如果用户绑定了  就让其引藏
 			// #ifdef APP-PLUS
-			uni.getStorage({
-				key:"bindopenid",
-				success(res){
-					// console.log(res)
-					_this.openidbool = true
-				},
-				fail(err){
-					_this.openidbool = false
-				}
-			})
+			_this.getopenid()
 			// #endif
-		},
-		created() {
-			const _this = this
+			let addresslength = ""
 			uni.getStorage({
 				key: "bindtokey",
 				success(res) {
+					// console.log(res)
+					app.globalData.Detectionupdatetokey(res.data)
 					uni.request({ //这个是获取一条收货地址的详情
 						url: `${app.globalData.Requestpath}user/getShippingAddressList`,
 						method: "POST",
@@ -811,11 +959,52 @@
 							// console.log(reslove)
 							_this.code = reslove.data.code
 							if (reslove.data.code !== 0) {
+								// console.log(333)
 								_this.Username = ""
 								_this.Userphone = ""
-								_this.Userselect = ""
+								_this.Userselect = "+手动添加收货地址"
 							}
 						}
+					})
+				},
+				fail(err){
+					uni.reLaunch({
+						url:"/pages/login/login"
+					})
+				}
+			})
+		},
+		created() {
+			// console.log(111)
+			const _this = this
+			uni.getStorage({
+				key: "bindtokey",
+				success(res) {
+					// console.log(res)
+					app.globalData.Detectionupdatetokey(res.data)
+					uni.request({ //这个是获取一条收货地址的详情
+						url: `${app.globalData.Requestpath}user/getShippingAddressList`,
+						method: "POST",
+						data: {
+							token: res.data,
+							page: 1,
+							pageSize: 1,
+						},
+						success(reslove) {
+							// console.log(reslove)
+							_this.code = reslove.data.code
+							if (reslove.data.code !== 0) {
+								// console.log(333)
+								_this.Username = ""
+								_this.Userphone = ""
+								_this.Userselect = "+手动添加收货地址"
+							}
+						}
+					})
+				},
+				fail(err){
+					uni.reLaunch({
+						url:"/pages/login/login"
 					})
 				}
 			})
@@ -935,8 +1124,14 @@
 						.shopgoosorder-title {
 							overflow: hidden;
 							width: 70%;
-							height: 76rpx;
+							// height: 76rpx;
 							font-size: 28rpx;
+							.shopgoosorder-title_text{
+								display: -webkit-box;
+								-webkit-box-orient: vertical;
+								-webkit-line-clamp: 2;
+								overflow: hidden;
+							}
 						}
 
 						.shopgoosorder-pic {
@@ -961,7 +1156,9 @@
 
 				.Deliverynote {
 					margin-top: 48rpx;
-
+					textarea{
+					    width: 400rpx ;
+						}
 					.distribution {
 						display: flex;
 						justify-content: space-around;
@@ -1051,4 +1248,81 @@
 	.cu-modal-left-padding {
 		padding: 0 20rpx;
 	}
+	// 新地址
+	.TheordercolumnBox{
+			margin-top: 20rpx;
+			display: flex;
+			justify-content: center;
+			.Theordercolumn{
+				position: relative;
+				width:710rpx;
+				// height: 200rpx;
+				background-color: #fff;
+				border-radius: 20rpx;
+				overflow: hidden;
+				.Theordercolumn_left{
+					padding: 30rpx 30rpx 50rpx 30rpx;
+					.message{
+						font-size: 32rpx;
+						font-weight: 500;
+					}
+					.dercophone{
+						margin-left: 20rpx;
+					}
+					.dercolocationBox{
+						display: flex;
+						flex-wrap: wrap;
+						flex-grow: 1;
+						margin-top: 25rpx;
+						line-height: 50rpx;
+						.dercolocation-left{
+							flex:1;
+							.dercolocation{
+								flex-grow: 5;
+								font-size: 38rpx;
+								font-weight: 600;	
+							}
+						}
+						.dercolocation-right{
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							width: 10%;
+							.cuIcon-right{
+								font-size: 36rpx;
+							}
+						}
+					}
+				}
+				.Theordercolumn_right{
+					position:absolute;
+					bottom: 0;
+					display: flex;
+					flex-wrap: wrap;
+					width: 100%;
+					// height: 16rpx;
+					padding-left: 10rpx;
+					// background-color: #7b6fe3;
+					.activeBox{
+						display: flex;
+						flex-wrap: nowrap;
+					}
+					.active{
+						transform:skewX(-10deg);
+						width: 35rpx;
+						height: 10rpx;
+					}
+					.violet{
+						background-color: #7b6fe3;
+					}
+					.white{
+						background-color: #fff;
+					}
+					.red{
+						background-color: #ef2950;
+					}
+				}
+			}
+		}
+
 </style>

@@ -21,7 +21,7 @@
 				<view class="btn-group">
 					<button 
 						class="cu-btn bg-orange round shadow-blur" 
-						v-if="parseInt(producttype)!==3 && couplebool!=='nlt'" 
+						v-if="parseInt(producttype)!==2 && couplebool!=='nlt'" 
 						@tap="Addcart(pic)"
 					>加入购物车</button>
 					<button class="cu-btn bg-red round shadow-blur" @tap="Skiporder" data-target="bottomModal">立即订购</button>
@@ -112,6 +112,7 @@
 				app.globalData.Detectionupdatetokey(this.tokey)
 				//this.Noteinformation收藏信息
 						//在这里添加数据
+					
 					if(this.collectionbool==false){//如果为false的话代表用户为添加收藏 
 						// console.log("当前为true")
 						this.collectionbool = true
@@ -124,10 +125,11 @@
 								good_id:this.pic.good_id,
 								good_name:this.pic.good_title,
 								good_image:this.pic.good_pic,
-								fav_price:this.pic.good_price,
+								fav_price:this.pic.good_promotion_price,
 								fav_remark:""
 							},
 							success:(res)=>{
+								
 								// console.log(res)
 								if(res.data.code==0){
 									app.globalData.showtoastsame("收藏成功")
@@ -161,43 +163,59 @@
 					}
 			},
 			Skiporder(e){
-				app.globalData.Detectionupdatetokey(this.tokey)
-				// console.log(this.immediatelylist.length)
-				/*
-					当用户点击立即购买的时候  
-						1.如果有规格就让框弹出来 数量也可以自己选择 
-						2.如果没有规格 就不让框弹出来 直接跳转订单 数量默认的就是1 规格默认的就是0
-				*/
-				if(this.immediatelylist.length>0){
-					this.modalName = e.currentTarget.dataset.target
-				}else{
-					// uni.navigateTo({
-					// 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=0&num=1&way=2&&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.pic.good_promotion_price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
-					// })
-					// console.log(this.pic.good_freight)
-					let SpecificationShopdetails = {
-						good_id:this.gid,
-						spec_id:0,
-						good_num:1,
-						way:2,
-						good_pic:this.pic.good_pic,
-						store_name:this.pic.store_name,
-						good_price:this.pic.good_promotion_price,
-						good_name:this.pic.good_title,
-						store_id:this.storeid,
-						good_freight:this.pic.good_freight,
-						good_type:this.couplebool
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(res) {
+						app.globalData.Detectionupdatetokey(res.data)
+							
+						
+						
+						// console.log(this.immediatelylist.length)
+						/*
+							当用户点击立即购买的时候  
+								1.如果有规格就让框弹出来 数量也可以自己选择 
+								2.如果没有规格 就不让框弹出来 直接跳转订单 数量默认的就是1 规格默认的就是0
+						*/
+						if(_this.immediatelylist.length>0){
+							_this.modalName = e.currentTarget.dataset.target
+						}else{
+							// uni.navigateTo({
+							// 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=0&num=1&way=2&&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.pic.good_promotion_price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
+							// })
+							// console.log(this.pic.good_freight)
+							// console.log(this.pic)
+							let SpecificationShopdetails = {
+								good_id:_this.gid,
+								spec_id:0,
+								good_num:1,
+								way:2,
+								good_pic:_this.pic.good_pic,
+								store_name:_this.pic.store_name,
+								good_price:_this.pic.good_promotion_price,
+								good_name:_this.pic.good_title,
+								store_id:_this.storeid,
+								good_freight:_this.pic.good_freight,
+								good_type:_this.couplebool,
+								good_purchase_price:_this.pic.good_purchase_price
+							}
+							//如果是团长类型增加 属性值
+							if(parseInt(_this.producttype)==2){
+								//这个分享码后期是动态的
+								SpecificationShopdetails.share_code = _this.code
+								SpecificationShopdetails.share_from = 2
+							}
+							// console.log(SpecificationShopdetails)
+							_this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
+							
+						}
+					},
+					fail(err){
+						uni.reLaunch({
+							url:"/pages/login/login"
+						})
 					}
-					//如果是团长类型增加 属性值
-					if(parseInt(this.producttype)==3){
-						//这个分享码后期是动态的
-						SpecificationShopdetails.share_code = this.code
-						SpecificationShopdetails.share_from = 3
-					}
-					// console.log(SpecificationShopdetails)
-					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
-					
-				}
+				})
 			},
 			//当用户点击了 子组件里面的x
 			hiddends(e){

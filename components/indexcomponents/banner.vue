@@ -13,10 +13,12 @@
 				<image :src="imgpath+item" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 	</view>
 </template>
 
 <script>
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	export default{
 		data(){
 			return {
@@ -46,7 +48,10 @@
 				}
 			}
 		},
-		props:["swiperList","height"]
+		props:["swiperList","height"],
+		components:{
+			defaultbgblackcolorwhitebar
+		}
 	}
 </script>
 

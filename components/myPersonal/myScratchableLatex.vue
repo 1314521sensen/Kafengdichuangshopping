@@ -15,33 +15,44 @@
 					name: '分享赚钱',
 					imgs:`${this.$store.state.httpUrl}my/ScratchableLatex/Promotedistribution.png`,
 					Routinghopname:"Promotedistribution",
-					url:"/pages/applygroup/applygroup"
+					url:"/pages/headearnings/headearnings"
 				},
 				{
-					badge: 1,
-					name: '签到',
-					imgs:`${this.$store.state.httpUrl}my/ScratchableLatex/Signin.png`,
-					Routinghopname:"Signin",
-					// url:"/pages/signin/signin"
-				}, {
 					badge: 22,
 					name: '收货地址',
 					url:"/pages/addressTo/addressTo",
 					imgs:`${this.$store.state.httpUrl}my/ScratchableLatex/Shippingaddress.png`,
 					Routinghopname:"userShippingaddress"
-				},  {
+				}, 
+				// {
+				//      badge: 1,
+				//      name: '签到',
+				//      imgs:`${this.$store.state.httpUrl}my/ScratchableLatex/Signin.png`,
+				//      Routinghopname:"Signin",
+				//      // url:"/pages/signin/signin"
+				// }, 
+				{
 					badge: 0,
-					name: '我的拼单',
-					imgs:`${this.$store.state.httpUrl}my/ScratchableLatex/Myspelllist.png`,
-					Routinghopname:"userMyspelllist",
-					// url:"/pages/myspelllist/myspelllist"
-				}, {
-					badge: 0,
-					name: '我的收藏',
+					name: '商品收藏',
 					url:"/components/collection/collection",
 					imgs:`${this.$store.state.httpUrl}my/ScratchableLatex/Mycollection.png`,
 					Routinghopname:"userMycollection"
-				}, {
+				},
+				{
+					badge: 0,
+					name: '店铺收藏',
+					url:"/pages/storecollection/storecollection",
+					imgs:`${this.$store.state.httpUrl}my/ScratchableLatex/storecollection.png`,
+					Routinghopname:"storecollection"
+				},
+				// {
+				//      badge: 0,
+				//      name: '我的拼单',
+				//      imgs:`${this.$store.state.httpUrl}my/ScratchableLatex/Myspelllist.png`,
+				//      Routinghopname:"userMyspelllist",
+				//      // url:"/pages/myspelllist/myspelllist"
+				// }, 
+				{
 					badge: 0,
 					name: '我的足迹',
 					url:"/components/collection/collection",

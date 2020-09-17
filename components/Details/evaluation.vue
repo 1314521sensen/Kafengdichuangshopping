@@ -26,7 +26,7 @@
 							:style="{'background-image':'url('+imgpath+item.user_pic+')'}">
 						</view>
 					</view>
-					<text>{{item.user_name}}</text>
+					<text>{{item.user_name[0]+'**'+item.user_name[item.user_name.length-1]}}</text>
 				</view>
 				<!-- 这是评论的内容 -->
 				<view class="content-area">

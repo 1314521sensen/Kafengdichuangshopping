@@ -34,6 +34,7 @@ let state = {
 	Notpaying: "", //这是未付款的结束的毫秒值
 	sendTimes: "", //这是发货时间
 	remainingTime: "", //订单剩余时间
+	ordercode: "", //订单里面的code码
 	couponslist: [], //这是优惠券的数据
 	BrandList: [], //这是品牌的数据
 	Brandpage: 1, //品牌的页数
@@ -43,7 +44,7 @@ let state = {
 	isdownload: false, //更新app的状态是否显示的整包的更新
 	doloadurl: "", //app的下载地址
 	progress: "0%", //下载进度
-	httpUrl: "http://hbk.huiboke.com/uploads/app/image/",//http://hbk.3call.net
+	httpUrl: "http://hbk.huiboke.com/uploads/app/image/", //http://hbk.3call.net
 	Delete: false,
 	orderpage: 1, //订单请求的页数
 	liveshoplist: [], //存放主播开播前需要携带直播的商品
@@ -61,6 +62,7 @@ let state = {
 	kf_id: "", //这是后台返回来的客服id
 	kf_name: "", //这是后台返回来的客服名字
 	sokettime: null, //客服的长连接定时器
+	hiensoketime:null,//当用户黑屏的时候 继续定时器
 	isconnectserver: false, //联系客服的是否显示 
 	chatpages: 0, //聊天记录的那一页
 	chattotal: 0, //聊天记录的总条数
@@ -68,7 +70,9 @@ let state = {
 	Qrcodeurl: "", //生成分享二维码的地址
 	liveuserlist: [], //这是直播聊天记录
 	verifyStatus: '', //直播状态显示权限
-	indexpopupbool:true,//首页弹窗是不是显示
+	indexpopupbool: true, //首页弹窗是不是显示
+	firstOrderbool: false,
+	is_newuser: true, //判断是不是新用户 0是 1不是
 }
 //getters 用于计算
 let getters = {
@@ -176,14 +180,12 @@ let mutations = {
 								//当下载完强制安装
 								plus.runtime.install(resfile.tempFilePath, {
 									force: true
-								}, function() {
-									plus.runtime.restart();
-								}, function() {
+								}, function() {}, function() {
 
 								});
 							},
 							fail(err) {
-
+								// console.log(err)
 							}
 						})
 						//监听下载的进度
@@ -237,29 +239,29 @@ let mutations = {
 		//先获取tokey 通过tokey去获取用户的详情 把用户的信息
 		_this.commit("gettokey")
 		uni.getStorage({
-			key:"bindtokey",
-			success(restokey){
+			key: "bindtokey",
+			success(restokey) {
+				// console.debug(restokey)
 				uni.request({
 					url: `${Requestpath}user/getUserDetail`,
 					method: "POST",
 					data: {
-						token:restokey.data
+						token: restokey.data
 					},
 					success(res) {
-
 						// console.log(res)
 						if (res.data.code == 0) {
 							// console.log("先进入请求者")
 							let {
 								user_id,
-								user_username,
+								user_nick,
 								user_pic
 							} = res.data.data
 							state.uid = user_id
-							state.uname = user_username
+							state.uname = user_nick
 							state.avatar = user_pic
 							uni.connectSocket({
-								// wss://echo.websocket.org49.232.153.178:7272
+								// ws://49.232.153.178:7272  192.168.0.14
 								url: 'ws://49.232.153.178:7272',
 								// #ifdef MP
 								header: {
@@ -289,10 +291,12 @@ let mutations = {
 										uni.sendSocketMessage({
 											data: JSON.stringify(initobj),
 											success(resinit) {
+												// console.log(resinit)
 												state.linkstate = "正在连接中"
 												state.isconnectserver = false
 											},
 											fail(err) {
+												// console.log(err)
 												state.linkstate = "连接中断"
 												state.isconnectserver = true
 											}
@@ -310,31 +314,12 @@ let mutations = {
 					}
 				})
 			},
-			fail(err){
+			fail(err) {
 				// console.log(err)
 			}
 		})
 		// 监听WebSocket连接打开事件。
-		uni.onSocketOpen((res) => {
-			state.socketOpen = true
-			state.isconnectserver = false
-			state.sokettime = setInterval(function() {
-				let pingobj = {
-					type: 'ping'
-				}
-				uni.sendSocketMessage({
-					data: JSON.stringify(pingobj),
-					success(res) {
-						// console.log(res)
-					},
-					fail(err) {
-						// console.log(err)
-					}
-				})
-			}, 30000)
-
-			// console.log('onOpen', res);
-		})
+		_this.commit("ContinuousSendPing")
 		//监听WebSocket接受到服务器的消息事件。
 		uni.onSocketMessage((res) => {
 			// this.msg = res.data
@@ -387,7 +372,8 @@ let mutations = {
 					})
 				}
 			} else if (resparse.message_type == "connect") {
-				state.linkstate = "连接成功"
+				// console.log(resparse)
+				state.linkstate = `客服${resparse.data.kf_name}为您服务`
 				state.isconnectserver = false
 				state.kf_id = resparse.data.kf_id
 				state.kf_name = resparse.data.kf_name
@@ -415,6 +401,18 @@ let mutations = {
 				state.isconnectserver = false
 			}
 		})
+		//链接失败
+		uni.onSocketError(function(resError){
+			// console.log(resError)
+		},function(errError){
+			// console.log(errError)
+		})
+		uni.onSocketClose(function(resClose){
+			// console.log(resClose)
+			state.linkstate = "链接已断开"
+		},function(errClose){
+			// console.log(errClose)
+		})
 	},
 	soketclose() {
 		uni.closeSocket({
@@ -426,7 +424,55 @@ let mutations = {
 		})
 	},
 
-	//
+	//链接客服持续发送ping
+	ContinuousSendPing(){
+		// console.log("执行这个函数了")
+		uni.onSocketOpen((res) => {
+			// console.log(res)
+			// console.log("执行这")
+			state.socketOpen = true
+			state.isconnectserver = false
+			state.sokettime = setInterval(function() {
+				let pingobj = {
+					type: 'ping'
+				}
+				uni.sendSocketMessage({
+					data: JSON.stringify(pingobj),
+					success(res) {
+						// console.log(res)
+					},
+					fail(err) {
+						// console.log(err)
+					}
+				})
+			}, 30000)
+		
+			// console.log('onOpen', res);
+		},(err)=>{
+			// console.log(err)
+		})
+	},
+	
+	hiendsocket(){
+		//hiensoketime
+		state.socketOpen = true
+		state.isconnectserver = false
+		state.hiensoketime = setInterval(function() {
+			let pingobj = {
+				type: 'ping'
+			}
+			uni.sendSocketMessage({
+				data: JSON.stringify(pingobj),
+				success(res) {
+					console.log(res)
+				},
+				fail(err) {
+					console.log(err)
+				}
+			})
+		}, 30000)
+	},
+	
 	record(state, pages) {
 		const _this = this
 		uni.request({
@@ -692,17 +738,61 @@ let mutations = {
 			})
 		}
 	},
+	//封装个更改购物车数量的接口
+	getcartnum(state, childObj) {
+		const _this = this
+		// console.log(childObj)
+		//解构函数
+		let {
+			goodnum
+		} = childObj
+		let {
+			gid,
+			spec_id,
+			spec_value,
+		} = childObj.childsdata
+		//请求数据接口
+		uni.getStorage({
+			key: "bindtokey",
+			success(restokey) {
+				uni.request({
+					url: `${Requestpath}shopping_cart/updateGoodSpec`,
+					method: "POST",
+					data: {
+						token: restokey.data,
+						gid,
+						spec_id: spec_value ? spec_id : 0,
+						quantity: goodnum
+					},
+					success(res) {
+						// console.log(res)
+						if (parseInt(res.data.code) !== 0) {
+							_this.commit("getshowmodel", {
+								msg: res.data.msg
+							})
+						}
+					}
+				})
+			}
+		})
+	},
 	//当每一个小商品数量点击减号时 或减号时 根据布尔值判断 点击的是加号还是减号
 	Increasereduce(state, childObj) {
+		const _this = this
 		let {
 			indexs,
 			childindex,
-			bool
+			bool,
+			spec_value
 		} = childObj
 		//因为传过来的是字符串 0或者1 需要先parseInt转为整形 在进行转为bool值进行判断
 		if (Boolean(parseInt(bool))) {
 			//为true的时候 点击了+
 			state.cartList[indexs].sub[childindex].good_num++
+			_this.commit("getcartnum", {
+				childsdata: childObj,
+				goodnum: state.cartList[indexs].sub[childindex].good_num
+			})
 		} else {
 			//为false的时候点击了 false
 			state.cartList[indexs].sub[childindex].good_num--
@@ -712,7 +802,16 @@ let mutations = {
 					icon: "none",
 					success() {
 						state.cartList[indexs].sub[childindex].good_num = 1
+						_this.commit("getcartnum", {
+							childsdata: childObj,
+							goodnum: state.cartList[indexs].sub[childindex].good_num
+						})
 					}
+				})
+			} else {
+				_this.commit("getcartnum", {
+					childsdata: childObj,
+					goodnum: state.cartList[indexs].sub[childindex].good_num
 				})
 			}
 		}
@@ -732,6 +831,10 @@ let mutations = {
 			})
 		})
 		// console.log(arr)
+		if(arr.length<=0){
+			return _this.commit("getshowmodel", {msg:"请选中商品删除"})
+		}
+		// console.log( _this.state.tokey)
 		uni.request({
 			url: `${Requestpath}shopping_cart/deleteMultiShoppingCartInfo`,
 			method: "POST",
@@ -740,6 +843,7 @@ let mutations = {
 				cids: arr
 			},
 			success(res) {
+				// console.log(res)
 				if (res.data.code == 0) {
 					state.shopcatdeletandlistbool = false
 					//调用mutations里面自身的方法
@@ -768,7 +872,8 @@ let mutations = {
 			data: {
 				token: _this.state.tokey,
 				gid: gid,
-				spec_id: specificationid
+				spec_id: specificationid,
+				quantity: 0
 			},
 			success(res) {
 				// console.log(res)
@@ -791,7 +896,6 @@ let mutations = {
 	},
 	//跳到订单页面获取订单里面的值逻辑
 	Saveorder(state, shopvalue) {
-		// console.log(shopvalue)
 		const _this = this
 		//将传过来的值 进行结构出来
 		let {
@@ -931,7 +1035,6 @@ let mutations = {
 	},
 	//点击跳转订单内
 	linkDetails(state, orderinfo) {
-		// console.log(orderinfo)
 		// state.order_sn = order_sn
 		let {
 			order_sn,
@@ -990,14 +1093,15 @@ let mutations = {
 						token: state.tokey,
 						order_sn: res.data.order_sn,
 						page: 1,
-						pageSize: 10
+						pageSize: 99
 					},
 					success(res) {
-						// console.log(res)
 						// console.log(res.data.data.list)
 						if (res.data.code == 0) {
 							state.orderlistshop = res.data.data.list
+							// console.log(state.orderlistshop)
 							state.ordercreatetime = res.data.data.list[0].create_time
+							state.ordercode = res.data.data.list[0].share_code
 						}
 					}
 				})
@@ -1021,6 +1125,7 @@ let mutations = {
 				o_sn: order_sn,
 			},
 			success(res) {
+				// console.log(res)
 				if (res.data.code == 0) {
 					_this.commit("getshowmodel", {
 						msg: res.data.msg
@@ -1074,9 +1179,10 @@ let mutations = {
 						msg: res.data.msg
 					})
 					setTimeout(() => {
-						uni.redirectTo({
-							url: `/pages/orderpageRouter/orderpageRouter`
-						})
+						// uni.redirectTo({
+						// 	url: `/pages/orderpageRouter/orderpageRouter`
+						// })
+						uni.navigateBack()
 					}, 1500)
 				} else {
 					_this.commit("getshowmodel", {
@@ -1092,7 +1198,8 @@ let mutations = {
 		let {
 			o_sn,
 			af_price,
-			pay_pwd
+			pay_pwd,
+			r_text
 		} = refundobj
 		_this.commit("gettokey")
 		uni.request({
@@ -1102,7 +1209,8 @@ let mutations = {
 				token: state.tokey,
 				o_sn,
 				af_price,
-				pay_pwd
+				pay_pwd,
+				r_text
 			},
 			success(res) {
 				if (res.data.code == 0) {
@@ -1191,131 +1299,186 @@ let mutations = {
 
 	/*----评价---*/
 	//获取外面的待评价和已评价的列表
-     getevaluationlist(state, evaluationobj) {
-    		 const _this = this
-    		 let {
-    		 	url,
-				pages
-    		 } = evaluationobj
-			 // console.log(evaluationobj,111)
-    		 _this.commit("gettokey")
-    		 //这是请求的订单评价超时的时间
-    		 uni.request({
-    			 url:`${Requestpath}order/getOrderOverTimeConfig`,
-    			 success(resTime) {
-    				if(resTime.data.code==0){
-    					let arr = [] //这是订单超时的数组 为了存放订单编号
-    					// console.log(resTime.data.data.complete_day,"这是完成时间")
-    					//这是请求 未评价的列表或者 已评价的列表
-    					 uni.request({
-    						url: `${Requestpath}${url}`,	
-    						method: "POST",
-    						data: {
-    							token: state.tokey,
-    							page:pages,
-    							pageSize: 10
-    						},
-    						success(res) {
-    							// console.log(res)//自动评价 = 完成时间 + 配置信息 - new date  
-    							if(res.data.code==0){
-    								//这是 获取店铺的的订单列表
-    								
-									if(pages == 1){
-										state.evaluationlist = res.data.data.list
-									}else{
-										state.evaluationlist =  state.evaluationlist.concat(res.data.data.list) 
-									}
-    								
-    									// console.log(CompletiontimeS)
-    								res.data.data.list.forEach((item,index)=>{
-    									// console.log(item.finish_time)
-    									// console.log(resTime.data.data.complete_day * 1000)
-    									//自动评价 = 完成时间 + 配置信息 - new date
-    									
-    								if(new Date(item.finish_time.replace(/-/g, '/')).getTime() + parseInt(resTime.data.data.complete_day * 1000) - new Date().getTime() <= 0){
-    								// console.log(item.order_sn)750
-    								arr.push(item.order_sn)
-    								// console.log(arr)
-    								//自动评价
-    								uni.request({
-    									url:`${Requestpath}order/noEvaluationOrderToFinish`,
-    									method:"POST",
-    									data:{
-    										tokey:state.tokey,
-    										o_sns:arr
-    									},
-    									success(res) {
-    										// console.log(res)
-    									}
-    								})
-    							}
-    									//这是请求的评价里面的订单商品
-    									uni.request({
-    										url:`${Requestpath}order/getOrderGoodList`,
-    										method:"POST",
-    										data:{
-    											token:state.tokey,
-    											order_sn:item.order_sn,
-    											page:1,
-    											pageSize:10
-    										},
-    										success(resshop) {
-    											// console.log(resshop,23222)
-    											if(resshop.data.code==0){
-    												//订单号比对
-    												state.evaluationlistitem.push(resshop.data.data.list)
-    												
-    											}
-    											
-    										}
-    									})
-    								})
-    							}
-    							//原来的位置
-    						}
-    					})
-    				}
-    			}
-    		})
-    	},
-	
-
-
-	/*---退款和退货退款的详情---*/
-	getrefundreturn() {
+	getevaluationlist(state, evaluationobj) {
 		const _this = this
+		let {
+			url,
+			pages
+		} = evaluationobj
+		state.evaluationlistitem = []
+		// console.log(evaluationobj,111)
 		_this.commit("gettokey")
+		//这是请求的订单评价超时的时间
 		uni.request({
-			url: `${Requestpath}order/getRefundOrderList`,
-			method: "POST",
-			data: {
-				token: state.tokey,
-				page: 1,
-				pageSize: 10
-			}, 
-			success(res) {
-				// console.log(res)
-				if (res.data.code == 0) {
-					state.refundreturnlist = res.data.data.list
+			url: `${Requestpath}order/getOrderOverTimeConfig`,
+			success(resTime) {
+				if (resTime.data.code == 0) {
+					let arr = [] //这是订单超时的数组 为了存放订单编号
+					// console.log(resTime.data.data.complete_day,"这是完成时间")
+					//这是请求 未评价的列表或者 已评价的列表
 					uni.request({
-						url: `${Requestpath}order/getRefundAndGoodsOrderList`,
+						url: `${Requestpath}${url}`,
 						method: "POST",
 						data: {
 							token: state.tokey,
-							page: 1,
+							page: pages,
 							pageSize: 10
 						},
 						success(res) {
-							// console.log(res)
-							//因为退货和退款退款两个接口同时的 所以要把他们的数据进行合并
+							// console.log(res)//自动评价 = 完成时间 + 配置信息 - new date  
 							if (res.data.code == 0) {
-								state.refundreturnlist.concat(res.data.data.list)
+								//这是 获取店铺的的订单列表
+
+								if (pages == 1) {
+									state.evaluationlist = res.data.data.list
+								} else {
+									state.evaluationlist = state.evaluationlist.concat(res.data.data.list)
+								}
+
+								
+
+								// console.log(CompletiontimeS)
+								res.data.data.list.forEach((item, index) => {
+									// console.log(item.finish_time)
+									// console.log(resTime.data.data.complete_day * 1000)
+									//自动评价 = 完成时间 + 配置信息 - new date
+
+									if (new Date(item.finish_time.replace(/-/g, '/')).getTime() + parseInt(resTime.data.data.complete_day *
+											1000) - new Date().getTime() <= 0) {
+										// console.log(item.order_sn)750
+										arr.push(item.order_sn)
+										// console.log(arr)
+										//自动评价
+										uni.request({
+											url: `${Requestpath}order/noEvaluationOrderToFinish`,
+											method: "POST",
+											data: {
+												tokey: state.tokey,
+												o_sns: arr
+											},
+											success(res) {
+												// console.log(res)
+											}
+										})
+									}
+									//这是请求的评价里面的订单商品
+									uni.request({
+										url: `${Requestpath}order/getOrderGoodList`,
+										method: "POST",
+										data: {
+											token: state.tokey,
+											order_sn: item.order_sn,
+											page: 1,
+											pageSize: 10
+										},
+										success(resshop) {
+											// console.log(resshop,23222)
+											if (resshop.data.code == 0) {
+												//订单号比对
+												// console.log(index)
+												state.evaluationlistitem.push(resshop.data.data.list)
+
+											}
+
+										}
+									})
+								})
 							}
+							//原来的位置
 						}
 					})
 				}
 			}
 		})
+	},
+
+
+
+	/*---退款和退货退款的详情---*/
+	// getrefundreturn() {
+	// 	const _this = this
+	// 	_this.commit("gettokey")
+	// 	uni.request({
+	// 		url: `${Requestpath}order/getRefundOrderList`,
+	// 		method: "POST",
+	// 		data: {
+	// 			token: state.tokey,
+	// 			page: 1,
+	// 			pageSize: 10
+	// 		}, 
+	// 		success(res) {
+	// 			// console.log(res)
+	// 			if (res.data.code == 0) {
+	// 				state.refundreturnlist = res.data.data.list
+	// 				uni.request({
+	// 					url: `${Requestpath}order/getRefundAndGoodsOrderList`,
+	// 					method: "POST",
+	// 					data: {
+	// 						token: state.tokey,
+	// 						page: 1,
+	// 						pageSize: 10
+	// 					},
+	// 					success(res) {
+	// 						// console.log(res)
+	// 						//因为退货和退款退款两个接口同时的 所以要把他们的数据进行合并
+	// 						if (res.data.code == 0) {
+	// 							state.refundreturnlist.concat(res.data.data.list)
+	// 						}
+	// 					}
+	// 				})
+	// 			}
+	// 		}
+	// 	})
+	// },
+	/*---订单退款的列表+---*/
+	OrderrefundList() {
+		const _this = this
+		uni.getStorage({
+			key: "bindtokey",
+			success(restokey) {
+				uni.request({
+					url: `${Requestpath}order/getRefundOrderList`,
+					method: "POST",
+					data: {
+						token: restokey.data,
+						page: 1,
+						pageSize: 7
+					},
+					success(res) {
+						// console.log(res,'退款订单列表')
+						if (res.data.code == 0) {
+							state.refundreturnlist = res.data.data.list
+							console.log(state.refundreturnlist,1111)
+						}
+					}
+				})
+			}
+		})
+
+	},
+	// 订单退款退货列表  
+	Orderefundreturnlist() {
+		const _this = this
+		uni.getStorage({
+			key: "bindtokey",
+			success(restokey){
+				uni.request({
+					url: `${Requestpath}order/getRefundAndGoodsOrderList`,
+					method: "POST",
+					data: {
+						token: restokey.data,
+						page: 1,
+						pageSize: 7
+					},
+					success(res) {
+						if (res.data.code == 0) {
+							state.refundreturnlist = res.data.data.list
+						}
+					}
+				})
+			}
+		})
+		
 	},
 
 
@@ -1339,14 +1502,14 @@ let mutations = {
 				data: {
 					token: state.tokey,
 					sid: -2,
-					page:pages,
+					page: pages,
 					pageSize: 10
 				},
 				success(res) {
 					if (res.data.code == 0) {
-						if(pages == 1){
+						if (pages == 1) {
 							state.couponslist = res.data.data.list
-						}else{
+						} else {
 							state.couponslist = state.couponslist.concat(res.data.data.list)
 						}
 					}
@@ -1363,10 +1526,10 @@ let mutations = {
 					pageSize: 10
 				},
 				success(res) {
-					if (res.data.code == 0){
-						if(pages == 1){
+					if (res.data.code == 0) {
+						if (pages == 1) {
 							state.couponslist = res.data.data.list
-						}else{
+						} else {
 							state.couponslist = state.couponslist.concat(res.data.data.list)
 						}
 					}
@@ -1392,9 +1555,10 @@ let mutations = {
 			url: `${Requestpath}brand/getBrandList`,
 			data: {
 				page: state.Brandpage,
-				pageSize: 1
+				pageSize: 3
 			},
 			success(res) {
+				// console.log(res)
 				if (res.data.code == 0) {
 					//创建 两个变量 arrlist开始的时候等于 在state定义的数组
 					//因为最后的时候 数据都会增加到state.BrandList 这样可以实现分页
@@ -1422,36 +1586,45 @@ let mutations = {
 								//这里的判断为了判断有的数据 没有值
 								if (res.data.code == 0) {
 									arr[index].Brandonlist = res.data.data.list
+
+
 								} else {
 									arr[index].Brandonlist = []
+									state.Brandloadbool = true
 								}
 								//这里请求下面6个小商品的数据
-								uni.request({
-									url: `${Requestpath}brand/getRandomBrandGoodList`,
-									data: {
-										brand_id: item.brand_id,
-										limit: 6
-									},
-									success(reslist) {
-										//这里的判断为了判断有的数据 没有值
-										if (reslist.data.code == 0) {
-											arr[index].Brandonlists = reslist.data.data.list
-										} else {
-											arr[index].Brandonlists = []
-										}
-										if (Brandloadbools == false) {
-											setTimeout(() => {
-												state.Brandloadbool = true
-											}, 1500)
-										} else {
-											state.Brandloadbool = true
-										}
-									}
-								})
+								// uni.request({
+								// 	url: `${Requestpath}brand/getRandomBrandGoodList`,
+								// 	data: {
+								// 		brand_id: item.brand_id,
+								// 		limit: 6
+								// 	},
+								// 	success(reslist) {
+								// 		//这里的判断为了判断有的数据 没有值
+								// 		if (reslist.data.code == 0) {
+								// 			arr[index].Brandonlists = reslist.data.data.list
+								// 		} else {
+								// 			arr[index].Brandonlists = []
+								// 		}
+								// 		if (Brandloadbools == false) {
+								// 			setTimeout(() => {
+								// 				state.Brandloadbool = true
+								// 			}, 1500)
+								// 		} else {
+								// 			state.Brandloadbool = true
+								// 		}
+								// 	}
+								// })
 							}
 						})
+
 					})
-					state.BrandList = arr
+					setTimeout(() => {
+						state.BrandList = arr
+						state.Brandloadbool = true
+					}, 1000)
+				} else {
+					state.Brandloadbool = true
 				}
 			}
 		})
@@ -1460,7 +1633,7 @@ let mutations = {
 	scrolltolower() {
 		state.Brandpage++
 		this.commit("getgetBrandList", {
-			Brandloadbools: false
+			Brandloadbools: true
 		})
 	},
 
@@ -1499,6 +1672,7 @@ let mutations = {
 	},
 	userliveshoplist(state, userliveobj) {
 		state.userliveid = userliveobj
+		// console.log(userliveobj)
 		uni.request({
 			url: `${Requestpath}live/getAnchorGoodListNoToken`,
 			data: {
@@ -1524,7 +1698,6 @@ let mutations = {
 		const _this = this
 		//liveshopspecifications
 		let liveshopobj = {}
-		// console.log(Immediateobj)
 		let {
 			gid,
 			s_id,
@@ -1571,7 +1744,7 @@ let mutations = {
 						good_name: g_le,
 						store_id: s_id,
 						share_code: share_code,
-						good_freight : good_freight,
+						good_freight: good_freight,
 						share_from: 1
 					}
 					// console.log(SpecificationShopdetails)
@@ -1589,13 +1762,14 @@ let mutations = {
 	},
 	//当前端接收到服务端的消息的时候
 	livereceivemsg(state, livemsgobj) {
-
-		let {
-			msg
-		} = livemsgobj
-		// console.log(msg)
-		state.liveuserlist.push(msg)
+			let {
+				msg
+			} = livemsgobj
+			state.liveuserlist.push(msg)
+			// console.log(state.liveuserlist)
 		// console.log(state.liveuserlist, "这是index.js里面的")
+		// const length = state.liveuserlist.length
+		// console.log(length)
 	},
 	/******直播*****/
 

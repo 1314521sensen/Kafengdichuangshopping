@@ -2,8 +2,16 @@
 	<view class="shoppingcarnew">
 		<pageheight :statusBar="statusBar"></pageheight>
 		<view class="shoppingcartop">
-			<text class="shoppingcartitle">购物车</text>
-			<text class="management" @tap="management">{{btnswitchtext}}</text>
+			<view class="shoppingcartitle">
+				<text class="lg text-gray cuIcon-back carjiantou" @tap="carjiantou"></text>
+				<text class="shoppingcartitle_text">购物车</text>
+			</view>
+			<!-- 这里加判断为了让删除按钮不要在显示 -->
+			<text 
+				class="management" 
+				@tap="management"
+				v-show="this.$store.state.cartList.length>0"
+			>{{btnswitchtext}}</text>
 		</view>
 		<view class="shoppingcarlist">
 			<scroll-view class="scroll-view" :scroll-y="true" @scrolltolower="scrolltolower">
@@ -76,6 +84,9 @@
 											@tap="Increasereduce" 
 											:data-indexs="index" 
 											:data-childindex="indexs"
+											:data-spec_value="items.spec_value"
+											:data-spec_id="items.spec_id"
+											:data-gid="items.good_id"
 											data-bool="0"
 										>-</button>
 										<input type="text" class="inp" :value="items.good_num" disabled="true"/>
@@ -84,6 +95,9 @@
 											@tap="Increasereduce"
 											:data-indexs="index"
 											:data-childindex="indexs"
+											:data-spec_value="items.spec_value"
+											:data-spec_id="items.spec_id"
+											:data-gid="items.good_id"
 											data-bool="1"
 										>+</button>
 									</view>
@@ -94,7 +108,7 @@
 				</view>
 			</scroll-view>
 		</view>
-		<view class="shoppingcar-bottom">
+		<view class="shoppingcar-bottom" v-show="this.$store.state.cartList.length>0">
 			<view class="same-right" v-if="btnswitchbool">
 				<!-- <view class="freight">
 				    <text>运费:{{this.$store.state.freight}}</text>
@@ -104,7 +118,7 @@
 				<text style="color:#ee6c29">{{this.$store.getters.totalprice}}</text>
 				<button class="same-btn cu-btn round bg-orange" @tap="settlement">结算</button>
 			</view>
-			<button class="cu-btn round bg-red" v-else @tap="deleteshop">删除</button>
+			<button class="cu-btn round bg-red" v-else @tap="deleteshop" v-show="this.$store.state.cartList.length>0">删除</button>
 		</view>
 		<!-- 底部的窗口 -->
 		<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
@@ -146,6 +160,17 @@
 				</view>
 			</view>
 		</view>
+		<view class="cartweiicon" v-show="this.$store.state.cartList.length<=0">
+			<view class="cartweiicon_center">
+				<view class="cartweiicon_center_img" :style="{'background-image':'url('+this.$store.state.httpUrl+'shopcart/btnbrowsebuy.png'+')'}"></view>
+				<view class="cartweiicon_center_text">
+					您的购物车空空如也
+				</view>
+				<view class="browse">
+					<button class="cu-btn round btnbrowse" @tap.stop="btnbrowse">去逛逛</button>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -161,10 +186,17 @@
 				modalName:null,
 				//规格的src
 				specificationsrc:"",
-				imgpath:this.$store.state.imgyuming
+				imgpath:this.$store.state.imgyuming,
+				forwardcartbool:0,//此变量判断用户是通过哪里进来的
 			}
 		},
 		methods:{
+			//点击去逛逛
+			btnbrowse(){
+				uni.reLaunch({
+					url:`/pages/index/index`
+				})
+			},
 			//点击里面的商品 跳到商品详情
 			detaisinglepage(e){
 			    let {g_id,s_id} = e.currentTarget.dataset
@@ -209,8 +241,8 @@
 			},
 			//当每一个小商品数量点击减号时 或减号时 根据布尔值判断 点击的是加号还是减号
 			Increasereduce(e){
-				let {indexs,childindex,bool} = e.currentTarget.dataset
-				this.$store.commit("Increasereduce",{indexs:parseInt(indexs),childindex:parseInt(childindex),bool:bool})
+				let {indexs,childindex,bool,spec_value,spec_id,gid} = e.currentTarget.dataset
+				this.$store.commit("Increasereduce",{indexs:parseInt(indexs),childindex:parseInt(childindex),bool:bool,spec_value:spec_value,spec_id:spec_id,gid:gid})
 			},
 			//当点击删除商品的时候
 			deleteshop(){
@@ -236,38 +268,97 @@
 			scrolltolower(){
 				// console.log("触发了")
 				this.$store.commit("shopcarscrolltolower")
+			},
+			carjiantou(){
+				if(parseInt(this.forwardcartbool)==0){
+					uni.reLaunch({
+						url:"/pages/index/index"
+					})
+				}else{
+					uni.navigateBack()
+				}
+				
 			}
 		},
 		created(){
+			// 判断是否登录
+			uni.getStorageInfo({
+				success(res){
+					let key = res.keys
+					let keylen = key.length
+						key.forEach((item,index)=>{
+							if(item != "bindtokey"){
+								keylen-- 
+								// console.log(keylen) 
+							}
+						})
+						if(keylen == 0){
+							uni.redirectTo({
+								url:"/pages/login/login"
+							})
+						}
+					}
+				})
+
+			const _this = this
 			//调用vuex的actions里面的异步函数
-			this.$store.dispatch('getcarlists')
+			_this.$store.dispatch('getcarlists')
+			//在缓存中取出值
+			uni.getStorage({
+				key:"forwardcartbool",
+				success(res) {
+					_this.forwardcartbool = res.data
+				}
+			})
 			// console.log(this.$store.state)
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		//当用户按手机系统返回的时候
+		onBackPress(opction){
+			if(opction.from=='backbutton'){
+				uni.redirectTo({
+					url:`/pages/index/index`
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
 	.shoppingcarnew{
+		height:100vh;
 		background-color: #F8F8F8;
 		.shoppingcartop{
 			display:flex;
 			justify-content: space-between;
 			padding:0 20rpx;
 			.shoppingcartitle{
+				display: flex;
+				flex:1;
 				font-size: 45rpx;
 				font-weight: bold;
+				.carjiantou{
+					color:#CCCCCC;
+					margin-right:15rpx;
+					text-align:left;
+				}
+				.shoppingcartitle_text{
+					flex:1;
+					text-align:center;
+				}
 			}
 			.management{
+				width: 20%;
 				font-size: 35rpx;
+				text-align:center;
 			}
 		}
 		.shoppingcarlist{
 			margin-top:30rpx;
 			.scroll-view{
-				height:79vh;
+				height:86vh;
 				// background-color:red;
 				.scroll-view-item{
 					padding:0 20rpx;
@@ -363,7 +454,7 @@
 		.shoppingcar-bottom{
 			position: fixed;
 			/* #ifdef H5 */
-			bottom:90rpx;
+			bottom:0;
 			/* #endif */
 			/* #ifdef APP-PLUS || MP-WEIXIN */
 			bottom:0;
@@ -478,6 +569,43 @@
 					}
 				}
 			}
+		}
+	}
+	.cartweiicon{
+		display:flex;
+		justify-content: center;
+		position: fixed;
+		top:30%;
+		left:0;
+		width: 100%;
+		// height:100rpx;
+		// background-color:red;
+		.cartweiicon_center{
+			width: 50%;
+			// background-color:yellow;
+			.cartweiicon_center_img{
+				height:200rpx;
+				// background-color:green;
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+			}
+			.cartweiicon_center_text{
+				text-align:center;
+				color:#999;
+				font-weight:bold;
+				font-size: 36rpx;
+				margin:20rpx 0;
+			}
+			.browse{
+				display:flex;
+				justify-content: center;
+				.btnbrowse{
+					background-color:rgb(254,86,120) !important;
+					font-weight: bold;
+					color:#fff;
+				}
+			}
+			
 		}
 	}
 </style>

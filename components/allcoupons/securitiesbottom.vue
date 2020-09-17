@@ -17,8 +17,19 @@
 			<view class="discount_coupon">
 				<scroll-view scroll-y="true" class="scroll-Y" @scrolltolower="tolower">
 					<view class="demo_fa" v-for="(item,index) in this.$store.state.couponslist" :key="index">
-						<view class="discount_coupon_demo" v-if="item.status==parseInt(TabCur)+1">
+						
+						<view class="discount_coupon_demo" :class="item.status == 1 ? 'demoOne':'demoTwo'" >
+							<!-- <view class="status" v-if="item.status == 1">
+								<text>未使用</text>
+							</view> -->
+							<view class="status" v-if="item.status == 2">
+								<text>已使用</text>
+							</view>
+							<view class="status" v-if="item.status == 3">
+								<text>已过期</text>
+							</view>
 							<view class="demo_left">
+								
 								<view class="demo_left_price">
 									<text class="price_left" v-text="item.money"></text>
 									<text class="price_right">元</text>
@@ -87,7 +98,6 @@
 				let {indexs} = e.currentTarget.dataset
 				this.couponstindex = indexs
 				this.$emit("storeIsStillAndPlatform",indexs)
-				
 			},
 			couponsUse(e){
 				let {s_id} = e.currentTarget.dataset
@@ -96,7 +106,7 @@
 						url:`/pages/Store/store?storeid=${s_id}`
 					})
 				}else{
-					uni.switchTab({
+					uni.redirectTo({
 						url:`/pages/index/index`
 					})
 				}
@@ -116,7 +126,29 @@
 </script>
 
 <style lang="less" scoped>
-	
+	.status{
+		position: absolute;
+		width: 95%;
+		height: 175rpx;
+		z-index: 999;
+		line-height: 175rpx;
+		text-align: center;
+		background-color: rgba(0,0,0,.1);
+		text{
+			padding: 20rpx;
+			border: 6rpx solid #CCCCCC;
+			border-radius:50%;
+			font-size: 50rpx;
+			font-weight: bold;
+			color: #7e7e7e;
+		}
+	}
+	.demoOne{
+		background: linear-gradient(to left,#eb480e,#f1952b,#ec661c);
+	}
+	.demoTwo{
+		background-color: #CCCCCC;
+	}
 	.securitiesbottom{
 		background-color: white;
 	 width: 100%;
@@ -152,7 +184,8 @@
 		  margin: 20rpx auto 0;
 		  display: flex;
 		  justify-content: space-between;
-		  background: linear-gradient(to left,#eb480e,#f1952b,#ec661c);
+		  
+		 
 		  .demo_left{
 				width: 80%;
 				height: 175rpx;

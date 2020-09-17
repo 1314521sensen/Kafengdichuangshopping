@@ -1,16 +1,21 @@
 <template>
 	<view class="SetChangeResetpassword">
 		<pageheight :statusBar="statusBar"></pageheight>
+		<actionbarwei></actionbarwei>
 		<view class="shezhiandchangpasswordd">
 			<form @submit="zhifubind">
 				<view class="item" v-for="(item,index) in list" :key="index" v-if="showindex==index">
 					<view class="cu-form-group margin-top">
 						<view class="title">{{item.titlename}}</view>
-						<input :placeholder="item.titleplaceholder" :name="item.namelogin"></input>
+						<input :placeholder="item.titleplaceholder" :name="item.namelogin" type="password"></input>
 					</view>
 					<view class="cu-form-group margin-top">
 						<view class="title">{{item.zhifupassword}}</view>
-						<input :placeholder="item.zhifuplaceholder" :name="item.namezjifu"></input>
+						<input :placeholder="item.zhifuplaceholder" :name="item.namezjifu" type="password"></input>
+					</view>
+					<view class="cu-form-group margin-top">
+						<view class="title">{{item.affirmpassword}}</view>
+						<input :placeholder="item.zhifuplaceholder" :name="item.nameaffirm" type="password"></input>
 					</view>
 				</view>
 				<button class="cu-btn bg-green shadow margin-top" form-type="submit" :style="{'width':'100%'}">确认设置</button>
@@ -45,7 +50,11 @@
 									<!-- 这是身份证 -->
 									<view class="cu-form-group margin-top" v-for="(item,index) in changelist" :key="index">
 										<view class="title">{{item.title}}</view>
-										<input :placeholder="item.titleplaceholder" :name="item.name"></input>
+										<input 
+											:placeholder="item.titleplaceholder" 
+											:name="item.name"
+											:type="item.inp_type"
+										></input>
 									</view>
 									<button class="cu-btn bg-green shadow margin-top" form-type="submit" :style="{'width':'100%'}">确定重置</button>
 								</form>
@@ -58,6 +67,7 @@
 </template>
 
 <script>
+	import actionbarwei from "@/components/actionbar/actionbarwei.vue"
 	const app = getApp()
 	export default{
 		data(){
@@ -82,33 +92,40 @@
 						titleplaceholder:"请输入登录密码",
 						namelogin:"loginpassword",
 						zhifupassword:"支付密码",
-						zhifuplaceholder:"请设置您的支付密码",
-						namezjifu:"zhifupassword"
+						affirmpassword:"确认支付密码",
+						zhifuplaceholder:"重复您的支付密码",
+						namezjifu:"zhifupassword",
+						nameaffirm:"zhifupasswords"
 					},
 					{
 						titlename:"原支付密码",
 						titleplaceholder:"请输入您的原支付密码",
 						namelogin:"oldpassword",
 						zhifupassword:"新支付密码",
-						zhifuplaceholder:"请设置您的新支付密码",
-						namezjifu:"newspassword"
-					}
+						affirmpassword:"确认新支付密码",
+						zhifuplaceholder:"重复您的新支付密码",
+						namezjifu:"newspassword",
+						nameaffirm:"newspasswords"
+					},
 				],
 				changelist:[
 					{
 						title:"身份证号",
 						titleplaceholder:"请输入身份证号",
-						name:"idcard"
+						name:"idcard",
+						inp_type:"text"
 					},
 					{
 						title:"登录密码",
 						titleplaceholder:"请输入登录密码",
-						name:"loginpassword"
+						name:"loginpassword",
+						inp_type:"password"
 					},
 					{
 						"title":"支付密码",
 						titleplaceholder:"请设置新支付密码",
-						name:"newpaypassword"
+						name:"newpaypassword",
+						inp_type:"password"
 					}
 				],
 				Realnamebool:true,//重置密码的时候 是否实名
@@ -145,29 +162,34 @@
 				const _this = this
 				let regnewspassword = /^\d{6,6}$/;
 				if(parseInt(this.showindex)){//这是1的时候就修改密码
-					let {oldpassword,newspassword} = e.detail.value
+					let {oldpassword,newspassword,newspasswords} = e.detail.value
 					if(oldpassword!=="" && newspassword!==""){
 						if(regnewspassword.test(newspassword)){
-							uni.request({
-								url:`${app.globalData.Requestpath}user/editPayPassword`,
-								method:"POST",
-								data:{
-									token:this.tokey,
-									old_pay_password:oldpassword,
-									new_pay_password:newspassword,
-									isAllow:0
-								},
-								success:(res)=>{
-									if(res.data.code==0){
-										app.globalData.showtoastsame("修改成功")
-										uni.navigateTo({
-											url:"/components/setcenter/setcenter?title=userset&titlename=设置"
-										})
-									}else{
-										app.globalData.showtoastsame(res.data.msg)
+							if(newspassword == newspasswords){
+								uni.request({
+									url:`${app.globalData.Requestpath}user/editPayPassword`,
+									method:"POST",
+									data:{
+										token:this.tokey,
+										old_pay_password:oldpassword,
+										new_pay_password:newspassword,
+										isAllow:0
+									},
+									success:(res)=>{
+										if(res.data.code==0){
+											app.globalData.showtoastsame("修改成功")
+											uni.navigateTo({
+												url:"/components/setcenter/setcenter?title=userset&titlename=设置"
+											})
+										}else{
+											app.globalData.showtoastsame(res.data.msg)
+										}
 									}
-								}
-							})
+								})
+							}else{
+								app.globalData.showtoastsame("两次密码输入不一致")
+							}
+							
 						}else{
 							app.globalData.showtoastsame("密码请设置数字6位数")
 						}
@@ -307,6 +329,9 @@
 				this.Realnamebool = false
 			}
 			
+		},
+		components:{
+			actionbarwei,
 		}
 	}
 </script>

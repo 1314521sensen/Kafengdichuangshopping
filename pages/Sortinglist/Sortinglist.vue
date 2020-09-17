@@ -3,11 +3,14 @@
 		<pageheight :statusBar="statusBar"></pageheight>
 		<seachinput :value2="value2" :value="value"></seachinput>
 		<!--sorting这里传过去的value是用来排序的  -->
-		<sorting :value="value" @sortingshoplist="sortingshoplist"></sorting>
-		<scroll-view :scroll-y="true"  @scrolltolower="scrolltolower" class="scrolltolower-list">
+		<sorting :value="value" @sortingshoplist="sortingshoplist" v-show="horizontallylist.length>0"></sorting>
+		<scroll-view :scroll-y="true"  @scrolltolower="scrolltolower" class="scrolltolower-list"  v-show="horizontallylist.length>0">
 			<horizontallylist :horizontallylist="horizontallylist"></horizontallylist>
 		</scroll-view>
-		
+		<view class="nolist" v-show="horizontallylist.length<=0">
+			暂无搜索商品
+		</view>
+		<Selectionrecommended v-show="horizontallylist.length<=0"></Selectionrecommended>
 	</view>
 </template>
 
@@ -15,6 +18,7 @@
 	import seachinput from "@/components/sortinglist/seachinput.vue"
 	import sorting from "@/components/sortinglist/sorting.vue"
 	import horizontallylist from "@/components/sortinglist/horizontallylist.vue"
+	import Selectionrecommended from "@/components/myPersonal/Selectionrecommended.vue"
 	const app = getApp();
 	export default {
 		//这是商品排序列表大组件
@@ -88,7 +92,8 @@
 		components:{
 			sorting,
 			horizontallylist,
-			seachinput
+			seachinput,
+			Selectionrecommended
 		},
 		onLoad(opctry){
 			this.value = opctry.value
@@ -102,7 +107,21 @@
 </script>
 
 <style lang="less" scoped>
-	.scrolltolower-list{
-		height: 87vh;
-	}
+	.sortinglist{
+			background-color: #fff;
+		}
+		.scrolltolower-list{
+			height: 90vh;
+			
+		}
+		.nolist{
+			display:flex;
+			justify-content: center;
+			align-items: center;
+			height:5vh;
+			background-color:#fff;
+			font-size: 30rpx;
+			// font-weight: bold;
+			color:#999;
+		}
 </style>

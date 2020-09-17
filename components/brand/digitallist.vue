@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<!-- v-if="this.$store.state.Brandloadbool" -->
-		<view v-if="this.$store.state.Brandloadbool">
+		<!-- v-if="this.$store.state.Brandloadbool" v-show="this.$store.state.Brandloadbool"-->
+		<view>
 		<view class="wrapBox" 
 			v-for="(item,index) in this.$store.state.BrandList" 
 			:key="index"
@@ -45,11 +45,9 @@
 					</view>
 				</view>
 			</view>
-			<view class="wrap">
+			<!-- <view class="wrap">
 				<view class="productlist">
-					<!-- 装商品的大盒子 -->
 					<view class="produBox">
-						<!-- 每个商品的盒子 -->
 						<view class="goodsBox" 
 							v-for="(itemlists,indexlists) in item.Brandonlists" 
 							:key='indexlists'
@@ -62,10 +60,11 @@
 						</view>
 					</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 		</view>
-		<loading v-if="this.$store.state.Brandloadbool==false"></loading>
+		<!--  -->
+		<loading v-show="this.$store.state.Brandloadbool==false"></loading>
 	</view>
 </template>
 
@@ -96,7 +95,15 @@
 		},
 		created() {
 			this.$store.commit("getgetBrandList",{Brandloadbools:true})
-		}
+		},
+		// updated() {
+		// 	uni.getStorage({
+		// 		key:"BrandList",
+		// 		success(res) {
+		// 			console.log(res,"新数据")
+		// 		}
+		// 	})
+		// }
 	}
 </script>
 
@@ -146,12 +153,13 @@
 				.details{
 					display:flex;
 					flex: 1;
-					justify-content: space-between;
+					// justify-content: space-between;
 					align-items: center;
 					padding: 0 10rpx;
 					border-top-left-radius: 12rpx;
 					// 单个商品
 					.Goody{
+						margin-left: 5rpx;
 						width: 210rpx;
 						background-color: #fff;
 						// 背景手机图片

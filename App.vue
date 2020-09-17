@@ -50,7 +50,7 @@
 					},
 					success(res) {
 						if(res.data.code==1){
-							uni.reLaunch({
+							return uni.reLaunch({
 								url:"/pages/login/login"
 							})
 						}
@@ -107,10 +107,9 @@
 				
 				uni.getSystemInfo({
 					success(res){
-						
 						let version = plus.runtime.version
 						let Applicationnum = version.split('.').join('')
-						// console.log(Applicationnum,"这是手机的")
+						// console.log(Applicationnum)
 						//判断用户是安卓还是苹果
 						if(res.platform=="android"){
 							//获取网络状态
@@ -151,9 +150,6 @@
 				})
 			// #endif
 			//app热跟新---结束
-			
-			
-			
 			//引导页---开始
 			// #ifdef APP-PLUS
 				uni.getStorage({
@@ -215,6 +211,9 @@
 					key:'indexpopupbool',
 					success(res){
 						_this.$store.state.indexpopupbool = false
+					},
+					fail(err){
+						//当用户第一次下载的app的时候 首次打开隐藏底部的tabber
 					}
 				})
 			// #endif

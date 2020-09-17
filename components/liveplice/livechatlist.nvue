@@ -1,24 +1,49 @@
 <template>
 	<cover-view class="chat parent-padding-leftAndright" :style="{width:(componentwidth/2+30)+'px'}">
-		<scroller scroll-direction :show-scrollbar="false">
+		<!-- scroll-direction :show-scrollbar="false" -->
+		<scroll-view 
+			:scroll-y="true" 
+			class="scroll-view"
+		>
 			<cover-view class="bg-Black-gradient chat-item" v-for="(item,index) in this.$store.state.liveuserlist" :key="index">
-				<text class="font-size-twenty-flxed textcolor-Promptreply text-wrap">{{item.name}}&nbsp;{{item.content}}</text>
+				<cover-view class="linetext">
+					<text class="textcolor-Promptreply text-wrap namecolor" :style="{color:item.livetextcolor}">{{item.name+':'}}&nbsp;</text>
+					<text class="textcolor-Promptreply text-wrap lineTexts" :style="{width:(componentwidth/2+30)+'px'}">{{item.content}}</text>
+				</cover-view>
 			</cover-view>
-		</scroller>
+			<cover-view class="Fixed_box" id='gundong'>
+				
+			</cover-view>
+		</scroll-view>
 	</cover-view>
 </template>
 
 <script>
 	export default {
+		data(){
+			return {
+				oldbottom:0,
+			}
+		},
 		props:["componentwidth"],
+		mounted(){
+			// 滚动条的距离
+			uni.createSelectorQuery().select("#gundong").boundingClientRect((res)=>{
+					// console.log(res)
+					this.oldbottom = res.bottom  // 记录 滚动 元素的 bottom 值
+				}).exec()
+		},
 	}
 </script>
 
 <style>
 .chat{
 		/* background-color:green; */
-		height:400rpx;
+		/* height:400rpx; */
 		margin-bottom:40rpx;
+	}
+	.scroll-view{
+		/* height:400rpx; */
 	}
 	.chat-item{
 		flex-wrap:wrap;
@@ -28,5 +53,23 @@
 	}
 	.text-wrap{
 		flex-wrap:wrap;
+	}
+	.Fixed_box{
+		height:4rpx;
+		/* background-color:red; */
+	}
+	.linetext{
+		flex-direction:row;
+		flex-wrap: wrap;
+	}
+	.namecolor{
+		font-size: 32rpx;
+		/* color:#f8d775; */
+	}
+	.lineTexts{
+		font-size: 28rpx;
+		margin-top:10rpx;
+		/* flex-wrap:wrap; */
+		/* background-color:red; */
 	}
 </style>

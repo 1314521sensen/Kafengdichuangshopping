@@ -59,7 +59,7 @@
 												if(i==100){
 													clearInterval(times)
 													this.disabled = false
-													uni.switchTab({
+													uni.redirectTo({
 														url:"/pages/index/index"
 													})
 												}
@@ -85,7 +85,7 @@
 												if(i==100){
 													clearInterval(times)
 													this.disabled = false
-													uni.switchTab({
+													uni.redirectTo({
 														url:"/pages/index/index"
 													})
 												}

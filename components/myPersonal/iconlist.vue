@@ -29,7 +29,7 @@
 				// /pages/orderpageRouter/orderpageRouter 链接
 				uni.navigateTo({
 					//这块目前还没发现 哪引用着  后期发现再改
-					url:`/pages/orderpageRouter/orderpageRouter?index=${index+1}`
+					url:`/pages/orderpageRouter/orderpageRouter?index=${index+1}&is_order=is_order`
 				})
 			}
 		}

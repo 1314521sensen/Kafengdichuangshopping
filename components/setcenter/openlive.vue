@@ -19,10 +19,17 @@
 		},
 		methods:{
 			openlivelink(){
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey) {
+						app.globalData.Detectionupdatetokey(restokey.data)
+						uni.navigateTo({
+						    url: '/pages/Livecover/Livecover'
+						})
+					}
+				})
 				// console.log('进入开启直播页面')
-				uni.navigateTo({
-				    url: '/pages/Livecover/Livecover'
-				});
+				
 			}
 		}
 	}

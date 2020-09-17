@@ -1,6 +1,8 @@
 <template>
 	<view>
 		<pageheight :statusBar="statusBar"></pageheight>
+		<!-- <actionbar></actionbar> -->
+		<actionbar message="评价中心"></actionbar>
 		<scroll-view scroll-x class="bg-gray nav">
 			<view class="flex text-center">
 				<view class="cu-item flex-sub" :class="index==TabCur?'text-red cur':''" v-for="(item,index) in tabSelectList" :key="index" @tap="tabSelect" :data-id="index" :data-url="item.url">
@@ -15,6 +17,7 @@
 
 <script>
 	const app = getApp()
+	import actionbar from "@/components/actionbar/actionbar.vue"
 	import Evaluate from "@/components/evaluate/evaluate.vue"
 	export default {
 		data() {
@@ -36,6 +39,9 @@
 		},
 		methods: {
 			tabSelect(e) {
+				
+				this.$store.state.evaluationlistitem = []
+				
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 				let url = e.currentTarget.dataset.url
@@ -44,7 +50,8 @@
 			},
 		},
 		components:{
-			Evaluate
+			Evaluate,
+			actionbar
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar

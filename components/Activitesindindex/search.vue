@@ -1,6 +1,6 @@
 <template>
 	<view class="searchBox">
-		<view class="photo" v-if="bool">
+		<view class="photo" v-if="bool" @tap="jumppersonal">
 			<image :src="this.$store.state.imgyuming+user_pic" mode=""></image>
 		</view>
 		<view class="cu-bar search bg-white">
@@ -36,6 +36,11 @@
 			}
 		},
 		methods:{
+			jumppersonal(){
+				uni.navigateTo({
+					url:"/pages/Personaldata/Personaldata"
+				})
+			},
 			InputFocus() {
 				uni.navigateTo({
 					url:"/pages/SearchTo/SearchTo"
@@ -58,7 +63,7 @@
 							uni.navigateTo({
 								url:`/pages/Freeregistration/Freeregistration?code=${code}`
 							})
-						}else if(arr[arr.length-1]=="type=3"){
+						}else if(arr[arr.length-1]=="type=2"){
 							//这是商品的二维码
 							let arr1 = []
 							 arr.forEach((item,index)=>{
@@ -93,11 +98,31 @@
 							token:res.data
 						},
 						success(res) {
+							// console.log(res,"会员")
+							uni.setStorage({
+								key:'beesVip',
+								data:0
+							})
+							
 							if(res.data.code == 0){
+								uni.setStorage({
+									key:"share_code",
+									data:res.data.data.share_code
+								})
+								uni.setStorage({
+									key:'beesVip',
+									data:res.data.data.is_member
+								})
 								let {user_sid} = res.data.data
 								_this.code = res.data.data.code
 								_this.user_pic = res.data.data.user_pic
 								_this.bool = true
+								//判断用户是不是新用户
+								if(parseInt(res.data.data.is_newuser)){
+									_this.$store.state.is_newuser = false
+								}else{
+									_this.$store.state.is_newuser = true
+								}
 								//将店铺id保存到缓存中判断用户是不是这个店铺的
 								uni.setStorage({
 									key:"userstoreid",

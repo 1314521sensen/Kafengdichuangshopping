@@ -3,7 +3,13 @@
 		<!-- 这个动态的设置高度 -->
 		<swiper class="screen-swiper" :class="dotStyle?'square-dot':'round-dot'" :indicator-dots="true" :circular="true"
 		 :autoplay="true" interval="5000" duration="500">
-			<swiper-item v-for="(item,index) in swiperList" :key="index">
+			<swiper-item 
+				v-for="(item,index) in swiperList" 
+				:key="index" 
+				@tap="bannertap"
+				:data-category="item.category"
+				:data-adv_link="item.adv_link"
+			>
 				<image :src="imgpath+item.adv_thumb" mode="scaleToFill"></image>
 			</swiper-item>
 		</swiper>
@@ -22,6 +28,21 @@
 			DotStyle(e) {
 				this.dotStyle = e.detail.value
 			},
+			//banner 点击
+			bannertap(e){
+				// console.log(this.swiperList)
+				// console.log(e.currentTarget.dataset)
+				let {category,adv_link} = e.currentTarget.dataset
+				// console.log(adv_link)
+				if(parseInt(category)==1){
+					let storeid = adv_link.split("?")[1].split("=")
+					// console.log(storeid)
+					uni.navigateTo({
+						url:`/pages/Store/store?storeid=${storeid[1]}`
+					})
+					//
+				}
+			}
 		},
 		props:["swiperList"]
 	}

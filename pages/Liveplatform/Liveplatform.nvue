@@ -1,6 +1,7 @@
 <template>
  <!-- #ifdef APP-PLUS -->
 	<view>
+		<!-- url -->
 		<view v-if="liveanchorsowing">
 			 <video 
 				id="myVideo"
@@ -112,16 +113,15 @@
 		},
 		onLoad(opction){
 			const _this = this
-			
 			// console.log(opction)
-			let {indexs,live_url,livenick,roomid,livepic,uid,uname} = opction
+			let {indexs,live_url,livenick,roomid,livepic,uid,uname,liveuid} = opction
 			_this.url = live_url
 			_this.livenick = livenick
 			_this.roomid = roomid
 			_this.livepic = livepic
 			_this.uname = uname
 			_this.uid = uid
-			_this.$store.commit('userliveshoplist',uid)
+			_this.$store.commit('userliveshoplist',liveuid)
 			//初始化用户一进入直播间的数据
 			let userInitialize = {
 				type:'liveUserInit',
@@ -130,6 +130,7 @@
 				avatar:'',
 				group:roomid
 			}
+			// console.log(userInitialize)
 			// console.log(JSON.stringify(userInitialize),"这是初始化的数据")
 			uni.connectSocket({
 				url:"ws://49.232.153.178:7272",
@@ -149,10 +150,13 @@
 						uni.sendSocketMessage({
 							data:JSON.stringify(userInitialize),
 							success(ressendmsg) {
+								_this.liveanchorsowing = true
 								// console.log(ressendmsg,"这是初始化的发送成功")
 							},
 							fail(err){
+								_this.liveanchorsowing = false
 								// console.log(err)
+								// uni.navigateBack()
 							}
 						})
 					},3000)
@@ -161,7 +165,7 @@
 			//liveuserlist
 			//监听WebSocket连接打开事件。
 			uni.onSocketOpen(function(res){
-				// console.log("监听连接状态")
+				// console.log(res,"监听连接状态")
 				let pingobj = {
 					type:'livePing'
 				}
@@ -178,20 +182,57 @@
 			uni.onSocketMessage(function(resmsg){
 				// console.log("监听接收服务器的状态",resmsg)
 				// console.log(JSON.parse(resmsg.data))
+				let colorarr = ["#ed5565","#da4453","#fc6451","#e9573f","#ffce54","#f6bb42","#a0d468","#8cc152","#48cfad","#37bc98","#4fc1e9","#3bafda","#5d9cec","#4a89dc","#ac92ec","#967adc","#ec87c0","#d770ad"];
 				let messagetype = JSON.parse(resmsg.data).message_type
 				if(messagetype=="liveConnect"){
 					//当用户加入到直播间的时候
 					_this.cont = JSON.parse(resmsg.data).data.count
 				}else if(messagetype=="liveChatMessage"){
+					
+					let livetextcolor = colorarr[parseInt(Math.random()*colorarr.length)]
+					let obj = JSON.parse(resmsg.data).data
+					obj.livetextcolor = livetextcolor
+					// console.log(obj)
 					//当用户接收到服务器消息的时候 
-					_this.$store.commit("livereceivemsg",{msg:JSON.parse(resmsg.data).data})
+					_this.$store.commit("livereceivemsg",{msg:obj})
 				}else if(messagetype=="anchorCloseRoom"){
 					// console.log()
 					//当主播下播的时候
 					_this.liveanchorsowing = false
 				}else if(messagetype=="liveWait"){
 					_this.liveanchorsowing = false
+				}else if(messagetype=="uid_empty"){
+					uni.showModal({
+						title:"连接错误",
+						content:"请退出重进",
+						showCancel:false,
+						confirmText:"确定退出",
+						confirmColor:"#00ff00",
+						success(res){
+							if(_this.liveanchorsowing){
+								uni.closeSocket({
+									code:1000,
+									success(resuserclose) {
+										// console.log(resuserclose)
+										clearInterval(_this.userlivetime)
+										//当用户退出直播间的时候 将数据清空
+										_this.$store.state.liveuserlist = []
+										uni.navigateBack()
+									}
+								})
+							}else{
+								uni.navigateBack()
+							}
+						}
+					})
 				}
+			})
+			//
+			uni.onSocketClose(function(res){
+				clearInterval(_this.userlivetime)
+				//当用户退出直播间的时候 将数据清空
+				_this.$store.state.liveuserlist = []
+				_this.liveanchorsowing = false
 			})
 		},
 		//当组件销毁前

@@ -1,17 +1,24 @@
 <template>
 	<view class="list">
-		<view class="cu-list menu-avatar">
+		<view class="Headchoose">
+			<view @click="refund"  :class="active">退款订单列表</view>
+			<view @click="refundGoods" :class="activb">退款退货订单列表</view>
+		</view>
+		<scroll-view style="overflow: hidden;height:91vh;" scroll-y="true" @scrolltolower="scrollBottom">
+		
+			<view class="cu-list menu-avatar">
 				<!-- 这是背景图片 -->
 				<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
 				<!-- <button class="cu-btn bg-red margin-tb-sm lg" :style="{'display':display}">删除你不想要的商品</button> -->
+				
 				<view class="cu-item" 
 					v-for="(item,index) in this.$store.state.refundreturnlist" 
 					:key="index"
+					:data-index="index"
 					:data-s_id="item.store_id"
 					@tap="particulars"
 				>
-					
-					<!-- @tap="linkDetails(item.order_id,item.order_sn)" -->
+					<!-- @tap="linkDetails(item.order_id,item.order_sn)"  -->
 					
 					<view class="cu-item-left">
 						<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
@@ -21,87 +28,200 @@
 					</view>
 					<view class="cu-item-right">
 						<view class="content">
-							<!-- goods_name这个值和上面的值一样的返回的不一样 -->
+							<!-- goods_name这个值和上面的值一样的返回的不一样   -->
 							<view class="text-grey">{{item.store_name}}</view>
 							<view class="price">
-								￥{{item.change_price}}
+								￥{{item.good_price}}
 								
 								<text class="">{{item.refund_state==1?'退款':'退货退款'}}</text>
 							</view>
 						</view>
 					</view>
 				</view>
-		</view>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data(){
 			return {
-				imgpath:this.$store.state.imgyuming
+				imgpath:this.$store.state.imgyuming,
+				active:"active",
+				activb:"",
+				page:1, //当前页数
+				iSrefund:0,//判断是退款还是退款退货列表 
+				refundtype:[
+					{
+						type:1,
+						text:'退款订单列表'
+					},
+					{
+						type:2,
+						text:'退款退货订单列表'
+					}
+				]
 			}
 		},
 		methods:{
+			scrollBottom(){
+				const _this = this
+				this.page++
+				// console.log(this.page)
+				if(this.iSrefund == 0){
+					uni.getStorage({
+						key:"bindtokey",
+						success(res){
+							uni.request({
+								url: `${app.globalData.Requestpath}order/getRefundOrderList`,
+								method: "POST",
+								data: {
+									token: res.data,
+									page: _this.page,
+									pageSize: 7
+								}, 
+								success(res) {
+									// console.log(res) 
+									if (res.data.code == 0) {
+										// state.refundreturnlist = res.data.data.list  
+										if(_this.page == 1){
+											_this.$store.state.refundreturnlist = res.data.data.list
+										}else{
+											_this.$store.state.refundreturnlist = _this.$store.state.refundreturnlist.concat(res.data.data.list)
+										}
+									}
+								}
+							})
+						}
+					})
+				}else if(this.iSrefund == 1){
+					// this.$store.commit("Orderefundreturnlist",{pages:this.page}) 
+					uni.getStorage({
+						key:"bindtokey",
+						success(res){
+							uni.request({
+								url:`${app.globalData.Requestpath}order/getRefundAndGoodsOrderList`,
+								method:"POST",
+								data:{
+									token:res.data,
+									page:_this.page,
+									pageSize:7
+								},
+								success(res){
+									if(res.data.code == 0){
+										if(_this.page == 1){
+											_this.$store.state.refundreturnlist = res.data.data.list
+										}else{
+											_this.$store.state.refundreturnlist = _this.$store.state.refundreturnlist.concat(res.data.data.list)
+										}
+									}
+								}
+							})
+						}
+					})
+				}
+			},
+			// 退款列表
+			refund(){
+				this.$store.state.refundreturnlist = []
+				this.$store.commit("OrderrefundList")
+				this.active = "active"
+				this.activb = ""
+				this.iSrefund = 0
+				this.page = 1
+				console.log(this.iSrefund)
+			},
+			// 退款退货列表  
+			refundGoods(){
+				this.$store.state.refundreturnlist = []
+				this.$store.commit("Orderefundreturnlist")
+				this.active = ""
+				this.activb = "activb"
+				this.iSrefund = 1
+				this.page = 1
+				// console.log(this.iSrefund)
+				// this.active = "active"
+			},
 			particulars(e){
-               let {s_id} = e.currentTarget.dataset
-                   uni.navigateTo({
-						url:`/pages/Store/store?storeid=${s_id}`
-               		})
+				const _this = this
+				// 获取订单内订单商品列表
+				let indexs = e.currentTarget.dataset.index
+				// 店铺名称
+				let store_name = this.$store.state.refundreturnlist[indexs].store_name  
+				// 订单编号
+				let order_sn =  this.$store.state.refundreturnlist[indexs].order_sn
+				// // 运费
+				let dispatch_price = this.$store.state.refundreturnlist[indexs].dispatch_price
+				// // 流水号 
+				let swift_no = this.$store.state.refundreturnlist[indexs].swift_no
+				// 创建时间
+				let createTime = this.$store.state.refundreturnlist[indexs].create_time
+				let address_id = this.$store.state.refundreturnlist[indexs].address_id
+				// 订单Id
+				let order_id = this.$store.state.refundreturnlist[indexs].order_id
+				
+				
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						uni.request({
+							url:`${app.globalData.Requestpath}order/getOrderGoodList`,
+							method:"POST",
+							data:{
+								token:res.data,
+								order_sn:order_sn,
+								page:1,
+								pageSize:10
+							},
+							success(receiving) {
+								uni.setStorage({
+									key:'Detailsrefund',
+									data:receiving,
+									success(success) {
+										// console.log(receiving,'333')
+										// console.log(dispatch_price)
+									}
+								})
+								  
+							}
+						})
+					}
+				})
+				uni.navigateTo({
+					url:`/pages/Detailsofrefund/Detailsofrefund?title=${store_name}&order_sn=${order_sn}&dispatch_price=${dispatch_price}&swift_no=${swift_no}&createTime=${createTime}&address_id=${address_id}&order_id=${order_id}`
+				})
 			}
-			// linkDetails(){
-			// 	console.log(1)
-			// 	//orderid----订单id
-			// 	//ordersn----订单编号
-			// 	//当点击的时候跳转到订单详情页
-			// 	//根据index和我的组件中传过来的url 判断跳到哪里
-			// 		uni.navigateTo({
-			// 			url:`/pages/Temporarynonpayment/Temporarynonpayment?order=${btoa(orderid)}&ordersnSerial=${btoa(ordersn)}`
-			// 		})
-			// },
-			// deletescollectionAndfootprint(index){
-			// 	let deleteid = this.deletelist[index].fav_id?this.deletelist[index].fav_id:this.deletelist[index].track_id
-			// 	uni.showModal({
-			// 		title:"确定要删除该商品吗",
-			// 		cancelText:true,
-			// 		cancelText:"确认取消",
-			// 		cancelColor:"#ff0000",
-			// 		confirmText:"确认删除",
-			// 		success:(res)=>{
-			// 			if(res.confirm){
-			// 				uni.request({
-			// 					url:this.deleteurl,
-			// 					method:"POST",
-			// 					data:{
-			// 						token:this.tokey,
-			// 						fav_id:deleteid,
-			// 						track_id:deleteid
-			// 					},
-			// 					success(res) {
-			// 						console.log(res)
-			// 						if(res.data.code==0){//这后期需要更改
-			// 							uni.switchTab({
-			// 								url:"/pages/PersonalMy/PersonalMy"
-			// 							})
-			// 						}
-			// 					}
-			// 				})
-			// 			}else{
-			// 				return false
-			// 			}
-			// 		}
-			// 	})
-			// }
 		},
+		//OrderrefundList 退款列表 
+		// Orderefundreturnlist  退款退货列表
+		
 		// props:["list","display","deleteurl","tokey","deletelist"],
 		created() {
-			this.$store.commit("getrefundreturn")
-		}
+			this.$store.commit("OrderrefundList")
+			
+		},
 	}
 </script>
 
 <style lang="less" scoped>
+	.active{
+		color: red;
+	}
+	.activb{
+		color: red;
+	}
 	.list{
+		.Headchoose{
+			display: flex;
+			flex-grow: 10;
+			view{
+			   flex-grow: 5;
+			   text-align: center;
+			   line-height: 80rpx;
+			}
+		}
 		.shopping-title{
 			//由于背景图片没高度 给来一个高度
 			height:70rpx;

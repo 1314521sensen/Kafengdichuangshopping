@@ -3,10 +3,12 @@
 		:style="{'background-image':'url('+this.$store.state.httpUrl+'WeChatLanding/WeChatLanding.png'+')','padding-top':statusBar+'rpx'}"
 		 @tap="WeChatbinding"
 	>
+	<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 	</view>
 </template>
 
 <script>
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	const app = getApp()
 	export default {
 		data() {
@@ -50,9 +52,10 @@
 																key:"bindopenid",
 																data:resopenid.data.openid,
 																success() {
-																	uni.redirectTo({
-																		url:`/components/setcenter/setcenter?title=设置&titlename=userset`
-																	})
+																	// uni.redirectTo({
+																	// 	url:`/components/setcenter/setcenter?title=设置&titlename=userset`
+																	// })
+																	uni.navigateBack()
 																}
 															})
 														}else{
@@ -79,6 +82,9 @@
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		components:{
+			defaultbgblackcolorwhitebar
 		}
 	}
 </script>

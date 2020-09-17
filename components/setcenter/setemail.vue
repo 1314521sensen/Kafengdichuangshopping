@@ -22,7 +22,7 @@
 				statusBar:0,
 				list:[
 					{
-						title:"绑定手机号或者邮箱",
+						title:"绑定邮箱",
 						textright:"进行绑定",
 					},
 				]
@@ -61,20 +61,23 @@
 						uni.showModal({
 							title:"请绑定或更换邮箱账户",
 							content:"如果没有绑定邮箱请绑定邮箱",
-							showCancel:false,
+							showCancel:true,
 							confirmText:gengemail,
 							// cancelColor:"#ff0000",
-							confirmColor:"#ff0000",
+							cancelText:"取消",
+							cancelColor:"#ff0000",
+							confirmColor:"#00ff00",
 							success(res){
-								
-								if(gengemail=="绑定邮箱"){//如果为true的话就是邮箱绑定
-									uni.navigateTo({
-										url:`/components/indexcomponents/indexbindinfo?bind=${0}`
-									})
-								}else{//否则就邮箱更换
-									uni.navigateTo({
-										url:`/components/indexcomponents/indexbindinfo?bind=${1}`
-									})
+								if(res.confirm){
+									if(gengemail=="绑定邮箱"){//如果为true的话就是邮箱绑定
+										uni.navigateTo({
+											url:`/components/indexcomponents/indexbindinfo?bind=${0}`
+										})
+									}else{//否则就邮箱更换
+										uni.navigateTo({
+											url:`/components/indexcomponents/indexbindinfo?bind=${1}`
+										})
+									}
 								}
 							}
 						})

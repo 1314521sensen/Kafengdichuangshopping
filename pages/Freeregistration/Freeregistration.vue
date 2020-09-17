@@ -1,15 +1,21 @@
 <template>
 	<view class="freeregistration">
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 		<view class="newfreeregistration">
 			<view class="freeregistration-title">
-				<view class="register-img" style="background-image:url(/static/logo.png)"></view>
-				<text>亲,欢迎注册账号</text>
+				<view class="register-img" :style="{'background-image':'url('+this.$store.state.httpUrl+'logo.png'+')'}"></view>
+				<view>
+					<view class="Back_index">
+						<text class="text_title">亲,欢迎注册账号</text>
+						<text @tap="Back_index">返回首页</text>
+					</view>
+				</view>
 			</view>
 			<view class="form">
 				<form @submit="smslogin">
 					<view class="cu-form-group margin-top inp">
 						<view class="title">账号:</view>
-						<input placeholder="注册账号至少5位最多20位" v-model="username" name="username" type="text"></input>
+						<input placeholder="注册账号至少2位最多20位" v-model="username" name="username" type="text"></input>
 					</view>
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<view class="title">密码:</view>
@@ -28,8 +34,9 @@
 						<button class='cu-btn bg-green shadow newcu-btn' @tap="countdown" :disabled="disabled">{{countdowntext}}</button>
 					</view>
 					<view class="fa_referrer_mobile cu-form-group" v-if="bool">
-								<input type="text" placeholder="推荐人手机号(选填)" name="referrer_mobile" v-model="referrer_mobile"/>
-							</view>
+						<input type="text" placeholder="推荐人手机号(选填)" name="referrer_mobile" v-model="referrer_mobile"/>
+					</view>
+					
 					<view class="loginButton">
 						<button class="bg-gradual-red cu-btn block bg-orange margin-tb-sm lg" form-type="submit">
 							注册
@@ -42,6 +49,7 @@
 </template>
 
 <script>
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	const app = getApp()
 	export default {
 		//免费注册
@@ -62,6 +70,11 @@
 			}
 		},
 		methods: {
+			Back_index(){
+				uni.reLaunch({
+					url:"/pages/index/index"
+				})
+			},
 			//验证码
 			countdown(){
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
@@ -128,13 +141,13 @@
 			},
 			//提交
 			smslogin(e){
-				// console.log(e)
+				// console.log(this.code)
 				//获取里面的每一个值
 				let {username,password,Confirmpassword,phone,phonecode,referrer_mobile} = e.detail.value
 				//写两个正则
 				//来匹配账号
 				//账号必须为5到100位
-				let regname = /^[\W|\w]{5,20}$/;
+				let regname = /^[\W|\w]{2,20}$/;
 				//密码为6-16位 单词，数字加_
 				let userpassword = /^\w{6,16}$/;
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
@@ -150,7 +163,6 @@
 							password:password,
 							mobile_phone:phone,
 							code:phonecode,
-							referrer_sc:this.referrer_sc,
 							referrer_mobile:referrer_mobile,
 							referrer_sc:this.code
 						}
@@ -202,7 +214,7 @@
 																	key:"userbindstate",
 																	data:1,
 																	success() {
-																		uni.switchTab({
+																		uni.redirectTo({
 																			url:"/pages/index/index"
 																		})
 																	}
@@ -239,15 +251,47 @@
 								if(res.data.code==0){
 									// #ifdef APP-PLUS || H5
 										//app直接跳转不用绑定
-										uni.reLaunch({
-											url:"/pages/login/login"
+										//这里设置用户的登录状态码 为1loginstate
+										uni.setStorage({
+											key:"loginstate",
+											data:1
+										})
+										uni.setStorage({//这个是把tokey存起来
+											key:"bindtokey",
+											data:res.data.data.token
+										})
+										uni.setStorage({
+											key:"userbindstate",
+											data:1,
+											success() {
+												uni.reLaunch({
+													url:"/pages/index/index"
+												})
+											}
 										})
 									// #endif
 								}else{
 									uni.showToast({
 										title:"该用户已经注册过了",
-										icon:"none"
+										icon:"none",
+										success() {
+											uni.showModal({
+												title:"该用户已经注册过了",
+												content:"是否前往登录页面",
+												showCancel:true,
+												cancelText:"取消",
+												cancelColor:"#ff0000",
+												confirmText:"确认前往",
+												confirmColor:"#00ff00",
+												success(res) {
+													if(res.confirm){
+														uni.navigateBack()
+													}
+												}
+											})
+										}
 									})
+									
 								}
 							},
 							fail(){//请求失败的时候
@@ -285,6 +329,9 @@
 				_this.bool = true
 			}
 			//这是扫码进来的---结束
+		},
+		components:{
+			defaultbgblackcolorwhitebar
 		}
 	}
 </script>
@@ -309,9 +356,9 @@
 	    
 	   }
 	   overflow:hidden;
-	   text{
+	   .text_title{
 	    display:block;
-	    font-size: 40rpx;
+	    font-size:30rpx;
 	    margin-top:28rpx;
 	    &:last-child{
 	     font-size: 30rpx;
@@ -377,5 +424,12 @@
 		 color:red;
 		 background-color: #fff;
 		 border-radius: 13px;
+	 }
+	 .Back_index{
+		 display:flex;
+		 justify-content: space-between;
+		 align-items:flex-end;
+		 font-size: 24rpx;
+		 color:#999;
 	 }
 </style>

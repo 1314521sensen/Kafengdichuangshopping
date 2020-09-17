@@ -26,6 +26,8 @@
 			:producttype="producttype"
 			:code="code"
 		></bottomcar>
+		<suspensionshopcart></suspensionshopcart>
+		<shoreicon :pic="pic"></shoreicon>
 	</view>
 </template>
 
@@ -40,6 +42,10 @@
 	//引入活动组件
 	import NewactivityTop from "@/components/Details/NewactivityTop.vue"
 	import NewSpellgrouplist from "@/components/Details/NewSpellgrouplist.vue"
+	//引入 悬浮的购物车
+	import suspensionshopcart from  "@/components/actionbar/suspensionshopcart.vue"
+	import shoreicon from "@/components/actionbar/shoreicon.vue"
+	
 	const app = getApp()
 	export default {
 		data() {
@@ -73,7 +79,9 @@
 			imgs,
 			bottomcar,
 			NewactivityTop,
-			NewSpellgrouplist
+			NewSpellgrouplist,
+			suspensionshopcart,
+			shoreicon
 		},
 		onLoad(opction){
 			// couplebool
@@ -98,7 +106,7 @@
 				this.couplebool = "nt"
 			}
 			//判断是不是团长商品
-			if(parseInt(type)==3){
+			if(parseInt(type)==2){
 				this.producttype = type
 				this.code = opction.code
 			}else{
@@ -118,6 +126,7 @@
 						_this.good_delete = res.data.data.good_delete
 						_this.swiperList = JSON.parse(res.data.data.good_images?res.data.data.good_images:'[]')
 						_this.pic = res.data.data
+						// console.log(_this.pic,456)
 						_this.good_content_images = res.data.data.good_content_images
 						_this.storeid = res.data.data.store_id
 						//将轮播图的数据加入到缓存中
@@ -137,8 +146,8 @@
 								good_id:_this.gid,
 								good_name:_this.pic.good_title,
 								good_image:_this.pic.good_pic,
-								track_price:_this.pic.good_price
-							}
+								track_price:_this.pic.good_promotion_price
+							},
 						})
 						//到这
 						//商品规格开始
@@ -182,6 +191,7 @@
 		created() {
 			const _this = this
 			_this.$store.state.bannerbool = true
+			_this.$store.state.firstOrderbool = false
 		}
 	}
 </script>

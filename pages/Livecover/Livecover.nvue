@@ -1,7 +1,7 @@
 <template>
  <!-- #ifdef APP-PLUS -->
 	<view class="livecover" :style="{width:windowWidth+'px',height:windowHeight+'px'}">
-		<!--这是直播推流组件 -->
+		<!--这是直播推流组件 url-->
 		<live-pusher 
 			id='livePusher' 
 			ref="livePusher"
@@ -326,6 +326,7 @@
 						}
 					})
 				}else{
+					console.log("当前的状态为false")
 					uni.closeSocket({
 						code:1000,
 						success(reswebclose) {
@@ -448,7 +449,7 @@
 							url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
 							method:"POST",
 							data:{
-								token:_this.tokey,
+								token:restokey.data,
 								live_nick:_this.livenickname,
 								live_pic:_this.Backcoverurl,
 								live_desc:_this.Backinpvalue,
@@ -461,7 +462,7 @@
 										url:`${app.globalData.Requestpath}live_user/getLiveUserInfo`,
 										method:"POST",
 										data:{
-											token:_this.tokey
+											token:restokey.data
 										},
 										success(resinfo) {
 											// console.log(resinfo)
@@ -511,7 +512,18 @@
 																	_this.startDate = new Date().getTime()
 																},
 																fail(err){
-																	// console.log(err)
+																	_this.startDate = new Date().getTime()
+																	_this.$store.state.liveuserlist = []
+																	let endTime = new Date().getTime()
+																	//将毫秒转成秒
+																	let endtime = Math.floor((endTime - _this.startDate)/1000)
+																	//将秒转转成分钟
+																	let endmin = Number(endtime/60).toFixed(2)
+																	// console.log(parseFloat(Number(endtime/60)))
+																	uni.redirectTo({
+																		url:`/pages/Closeby/Closeby?livendmin=${endmin}&livenickname=${_this.livenickname}`
+																	})
+																	_this.liveflowbool = false
 																}
 															})
 														},3000)
@@ -730,6 +742,7 @@
 			
 			//监听服务端发来的消息
 			uni.onSocketMessage(function(res){
+				let colorarr = ["#ed5565","#da4453","#fc6451","#e9573f","#ffce54","#f6bb42","#a0d468","#8cc152","#48cfad","#37bc98","#4fc1e9","#3bafda","#5d9cec","#4a89dc","#ac92ec","#967adc","#ec87c0","#d770ad"];
 				// console.log(JSON.parse(res.data))
 				let messagetype = JSON.parse(res.data).message_type
 				if(messagetype=="zb_online"){
@@ -754,14 +767,92 @@
 						}
 					},130)
 				}else if(messagetype=="liveChatMessage"){
-					_this.$store.commit("livereceivemsg",{msg:JSON.parse(res.data).data})
+					let livetextcolor = colorarr[parseInt(Math.random()*colorarr.length)]
+					let obj = JSON.parse(res.data).data
+					obj.livetextcolor = livetextcolor
+					_this.$store.commit("livereceivemsg",{msg:obj})
+					
 				}else if(messagetype=="close_current_client"){
 					//当直播地址被占用的时候 直接让主播跳到关闭直播的页面
 					_this.$store.state.liveuserlist = []
 					uni.redirectTo({
 						url:"/pages/Closeby/Closeby"
 					})
+				}else if(messagetype=="uid_empty"){
+					uni.showModal({
+						title:"连接错误",
+						content:"请退出重进",
+						showCancel:false,
+						confirmText:"确定退出",
+						confirmColor:"#00ff00",
+						success(res){
+							if(_this.liveflowbool){
+								_this.Closeby()
+							}else{
+								uni.closeSocket({
+									code:1000,
+									success(reswebclose) {
+										// console.log(reswebclose)
+										_this.$store.state.liveuserlist = []
+										_this.liveflowbool = false
+										uni.navigateBack()
+									}
+								})
+							}
+						}
+					})
 				}
+			})
+			uni.onSocketClose(function(res){
+				// console.log(res)
+				let closeobj = {
+					type:'anchorCloseRoom',
+					uid:_this.uid,
+					name:_this.livenickname,
+					group:_this.room_id
+				}
+				uni.getStorage({
+					key:"bindtokey",
+					success(restokey) {
+						uni.request({
+							url:`${app.globalData.Requestpath}live_user/updateLiveUserInfo`,
+							method:"POST",
+							data:{
+								token:restokey.data,
+								live_nick:_this.livenickname,
+								live_pic:_this.Backcoverurl,
+								is_living:0
+							},
+							success(resclose) {
+								if(resclose.data.code==0){
+									_this.context.stop()
+									
+									_this.context.stopPreview({
+										success(e){
+											// console.log("关闭摄像头成功",JSON.stringify(e))
+										},
+										fail(err){
+											// console.log("关闭失败")
+										}
+									})
+									clearInterval(_this.webtime)
+									_this.$store.state.liveuserlist = []
+									let endTime = new Date().getTime()
+									//将毫秒转成秒
+									let endtime = Math.floor((endTime - _this.startDate)/1000)
+									//将秒转转成分钟
+									let endmin = Number(endtime/60).toFixed(2)
+									// console.log(parseFloat(Number(endtime/60)))
+									uni.redirectTo({
+										url:`/pages/Closeby/Closeby?livendmin=${endmin}&livenickname=${_this.livenickname}`
+									})
+									_this.liveflowbool = false
+								}
+							}
+						})
+					}
+				})
+				
 			})
 		},
 		//当用户不小心点击了系统的返回键的时候

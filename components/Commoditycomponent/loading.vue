@@ -1,7 +1,7 @@
 <template>
 	<view class="cu-load load-modal">
 		<!-- <view class="cuIcon-emojifill text-orange"></view> -->
-		<image src="/static/logo.png" mode="aspectFit"></image>
+		<image :src="this.$store.state.httpUrl+'logo.png'" mode="aspectFit"></image>
 		<view class="gray-text">加载中...</view>
 	</view>
 </template>

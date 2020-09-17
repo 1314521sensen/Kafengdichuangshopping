@@ -1,22 +1,46 @@
 <template>
 	<view>
-		<view class="PersonalMy-big-bg" v-show="openidbool">
-			<pageheight :statusBar="statusBar"></pageheight>
-			<!-- :amount="amount" :integral="integral" -->
-			<information :couponslistdata="couponslistdata" :tokey="tokey" :nickname="nickname" :images="images" :moneylist="moneylist"></information>
-			<orders></orders>
-			<!-- <setup></setup> -->
-			<view class="Mynine-cell-operation">
-				<view class="Mynine-cell-operation-midden">
-					<myScratchableLatex></myScratchableLatex>
-				</view>
+			<view class="PersonalMy-big-bg">
+				<scroll-view
+					:scroll-y="true" 
+					@scroll="scroll"
+					:scroll-top="scrollTop"
+					style="height: 100vh;"
+				>
+					<pageheight :statusBar="statusBar"></pageheight>
+					<!-- :amount="amount" :integral="integral" -->
+					<information 
+						:couponslistdata="couponslistdata" 
+						:tokey="tokey" 
+						:nickname="nickname" 
+						:images="images" 
+						:moneylist="moneylist"
+						:isvip="isvip"
+					></information>
+					<orders></orders>
+					<!-- <setup></setup> -->
+					<view class="Mynine-cell-operation">
+						<view class="Mynine-cell-operation-midden">
+							<myScratchableLatex></myScratchableLatex>
+						</view>
+					</view>
+					<Selectionrecommended></Selectionrecommended>
+					<view
+						class="Backtop" 
+						@tap="Backtop"
+						v-show="scrollTopbool"
+					>
+						<image 
+							:src="this.$store.state.httpUrl+'index/indexone/returntop.png'"
+							class="Backtopimage"
+						></image>
+					</view>
+				</scroll-view>
 			</view>
-			<Selectionrecommended></Selectionrecommended>
-		</view>
-		<!-- 绑定openid以后就不让他显示 -->
-		<!-- #ifdef APP-PLUS -->
-		<wxbindopen v-show="openidbool==false"></wxbindopen>
-		<!-- #endif -->
+			<!-- 绑定openid以后就不让他显示 -->
+			<!-- <wxbindopen v-show="openidbool==false"></wxbindopen> -->
+			<tabber></tabber>
+		
 	</view>
 	
 </template>
@@ -30,6 +54,8 @@
 	import Selectionrecommended from "@/components/myPersonal/Selectionrecommended.vue"
 	//引入绑定微信openid的组件
 	import wxbindopen from "@/components/myPersonal/wxbindopnid.vue"
+	//引入底部tabbber
+	import tabber from "@/components/indexcomponents/indextaber.vue"
 	const app = getApp();
 	export default {
 		//这是个人中心
@@ -63,7 +89,13 @@
 						url:"/pages/Allcoupons/allcoupons"
 					}
 				],
-				openidbool:true
+				openidbool:true,
+				isvip:false,
+				scrollTop: 0,
+				old: {
+					scrollTop: 0
+				},
+				scrollTopbool:false
 			}
 		},
 		components:{
@@ -71,13 +103,30 @@
 			myScratchableLatex,
 			information,
 			Selectionrecommended,
-			wxbindopen
+			wxbindopen,
+			tabber
 		},
 		onLoad(){
 			this.statusBar = app.globalData.statusBar
 		},
 		methods: {
-			
+			scroll(e) {
+				this.old.scrollTop = e.detail.scrollTop
+				if(e.detail.scrollTop>100){
+					this.scrollTopbool = true
+				}else{
+					this.scrollTopbool = false
+				}
+			},
+			Backtop(){
+				
+				this.scrollTop = this.old.scrollTop
+				// console.log(this.scrollTop)
+				this.$nextTick(function() {
+					this.scrollTop = 0
+					this.scrollTopbool = false
+				});
+			}
 		},
 		onShow(){
 			const _this = this
@@ -106,8 +155,10 @@
 								_this.images = `${_this.$store.state.imgyuming}${user_pic}`
 								_this.moneylist[0].num = user_amount
 								_this.moneylist[1].num = user_integral
-								//这里的缓存是不是会员
+								//判断是不是会员  如果是会员就让头像 v的图片显示
+								parseInt(is_member) ? _this.isvip = true : _this.isvip = false
 								
+								//这里的缓存是不是会员
 								uni.setStorage({
 									key:'beesVip',
 									data:is_member
@@ -172,9 +223,9 @@
 										}
 									}
 								})
-								// console.log(app_openid)
 								// #ifdef APP-PLUS
 								if(app_openid){
+									// console.log(222)
 									_this.openidbool = true
 									uni.setStorage({
 										key:"bindopenid",
@@ -182,6 +233,10 @@
 									})
 								}else{
 									_this.openidbool = false
+									uni.setStorage({
+										key:"bindopenid",
+										data:"",
+									})
 								}
 								// #endif
 							}else{
@@ -223,6 +278,14 @@
 					app.globalData.Detectionupdatetokey(err.data)
 				}
 			})
+		},
+		//当用户按手机系统返回的时候
+		onBackPress(opction){
+			if(opction.from=='backbutton'){
+				uni.redirectTo({
+					url:`/pages/index/index`
+				})
+			}
 		}
 	}
 </script>
@@ -238,6 +301,20 @@
 		.Mynine-cell-operation-midden{
 			width: 95%;
 			// box-shadow: 2rpx 0px 8rpx 6rpx #c6c6c6;
+		}
+	}
+	.Backtop{
+		position: fixed;
+		bottom:200rpx;
+		right:20rpx;
+		width: 70rpx;
+		height:70rpx;
+		background-color:rgba(0,0,0,.5);
+		border-radius:50%;
+		z-index:3;
+		.Backtopimage{
+			width: 100%;
+			height:100%;
 		}
 	}
 </style>

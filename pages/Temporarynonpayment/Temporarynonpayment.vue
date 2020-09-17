@@ -21,26 +21,45 @@
 					></xqcountdown> -->
 				</view>
 			</view>
-			<view class="contactWay">
-				<view class="locationImg">
-					<image src="/static/dingwei/dingwei.png" mode=""></image>
-				</view>
-				<view class="contactWaySite">
-					<view class="contact">
-						<text class="name-text">{{buyer_name}}</text>
-						<text class="phone">{{buyer_mobile}}</text>
+			<!-- 新修改的地址 -->
+			<view class="TheordercolumnBox">
+				<view class="Theordercolumn">
+					<view class="Theordercolumn_left">
+						<view class="message">
+							<text class="buyname">{{buyer_name}}</text>
+							<text class="dercophone">{{buyer_mobile}}</text>
+						</view>
+						<view class="dercolocationBox">
+							<view class="dercolocation-left">
+								<text>{{city}}&nbsp;{{rescitys}}&nbsp;{{area}}&nbsp;{{addressdetailed}}</text>
+							</view>
+						</view>
 					</view>
-					<view class="shippingAddress">
-						<text>{{city}}&nbsp;{{rescitys}}&nbsp;{{area}}</text>
+					<!-- 底下的颜色 -->
+					<view class="Theordercolumn_right">
+						<!-- <view v-for="(item,index) in 5" class="violet active">13</view> -->
+						 <view class="activeBox" v-for="(item,index) in 5" :key="index">
+							 <view class="violet active"></view>
+							<view class="white active"></view>
+							<view class="red active"></view>
+							<view class="white active"></view>
+						 </view>
+						 <view class="violet active"></view>
 					</view>
-				</view>
+				</view>	
 			</view>
-			<Selectexpresscompany v-if="orderstatus==3"></Selectexpresscompany>
+			
+			<!-- <Selectexpresscompany v-if="orderstatus==3"></Selectexpresscompany> -->
 			<deliveryaddressshow :order_sn="order_sn" :buyer_mobile="buyer_mobile" v-if="orderstatus>1"></deliveryaddressshow>
 			<view class="shoporder">
 				<view class="shoporder-list" v-for="(item,index) in this.$store.state.orderlistshop" :key='index'>
 					<view class="order-title">
-						<text>{{s_title}}</text>
+						<text 
+							:data-s_id="s_id"
+							@tap="linkstore"
+						>
+							{{s_title}}
+						</text>
 					</view>
 					<view 
 						class="shopgoosorder"
@@ -69,12 +88,16 @@
 					</view>
 					<view class="Deliverynote">
 						<view class="actual-payment">
-							<text class="actual-payment-text">实付款</text>
+							<text class="actual-payment-text">小计</text>
 							<text class="actual-payment-price" v-text="'￥'+((item.good_pay_price*item.good_num+Number(dispatch_price)).toFixed(2))"></text>
 						</view>
 					</view>
 				</view>
 				
+			</view>
+			<view class="total_price">
+				<text class="total_price_title">实付款</text>
+				<text class="total_price_text">{{total_price}}</text>
 			</view>
 			<!-- <orderInformation></orderInformation> -->
 			<view class="orderInformation">
@@ -98,11 +121,12 @@
 			</view>
 			<shopoderbottom 
 				:orderstatus="orderstatus" 
-				:price="price" 
+				:price="total_price" 
 				:order_sn="order_sn" 
 				:swift_no="swift_no"
 				:s_id='s_id' 
 				:s_name='s_name'
+				:addressCode="addressCode"
 			></shopoderbottom>
 		</scroll-view>
 	</view>
@@ -112,7 +136,7 @@
 	// import actionbar from "@/components/actionbar/actionbar.vue"
 	import shopoderbottom from "@/components/Temporarynonpayment/shopoderbottom.vue"
 	//引入查询物流的快递
-	import Selectexpresscompany from "@/components/Commoditycomponent/Selectexpresscompany.vue"
+	// import Selectexpresscompany from "@/components/Commoditycomponent/Selectexpresscompany.vue"
 	//引入跳到物流的页面
 	import deliveryaddressshow from "@/components/Temporarynonpayment/Deliveryaddressshow.vue"
 	//引入倒计时的插件
@@ -140,13 +164,16 @@
 				Completiontime:"",//订单的完成时间
 				s_id:0,
 				s_name:'',
-				imgpath:this.$store.state.imgyuming
+				imgpath:this.$store.state.imgyuming,
+				addressCode:0,
+				addressdetailed:"",
+				total_price:"",//订单总价
 			}
 		},
 		components:{
 			// actionbar,
 			shopoderbottom,
-			Selectexpresscompany,
+			// Selectexpresscompany,
 			deliveryaddressshow,
 			xqcountdown
 		},
@@ -156,6 +183,11 @@
 				  uni.navigateTo({
                    		url:`/pages/Details/Details?id=${g_id}&storeid=${s_id}`
                   })
+			},
+			linkstore(e){
+				uni.navigateTo({
+					url:`/pages/Store/store?storeid=${e.currentTarget.dataset.s_id}`
+				})
 			}
 		},
 		//后期说
@@ -196,8 +228,10 @@
 									sn:res.data.order_sn
 								},
 								success(resinfo) {
+									
 									_this.s_id = resinfo.data.data.store_id
 									_this.s_name = resinfo.data.data.store_name
+									_this.total_price = resinfo.data.data.price
 									// console.log(restokey.data)
 									// console.log(res.data.order_sn)
 									if(resinfo.data.code==0){
@@ -219,12 +253,17 @@
 												address_id:resinfo.data.data.address_id,
 											},
 											success(resaddinfo) {
-												console.log(resaddinfo,"收货地址详情")
+												// console.log(resaddinfo)
+												_this.addressCode = resaddinfo.data.code
+												// console.log(resaddinfo,"收货地址详情")
 												if(resaddinfo.data.code==0){
+													
 													//这是收货人的名称
-													_this.buyer_name = resaddinfo.data.data.street_number
+													_this.buyer_name = resaddinfo.data.data.consignee_name
 													//这是收货人的手机号
 													_this.buyer_mobile = resaddinfo.data.data.consignee_phone
+													//这是详细地址
+													_this.addressdetailed = resaddinfo.data.data.street_number
 													//通过收货地址的详情返回市区的id 分别取调用市区县
 													//这是市
 													uni.request({
@@ -295,37 +334,6 @@
 				}
 			}
 		}
-		.contactWay{
-			background-color: #FFFFFF;
-			padding: 30rpx 0;
-			display: flex;
-			justify-content: left;
-			.locationImg{
-				height: 100rpx;
-				width: 20%;
-				text-align: center;
-				line-height: 100rpx;
-				padding-top: 21rpx;
-				image{
-					width: 80rpx;
-					height: 66rpx;
-					
-				}
-			}
-			.contactWaySite{
-				display: flex;
-				flex-direction:column;
-				justify-content: space-between;
-				.contact{
-					.name-text{
-						font-size: 34rpx;
-					}
-					.phone{
-						color: #CCCCCC;
-					}
-				}
-			}
-		}
 		.scroll-view{
 			height: 93vh;
 			padding-bottom: 80rpx;
@@ -382,7 +390,7 @@
 							text-align: right;
 							.price{
 								font-size: 30rpx;
-								font-weight: bold;
+								// font-weight: bold;
 							}
 							
 						}
@@ -412,7 +420,7 @@
 						
 					}
 					.actual-payment-price{
-						color:#ff5300 ;
+						color:#000 ;
 					}
 				}
 			}
@@ -446,4 +454,97 @@
 			}
 		}
 	}
+	
+	
+	// 新地址
+		.TheordercolumnBox{
+				margin: 40rpx 0;
+				display: flex;
+				justify-content: center;
+				.Theordercolumn{
+					position: relative;
+					width:100%;
+					// height: 200rpx;
+					background-color: #fff;
+					border-radius: 20rpx;
+					overflow: hidden;
+					.Theordercolumn_left{
+						padding: 30rpx 30rpx 50rpx 30rpx;
+						.message{
+							font-size: 32rpx;
+							line-height: 50rpx;
+							font-weight: 500;
+						}
+						
+						.dercophone{
+							// margin-left: 20rpx;
+						}
+						.dercolocationBox{
+							display: flex;
+							flex-wrap: wrap;
+							flex-grow: 1;
+							margin-top: 25rpx;
+							line-height: 50rpx;
+							.dercolocation-left{
+								flex:1;
+								.dercolocation{
+									flex-grow: 5;
+									font-size: 38rpx;
+									font-weight: 600;	
+								}
+							}
+							.dercolocation-right{
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								width: 10%;
+								.cuIcon-right{
+									font-size: 36rpx;
+								}
+							}
+						}
+					}
+					.Theordercolumn_right{
+						position:absolute;
+						bottom: 0;
+						display: flex;
+						flex-wrap: wrap;
+						width: 100%;
+						// height: 16rpx;
+						padding-left: 10rpx;
+						// background-color: #7b6fe3;
+						.activeBox{
+							display: flex;
+							flex-wrap: nowrap;
+						}
+						.active{
+							transform:skewX(-10deg);
+							width: 35rpx;
+							height: 10rpx;
+						}
+						.violet{
+							background-color: #7b6fe3;
+						}
+						.white{
+							background-color: #fff;
+						}
+						.red{
+							background-color: #ef2950;
+						}
+					}
+				}
+			}
+			.total_price{
+				display:flex;
+				justify-content: space-between;
+				background-color:#fff;
+				padding:30rpx 20rpx;
+				margin-top: 20rpx;
+				font-weight: bold;
+				font-size: 30rpx;
+				color:#ff5300;
+				.total_price_text{
+					font-size: 35rpx;
+				}
+			}
 </style>

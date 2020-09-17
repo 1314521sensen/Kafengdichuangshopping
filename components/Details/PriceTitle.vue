@@ -27,7 +27,7 @@
 		<view v-if="this.$store.state.bannerbool">
 			<storecoupon :tokey="tokey" :storeid="storeid" msg="领卷" Whatcoupon="0" titlemsg="领劵"></storecoupon>
 			<service></service>
-			<member></member>
+			<member v-show="isvip==0"></member>
 			<bottompopup parameter="参数" :storeid="storeid" :gid="gid"></bottompopup>
 			<evaluation :gid="gid"></evaluation>
 		</view>
@@ -46,7 +46,8 @@
 			return {
 				unitprice:78.8,
 				title:"coconordic意大利 SC(Square circle)同款茶几简约现代北欧小茶桌",
-				imgyuming:`${this.$store.state.imgyuming}/uploads/app/image/`
+				imgyuming:`${this.$store.state.imgyuming}/uploads/app/image/`,
+				isvip:0,
 			}
 		},
 		methods:{
@@ -60,6 +61,16 @@
 			member
 		},
 		props:["pic","areaName","tokey","storeid","couplebool","good_state","good_verify","good_delete","gid","liveshopstate"],
+		created() {
+			const _this = this
+			//获取缓存中是不是会员 如果是会员 就不让立即开通显示
+			uni.getStorage({
+				key:"beesVip",
+				success(res) {
+					_this.isvip = res.data
+				}
+			})
+		}
 	}
 </script>
 

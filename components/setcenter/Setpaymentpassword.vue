@@ -1,9 +1,9 @@
 <template>
 	<view class="Setpaymentpassword">
 		<view class="orders">
-			<view class="orders-title-name">
+			<view class="orders-title-name" @tap="shezhipasswrd" data-target="setphonetan">
 				<text>{{message}}</text>
-				<view class="mintext"  @tap="shezhipasswrd" data-target="setphonetan">
+				<view class="mintext">
 					<text class="lg text-gray cuIcon-right"></text>
 				</view>
 			</view>

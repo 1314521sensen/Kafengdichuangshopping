@@ -29,8 +29,8 @@
 					if(this.num==0){
 						clearInterval(times)
 						this.num = 3
-						uni.switchTab({
-							url:"/pages/index/index"
+						uni.redirectTo({
+							url: `/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 						})
 					}
 				},1000)

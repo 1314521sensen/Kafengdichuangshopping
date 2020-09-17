@@ -111,20 +111,40 @@
 					checked: false,
 					hot: false,
 				}],
-				money:false
+				money:false,
+				openidbool:false
 			}
 		},
 		methods:{
 			showModal(e) {
 				// console.log(e)
-				this.modalName = e.currentTarget.dataset.target
-				let {moneybool} = e.currentTarget.dataset
-				if(parseInt(moneybool)){
-					this.moneybool = true
+				if(this.openidbool){
+					this.modalName = e.currentTarget.dataset.target
+					let {moneybool} = e.currentTarget.dataset
+					if(parseInt(moneybool)){
+						this.moneybool = true
+					}else{
+						this.moneybool = false
+					}
 				}else{
-					this.moneybool = false
+					//如果用户没有绑定openid的话 就让用户跳到绑定openid的页面
+					uni.showModal({
+						title:"请进行绑定微信",
+						content:"为了您的正常提现",
+						showCancel:true,
+						cancelText:"取消",
+						cancelColor:"#ff0000",
+						confirmText:"确定绑定",
+						confirmColor:"#00ff00",
+						success(res) {
+							if(res.confirm){
+								uni.navigateTo({
+									url:`/pages/WeChatLanding/WeChatLanding`
+								})
+							}
+						}
+					})
 				}
-				
 			},
 			hideModal(e) {
 				this.modalName = null  
@@ -248,6 +268,25 @@
 						}
 					}
 				})
+			},
+			//封装一个方法 判断用户有没有绑定微信openid
+			getopenid(){
+				const _this = this
+				//取出openid bindopenid /pages/WeChatLanding/WeChatLanding
+				//判断用户有没有绑定openid
+				uni.getStorage({
+					key:"bindopenid",
+					success(res){
+						if(res.data!==""){
+							_this.openidbool = true
+						}else{
+							_this.openidbool = false
+						}
+					},
+					fail(err){
+						_this.openidbool = false
+					}
+				})
 			}
 		},
 		onLoad(){
@@ -274,10 +313,14 @@
 					_this.getBalanceLogList(res.data,1)
 				}
 			})
+			_this.getopenid()
 		},
 		components:{
 			actionbar
 		},
+		onShow(){
+			this.getopenid()
+		}
 	}
 </script>
 

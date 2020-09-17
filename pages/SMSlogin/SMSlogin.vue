@@ -1,5 +1,6 @@
 <template>
 	<view class="smslogin">
+		<!-- <defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar> -->
 		<logobg></logobg>
 		<logintitle msg="验证码登录"></logintitle>
 		<view class="sms">
@@ -13,8 +14,13 @@
 					<button class='cu-btn bg-green shadow newcu-btn' @tap="countdown"  :disabled="bool">{{countdowntext}}</button>
 				</view>
 				<!-- #ifdef APP-PLUS -->
-					<view class="sms-and-registration">
-						<text @tap="registration">免费注册</text>
+					<view class="loginBox">
+						<view class="userslogin">
+							<text @tap="nameLogin" >用户名登录</text>
+						</view>
+						<view class="sms-and-registration">
+							<text @tap="registration">免费注册</text>
+						</view>
 					</view>
 				<!-- #endif -->
 				<view class="loginButton">
@@ -32,6 +38,7 @@
 	import logobg from "@/components/login/loginbg.vue";
 	//引入登录的标题
 	import logintitle from "@/components/login/logintitle.vue"
+	// import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	const app = getApp()
 	export default {
 		data() {//这是短信登录
@@ -44,6 +51,11 @@
 			}
 		},
 		methods: {
+			nameLogin(){
+				uni.navigateTo({
+					url: '/pages/login/login'
+				});
+			},
 			//点击验证码时
 			countdown(){//
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
@@ -158,7 +170,7 @@
 												data:resinfo.data.data
 											})
 											// #ifdef APP-PLUS || H5 || MP-WEIXIN
-												uni.switchTab({
+												uni.redirectTo({
 													url:"/pages/index/index"
 												})
 											// #endif
@@ -196,7 +208,8 @@
 		},
 		components:{
 			logobg,
-			logintitle
+			logintitle,
+			// defaultbgblackcolorwhitebar
 		}
 	}
 </script>
@@ -270,4 +283,15 @@
 	 		 background-color: #fff;
 	 		 border-radius: 13px;
 	 }
+	  .loginBox{
+	 		 display: flex;
+	 		 flex-grow: 12;
+	 		 .userslogin{
+	 			 padding-left: 25rpx;
+	 			 flex-grow: 3;
+	 			 font-size: 24rpx;
+	 			 color:#999;
+	 		 }
+	 	 }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<view class="Oneyuanbuybox" @tap="discount" v-show="bool">
+	<view class="Oneyuanbuybox" @tap="discount" v-show="bool && this.$store.state.is_newuser">
 		<view class="Oneyuanbuy">
 			<view class="cha">
 				<text @tap.stop="cha">×</text>

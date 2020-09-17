@@ -1,8 +1,9 @@
 <template>
 	<!-- 折扣页面 -->
 	<view class="discounts">
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 		<!-- 折扣背景图 -->
-		<view class="discountBack" :style="{'background-image':'url('+this.$store.state.httpUrl+'discount/discountbg.png'+')'}">
+		<view class="discountBack" :style="{'background-image':'url('+this.$store.state.httpUrl+'discount/discountbgs.png'+')'}">
 		
 		</view>
 		<!-- 分类 -->
@@ -50,14 +51,20 @@
 				</view>
 			</scroll-view>
 		</view>
+		<view class="loading" v-if="this.$store.state.firstOrderbool">
+			<view class="cu-load " :class="!isLoad?'loading':'over'"></view>
+		</view>
 	</view>
 </template>
 
 <script>
 	const app = getApp()
+	//这是引入头部的导航
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	export default {
 		data() {
 			return {
+				statusBar: 0,
 				loading: false,
 				// discountnavlist:[
 				// 	"精选",
@@ -98,6 +105,7 @@
 									uni.redirectTo({
 										url:`/pages/login/login`
 									})
+									_this.$store.state.firstOrderbool = true
 								}
 							}
 						})
@@ -126,25 +134,41 @@
 					limit:10
 				},
 				success(res) {
-					// console.log(res)
 					if(res.data.code==0){
 						_this.singleProductlist = res.data.data
 					}
 				}
 			})
+		},
+		components:{
+			defaultbgblackcolorwhitebar
 		}
 	}
 </script>
 
 <style lang="less" scoped>
+	.loading{
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		.cu-load{
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0,0,0,.3);
+			padding: 500rpx 100rpx;
+			font-size: 50rpx;
+		}
+	}
 	.discounts{
-		background-color: #951d0d;
+		background-color: #d70d33;
 		padding-bottom:40rpx;
 		.ImmediatelyGrab{
-			
+			padding: 0 16rpx;
 		}
 		.discountBack{
-			height:100vh;
+			height:68vh;
 			// background:url('/static/discount/discountbg.png') no-repeat;
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
@@ -209,6 +233,7 @@
 			padding-left: 10rpx;
 			margin-top: 50rpx;
 			height: 250rpx;
+			border-radius: 10rpx;
 			background-color: #FFFFFF;
 			// border-bottom: 35rpx solid #951d0d;
 			display: flex;

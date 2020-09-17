@@ -7,7 +7,7 @@
 		   </view>
 		   <!-- 商品列表 -->
 		   <view class="productlist">
-			   <scroll-view scroll-y="true">
+			   <!-- <scroll-view scroll-y="true"> -->
 				  <view class="scrollBox">
 					   <!-- 单个商品盒子 -->
 					   <view class="goods" 
@@ -35,7 +35,7 @@
 						   </view>
 					   </view>
 				    </view>
-			   </scroll-view>
+			   <!-- </scroll-view> -->
 		   </view>
 	   </view>
 	</view>  
@@ -88,6 +88,7 @@
 			  display: flex;
 			  flex-wrap: wrap;
 			  justify-content: space-between;
+			  // height:60vh;
 			  // 滚轮里面装的一个盒子
 			  .scrollBox{
 				  display: flex;

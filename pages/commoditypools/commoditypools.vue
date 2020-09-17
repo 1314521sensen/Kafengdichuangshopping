@@ -11,7 +11,14 @@
 			</view>
 		</view>
 		<scroll-view scroll-y="true" class="goods-list" @scrolltolower="scrolltolower">
-			<view class="goods" v-for="(item,index) in goodsList" :key='index'>
+			<view 
+				class="goods" 
+				v-for="(item,index) in goodsList" 
+				:key='index'
+				:data-gid="item.good_id"
+				:data-sid="item.store_id"
+				@tap="shopdefailts"
+			>
 				<view class="img">
 					<image :src="imgpath+item.good_pic" mode=""></image>
 				</view>
@@ -20,14 +27,18 @@
 						<text>{{item.good_title}}</text>
 					</view>
 					<view class="commission">
-						<text class="commission-text">佣金:</text><text class="commission-pic">￥{{item.live_cms}}</text>
+						<text class="commission-text">佣金:</text>
+						<!-- 如果类型为0的情况下 就取佣金值 为1的情况下 佣金值*价格/100 -->
+						<text class="commission-pic">
+							￥{{item.live_cms_type==0?item.live_cms:(Number((item.live_cms*item.good_price)/100).toFixed(2))}}
+						</text>
 					</view>
 					<view class="goods-price">
 						<view class="price">
 							<text v-text="'￥'+item.good_price"></text>
 						</view>
 						<view class="sold-out">
-							<button class="cu-btn round" @tap="soldout" :data-g_id="item.id">下架</button>
+							<button class="cu-btn round" @tap.stop="soldout" :data-g_id="item.id">下架</button>
 						</view>
 					</view>
 				</view>
@@ -50,6 +61,12 @@
 			};
 		},
 		methods:{
+			shopdefailts(e){
+				let {gid,sid} = e.currentTarget.dataset
+				uni.navigateTo({
+					url:`/pages/Details/Details?id=${gid}&storeid=${sid}`
+				})
+			},
 			liveshoplist(){
 				let _this = this
 					uni.getStorage({

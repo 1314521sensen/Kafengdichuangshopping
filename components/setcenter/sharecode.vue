@@ -1,9 +1,9 @@
 <template>
 	<view class="shareCode" v-if="code!==''">
 		<view class="orders">
-			<view class="orders-title-name">
-				<text>{{code}}</text>
-				<view class="mintext"  @tap="shezhipasswrd" data-target="setphonetan">
+			<view class="orders-title-name" @tap="shezhipasswrd" data-target="setphonetan">
+				<text>{{'邀请码:'+code}}</text>
+				<view class="mintext">
 					<text class="lg text-gray cuIcon-right"></text>
 				</view>
 			</view>

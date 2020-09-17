@@ -8,11 +8,11 @@
 					<view class="ordinaryreturnlogin" v-if="option=='radio0'">
 						<view class="cu-form-group margin-top">
 							<view class="title">旧密码</view>
-							<input placeholder="请输入原密码" name="ordinaryoldpssword"></input>
+							<input placeholder="请输入原密码" name="ordinaryoldpssword" type="password"></input>
 						</view>
 						<view class="cu-form-group margin-top">
 							<view class="title">新密码</view>
-							<input placeholder="请输入新密码" name="ordinaryonewspssword"></input>
+							<input placeholder="请输入新密码" name="ordinaryonewspssword" type="password"></input>
 						</view>
 					</view>
 					<!-- 下面是手机和邮箱的 -->
@@ -28,7 +28,7 @@
 						</view>
 						<view class="cu-form-group margin-top">
 							<view class="title">{{item.titlenewpassword}}</view>
-							<input :placeholder="item.titlenewpasswordplaceholder" :name="item.namenewspassword"></input>
+							<input :placeholder="item.titlenewpasswordplaceholder" :name="item.namenewspassword" type="password"></input>
 						</view>
 					</view>
 				</view>
@@ -175,7 +175,7 @@
 										url:"/components/setcenter/setcenter?title=userset&titlename=设置"
 									})
 								}else{
-									this.showToastkuang("旧密码不能与新密码一致")
+									this.showToastkuang("新密码不能与旧密码一致")
 								}
 							}
 						})

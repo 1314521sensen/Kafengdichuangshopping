@@ -14,6 +14,7 @@
 		<openlive  v-if="this.$store.state.verifyStatus == 2"></openlive>
 		<Entrancelivecommodities v-if="this.$store.state.verifyStatus == 2"></Entrancelivecommodities>
 		<sharecode></sharecode>
+		<regards></regards>
 	</view>
 </template>
 
@@ -40,6 +41,8 @@
 	import Entrancelivecommodities from "@/components/setcenter/Entrancelivecommodities.vue"
 	//引入用户的code码分享
 	import sharecode from "@/components/setcenter/sharecode.vue"
+	// 引入关于  
+	import regards from "@/components/setcenter/regards.vue"
 	export default{
 		data(){
 			return {
@@ -66,7 +69,8 @@
 			openlive,
 			Entrancelivecommodities,
 			sharecode,
-			actionbar
+			actionbar,
+			regards
 		},
 		onLoad(opction){
 			//用来检测是否订单那个页面跳转过来的
@@ -154,10 +158,14 @@
 					key:"bindopenid",
 					success(resopen){
 						// console.log(resopen)
-						_this.wxopenidbool = false
+						if(resopen.data){
+							_this.wxopenidbool = false
+						}else{
+							_this.wxopenidbool = true
+						}
 					},
 					fail(err){
-						// console.log(err)
+						console.log(err)
 						_this.wxopenidbool = true
 					}
 				})

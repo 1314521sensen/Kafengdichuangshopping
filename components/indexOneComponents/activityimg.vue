@@ -13,7 +13,7 @@
 		methods:{
 			linknew(){
 				uni.navigateTo({
-					url:'/pages/Newgift/Newgift'
+					url:`/pages/discount/discount`
 				})
 			}
 		}

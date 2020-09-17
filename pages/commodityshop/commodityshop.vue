@@ -88,6 +88,9 @@
 										</view>
 									</view>
 								</view>
+								<view class="scrollviewitem-info_commission">
+									<text>佣金 {{item.commission}}</text>
+								</view>
 							</view>
 						</view>
 					</scroll-view>
@@ -116,7 +119,7 @@
 						<view class="Promotioncommended_price">
 							<text class="text-red">¥{{item.good_promotion_price}}</text>
 							<view class="Promotioncommended_commission">
-								佣金<text class="text-red">{{item.commission}}</text>
+								佣金<text class="text-red Promotioncommended_commissiontext">{{item.commission}}</text>
 							</view>
 						</view>
 						<view 
@@ -464,6 +467,14 @@
 									}
 								}
 							}
+							.scrollviewitem-info_commission{
+								color:#fff;
+								text{
+									background-color:rgba(0,0,0,.5);
+									padding:6rpx 10rpx;
+									font-size: 24rpx;
+								}
+							}
 						}
 					}
 				}
@@ -522,6 +533,7 @@
 				color:#fff;
 				text{
 					margin-left:10rpx;
+					color:#fff;
 				}
 			}
 		}

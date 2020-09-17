@@ -36,10 +36,10 @@
 						name:'终身VIP',
 						value:3690
 					}
-				],
-				// vipbool:0,
+				], 
+				vipbool:0,
 				indexs:0,
-				// bool:true
+				// bool:true 
 				loadbool:false
 			}
 		},
@@ -69,7 +69,7 @@
 						total:total
 					},
 					success(resgetpay) {
-						console.log(resgetpay)
+						// console.log(resgetpay)
 						if(resgetpay.statusCode==200){
 							let {appid,noncestr,partnerid,prepayid,timestamp,sign,order_sn,bill,out_trade_no} = resgetpay.data
 							let packages = resgetpay.data.package
@@ -82,18 +82,18 @@
 								timestamp,
 								sign
 							}
-							console.log(payobj)
+							// console.log(payobj)
 							uni.requestPayment({
 								provider:'wxpay',
 								orderInfo:payobj,
 								success(res) {
-									console.log("支付成功")
+									// console.log("支付成功")
 									
 									//只要支付成功的时候  就申请团长
 									uni.getStorage({
 										key:"bindtokey",
 										success(restokey) {
-											console.log(out_trade_no,restokey.data)
+											// console.log(out_trade_no,restokey.data,1111)
 											uni.request({
 												url:`${app.globalData.Requestpath}notify/wechatpaymember`,
 												method:"POST",
@@ -103,7 +103,7 @@
 													type:num
 												},
 												success(respaymember) {
-													console.log(respaymember)
+													// console.log(respaymember,222222)
 													if(respaymember.data.code==0){
 														//开通会员
 														uni.request({
@@ -114,7 +114,25 @@
 																type:num
 															},
 															success(res){
+																// console.log(res)
 																if(res.data.code==0){
+																	uni.getStorage({
+																		key:"bindtokey",
+																		success(restokeys) {
+																			// console.log(restokeys.data)
+																			uni.request({
+																				url:`${app.globalData.Requestpath}CmsSettlement/getcommission`,
+																				method:"POST",
+																				data:{
+																					token:restokeys.data
+																				},
+																				success(res) {
+																					// console.log(restokey.data,"token")
+																					// console.log(res,99999)
+																				},
+																			})
+																			}
+																		})
 																	//这是申请团长
 																	if(_this.field=="groupinformation"){
 																		uni.request({
@@ -148,6 +166,9 @@
 																			}
 																		})
 																	}
+																	//接着 分配佣金接口
+																	// console.log(restokey.data,5555)
+																	
 																}
 															}
 														})
@@ -167,9 +188,10 @@
 			},
 			close(){
 				// this.bool = false
-				uni.switchTab({
-					url: '/pages/PersonalMy/PersonalMy'
-				});
+				// uni.redirectTo({
+				// 	url: '/pages/PersonalMy/PersonalMy'
+				// });
+				uni.navigateBack()
 			}
 		},
 		created() {

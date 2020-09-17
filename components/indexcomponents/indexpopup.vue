@@ -45,13 +45,19 @@
 				this.$store.state.indexpopupbool = false
 				uni.setStorage({
 					key:'indexpopupbool',
-					data:false
+					data:false,
+					success() {
+						uni.showTabBar()
+					}
 				}) 
 			},
 			disagree(){
 				plus.runtime.quit();
 			},
-		}
+		},
+		// created() {
+		// 	uni.hideTabBar()
+		// }
 	}
 </script>
 
@@ -67,7 +73,6 @@
 		padding: 200rpx 100rpx ;
 		.popup{
 			width: 100%;
-			height: 90%;
 			background-color: #FFFFFF;
 			border-radius: 20rpx;
 			overflow: hidden;

@@ -188,7 +188,6 @@
 			//封装一个共用的提交评价
 			plicestarevaluation(getimglist){
 				const _this = this
-				// console.log(_this.tokey,_this.bianhao,_this.gid,_this.topvalue,_this.attitudevaluevalue,_this.Logisticsvalue,_this.neirongtext)
 				//  开始对商品评价
 					uni.request({
 						url:`${app.globalData.Requestpath}order/orderGoodEvaluation`,
@@ -204,7 +203,6 @@
 							e_pic:getimglist
 						},
 						success(res) {
-							console.log(res)
 							if(res.data.code==0){
 								//请求成功跳到评价的页面
 								_this.$store.commit("getevaluationlist",{url:'order/getConfirmPayOrderList',pages:1})
@@ -262,7 +260,7 @@
 		onLoad(oipction) {
 			const _this = this
 			this.bianhao = atob(oipction.ordersnbianhao)//这是定单编号
-			this.gid = atob(oipction.shopgooid)//这是商品id
+			this.gid = oipction.shopgooid//这是商品id shopgooid
 			this.img = oipction.img
 			this.goodname = oipction.goodname
 			this.yuming = app.globalData.imgyuming

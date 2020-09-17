@@ -52,7 +52,7 @@
 		},
 		methods: {
 			earnpoints(){
-				uni.switchTab({
+				uni.redirectTo({
 					url:`/pages/index/index`
 				})
 			},
@@ -116,6 +116,7 @@
 		width: 100%;
 	}
 	.integra-img{
+		border-radius: 30rpx;
 		background-size: 100% 100%;
 		height: 260rpx;
 		width: 90%;

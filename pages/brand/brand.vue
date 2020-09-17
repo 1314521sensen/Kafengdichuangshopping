@@ -1,6 +1,7 @@
 <template>
 	<!-- 品牌专场 -->
 	<scroll-view class="brand" :style="{'padding-top':statusBar+20+'rpx'}" :scroll-y="true" @scrolltolower="scrolltolower">
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 		<!-- 导航 -->
 		<view class="brand_nav">
 			<view class="Specialspecial">品牌专场</view>
@@ -34,7 +35,7 @@
 					</view>
 					<view class="particular">
 						<view class="genre">{{item.good_title}}</view>
-						<view class="Howmany">{{'¥'+item.good_price}}</view>
+						<view class="Howmany">{{'¥'+item.good_promotion_price}}</view>
 					</view>
 				</view>
 			</view>
@@ -46,7 +47,7 @@
 
 <script>  
 	import digitallist from "@/components/brand/digitallist.vue"
-	
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	const app = getApp()
 	export default {
 		data() {
@@ -71,7 +72,8 @@
 			}
 		},
 		components:{
-			digitallist
+			digitallist,
+			defaultbgblackcolorwhitebar
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
@@ -85,13 +87,16 @@
 					limit:4
 				},
 				success(res) {
-					// console.log(res)
+					// console.log(res,'')
 					if(res.data.code==0){
 						_this.heeledpumpsListBox = res.data.data.list
 					}
 				}
 			})
-		}
+		},
+		destroyed(){
+		   this.$store.state.Brandpage = 1
+		  }
 	}
 </script>
 

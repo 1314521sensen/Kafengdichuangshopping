@@ -4,11 +4,11 @@
 		<!-- <view class="allcoupons"> -->
 			<actionbar url="/pages/PersonalMy/PersonalMy" message="优惠券"></actionbar>
 			<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
-				<view class="nav-text">
+				<!-- <view class="nav-text">
 					<view class="cu-item" :class="index==TabCur?'nav-bg text-red cur':''" v-for="(item,index) in coupons" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
 						{{item}}
 					</view>
-				</view>
+				</view> -->
 				<!--  v-if="items==coupons[TabCur]" :couponslist="couponslist" -->
 			<securitiesbottom @storeIsStillAndPlatform="storeIsStillAndPlatform" :TabCur="TabCur" :bottomindex="bottomindex"></securitiesbottom>
 			</scroll-view>

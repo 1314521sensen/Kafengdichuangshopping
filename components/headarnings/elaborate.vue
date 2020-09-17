@@ -38,7 +38,7 @@
 					// },
 					{
 						urls:`${this.$store.state.httpUrl}headearning/withdrawal.png`,
-						parText:"提现"
+						parText:"佣金提现"
 					}	
 				]
 			}

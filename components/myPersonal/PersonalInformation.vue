@@ -3,13 +3,19 @@
 		<view class="Personal-bg">
 			<view class="Personal-top">
 				<view class="Personaladdlogin">
-					<view class="Personal">
+					<view class="Personal"  @tap="jumppersonal">
 						<view class="head-portrait">
 							<image :src="images"></image>
+							<view class="isVip" v-show="isvip">
+								<image 
+									:src="imgpath+'my/orders/Vip.png'" 
+									class="vipimg"
+								></image>
+							</view>
 						</view>
 						<view class="head-information">
 							<text>{{nickname}}</text>
-							<text class="Personalhomepagebtn" @tap="jumppersonal">个人主页</text>
+							<text class="Personalhomepagebtn">个人主页</text>
 						</view>
 					</view>
 					<!-- 新增加的登录退出 -->
@@ -37,7 +43,7 @@
 	export default{
 		data(){
 			return {
-				
+				imgpath:this.$store.state.httpUrl
 			}
 		},
 		methods:{
@@ -89,7 +95,7 @@
 		components:{
 			usermoney
 		},
-		props:["tokey","images","nickname","moneylist"]
+		props:["tokey","images","nickname","moneylist","isvip"]
 	}
 </script>
 
@@ -116,6 +122,7 @@
 						display:flex;
 						align-items: center;
 						.head-portrait{
+							position: relative;
 							width: 120rpx;
 							height:120rpx;
 							// background-color:yellow;
@@ -124,6 +131,18 @@
 								width: 100%;
 								height:100%;
 								border-radius:50%;
+							}
+							.isVip{
+								position: absolute;
+								bottom:-20rpx;
+								right:0;
+								width: 50rpx;
+								height:50rpx;
+								// background-color:green;
+								.vipimg{
+									width: 100%;
+									height:100%;
+								}
 							}
 						}
 						.head-information{

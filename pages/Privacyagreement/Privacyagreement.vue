@@ -1,5 +1,6 @@
 <template>
 	<view class="loginAgreement" :style="{'padding-top':statusBar+20+'rpx'}">
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 		<text class="loginAgreementText">
 			<text class="loginagreementTitle">惠播客隐私协议</text>
 		尊敬的惠播客用户：我们对《惠播客隐私政策》进行了更新。此版本《惠播客隐私政策》的更新主要集中在优化注销流程，取消原申请注销后48小时审核，变更为实时注销。
@@ -235,6 +236,7 @@
 
 <script>
 	const app = getApp()
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	export default{
 		data(){
 			return {
@@ -243,6 +245,9 @@
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar
+		},
+		components:{
+			defaultbgblackcolorwhitebar
 		}
 	}
 </script>

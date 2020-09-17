@@ -1,5 +1,6 @@
 <template>
 	<view class="CustomerBox" :style="{'padding-top':statusBar+'px'}">
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 		<scroll-view class="cu-chat" :scroll-y="true" :scroll-top="scrollTop" :class="bool?'cu-chatActive':'cu-chatActivea'" @scrolltoupper="pullUp">
 			<!-- 连接客服的按钮 -->
 			<view class="customerservice" @tap="reconnection" v-show="this.$store.state.isconnectserver">
@@ -114,9 +115,9 @@
 				<!-- <view class="date">2018年3月23日 13:23</view> -->
 			</view>
 			<!-- 链接状态 -->
-			<!-- <view class="messagejudge">
+			<view class="messagejudge">
 			    <text>{{this.$store.state.linkstate}}</text> 
-			</view> -->
+			</view>
 			
 			<!-- <view class="cu-info round">对方撤回一条消息!</view> -->
 			<!-- <view class="cu-item">
@@ -250,6 +251,7 @@
 </template>
 
 <script>
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	const app = getApp()
 	//这是客服
 	export default {
@@ -469,7 +471,7 @@
 							success(resimg){
 								
 								let resimgparse = JSON.parse(resimg.data)
-								console.log(resimgparse)
+								// console.log(resimgparse)
 								if(resimgparse.code==0){
 									// 现在图片 是老服务器才能实现 
 									_this.$store.commit("Customersendmsg",{textvalue:`<image style='width:80px;' src='${"http://hbk.huiboke.com"+resimgparse.data.src}'></image>`})
@@ -542,6 +544,7 @@
 			//当用户已进入页面的时候  在缓存中 取值如果没有  就让键盘自动弹出来  获取用户的键盘的高度 
 		},
 		created() {
+			// console.log(111)
 			const _this = this
 			//获取系统的信息
 			uni.getSystemInfo({
@@ -571,11 +574,42 @@
 		},
 		//销毁前
 		beforeDestroy(){
-			console.log(1111)
+			// console.log(1111)
 			this.$store.commit("soketclose")
 			this.$store.state.chatlist = []
 			this.$store.state.Customersendmsglist = []
 			this.$store.state.chatpages = 0
+		},
+		components:{
+			defaultbgblackcolorwhitebar
+		},
+		//当页面
+		onHide(){
+			// console.log(111)
+			//先清除前面的定时器
+			this.$store.commit("hiendsocket")
+		},
+		onUnload(){
+			//如果用户在加入到后台的时候 sokettime不为空的时候 
+			if(this.$store.state.sokettime!==null){
+				clearInterval(this.$store.state.hiensoketime)
+				this.$store.commit("soketclose")
+			}else{
+				this.$store.commit("soketclose")
+			}
+			// console.log(222,"页面卸载")
+			// this.$store.commit("soketclose")
+			this.$store.state.chatlist = []
+			this.$store.state.Customersendmsglist = []
+			this.$store.state.chatpages = 0
+		},
+		onShow(){
+			// console.log("页面显示",this.$store.state.hiensoketime)
+			if(this.$store.state.sokettime!==null){
+				// console.log("不等于null")
+				clearInterval(this.$store.state.hiensoketime)
+				this.$store.commit("ContinuousSendPing")
+			}
 		}
 	}
 </script>

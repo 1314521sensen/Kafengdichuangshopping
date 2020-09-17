@@ -1,14 +1,15 @@
 <template>
 	<view class="address">
 		<pageheight :statusBar="statusBar"></pageheight>
+		<actionbar :message="messageTit"></actionbar>
 		<view class="from">
-			<view class="cu-form-group margin-top">
-				<view class="title">姓名</view>
-				<input v-model="value1" placeholder="姓名" name="input"></input>
-			</view>
 			<view class="cu-form-group">
+				<view class="title">收货人</view>
+				<input v-model="value1" placeholder="收货人姓名" name="input"></input>
+			</view>
+			<view class="cu-form-group borderadd">
 				<view class="title">手机号码</view>
-				<input v-model="value2" placeholder="手机号" name="input"></input>
+				<input v-model="value2" placeholder="收货人手机号" name="input"></input>
 				<view class="cu-capsule radius">
 					<view class='cu-tag bg-blue '>
 						+86
@@ -19,36 +20,54 @@
 				</view>
 			</view>
 			<!-- <view class="cu-form-group" @tap="Addressselection"> -->
-				<areaselection @selectiondata="selectiondata" message="收货地址"></areaselection>
+			<areaselection 
+				@selectiondata="selectiondata" 
+				message="所在地区" 
+				style="margin-top:0;border-bottom:2rpx solid #f2f2f2;"
+			></areaselection>
 			<!-- </view> -->
-			<view class="cu-form-group">
+			<view class="cu-form-group borderadd">
 				<view class="title">详细地址</view>
-				<input v-model="value4" placeholder="请输入详细地址" name="input"></input>
+				<input v-model="value4" placeholder="街道、楼牌号等" name="input"></input>
+			</view>
+			<view class="cu-form-group addresdefault">
+				<view class="addresdefault-left">
+					<view class="title addres-title">设置默认地址</view>
+					<view class="addres-remind">提醒:每次下单会默认推荐使用该地址</view>
+				</view>
+				<view class="addresdefault-right">
+					<switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch>
+				</view>
 			</view>
 		</view>
 		<view class="confirm-box">
 			<view class="confirm">
 				<view class="cu-bar btn-group">
-					<button class="cu-btn bg-red shadow-blur round" @tap="Addresscancel">取消</button>
-					<button class="cu-btn bg-green shadow-blur round" @tap="submits">保存</button>
+					<button 
+						class="cu-btn bg-green shadow-blur round" 
+						@tap="submits"
+						style="max-width:90%;background-color: #fa2342;"
+					>保存</button>
 				</view>
 			</view>
 		</view>
-		
 	</view>
 </template>
 
 <script>
 	import areaselection from "@/components/actionbar/areaselection.vue"
+	import actionbar from "@/components/actionbar/actionbar.vue"
 	const app = getApp();
 	export default{
 		data(){
 			return {
+				messageTit:'新增收货人',
 				show: false,
 				value1:"",
 				value2:"",
 				value3:"",
 				value4:"",
+				value6:"",
 				statusBar:0,
 				selectiondatalist:[],
 				tokey:0,
@@ -66,11 +85,15 @@
 				goodtitle:"",
 				storeid:"",
 				freight:"",
-				spec_id:0
+				spec_id:0,
+				switchA: false,
 			}
 		},
 		methods:{
-			
+			SwitchA(e) {
+				
+				this.switchA = e.detail.value
+			},
 			// Addressselection(){
 			// 	this.show = true
 			// },
@@ -96,7 +119,7 @@
 								postal_code:"",//这到明天需要改
 								consignee_name:this.value1,
 								consignee_phone:this.value2,
-								is_default:0
+								is_default:this.switchA?1:0
 							},
 							success(res) {
 								// console.log(res)
@@ -105,15 +128,15 @@
 									//pages/addressTo/addressTo?title=收货地址
 									// console.log(_this.way)
 									if(_this.way==1){
-										uni.navigateTo({
+										uni.redirectTo({
 											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}&freight=${_this.freight}`
 										})
 									}else if(_this.way==2){
-										uni.navigateTo({
+										uni.redirectTo({
 											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}&freight=${_this.freight}&spec_id=${_this.spec_id}`
 										})
 									}else{
-										uni.navigateTo({
+										uni.redirectTo({
 											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}`
 										})
 									}
@@ -134,20 +157,20 @@
 								postal_code:"",//这到明天需要改
 								consignee_name:this.value1,
 								consignee_phone:this.value2,
-								is_default:0
+								is_default:this.switchA?1:0
 							},
 							success(res) {
 								if(res.data.code==0){
 									if(_this.way==1){
-										uni.navigateTo({
+										uni.redirectTo({
 											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&cids=${_this.cids}&storeid=${_this.storeid}&freight=${_this.freight}`
 										})
 									}else if(_this.way==2){
-										uni.navigateTo({
+										uni.redirectTo({
 											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}&gid=${_this.gid}&specname=${_this.specname}&num=${_this.num}&way=${_this.way}&img=${_this.img}&storename=${_this.storename}&price=${_this.price}&goodtitle=${_this.goodtitle}&storeid=${_this.storeid}&freight=${_this.freight}&spec_id=${_this.spec_id}`
 										})
 									}else{
-										uni.navigateTo({
+										uni.redirectTo({
 											url:`/pages/addressTo/addressTo?title=${_this.returntitleparameter}`
 										})
 									}
@@ -183,12 +206,24 @@
 			areaselection,
 		},
 		onLoad(opction){
+			if(opction.amend == 1){
+				this.messageTit = "编辑收货人"
+			}
+
+			
 			this.returntitleparameter = opction.titleparameter
 			this.Addressoption = opction.title
 			this.address = opction.address
 			this.statusBar = app.globalData.statusBar
 			 this.value1 = opction.value1;
 			 this.value2 = opction.value2;
+			 this.value4 = opction.value4
+			 this.value6 = opction.value6
+			 if(parseInt(this.value6)){
+				 this.switchA = true
+			 }else{
+				 this.switchA = false
+			 }
 			//1是购物车过来的
 			//2是详情过来的
 			// console.log(opction.titleparameter)
@@ -229,7 +264,11 @@
 </script>
 
 <style lang="less" scoped>
+
+	
 	.address{
+		height:100vh;
+		background-color: #fff;
 		.confirm-box{
 			.confirm{
 				position: fixed;
@@ -249,5 +288,22 @@
 	}
 	.cu-bar.btn-group uni-button{
 		margin:0;
+	}
+	.borderadd{
+		border-bottom:2rpx solid #f2f2f2;
+	}
+	.addresdefault{
+		border-top:0;
+		border-bottom:2rpx solid #f2f2f2;
+		padding:20rpx 30rpx;
+		.addresdefault-left{
+			.addres-title{
+				font-size: 28rpx;
+				font-weight: bold;
+			}
+			.addres-remind{
+				font-size: 24rpx;
+			}
+		}
 	}
 </style>

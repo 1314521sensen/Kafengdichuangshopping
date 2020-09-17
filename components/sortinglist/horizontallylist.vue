@@ -5,7 +5,7 @@
 					<image :src="imgpath+item.good_pic"></image>
 					<view class="list-titile">
 						<view class="item-title">{{item.good_title}}</view>
-						<text class="horizontallyprice">¥{{item.good_price}}</text>
+						<text class="horizontallyprice">¥{{item.good_promotion_price}}</text>
 					</view>
 				</view>
 			</view>

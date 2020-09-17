@@ -2,11 +2,11 @@
 	<view class="setphone">
 		<view class="item">
 			<view class="orders">
-				<view class="orders-title-name">
+				<view class="orders-title-name" @tap="showModal" data-target="setphonetan">
 					<text>更换手机号</text>
-					<view class="mintext"  @tap="showModal" data-target="setphonetan">
+					<view class="mintext">
 						<text>进行更换</text>
-						<text class="lg text-gray cuIcon-right" ></text>
+						<text class="lg text-gray cuIcon-right"></text>
 					</view>
 				</view>
 				<form @submit="setregphone">

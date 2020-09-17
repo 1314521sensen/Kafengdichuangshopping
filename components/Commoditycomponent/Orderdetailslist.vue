@@ -71,7 +71,7 @@
 								},
 								success(res) {
 									if(res.data.code==0){//这后期需要更改
-										uni.switchTab({
+										uni.redirectTo({
 											url:"/pages/PersonalMy/PersonalMy"
 										})
 									}else{

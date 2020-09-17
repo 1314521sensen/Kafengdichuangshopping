@@ -24,8 +24,10 @@
 						<view class="loginButton">
 							<button class="cu-btn bg-gradual-red round register" form-type="submit">登录</button>
 							<!-- #ifdef APP-PLUS || H5 -->
-								<button class="cu-btn  round login-one" @tap="smslogin('/pages/Freeregistration/Freeregistration')">注册</button>	
+								<button class="cu-btn  round login-one" @tap="smslogin('/pages/Freeregistration/Freeregistration')">注册</button>
+								<button class="cu-btn  round login-one" @tap="smslogin('/pages/loginresetpassword/loginresetpassword')">忘记密码</button>
 							<!--#endif -->
+							
 						</view>
 					</form>
 				</view>
@@ -60,7 +62,7 @@
 			},
 			//用户没有登录的情况下 返回首页
 			returnindex(){
-				uni.switchTab({
+				uni.redirectTo({
 					url:"/pages/index/index"
 				})
 			},
@@ -94,7 +96,7 @@
 							// #endif
 							// #ifdef APP-PLUS || H5
 								this.toast("登录成功")
-								uni.switchTab({
+								uni.redirectTo({
 									url:"/pages/index/index"
 								})
 							// #endif

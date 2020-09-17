@@ -9,7 +9,7 @@
 					<!-- 这是背景图片 -->
 					<!-- <view class="shopping-title">这里是背景图片 先用颜色替代</view> -->
 					<!-- <button class="cu-btn bg-red margin-tb-sm lg" :style="{'display':display}">删除你不想要的商品</button> -->
-					<view class="cu-item" v-for="(item,index) in list" :key="index">
+					<view class="item_list"  v-for="(item,index) in list" :key="index">
 						<view class="cu-item-left" @tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)">
 							<!--为什么这么写 因为组件是相互引用的  再加上后台 返回的数据值可能不一样只能用三目去判断哪个有值 goods_image -->
 							<view class="cu-avatar round lg cu-item-left-bg"
@@ -22,9 +22,11 @@
 							<view class="content">
 								<!-- goods_name这个值和上面的值一样的返回的不一样 -->
 								<view 
-									class="text-grey" 
+									class="content_text"
 									@tap="linkDetails(item.good_id?item.good_id:item.goods_id,item.store_id)"
-								>{{item.good_title?item.good_title:item.goods_name}}</view>
+								>
+									<text class="text-grey">{{item.good_title?item.good_title:item.goods_name}}</text>
+								</view>
 								<view class="price">
 									￥{{item.good_price?item.good_price:(item.fav_price?item.fav_price:item.track_price)}}
 									<text 
@@ -38,6 +40,30 @@
 								</view>
 							</view>
 						</view>
+						<button
+							v-if="item.is_valid == 0"
+							:disabled="false"
+							class="addbtncart" 
+							@tap='addcart'
+							:data-sid="item.store_id"
+							:data-s_name="item.store_name"
+							:data-gid="item.goods_id"
+							:data-g_name="item.goods_name"
+							:data-g_pic=" item.goods_image"
+							data-g_type="nt"
+						>加入到购物车</button>
+						<button
+							v-if="item.is_valid == 1"
+							:disabled="true"
+							class="addbtncart" 
+							@tap='addcart'
+							:data-sid="item.store_id"
+							:data-s_name="item.store_name"
+							:data-gid="item.goods_id"
+							:data-g_name="item.goods_name"
+							:data-g_pic=" item.goods_image"
+							data-g_type="nt"
+						>已失效</button>
 					</view>
 				</view>
 			</view>
@@ -45,6 +71,7 @@
 		</scroll-view>
 		<Nopage v-show="list.length==0"></Nopage>
 		<loading v-if="loadingbool==false"></loading>
+		<suspensionshopcart v-show="loadingbool"></suspensionshopcart>
 	</view>
 </template>
 
@@ -57,6 +84,8 @@
 	import Nopage from "@/components/Nopage.vue"
 	//引入加载的插件
 	// import uniLoadMore from "@/components/uni-load-more/uni-load-more.vue"
+	//引入悬浮 购物车
+	import suspensionshopcart from "@/components/actionbar/suspensionshopcart.vue"
 	const app = getApp();
 	//这是我的收藏
 	export default{
@@ -82,6 +111,7 @@
 			// list,
 			Nopage,
 			// uniLoadMore
+			suspensionshopcart
 		},
 		methods:{
 			//封装一个请求获取用户收藏的信息
@@ -100,18 +130,21 @@
 								pageSize:_this.listnum
 							},
 							success(reslist){
+								// console.log(reslist)
 								if(reslist.data.code==0){
 									if(_this.listindex>1){
 										_this.list = _this.list.concat(reslist.data.data.list)
 									}else{
 										_this.list = reslist.data.data.list
 									}
+									// console.log(_this.list)
 									_this.Delete = false
 								}else{
 									if(_this.Delete){
 										_this.list = []
 									}
 								}
+								// console.log(_this.list)
 								_this.loadingbool = true
 							}
 						})
@@ -164,6 +197,41 @@
 						}
 					}
 				})
+			},
+			addcart(e){
+				let {
+					sid,
+					s_name,
+					gid,
+					g_name,
+					g_pic,
+					g_type
+				} = e.currentTarget.dataset
+				uni.getStorage({
+					key:'bindtokey',
+					success(restokey) {
+						uni.request({
+							url:`${app.globalData.Requestpath}shopping_cart/addShoppingCartInfo`,
+							method:"POST",
+							data:{
+								token:restokey.data,
+								sid,
+								s_name,
+								gid,
+								g_name,
+								g_pic, 
+								g_type
+							},
+							success(res) {
+								if(res.data.code==0){
+									return app.globalData.showtoastsame("添加成功")
+								}else{
+									return app.globalData.showtoastsame("添加失败")
+								}
+							}
+						})
+					}
+				})
 			}
 		},
 		
@@ -211,17 +279,15 @@
 	   // background-size: 100% 100%;
 	  }
 	  .cu-list{
-	   margin-bottom:20rpx;
-	   display: flex;
-	   flex-wrap:wrap;
-	   justify-content:space-between;
-	   padding: 0 20rpx;
-	   
-	   
+		   margin-bottom:20rpx;
+		   display: flex;
+		   flex-wrap:wrap;
+		   justify-content:space-between;
+		   padding: 0 20rpx;
 	  }
-	  .cu-list.menu-avatar>.cu-item{
+	  .cu-list.menu-avatar > .item_list{
 	   display:block;
-	   height:490rpx;
+	   // height:536rpx;
 	   width: 340rpx;
 	   // border: 2rpx solid red;
 	   margin-bottom: 18rpx;
@@ -258,7 +324,7 @@
 	     align-items: stretch !important;
 	     /* #ifdef APP-PLUS */
 	      .text-grey{
-	       line-height:28rpx;
+	       // line-height:26rpx;
 	       color:#000;
 	       font-size: 28rpx;
 	      display: -webkit-box;
@@ -289,7 +355,6 @@
 	       color:red;
 	       font-weight: bold;
 	       font-size: 30rpx;
-	      
 	      // margin-top:60rpx;
 	      justify-content: space-between;
 	      }
@@ -304,5 +369,15 @@
 		.cu-btn.lg{
 			line-height:80rpx;
 		}
+	}
+	.addbtncart{
+		font-size: 24rpx;
+		width: 50%;
+		margin:0;
+		padding:0;
+		background-color:red;
+		color:#fff;
+		// margin-left:10rpx;
+		margin:20rpx 0 20rpx 10rpx;
 	}
 </style>

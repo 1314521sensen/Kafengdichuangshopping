@@ -1,5 +1,5 @@
 <template>
-	<view class="cu-modal bottom-modal immediately">
+	<view class="cu-modal bottom-modal immediately" @tap="Shutdown">
 		<view class="cu-dialog">
 			<view class="immediately-top">
 				<view class="immediately-top-image">
@@ -8,7 +8,7 @@
 				<view class="immediately-top-describe">
 					<view class="price">
 						<text v-if="price!==''">¥{{price}}</text>
-						<text class="lg text-gray cuIcon-close" @tap="Shutdown"></text>
+						<text class="lg text-gray cuIcon-close" @tap.stop="Shutdown"></text>
 					</view>
 					<view class="describe" v-html="text">
 					</view>
@@ -24,7 +24,7 @@
 							<!-- v-for="(items,indexs) in item.spec_value" 
 									:key="indexs" :style="{'color':color}"  
 									@tap="choose(items,index,indexs,item)"items,index,indexs,item -->
-							<view class="item-specifications" @tap="choose" :data-specid="item.id" :data-index="index">
+							<view class="item-specifications" @tap.stop="choose" :data-specid="item.id" :data-index="index">
 								<text class="test" :class="index==indexs?'active':''">{{item.spec_value}}</text>  
 							</view>
 						</view>
@@ -35,15 +35,15 @@
 			<view class="numberof" v-if="bool==false">
 				<view>购买数量</view>
 				<view class="adder">
-					<button @tap="shopingnum(false)">-</button>
+					<button @tap.stop="shopingnum(false)">-</button>
 					<input type="text" v-model="num" disabled="true">
-					<button @tap="shopingnum(true)">+</button>
+					<button @tap.stop="shopingnum(true)">+</button>
 				</view>
 			</view>
 			<button 
 				class="cu-btn bg-red lg" 
 				:style="{'width':'100%','border-radius':'32rpx'}" 
-				@tap="buy">{{bool?'确定':'立即购买'}}</button>
+				@tap.stop="buy">{{bool?'确定':'立即购买'}}</button>
 		</view>
 	</view>
 </template>
@@ -62,6 +62,7 @@
 				price:"",
 				specid:0,
 				indexs:-1,
+				purchase_price:0,//佣金结算价
 			}
 		},
 		methods:{
@@ -91,10 +92,11 @@
 						spec_id:e.currentTarget.dataset.specid,
 					},
 					success:(res)=>{
-						// console.log(res)
+						// console.log(res.data.data.purchase_price)
 						if(res.data.code==0){
 							this.text = res.data.data.spec_value
 							this.price = res.data.data.spec_price
+							this.purchase_price = res.data.data.purchase_price
 						}
 					}
 				})
@@ -139,17 +141,19 @@
 						good_name:this.pic.good_title,
 						store_id:this.storeid,
 						good_freight:this.pic.good_freight,
-						good_type:this.couplebool
+						good_type:this.couplebool,
+						good_purchase_price:this.purchase_price
 					}
 					//如果是团长类型增加 属性值
-					if(parseInt(this.producttype)==3){
+					if(parseInt(this.producttype)==2){
 						//这个分享码后期是动态的
 						SpecificationShopdetails.share_code = this.code
-						SpecificationShopdetails.share_from = 3
+						SpecificationShopdetails.share_from = 2
 					}
 					// console.log(SpecificationShopdetails)
 					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
 				}
+				app.globalData.showtoastsame("请选择规格")
 				//这些先留着 为后期用
 				// if(this.selectedlist.length<this.immediatelylist.length){
 				// 	app.globalData.showtoastsame("请选择完整规格")

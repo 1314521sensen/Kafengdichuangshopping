@@ -13,16 +13,8 @@
 						</view>
 						<view class="search-form round inpufuoBox">
 							<text class="cuIcon-search"></text>
-							<input 
-								@focus="InputFocus" 
-								@blur="InputBlur" 
-								@input="Input" 
-								:adjust-position="false" 
-								type="text" 
-								placeholder="搜索商品" 
-								confirm-type="search"
-								v-model="keyword"
-							></input>
+							<input @focus="InputFocus" @blur="InputBlur" @input="Input" :adjust-position="false" type="text" placeholder="搜索商品"
+							 confirm-type="search" v-model="keyword"></input>
 						</view>
 						<view class="Icon_lgo" @tap="share">
 							<text class="lg text-gray cuIcon-forward"></text>
@@ -41,27 +33,11 @@
 							<view>
 								<view class="Storequality">
 									<text class="TheStoreCredit">店铺信用</text>
-									<uniRate
-										:size='14' 
-										color="#fff" 
-										active-color="#e96201" 
-										:margin="4" 
-										:disabled="true"
-										:max="5"
-										:value="storecredit"
-									></uniRate>
+									<uniRate :size='14' color="#fff" active-color="#e96201" :margin="4" :disabled="true" :max="5" :value="storecredit"></uniRate>
 								</view>
 								<view class="Storequality">
 									<text class="TheStoreCredit">综合评分</text>
-									<uniRate 
-										:size='14' 
-										color="#fff" 
-										active-color="#e96201" 
-										:margin="4" 
-										:disabled="true"
-										:max="5"
-										:value="score"
-									></uniRate>
+									<uniRate :size='14' color="#fff" active-color="#e96201" :margin="4" :disabled="true" :max="5" :value="score"></uniRate>
 								</view>
 							</view>
 							<view></view>
@@ -69,18 +45,19 @@
 					</view>
 					<!-- 右边的关注等 -->
 					<view class="store_presentationRight">
-						<view class="butt_on" @tap="attentionstore">
-							<text>+</text>
-							关注
+						<view class="button_pluse" @tap="attentionstore" :class="Focusbool?'butt_on_active':'butt_on'">
+							<text v-show="Focusbool==false">+</text>
+							{{Focustext}}
 						</view>
-						<view>{{fav_count}}人</view>
+						<!-- <view>{{fav_count}}人</view> -->
 					</view>
 				</view>
 				<!-- 分类 -->
 				<view class="store-nav">
 					<view>
 						<scroll-view scroll-x class="nav" scroll-with-animation :scroll-left="scrollLeft">
-							<view class="cu-item" :class="index==TabCur?' cur':''" v-for="(item,index) in navlist" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
+							<view class="cu-item" :class="index==TabCur?' cur':''" v-for="(item,index) in navlist" :key="index" @tap="tabSelect"
+							 :data-id="index" :data-items="item">
 								{{item}}
 							</view>
 						</scroll-view>
@@ -92,16 +69,8 @@
 				<view class="navshowitem" v-if="parseInt(TabCur)==0">
 					<!-- 直播间  小广告 -->
 					<!-- v-show="isWhetherlive"  -->
-					<adlet 
-						:live_url="live_url"
-						:livenick="livenick"
-						:roomid="roomid"
-						:livepic="livepic"
-						:uname="uname"
-						:uid="uid"
-						:livedesc="livedesc"
-						v-if="adletbool"
-					></adlet>
+					<adlet :live_url="live_url" :livenick="livenick" :roomid="roomid" :livepic="livepic" :uname="uname" :uid="uid"
+					 :livedesc="livedesc" v-if="adletbool"></adlet>
 					<!-- 新品活动xxx等  可能是轮播图 -->
 					<storebanner></storebanner>
 					<!-- 优惠券 -->
@@ -147,7 +116,7 @@
 	// 新品开业    
 	import storenewArrival from "@/components/store/storenewArrival.vue"
 	// 精品大卖
-	import boutiqueBarley  from "@/components/store/boutiquebarley.vue"
+	import boutiqueBarley from "@/components/store/boutiquebarley.vue"
 	import adlet from "@/components/store/adlet.vue"
 	import liveMerchant from "@/components/store/liveMerchant.vue"
 	// 引入nvue二维码弹框
@@ -157,46 +126,52 @@
 		//这是店铺    
 		data() {
 			return {
-				statusBar:0,
-				items:"推荐",
+				statusBar: 0,
+				items: "推荐",
 				// Month:0,
 				// day:0,
-				storeid:"",
-				Shopname:"",//店铺的名字
-				Whetherproprietary:false,//是否自营  
-				score:0,//分数
-				storecredit:"",
-				newslist:[],
-				horizontallylist:[],
-				bodylist:[],
-				itemss:"",
+				storeid: "",
+				Shopname: "", //店铺的名字
+				Whetherproprietary: false, //是否自营  
+				score: 0, //分数
+				storecredit: "",
+				newslist: [],
+				horizontallylist: [],
+				bodylist: [],
+				itemss: "",
 				TabCur: 0,
 				scrollLeft: 0,
-				navlist:["推荐","宝贝","新品","直播"],//"视频"
-				page:1,
-				fav_count:0,//关注的人数
-				store_logo:"",//店铺logo
-				storenewArrivallist:[],//新店开业数据
-				list:[],
-				bool:false,
-				keyword:"",
-				isWhetherlive:false,
-				live_url:"",
-				livenick:"",
-				roomid:"",
-				livepic:"",
-				uname:"",
-				uid:"",
-				livedesc:"",
-				loadingbool:false,
-				isCode:false,
-				userstoreid:0,//获取用户的店铺id和当前的店铺id进行比较
-				adletbool:false,
-				imgpath:this.$store.state.imgyuming
+				navlist: ["推荐", "宝贝", "新品", "直播"], //"视频"
+				page: 1,
+				fav_count: 0, //关注的人数
+				store_logo: "", //店铺logo
+				storenewArrivallist: [], //新店开业数据
+				list: [],
+				bool: false,
+				keyword: "",
+				isWhetherlive: false,
+				live_url: "",
+				livenick: "",
+				roomid: "",
+				livepic: "",
+				uname: "",
+				uid: "",
+				livedesc: "",
+				loadingbool: false,
+				isCode: false,
+				userstoreid: 0, //获取用户的店铺id和当前的店铺id进行比较
+				adletbool: false,
+				imgpath: this.$store.state.imgyuming,
+				Focustext: "关注",
+				Focusbool: false, //关注是true 没关注 是false
+				resbool: 0, //标识符
+				gid: 0, //商品ID
+				iswhether: true, //是否关注店铺
+				fav_id: 0 //店铺的唯一标识
 			}
 		},
 		methods: {
-			getChildnav(e){
+			getChildnav(e) {
 				// console.log(e)
 				this.items = e
 				// console.log(this.items)
@@ -208,53 +183,56 @@
 				this.InputBottom = 0
 			},
 			tabSelect(e) {
-				let {id,items} = e.currentTarget.dataset
+				let {
+					id,
+					items
+				} = e.currentTarget.dataset
 				this.itemss = items
 				// console.log(e.currentTarget.dataset)
 				this.TabCur = id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
-			returnshopdefailt(){
+			returnshopdefailt() {
 				uni.navigateBack()
 			},
 			//封装三个 请求不同的数据
-			getrecommended(page){
+			getrecommended(page) {
 				const _this = this
 				//获取推荐
 				uni.request({
-					url:`${app.globalData.Requestpath}store/getStoreRecommendGoodList`,
-					data:{
-						sid:_this.storeid,
-						page:page,
-						pageSize:10
+					url: `${app.globalData.Requestpath}store/getStoreRecommendGoodList`,
+					data: {
+						sid: _this.storeid,
+						page: page,
+						pageSize: 10
 					},
 					success(res) {
 						// console.log(res)
-						if(res.data.code==0){
-							if(_this.page>1){
+						if (res.data.code == 0) {
+							if (_this.page > 1) {
 								_this.horizontallylist = _this.horizontallylist.concat(res.data.data.list)
-							}else{
+							} else {
 								_this.horizontallylist = res.data.data.list
 							}
 						}
 					}
 				})
 			},
-			getbabylist(page){
+			getbabylist(page) {
 				const _this = this
 				//获取宝贝信息
 				uni.request({
-					url:`${app.globalData.Requestpath}store/getStoreGoodList`,
-					data:{
-						sid:_this.storeid,
-						page:page,
-						limit:10
+					url: `${app.globalData.Requestpath}store/getStoreGoodList`,
+					data: {
+						sid: _this.storeid,
+						page: page,
+						limit: 10
 					},
 					success(res) {
-						if(res.data.code==0){
-							if(_this.page>1){
+						if (res.data.code == 0) {
+							if (_this.page > 1) {
 								_this.bodylist = _this.bodylist.concat(res.data.data.list)
-							}else{
+							} else {
 								_this.bodylist = res.data.data.list
 							}
 						}
@@ -262,55 +240,112 @@
 				})
 			},
 			//用户滑到底部的时候触发
-			scrolltolower(){
+			scrolltolower() {
 				this.page++
 				this.getrecommended(this.page)
 				this.getbabylist(this.page)
 			},
-			attentionstore(){
+			attentionstore() {
 				const _this = this
-				uni.getStorage({
-					key:"bindtokey",
-					success(restokey) {
-						uni.request({
-							url:`${app.globalData.Requestpath}user/addStoreFavoriteInfo`,
-							method:"POST",
-							data:{
-								token:restokey.data,
-								store_id:_this.storeid,
-								store_name:_this.Shopname,
-								store_logo:_this.store_logo
-							},
-							success(res) {
-								if(res.data.code==0){
-									app.globalData.showtoastsame(res.data.msg)
-								}else{
-									app.globalData.Detectionupdatetokey(restokey.data)
-									app.globalData.showtoastsame(res.data.msg)
+				// console.log(_this.fav_id, '点击的时候')
+				if (_this.iswhether) {
+					uni.getStorage({
+						key: "bindtokey",
+						success(res) {
+							uni.request({
+								url: `${app.globalData.Requestpath}user/deleteFavoriteInfo`,
+								method: "POST",
+								data: {
+									token: res.data,
+									fav_id: _this.fav_id
+								},
+								success(res) {
+									if (res.data.code == 0) {
+										// console.log("取消关注")
+										_this.Focustext = "关注"
+										_this.iswhether = false
+										_this.Focusbool = false
+									} else {
+										// console.log("删除失败")
+										// console.log(_this.resbool)
+									}
+									// console.log(res)
 								}
-							}
-						})
-					}
-				})
-				
+							})
+						}
+					})
+				} else {
+					uni.getStorage({
+						key: "bindtokey",
+						success(res) {
+							uni.request({
+								url: `${app.globalData.Requestpath}user/addStoreFavoriteInfo`,
+								method: "POST",
+								data: {
+									token: res.data,
+									store_id: _this.storeid,
+									store_name: _this.Shopname,
+									store_logo: _this.store_logo
+								},
+								success(res) {
+									if (res.data.code == 0) {
+										// console.log(_this.storeid, _this.Shopname, _this.store_logo)
+										// console.log("再次光柱关注了")
+										_this.Focustext = "已关注"
+										_this.iswhether = true
+										_this.Focusbool = true
+									}
+								}
+							})
+						}
+					})
+				}
+				// const _this = this
+				// uni.getStorage({
+				// 	key:"bindtokey",
+				// 	success(restokey) {
+				// 		app.globalData.Detectionupdatetokey(restokey.data)
+				// 		uni.request({
+				// 			url:`${app.globalData.Requestpath}user/addStoreFavoriteInfo`,
+				// 			method:"POST",
+				// 			data:{
+				// 				token:restokey.data,
+				// 				store_id:_this.storeid,
+				// 				store_name:_this.Shopname,
+				// 				store_logo:_this.store_logo
+				// 			},
+				// 			success(res) {
+				// 				if(res.data.code==0){
+				// 					_this.Focustext = "已关注"
+				// 					_this.Focusbool = true
+				// 					app.globalData.showtoastsame(res.data.msg)
+				// 				}else{
+				// 					app.globalData.Detectionupdatetokey(restokey.data)
+				// 					app.globalData.showtoastsame(res.data.msg)
+				// 				}
+				// 			}
+				// 		})
+				// 	}
+				// })
+
 			},
-			share(){
+			share() {
 				this.isCode = true
 			},
-			cancel(){
+			cancel() {
 				this.isCode = false
 			},
-			Input(e){
+			Input(e) {
 				const _this = this
 				uni.request({
-					url:`${app.globalData.Requestpath}store/getStoreGoodList?sid=${_this.storeid}`,
-					data:{
-						g_name:_this.keyword
+					url: `${app.globalData.Requestpath}store/getStoreGoodList?sid=${_this.storeid}`,
+					data: {
+						g_name: _this.keyword
 					},
 					success(res) {
-						if(res.data.code==0){
+						if (res.data.code == 0) {
 							_this.bodylist = res.data.data.list
-						}else{
+						} else {
 							_this.bodylist = []
 						}
 					}
@@ -318,21 +353,55 @@
 				_this.TabCur = 1
 			},
 		},
-		onLoad(opction){
+		onLoad(opction) {
 			const _this = this
 			_this.storeid = opction.storeid
 			_this.statusBar = app.globalData.statusBar
-			// console.log(_this.Month,_this.day)
-			
+			//获取是否关注了店铺
+			//获取token  
+			// console.log(1111)
+			// uni.getStorage({
+			// 	key:"bindtokey",
+			// 	success(restokey) {
+
+			// 		uni.request({
+			// 			url:`${app.globalData.Requestpath}user/getStoreFavoriteInfo`,
+			// 			method:"POST",
+			// 			data:{
+			// 				token:restokey.data,
+			// 				id:_this.storeid
+			// 			},
+			// 			success(resbool) {
+			// 				if(resbool.data.code==0){
+			// 					_this.Focusbool = true
+			// 					_this.Focustext = "已关注"
+			// 				}else{
+			// 					_this.Focusbool = false
+			// 					_this.Focustext = "关注"
+			// 				}
+			// 			}
+			// 		})
+			// 	},
+			// })
+
 			uni.request({
-				url:`${app.globalData.Requestpath}store/getStoreInfo`,
-				data:{
-					sid:_this.storeid
+				url: `${app.globalData.Requestpath}store/getStoreInfo`,
+				data: {
+					sid: _this.storeid
 				},
 				success(res) {
 					// console.log(res)
-					if(res.data.code==0){
-						let {store_name,user_id,is_platform_store,store_servicecredit,store_credit,fav_count,store_logo,live_desc} = res.data.data
+					if (res.data.code == 0) {
+						let {
+							store_name,
+							user_id,
+							is_platform_store,
+							store_servicecredit,
+							store_credit,
+							fav_count,
+							store_logo,
+							live_desc
+						} = res.data.data
 						// console.log(user_id)
 						_this.store_logo = store_logo
 						_this.fav_count = fav_count
@@ -342,39 +411,46 @@
 						_this.livedesc = live_desc
 						_this.loadingbool = true
 						//判断是否自营
-						if(is_platform_store){
+						if (is_platform_store) {
 							_this.Whetherproprietary = true
-						}else{
+						} else {
 							_this.Whetherproprietary = false
 						}
 						//根据店铺id请求主播详情信息
 						uni.request({
-							url:`${app.globalData.Requestpath}live_user/getLiveUserInfoByUid`,
-							data:{
-								uid:user_id
+							url: `${app.globalData.Requestpath}live_user/getLiveUserInfoByUid`,
+							data: {
+								uid: user_id
 							},
 							success(res) {
 								// console.log(res)
-								if(res.data.code==0){
-									let {live_url,live_nick,room_id,live_pic,user_name,user_id,is_living} = res.data.data
+								if (res.data.code == 0) {
+									let {
+										live_url,
+										live_nick,
+										room_id,
+										live_pic,
+										user_name,
+										user_id,
+										is_living
+									} = res.data.data
 									_this.live_url = live_url
 									_this.livenick = live_nick
 									_this.roomid = room_id
 									_this.livepic = live_pic
 									_this.uname = user_name
 									_this.uid = user_id
-									if(parseInt(is_living)==1){
+									if (parseInt(is_living) == 1) {
 										_this.adletbool = true
-									}else{
+									} else {
 										_this.adletbool = false
 									}
-								}else{
+								} else {
 									_this.adletbool = false
 								}
 							}
 						})
 					}
-					
 				}
 			})
 			//获取推荐
@@ -383,10 +459,10 @@
 			// console.log(_this.storeid)
 			//获取商品的新品信息系
 			uni.request({
-				url:`${app.globalData.Requestpath}store/getNewStoreGoodList`,
-				data:{
-					sid:_this.storeid,
-					limit:10
+				url: `${app.globalData.Requestpath}store/getNewStoreGoodList`,
+				data: {
+					sid: _this.storeid,
+					limit: 10
 				},
 				success(res) {
 					// console.log(res)
@@ -395,19 +471,21 @@
 			})
 			//请求新店开业随机商品
 			uni.request({
-				url:`${app.globalData.Requestpath}store/getRandomStoreRecommendGoodList`,
-				data:{
-					sid:_this.storeid,
-					limit:10,
+				url: `${app.globalData.Requestpath}store/getRandomStoreRecommendGoodList`,
+				data: {
+					sid: _this.storeid,
+					limit: 10,
 				},
 				success(res) {
-					if(res.data.code==0){
+					if (res.data.code == 0) {
 						_this.storenewArrivallist = res.data.data
 					}
 				}
 			})
+
+
 		},
-		components:{
+		components: {
 			uniRate,
 			storerecommended,
 			storebady,
@@ -420,164 +498,255 @@
 			liveMerchant,
 			QRcodeA
 		},
-		created() {
+
+		beforeUpdate() {
 			const _this = this
-			//优惠券
 			uni.getStorage({
-				key:'bindtokey',
-				success:function(res){
+				key: "bindtokey",
+				success(res) {
 					uni.request({
-						url:`${app.globalData.Requestpath}activity/getStoreCouponTypeList`,
-						method:"POST",
-						data:{
-							token:res.data,
-							sid:_this.storeid,
+						url: `${app.globalData.Requestpath}user/getStoreFavoriteInfo`,
+						method: "POST",
+						data: {
+							token: res.data,
+							id: _this.storeid
 						},
 						success(res) {
-							if(res.data.code==0){
+							// console.log(res)
+							if (res.data.code == 0) {
+								_this.Focusbool = true
+								_this.Focustext = "已关注"
+								_this.iswhether = true
+								_this.fav_id = res.data.data.fav_id
+								// console.log(res.data.data.fav_id, "已经关注了")
+							} else {
+								_this.Focusbool = false
+								_this.iswhether = false
+								// console.log("未关注")
+							}
+						}
+					})
+				}
+			})
+		},
+		created() {
+			const _this = this
+			uni.getStorage({
+				key: "bindtokey",
+				success(res) {
+					uni.request({
+						url: `${app.globalData.Requestpath}user/getStoreFavoriteInfo`,
+						method: "POST",
+						data: {
+							token: res.data,
+							id: _this.storeid
+						},
+						success(res) {
+							// console.log(res)
+							if (res.data.code == 0) {
+								_this.Focusbool = true
+								_this.Focustext = "已关注"
+								_this.iswhether = true
+								_this.fav_id = res.data.data.fav_id
+							} else {
+								_this.Focusbool = false
+								_this.iswhether = false
+							}
+
+						}
+					})
+
+
+				}
+			})
+			//优惠券
+			uni.getStorage({
+				key: 'bindtokey',
+				success: function(res) {
+					uni.request({
+						url: `${app.globalData.Requestpath}activity/getStoreCouponTypeList`,
+						method: "POST",
+						data: {
+							token: res.data,
+							sid: _this.storeid,
+						},
+						success(res) {
+							if (res.data.code == 0) {
 								_this.list = res.data.data.list
 								_this.bool = true
-								
-							}else{
+
+							} else {
 								_this.bool = false
 							}
 						}
 					})
-					
+
 				}
 			})
 			//获取缓存中用户的店铺id
 			uni.getStorage({
-				key:"userstoreid",
+				key: "userstoreid",
 				success(resuserstore) {
 					_this.userstoreid = resuserstore.data
-					
+
 				},
-				fail(){
+				fail() {
 					_this.userstoreid = 0
 				}
 			})
 			//判断用户的店铺id和店铺的id是不是相等 不相等 就隐藏 相等就显示
-			let userstoreidbool = parseInt(_this.storeid)==parseInt(_this.userstoreid) ? true : false
-			if(!userstoreidbool){
+			let userstoreidbool = parseInt(_this.storeid) == parseInt(_this.userstoreid) ? true : false
+			if (!userstoreidbool) {
 				// console.log(111)
 				_this.navlist.pop()
 			}
-			
+
 		},
 	}
 </script>
 
 <style lang="less" scoped>
-	.cu-bar{
+	.cu-bar {
 		display: flex;
 		flex-grow: 12;
-		.action{
+
+		.action {
 			flex-grow: .1;
-			.action_Ico{
-				font-size: 50rpx;	
+
+			.action_Ico {
+				font-size: 50rpx;
 				font-weight: 100;
 			}
 		}
-		.inpufuoBox{
+
+		.inpufuoBox {
 			flex-grow: 15;
 		}
-		.Icon_lgo{
-			flex-grow:1;
+
+		.Icon_lgo {
+			flex-grow: 1;
 			font-size: 32rpx;
 		}
 	}
-	.store{
+
+	.store {
 		display: flex;
 		flex-wrap: wrap;
+		overflow: hidden;
+		height: 100vh;
+
 		// 头部的导航栏
-		.kepala{
+		.kepala {
 			flex: 1;
 			background-size: 100% 100%;
 			background-repeat: no-repeat;
-			.cuIcon-search{
+
+			.cuIcon-search {
 				font-size: 30rpx;
 			}
 		}
+
 		//店铺
-		.store_presentation{
+		.store_presentation {
 			display: flex;
 			padding: 50rpx 0 15rpx 0;
 			align-items: flex-end;
+
 			// background-color: red;
 			// 左边部分
-			.store_presentationLeft{
+			.store_presentationLeft {
 				width: 68%;
 				display: flex;
 				padding-left: 30rpx;
 				align-items: center;
-				.logo{
+
+				.logo {
 					width: 100rpx;
 					height: 100rpx;
 				}
-				.store_nameBox{
+
+				.store_nameBox {
 					padding-left: 20rpx;
-					.storeName_text{
+
+					.storeName_text {
 						// overflow:hidden;
 						color: #FFFFFF;
 						font-size: 32rpx;
 						font-weight: bold;
-						 // white-space:nowrap;
-						 // text-overflow:ellipsis;
+						// white-space:nowrap;
+						// text-overflow:ellipsis;
 					}
-					.Storequality{
+
+					.Storequality {
 						display: flex;
 						align-items: baseline;
 						color: #FFFFFF;
-						.TheStoreCredit{
+
+						.TheStoreCredit {
 							margin-top: 5rpx;
 							font-size: 24rpx;
 						}
 					}
 				}
-				
+
 			}
+
 			//右边部分   
-			.store_presentationRight{
+			.store_presentationRight {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
 				justify-content: center;
 				flex: 1;
 				margin: 30rpx 0 0 80rpx;
-			     color: #FFFFFF;
-			   .butt_on{
-				   line-height: 50rpx;
-				   text-align: center;
-				   width: 150rpx;
-				   height: 50rpx;
-				   background-color: #7baf31;  
-				   // border-radius: 20rpx;
-               }
+				color: #FFFFFF;
+
+				.butt_on {
+					background-color: #7baf31;
+					color: #fff;
+					// border-radius: 20rpx;
+				}
+
+				.button_pluse {
+					line-height: 50rpx;
+					text-align: center;
+					width: 150rpx;
+					height: 50rpx;
+				}
+
+				.butt_on_active {
+					background-color: #eee;
+					color: #999;
+				}
 			}
 		}
+
 		// 导航分类 
-		.store-nav{
-			background-color: rgba(0,0,0,.5);
+		.store-nav {
+			background-color: rgba(0, 0, 0, .5);
 			color: #FFFFFF;
 		}
-		.navshowitem{
+
+		.navshowitem {
 			width: 100%;
 			background-color: #fed9dc;
 		}
-		
+
 	}
-	.nav .cu-item.cur{
+
+	.nav .cu-item.cur {
 		height: 90rpx;
 		font-size: 40rpx;
 		transition: .5s;
 		color: #a7ee43;
-		border-bottom:10rpx solid;
+		border-bottom: 10rpx solid;
 	}
-	.nav .cu-item{
+
+	.nav .cu-item {
 		height: 86rpx;
 	}
-	.scroll-view{
-		height:70vh;
+
+	.scroll-view {
+		height: 71vh;
 	}
 </style>

@@ -2,8 +2,26 @@
 	<view class="sorting">
 		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
 			<view class="nav-text">
-				<view class="cu-item" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in list" :key="index" @tap="tabSelect" :data-id="index">
+				<view 
+					class="cu-item" 
+					:class="index==TabCur?'text-red cur':''" 
+					v-for="(item,index) in list" 
+					:key="index" 
+					@tap="tabSelect" 
+					:data-id="index"
+					v-show="index!=0 && index!=3"
+				>
 					{{item}}
+					<view class="icon" v-show="index==2">
+						<text 
+							class="lg text-gray cuIcon-triangleupfill icon_jian" 
+							:class="TabCur==2 && plice_bool?'active_red':''"
+						></text>
+						<text 
+							class="lg text-gray cuIcon-triangledownfill icon_jian"
+							:class="TabCur==2 && plice_bool==false?'active_red':''"
+						></text>
+					</view>
 				</view>
 			</view>
 		</scroll-view>
@@ -16,7 +34,7 @@
 	export default{
 		data(){
 			return {
-				TabCur: 0,
+				TabCur: 1,
 				scrollLeft: 0,
 				classxuan:"hiden",
 				list:[
@@ -39,7 +57,8 @@
 						one:"从高到低",
 						two:"从低到高"
 					}
-				]
+				],
+				plice_bool:false
 			}
 		},
 		methods: {
@@ -67,14 +86,21 @@
 
 					case 1:
 						//这是销量
-						this.sortinglistshop(0,0)
+						this.sortinglistshop(0,1)
 						// console.log("这是销量")
 						break;
 					
 					case 2:
 						//这是价格
-						this.sortinglistshop(1,0)
+						// this.sortinglistshop(1,0)
 						// console.log("这是2")
+						if(this.plice_bool){
+							this.plice_bool = false
+							this.sortinglistshop(1,1)
+						}else{
+							this.plice_bool = true
+							this.sortinglistshop(1,0)
+						}
 						break;
 					
 					case 3:
@@ -132,5 +158,32 @@
 				background-color: #fff;
 			}
 		}
+	}
+	.cu-item{
+		height:60rpx;
+		line-height:60rpx;
+		display:flex;
+		.icon{
+			display:flex;
+			flex-wrap: wrap;
+			align-items: center;
+			width: 30rpx;
+			height:60rpx;
+			// background-color:green;
+			.icon_jian{
+				display:block;
+				height:10rpx;
+				line-height:10rpx;
+				&:first-child{
+					margin-top:12rpx;
+				}
+				&:last-child{
+					margin-top:-18rpx;
+				}
+			}
+		}
+	}
+	.active_red{
+		color:#e54d42;
 	}
 </style>

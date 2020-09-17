@@ -1,6 +1,7 @@
 <template>
 	<view class="Liveplatformlist">
 		<pageheight :statusBar="statusBar"></pageheight>
+		<!-- <actionbar></actionbar> -->
 		<!-- <view class="Liveplatformlist-top-bg" :style="{'background-image':'url(/static/Liveplatformlist/bg.png)'}">
 			<pageheight :statusBar="statusBar"></pageheight>
 			<view class="region">
@@ -43,6 +44,9 @@
 		</view> -->
 		<scroll-view :scroll-y="true" @scrolltolower="scrolltolower" style="height:95vh;">
 			<view class="Livelist">
+				<view class="hint" v-if="livebool">
+					{{'暂无主播开播'}}
+				</view>
 				<view 
 					class="Livelist-item" 
 					:style="{'background-image':'url('+imgpath+item.live_pic+')'}"
@@ -53,12 +57,13 @@
 					:data-live_nick="item.live_nick"
 					:data-room_id="item.room_id"
 					:data-live_pic="item.live_pic"
+					:data-liveuid="item.user_id"
 				>
-					<view class="item-top item-plice">
-						<!-- <view class="watchimgs">
+					<!-- <view class="item-top item-plice">
+						 <view class="watchimgs">
 							<image src="/static/Liveplatformlist/liveicon.gif"></image>
 							<text class="watchtext">{{100}}人观看</text>
-						</view> -->
+						</view> 
 						<view class="watchimgs">
 							<view class="user_name">
 								<text>{{item.live_nick}}</text>
@@ -67,8 +72,8 @@
 								<text>{{item.room_id}}</text>
 							</view>
 						</view>
-					</view>
-					<view class="item-bottom item-plice">
+					</view> -->
+					<!-- <view class="item-bottom item-plice">
 						<view class="item-describe">
 							<view class="describe-top">
 								<view class="describe-top-imags">
@@ -87,15 +92,19 @@
 								<text class="describe-shopstore">{{item.shop_store_name}}</text>
 							</view>
 						</view>
-					</view>
+					</view> -->
 				</view>
 			</view>
 		</scroll-view>
+		<tabber></tabber>
 	</view>
 </template>
 
 <script>
 	const app = getApp()
+	// import actionbar from "@/components/actionbar/actionbarwei.vue"
+	//引入底部tabbber
+	import tabber from "@/components/indexcomponents/indextaber.vue"
 	export default {
 		data() {
 			return {
@@ -112,7 +121,8 @@
 				uid:"",
 				uname:"",
 				imgpath:this.$store.state.imgyuming,
-				pages:1
+				pages:1,
+				livebool:false
 			}
 		},
 		methods: {
@@ -129,10 +139,12 @@
 			},
 			//点击每一个直播项 跳到不同的主播
 			viewervideo(e){
-				let {index,live_url,live_nick,room_id,live_pic} = e.currentTarget.dataset
+				let {index,live_url,live_nick,room_id,live_pic,liveuid} = e.currentTarget.dataset
+				
+				// console.log(e)
 				// let {index} = e.currentTarget.dataset
 				uni.navigateTo({
-					url:`/pages/Liveplatform/Liveplatform?indexs=${index}&live_url=${live_url}&livenick=${live_nick}&roomid=${room_id}&livepic=${live_pic}&uid=${this.uid}&uname=${this.uname}`
+					url:`/pages/Liveplatform/Liveplatform?indexs=${index}&live_url=${live_url}&livenick=${live_nick}&roomid=${room_id}&livepic=${live_pic}&uid=${this.uid}&uname=${this.uname}&liveuid=${liveuid}`
 				})
 				// uni.navigateTo({
 				// 	url:`/pages/Liveplatform/Liveplatform?indexs=${index}`
@@ -173,9 +185,12 @@
 											_this.list[index].shop_store_name = ""
 											_this.list[index].shop_good_title = ''
 										}
+										// console.log(_this.list)
 									}
 								})
 							})
+						}else{
+							_this.livebool = true
 						}
 					}
 				})
@@ -208,6 +223,7 @@
 			uni.getStorage({
 				key:"bindtokey",
 				success(restokey){
+					// console.log(restokey)
 					app.globalData.Detectionupdatetokey(restokey.data)
 					uni.request({
 						url:`${app.globalData.Requestpath}user/getUserDetail`,
@@ -216,6 +232,7 @@
 							token:restokey.data
 						},
 						success(res) {
+							// console.log(res)
 							if(res.data.code==0){
 								let {user_id,user_nick} = res.data.data
 								_this.uid = user_id
@@ -223,18 +240,44 @@
 							}
 						}
 					})
+				},
+				fail(err){
+					uni.reLaunch({
+						url:`/pages/login/login`
+					})
 				}
 			})
 		},
 		onShow() {
 			this.getlivelist()
+		},
+		components:{
+			// actionbar,
+			tabber
+		},
+		//当用户按手机系统返回的时候
+		onBackPress(opction){
+			// console.log(opction)
+			if(opction.from=='backbutton'){
+				uni.redirectTo({
+					url:`/pages/index/index`
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
+	
 	.Liveplatformlist{
 		background-color: #fff;
+		.hint{
+			text-align: center;
+			color: #CCCCCC;
+			width: 100%;
+			font-size: 50rpx;
+			padding-top: 500rpx;
+		}
 	}
 	.Liveplatformlist-top-bg{
 		// height:170rpx;
@@ -321,12 +364,12 @@
 		display:flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
-		padding:0 20rpx;
+		padding:0 10rpx;
 		margin-top:30rpx;
 		.Livelist-item{
 			overflow: hidden;
-			width:48%;
-			height:440rpx;
+			width:49%;
+			height:556rpx;
 			// background-color:red;
 			margin-bottom:30rpx;
 			background-size: 100% 100%;

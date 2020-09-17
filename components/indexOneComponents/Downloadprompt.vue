@@ -1,5 +1,7 @@
 <template>
+	<!--   -->
 	<view class="wrap" v-if="this.$store.state.wholeisdownload">
+		<!--  -->
 		<view class="Downloadprompt" v-show="this.$store.state.isdownload">
 			<!-- 包裹盒子和那个叉 -->
 		   <view >
@@ -7,17 +9,17 @@
 				<view class="Playbox">
 					<!-- 更新的图片 -->
 				   <view class="UpdatePri">
-					   <image :src="this.$store.state.httpUrl+'logoPicture.png'" mode=""></image>
+					   <image :src="this.$store.state.httpUrl+'update/logoPicture.png'" mode=""></image>
 				   </view>
 				   <view class="versionupdating">新版本更新</view>
 				   <!-- 更新内容 -->
 				   <view class="updateCon">
-					   <view>更新内容</view>
+					   <!-- <view>更新内容</view>
 					   <view class="concrete">
 						   <view>1.新增小蜜蜂会员</view>
 						   <view>2.优化界面</view>
 						   <view>3.修复不分bug</view>
-					   </view>
+					   </view> -->
 				   </view>
 				   <!-- 立即更新  -->
 				   <view class="promptlyupdate_cen" @tap="AppUpdate">
@@ -98,7 +100,6 @@
 </script>
 
 <style lang="less" scoped>
-	
 	.Downloadprompt{
 		position: absolute;
 		// width: 100%;
@@ -107,6 +108,7 @@
 		top:10%;
 		display: flex;
 		justify-content: center;
+		z-index:101;
 	}
 	.Playbox{
 		margin-top: 200rpx;
@@ -144,7 +146,7 @@
 		.promptlyupdate_cen{
 			display: flex;
 			justify-content: center;
-			margin-top: 50rpx;
+			margin-top: 100rpx;
 			// 立即更新
 			.promptlyupdate{
 				width: 360rpx;

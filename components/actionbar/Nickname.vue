@@ -190,7 +190,7 @@
 										success:(res)=>{
 											// console.log(res,"已经请求用户信息成功")
 											if(res.data.code==0){
-												uni.switchTab({
+												uni.redirectTo({
 													url:"/pages/PersonalMy/PersonalMy"
 												})
 											}

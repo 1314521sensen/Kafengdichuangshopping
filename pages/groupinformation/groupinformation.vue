@@ -79,7 +79,7 @@
 				
 			},
 			returnicon(){
-				uni.switchTab({
+				uni.redirectTo({
 					url:"/pages/PersonalMy/PersonalMy"
 				})
 			}

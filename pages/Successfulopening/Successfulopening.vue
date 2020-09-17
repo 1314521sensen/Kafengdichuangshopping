@@ -16,7 +16,7 @@
 		},
 		onLoad() {
 			setTimeout(()=>{
-				uni.switchTab({
+				uni.redirectTo({
 					url:"/pages/index/index"
 				})
 			},3000)

@@ -1,6 +1,7 @@
 <template>
 	<view class="Allevaluation">
 		<pageheight :statusBar="statusBar"></pageheight>
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 		<!-- <seachinput value="" value2="" url="/pages/Details/Details"></seachinput> -->
 		<!-- v-for="(item,index) in evaluationlist" :key="index" -->
 		<scroll-view scroll-y="true" class="scroll-view" @scrolltolower="pullUp">
@@ -14,7 +15,7 @@
 						>
 						</view>
 					</view>
-					<text>{{item.user_name}}</text>
+					<text>{{item.user_name[0]+'**'+item.user_name[item.user_name.length-1]}}</text>
 				</view>
 				<!-- 这是评论的内容 -->
 				<view class="content-area">
@@ -43,6 +44,7 @@
 <script>
 	//先引用处理页面的状态栏的高度
 	import pageheight from "@/components/pageheight/pageheight.vue"
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	//引用搜索栏
 	// import seachinput from "@/components/sortinglist/seachinput.vue"
 	//这是全部路由页面
@@ -85,7 +87,6 @@
 							//将每一个商品的评价 的第一个 传到父级就行显示
 							//将评价图片转换为数组
 							_this.evaluationlist.forEach((item,index)=>{
-								console.log(item.ge_image)
 								if(item.ge_image!="" && item.ge_image!=null){
 									let url = item.ge_image.split(",")
 									_this.evaluationlist[index].ge_image = url
@@ -115,7 +116,8 @@
 			   }
 		},
 		components:{
-			pageheight
+			pageheight,
+			defaultbgblackcolorwhitebar
 			// seachinput
 		},
 		onLoad(opction){
@@ -152,7 +154,7 @@
 			}
 			.content-area{
 				padding:0 20rpx 0 35rpx;
-				font-size: 20rpx;
+				font-size: 26rpx;
 				margin-top:14rpx;
 			}
 			.content-imgs{

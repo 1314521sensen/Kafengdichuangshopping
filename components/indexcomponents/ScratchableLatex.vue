@@ -43,15 +43,37 @@
 						uni.navigateTo({
 							url:`${url}?title=${name}&titlename=${routinghopname}&field=littlebee`
 						})
-					}else{
+					}
+					else{
 						uni.navigateTo({
 							url:`${url}?title=${name}&titlename=${routinghopname}`
 						})
 					}
-					
 				}else{
 					app.globalData.showtoastsame("功能正在开发,请耐心等待")
 				}
+				/*
+				else if(routinghopname=="Promotedistribution"){
+					//判断是不是团长
+					uni.getStorage({
+						key:"beesgrouplong",
+						success(res) {
+							if(res.data==2){
+								//证明已经是团长了
+								uni.navigateTo({
+									url:`/pages/headearnings/headearnings`
+								})
+							}else{
+								//团长待审核 或者未开通
+								uni.navigateTo({
+									url:`${url}?title=${name}&titlename=${routinghopname}`
+								})
+							}
+						}
+					})
+				}
+				
+				*/
 			}
 		}
 	}

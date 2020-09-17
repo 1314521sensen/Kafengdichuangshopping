@@ -2,8 +2,8 @@
     "name" : "惠播客",
     "appid" : "__UNI__F002EB6",
     "description" : "",
-    "versionName" : "1.0.1",
-    "versionCode" : 101,
+    "versionName" : "1.1.6",
+    "versionCode" : 116,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -24,10 +24,10 @@
             "Push" : {},
             "Payment" : {},
             "LivePusher" : {},
-            "Share" : {},
             "VideoPlayer" : {},
             "Maps" : {},
-            "OAuth" : {}
+            "OAuth" : {},
+            "Share" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
