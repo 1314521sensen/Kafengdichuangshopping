@@ -44,7 +44,7 @@
 						})
 					},
 					fail(err){
-						uni.reLaunch({
+						uni.navigateTo({
 							url:`/pages/login/login`
 						})
 					}

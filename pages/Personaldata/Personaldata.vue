@@ -159,7 +159,7 @@
 					zhi: "",
 					showname: "3",
 					dialogtitle: "您要修改的昵称",
-					placeholdertext: "昵称至少五位最多10位",
+					placeholdertext: "昵称至少2位最多10位",
 					value3: "",
 					disabled: false
 				},
@@ -181,7 +181,7 @@
 						zhi: "",
 						showname: "1",
 						dialogtitle: "您要修改的昵称",
-						placeholdertext: "昵称至少五位最多10位",
+						placeholdertext: "昵称至少2位最多10位",
 						value3: "",
 						name: "usernick",
 						disabled: false
@@ -419,9 +419,12 @@
 									success: (res) => {
 										// console.log(res,"已经请求用户信息成功")
 										if (res.data.code == 0) {
-											uni.redirectTo({
-												url: "/pages/PersonalMy/PersonalMy"
-											})
+											app.globalData.showtoastsame("修改成功")
+											setTimeout(()=>{
+												uni.redirectTo({
+													url: "/pages/PersonalMy/PersonalMy"
+												})
+											},520)
 										}
 									},
 									fail(err) {

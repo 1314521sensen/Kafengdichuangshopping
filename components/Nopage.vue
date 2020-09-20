@@ -2,12 +2,15 @@
 	<view class="nopage">
 		<!-- 暂无页面 -->
 		<view class="nopages-box">
-			暂无商品
+			<text>{{prompttext}}</text>
 		</view>
 	</view>
 </template>
 
 <script>
+	export default{
+		props:["prompttext"]
+	}
 </script>
 
 <style lang="less" scoped>

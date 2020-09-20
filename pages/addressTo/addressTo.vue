@@ -1,7 +1,7 @@
 <template>
 	<view class="addressTo">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<actionbar url="/pages/PersonalMy/PersonalMy" message="添加地址"></actionbar>
+		<actionbar url="/pages/PersonalMy/PersonalMy" message="添加地址" isorder='isorder'></actionbar>
 		<view class="newaddressTO-box">
 			<view class="newaddressTO" @tap="tonews">
 				<button class="cu-btn bg-red lg newaddressbtn">
@@ -192,6 +192,12 @@
 				let value2 = itemStr.consignee_phone;
 				let value4 = itemStr.street_number
 				let value6 = itemStr.is_default
+				let province = itemStr.province
+				let city = itemStr.city
+				let area = itemStr.area
+				let province_name = itemStr.province_name
+				let city_name = itemStr.city_name
+				let area_name = itemStr.area_name
 				if(this.way==1){
 					uni.redirectTo({
 						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}&value1=${value1}&value2=${value2}&value4=${value4}&value6=${value6}&amend=1`
@@ -203,7 +209,7 @@
 					})
 				}else{
 					uni.redirectTo({
-						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&value1=${value1}&value2=${value2}&value4=${value4}&value6=${value6}&amend=1`
+						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&value1=${value1}&value2=${value2}&value4=${value4}&value6=${value6}&amend=1&province=${province}&city=${city}&area=${area}&province_name=${province_name}&city_name=${city_name}&area_name=${area_name}`
 					})
 				}
 			},

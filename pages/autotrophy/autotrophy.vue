@@ -1,7 +1,7 @@
 <template>
 	<view class="autotrophy">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<actionbar :message="title" url="/pages/index/index"></actionbar>
+		<actionbar class="actionbar" :message="title" url="/pages/index/index"></actionbar>
 		<!-- 种类 -->
 		<!-- <scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft" style="height: 80rpx;">
 			<view class="cu-item" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in navtabSelect" :key="index" @tap="tabSelect" :data-id="index">
@@ -9,7 +9,7 @@
 			</view>
 		</scroll-view> -->
 		<!-- 展示图 -->
-		<scroll-view :scroll-y="true" style="height: 100vh; width: 100%;" @scrolltolower="scroll">
+		<scroll-view :scroll-y="true" style="height: 100vh; width: 100%;padding-top: 100rpx;" @scrolltolower="scroll">
 		<view class="patternmaking" :style="{'background-image':'url('+this.$store.state.httpUrl+'Scratchablediagrams/banner.png'+')'}"></view>
 		<!-- 查看更多 -->
 		<!-- <view class="more">
@@ -293,6 +293,17 @@
 </script>
 
 <style lang="less" scoped>
+	/* #ifdef APP-PLUS */
+		page{
+			padding-top: 100rpx
+		}
+	
+	/* #endif */
+	.actionbar{
+		position: fixed;
+		z-index: 999;
+		width: 100%;
+	}
 	.autotrophy{
 		background-color: #f2f2f2;
 	}

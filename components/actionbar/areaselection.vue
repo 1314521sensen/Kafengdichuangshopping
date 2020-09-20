@@ -3,6 +3,7 @@
 		<view class="cu-form-group" @tap="showModal" data-target="selection">
 			<view class="title">{{message}}</view>
 			<text v-if="Haschosen.length==3">{{Haschosen[0][0].area_name}},{{Haschosen[1][0].area_name}},{{Haschosen[2][0].area_name}}</text>
+					<text v-if="Haschosenlist[0] && Haschosen.length==0 ">{{Haschosenlist[0]}},{{Haschosenlist[1]}},{{Haschosenlist[2]}}</text>
 			<text class='lg text-gray cuIcon-right'></text>
 		</view>
 		<view class="cu-modal bottom-modal" :class="modalName=='selection'?'show':''">
@@ -145,7 +146,7 @@
 		// mounted(){"defaultselectiondatalist"
 		// 	// console.log(this.defaultselectiondatalist[0])
 		// },
-		props:["message"]
+		props:["message","Haschosenlist"]
 	}
 </script>
 

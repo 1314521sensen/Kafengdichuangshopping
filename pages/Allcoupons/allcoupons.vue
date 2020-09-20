@@ -56,6 +56,7 @@
 			securitiesbottom
 		},
 		created() {
+			this.$store.state.couponslist = []
 			//初始化 优惠券列表
 			this.$store.commit("getallcouponslist",{topindex:0,bottomindex:0,pages:this.pages})
 		},

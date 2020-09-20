@@ -51,6 +51,7 @@
 			return {
 				bool:false,
 				username:"",
+				returnspath:""
 			}
 		},
 		methods: {
@@ -75,6 +76,7 @@
 			},
 			//封装一个app和微信端 不同的登录请求方法
 			Ordinarydifferentlogin(data,username,password,bingjson){
+				const _this = this
 				uni.request({
 					url:`${app.globalData.Requestpath}login_and_register/userLogin`,
 					method:"POST",
@@ -96,9 +98,13 @@
 							// #endif
 							// #ifdef APP-PLUS || H5
 								this.toast("登录成功")
-								uni.redirectTo({
-									url:"/pages/index/index"
-								})
+								if(_this.returnspath!==''){
+									uni.navigateBack()
+								}else{
+									uni.redirectTo({
+										url:"/pages/index/index"
+									})
+								}
 							// #endif
 						}else{
 							this.toast(res.data.msg)
@@ -173,6 +179,39 @@
 			logobg,
 			logintitle
 		},
+		//当用户点击了系统的返回
+		onBackPress(e){
+			// #ifdef APP-PLUS
+			if(e.from=='backbutton'){
+				uni.getStorage({
+					key:"bindtokey",
+					success(res) {
+						uni.request({
+							url:`${app.globalData.Requestpath}common/refreshToken`,
+							method:"POST",
+							data:{
+								token:res.data
+							},
+							success(res) {
+								if(res.data.code==1){
+									plus.runtime.quit();
+								}
+							}
+						})
+					},
+					fail(err){
+						plus.runtime.quit();
+					}
+				})
+			}
+			// #endif
+		},
+		created() {
+			let routes = getCurrentPages();
+			let curRoute = routes[routes.length - 2].route
+			this.returnspath = curRoute
+			// console.log(this.returnspath)
+		}
 	}
 </script>
 

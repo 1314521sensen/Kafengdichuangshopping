@@ -151,8 +151,19 @@
 				//密码为6-16位 单词，数字加_
 				let userpassword = /^\w{6,16}$/;
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				if(!(username.match(regname))){
+					app.globalData.showtoastsame("注册账号至少2位最多20位")
+				}else if(!(password.match(userpassword))){
+					app.globalData.showtoastsame("密码最小设置6位,最大16位，包含单词数字_")
+				}else if(password==Confirmpassword){
+					app.globalData.showtoastsame("请保持和前面的密码一致")
+				}else if(!(phone.match(userphone))){
+					app.globalData.showtoastsame("请输入正确的手机号")
+				}else if(phonecode ==""){
+					app.globalData.showtoastsame("请输入验证码")
+				}
 				if(password==Confirmpassword){
-					if(username.match(regname) && password.match(userpassword) && phone.match(userphone) && phonecode!==""){
+					if(username.match(regname) && password.match(userpassword) && phone.match(userphone) && phonecode!=="" ){
 						// console.log("验证通过")
 						// console.log()
 						//如果都通过了 发起请求 就可以跳转到登录页面
@@ -302,15 +313,17 @@
 							}
 						})
 						// #endif
-					}else{
-						uni.showToast({
-							title:"您填写的信息不正确",
-							icon:"none"
-						})
 					}
-			}else{
-				app.globalData.showtoastsame("请保持和前面的密码一致")
-			}
+					// else{
+					// 	uni.showToast({
+					// 		title:"您填写的信息不正确",
+					// 		icon:"none"
+					// 	})
+					// }
+				}
+				// else{
+				// 	app.globalData.showtoastsame("请保持和前面的密码一致")
+				// }
 			}
 		},
 		onLoad(opction) {

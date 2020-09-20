@@ -15,7 +15,7 @@
 					</view>
 					<view class="cu-form-group margin-top">
 						<view class="title">{{item.affirmpassword}}</view>
-						<input :placeholder="item.zhifuplaceholder" :name="item.nameaffirm" type="password"></input>
+						<input :placeholder="item.zhifuplaceholderA" :name="item.nameaffirm" type="password"></input>
 					</view>
 				</view>
 				<button class="cu-btn bg-green shadow margin-top" form-type="submit" :style="{'width':'100%'}">确认设置</button>
@@ -87,27 +87,28 @@
 				countdowntext:"验证码",
 				wait:60,
 				list:[
-					{
-						titlename:"用户登录密码",
-						titleplaceholder:"请输入登录密码",
-						namelogin:"loginpassword",
-						zhifupassword:"支付密码",
-						affirmpassword:"确认支付密码",
-						zhifuplaceholder:"重复您的支付密码",
-						namezjifu:"zhifupassword",
-						nameaffirm:"zhifupasswords"
-					},
-					{
-						titlename:"原支付密码",
-						titleplaceholder:"请输入您的原支付密码",
-						namelogin:"oldpassword",
-						zhifupassword:"新支付密码",
-						affirmpassword:"确认新支付密码",
-						zhifuplaceholder:"重复您的新支付密码",
-						namezjifu:"newspassword",
-						nameaffirm:"newspasswords"
-					},
-				],
+						{
+							titlename:"用户登录密码",
+							titleplaceholder:"请输入登录密码",
+							namelogin:"loginpassword",
+							zhifupassword:"支付密码",
+							affirmpassword:"确认支付密码",
+							zhifuplaceholder:"请设置您的支付密码",
+							namezjifu:"zhifupassword",
+							nameaffirm:"zhifupasswords"
+						},
+						{
+							titlename:"原支付密码",
+							titleplaceholder:"请输入您的原支付密码",
+							namelogin:"oldpassword",
+							zhifupassword:"新支付密码",
+							affirmpassword:"确认新支付密码",
+							zhifuplaceholder:"请输入您的新支付密码",
+							namezjifu:"newspassword",
+							nameaffirm:"newspasswords",
+							zhifuplaceholderA:"请确认您的新支付密码",
+						},
+					],
 				changelist:[
 					{
 						title:"身份证号",

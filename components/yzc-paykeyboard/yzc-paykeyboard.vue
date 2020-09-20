@@ -72,6 +72,7 @@
 					if (this.password.length == 6) {
 						// console.log(this.password);
 						this.$emit("Enterpasswordcompletepayment",this.password)
+						this.password = ''
 					}
 				}
 			},

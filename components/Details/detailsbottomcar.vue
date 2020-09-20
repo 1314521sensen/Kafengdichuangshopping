@@ -21,10 +21,15 @@
 				<view class="btn-group">
 					<button 
 						class="cu-btn bg-orange round shadow-blur" 
-						v-if="parseInt(producttype)!==2 && couplebool!=='nlt'" 
+						v-if="parseInt(producttype)!==2 && couplebool!=='nlt' && activityType==''" 
 						@tap="Addcart(pic)"
 					>加入购物车</button>
-					<button class="cu-btn bg-red round shadow-blur" @tap="Skiporder" data-target="bottomModal">立即订购</button>
+					<button 
+						class="cu-btn bg-red round shadow-blur" 
+						@tap="Skiporder" 
+						data-target="bottomModal"
+						
+					>立即订购</button>
 				</view>
 			</view>
 			<immediatelypopup 
@@ -38,6 +43,7 @@
 				:couplebool="couplebool"
 				:code="code"
 				:producttype="producttype"
+				:activityType="activityType"
 			></immediatelypopup>
 		</view>
 </template>
@@ -168,9 +174,6 @@
 					key:"bindtokey",
 					success(res) {
 						app.globalData.Detectionupdatetokey(res.data)
-							
-						
-						
 						// console.log(this.immediatelylist.length)
 						/*
 							当用户点击立即购买的时候  
@@ -180,11 +183,39 @@
 						if(_this.immediatelylist.length>0){
 							_this.modalName = e.currentTarget.dataset.target
 						}else{
+							// console.log(_this.pic)
+							let couponsstrId = ""
+							let {gc_id3,gc_id2,gc_id1} = _this.pic
 							// uni.navigateTo({
 							// 	url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&spec_id=0&num=1&way=2&&img=${JSON.stringify(this.pic.good_pic)}&storename=${this.pic.store_name}&price=${this.pic.good_promotion_price}&goodtitle=${this.pic.good_title}&storeid=${this.storeid}&freight=${this.pic.good_freight}`
 							// })
 							// console.log(this.pic.good_freight)
 							// console.log(this.pic)
+							if(gc_id3){
+								//这是三有的情况下
+								if(gc_id2){
+									if(gc_id1){
+										couponsstrId = gc_id1+'-'+gc_id2+'-'+gc_id3
+									}
+								}else{
+									if(gc_id1){
+										couponsstrId = gc_id1
+									}
+								}
+							}else{
+								//如果三没有的情况下
+								if(gc_id2){
+									//如果三没有的情况下 找二
+									if(gc_id1){
+										couponsstrId = gc_id1+'-'+gc_id2
+									}
+								}else{
+									if(gc_id1){
+										couponsstrId = gc_id1
+									}
+								}
+							}
+							
 							let SpecificationShopdetails = {
 								good_id:_this.gid,
 								spec_id:0,
@@ -197,7 +228,9 @@
 								store_id:_this.storeid,
 								good_freight:_this.pic.good_freight,
 								good_type:_this.couplebool,
-								good_purchase_price:_this.pic.good_purchase_price
+								good_purchase_price:_this.pic.good_purchase_price,
+								limit_gcategory:[couponsstrId],
+								activityType:_this.activityType
 							}
 							//如果是团长类型增加 属性值
 							if(parseInt(_this.producttype)==2){
@@ -211,7 +244,7 @@
 						}
 					},
 					fail(err){
-						uni.reLaunch({
+						uni.navigateTo({
 							url:"/pages/login/login"
 						})
 					}
@@ -222,7 +255,7 @@
 				this.modalName = e
 			}
 		},
-		props:["pic","gid","storeid","couplebool","good_state","good_verify","good_delete","producttype","code"],
+		props:["pic","gid","storeid","couplebool","good_state","good_verify","good_delete","producttype","code","activityType"],
 		created(){
 			const _this = this
 			uni.getStorage({

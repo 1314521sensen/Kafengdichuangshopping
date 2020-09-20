@@ -167,7 +167,8 @@
 				resbool: 0, //标识符
 				gid: 0, //商品ID
 				iswhether: true, //是否关注店铺
-				fav_id: 0 //店铺的唯一标识
+				fav_id: 0 ,//店铺的唯一标识
+				searchGoods:0,//判断是否是搜索商品
 			}
 		},
 		methods: {
@@ -191,6 +192,10 @@
 				// console.log(e.currentTarget.dataset)
 				this.TabCur = id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+				this.searchGoods = 0
+				if(this.TabCur == 1){
+					this.getbabylist(1)
+				}
 			},
 			returnshopdefailt() {
 				uni.navigateBack()
@@ -221,29 +226,33 @@
 			getbabylist(page) {
 				const _this = this
 				//获取宝贝信息
-				uni.request({
-					url: `${app.globalData.Requestpath}store/getStoreGoodList`,
-					data: {
-						sid: _this.storeid,
-						page: page,
-						limit: 10
-					},
-					success(res) {
-						if (res.data.code == 0) {
-							if (_this.page > 1) {
-								_this.bodylist = _this.bodylist.concat(res.data.data.list)
-							} else {
-								_this.bodylist = res.data.data.list
+				if(_this.searchGoods == 0){
+					uni.request({
+						url: `${app.globalData.Requestpath}store/getStoreGoodList`,
+						data: {
+							sid: _this.storeid,
+							page: page,
+							limit: 10
+						},
+						success(res) {
+							if (res.data.code == 0) {
+								if (_this.page > 1) {
+									_this.bodylist = _this.bodylist.concat(res.data.data.list)
+								} else {
+									_this.bodylist = res.data.data.list
+								}
 							}
 						}
-					}
-				})
+					})		
+				}
+				
 			},
 			//用户滑到底部的时候触发
 			scrolltolower() {
 				this.page++
 				this.getrecommended(this.page)
 				this.getbabylist(this.page)
+				this.searchGood(this.page)
 			},
 			attentionstore() {
 				const _this = this
@@ -335,22 +344,32 @@
 			cancel() {
 				this.isCode = false
 			},
-			Input(e) {
+			searchGood(page){
 				const _this = this
 				uni.request({
 					url: `${app.globalData.Requestpath}store/getStoreGoodList?sid=${_this.storeid}`,
 					data: {
+						sid:_this.storeid,
+						page:page,
+						pageSize:5,
 						g_name: _this.keyword
 					},
 					success(res) {
 						if (res.data.code == 0) {
-							_this.bodylist = res.data.data.list
+							_this.bodylist = _this.bodylist.concat(res.data.data.list) 
 						} else {
-							_this.bodylist = []
+							// _this.bodylist = []
 						}
 					}
 				})
+			},
+			Input(page) {
+				const _this = this
+				_this.bodylist = []
 				_this.TabCur = 1
+				_this.searchGoods = 1
+				_this.page = 1
+				_this.searchGood(_this.page)
 			},
 		},
 		onLoad(opction) {
@@ -455,7 +474,7 @@
 			})
 			//获取推荐
 			_this.getrecommended(1)
-			_this.getbabylist(1)
+			// _this.getbabylist(1)
 			// console.log(_this.storeid)
 			//获取商品的新品信息系
 			uni.request({

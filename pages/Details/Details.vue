@@ -25,6 +25,7 @@
 			:good_delete="good_delete"
 			:producttype="producttype"
 			:code="code"
+			:activityType="activityType"
 		></bottomcar>
 		<suspensionshopcart></suspensionshopcart>
 		<shoreicon :pic="pic"></shoreicon>
@@ -67,6 +68,7 @@
 				good_delete:"",//是否删除
 				liveshopstate:"",
 				producttype:"",//判断商品是不是团长类型
+				activityType:"",//判断是不是活动商品
 				code:0,//团长分享码
 			}
 		},
@@ -86,7 +88,8 @@
 		onLoad(opction){
 			// couplebool
 			// console.log(opction)
-			let {id,storeid,goodtype,liveshopstate,type} = opction
+			let {id,storeid,goodtype,liveshopstate,type,activityType} = opction
+			//activityType 针对活动的商品
 			const _this = this
 			//这是商品的id
 			this.gid = id
@@ -111,6 +114,12 @@
 				this.code = opction.code
 			}else{
 				this.producttype = ""
+			}
+			//判断是不是中秋活动
+			if(activityType=='activity'){
+				this.activityType = "activity"
+			}else{
+				this.activityType = ""
 			}
 			//在去请求详情页的其他数据
 			// console.log(shopJSON)

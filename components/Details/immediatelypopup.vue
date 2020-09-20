@@ -123,6 +123,34 @@
 					}
 				})
 				if(this.text!==""){
+					// console.log(this.pic)
+					let couponsstrId = ""
+					let {gc_id1,gc_id2,gc_id3} = this.pic
+					
+					if(gc_id3){
+						//这是三有的情况下
+						if(gc_id2){
+							if(gc_id1){
+								couponsstrId = gc_id1+'-'+gc_id2+'-'+gc_id3
+							}
+						}else{
+							if(gc_id1){
+								couponsstrId = gc_id1
+							}
+						}
+					}else{
+						//如果三没有的情况下
+						if(gc_id2){
+							//如果三没有的情况下 找二
+							if(gc_id1){
+								couponsstrId = gc_id1+'-'+gc_id2
+							}
+						}else{
+							if(gc_id1){
+								couponsstrId = gc_id1
+							}
+						}
+					}
 					// console.log(this.specid)
 					// console.log(this.gid,this.datalist,this.num)
 					// uni.navigateTo({
@@ -142,7 +170,9 @@
 						store_id:this.storeid,
 						good_freight:this.pic.good_freight,
 						good_type:this.couplebool,
-						good_purchase_price:this.purchase_price
+						good_purchase_price:this.purchase_price,
+						limit_gcategory:[couponsstrId],
+						activityType:this.activityType
 					}
 					//如果是团长类型增加 属性值
 					if(parseInt(this.producttype)==2){
@@ -152,8 +182,10 @@
 					}
 					// console.log(SpecificationShopdetails)
 					this.$store.commit("Saveorder",{fromvalue:0,publicShopdetails:SpecificationShopdetails})
+				}else{
+					app.globalData.showtoastsame("请选择规格")
 				}
-				app.globalData.showtoastsame("请选择规格")
+				// app.globalData.showtoastsame("请选择规格")
 				//这些先留着 为后期用
 				// if(this.selectedlist.length<this.immediatelylist.length){
 				// 	app.globalData.showtoastsame("请选择完整规格")
@@ -178,7 +210,7 @@
 				this.$emit("hiddends",null)
 			}
 		},
-		props:["immediatelylist","bool","gid","pic","storeid","couplebool","code","producttype"],
+		props:["immediatelylist","bool","gid","pic","storeid","couplebool","code","producttype","activityType"],
 		created() {
 			// console.log(this.immediatelylist)
 		}

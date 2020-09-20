@@ -37,6 +37,7 @@
 				</view>
 			</scroll-view>
 		</view>
+		<view v-if="isShow" class="isWhether">暂无推广佣金</view>
 	</view>
 </template>
 
@@ -49,7 +50,8 @@
 			return {
 				commissionsubsidiary:[],
 				page:1,
-				statusBar:0
+				statusBar:0,
+				isShow:false
 			}
 		},
 		created() {
@@ -68,8 +70,10 @@
 						success(res){
 							// console.log(res,"佣金")
 							if(res.data.code == 0){
-								console.log(res)
+								// console.log(res)
 								_this.commissionsubsidiary = res.data.data.list
+							}else{
+								_this.isShow = true
 							}
 						}
 					})
@@ -119,7 +123,7 @@
 <style lang="less" scoped>
 	.commissionsubsidiary{
 		.commissionsubsidiary_box{
-			height:90vh;
+			// height:90vh;
 			background-color: #fff;
 			.commissionsubsidiary_item{
 				display:flex;
@@ -154,4 +158,14 @@
 			}
 		}
 	}
+	
+	.isWhether{
+		height: 92vh;
+		background-color: #fff;
+		text-align: center;
+		color: #CCCCCC;
+		width: 100%;
+		font-size: 50rpx;
+		padding-top: 500rpx;
+		}
 </style>

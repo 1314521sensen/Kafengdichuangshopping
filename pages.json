@@ -345,6 +345,10 @@
             "path" : "pages/withdrawal/withdrawal",
             "style" : {}
         }
+        ,{
+            "path" : "pages/festivalActivities/festivalActivities",
+            "style" : {}
+        }
     ],
 	
 	"globalStyle": {

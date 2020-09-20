@@ -67,7 +67,7 @@
 								key:"bindtokey",
 								success(res) {
 									// console.log(res)
-									uni.reLaunch({
+									uni.navigateTo({
 										url:"/pages/login/login"
 									})
 								}

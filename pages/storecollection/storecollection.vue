@@ -96,7 +96,11 @@
 			},
 			checkbox(e){
 				let {index,fav_id}  = e.currentTarget.dataset
-				this.itemindex = index
+				if(this.itemindex == index){
+					this.itemindex = -1
+				}else{
+					this.itemindex = index
+				}
 				this.fav_id = fav_id
 			},
 			store_remove(){

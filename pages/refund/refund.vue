@@ -61,7 +61,7 @@
 					<text>快递公司：{{e_id}}</text>
 				</view>
 				<view class="waybill_number">
-					<text>快递单号：</text><input placeholder="请填写货运单号" name="input" @blur="waybillNumber"></input>
+					<text>快递单号：</text><input placeholder="请填写快递单号" name="input" @blur="waybillNumber"></input>
 				</view>
 			</view>
 		</view>
@@ -72,6 +72,7 @@
 			@Enterpasswordcompletepayment="Enterpasswordcompletepayment"
 			:show="passwordzhifutanchuang" 
 			@close="close"
+			:balancetext="String(price)"
 		>
 		</paymoney>
 	</view>
@@ -155,11 +156,10 @@
 				if(this.refundtype == 1){
 					this.passwordzhifutanchuang = true
 				}else if(this.e_id == ''){
-					app.globalData.showtoastsame("请填写正确的订单号")
+					app.globalData.showtoastsame("请填写正确的快递单号")
 				}else{
 					this.passwordzhifutanchuang = true
 				}
-				
 			},
 			//当用户输入完密码会将密码传到这里
 			Enterpasswordcompletepayment(e){

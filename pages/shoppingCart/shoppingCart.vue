@@ -188,6 +188,7 @@
 				specificationsrc:"",
 				imgpath:this.$store.state.imgyuming,
 				forwardcartbool:0,//此变量判断用户是通过哪里进来的
+				statusBar:0
 			}
 		},
 		methods:{
@@ -281,6 +282,7 @@
 			}
 		},
 		created(){
+			// console.log(curRoute)
 			// 判断是否登录
 			uni.getStorageInfo({
 				success(res){
@@ -301,6 +303,7 @@
 				})
 
 			const _this = this
+			_this.$store.state.pages = 1
 			//调用vuex的actions里面的异步函数
 			_this.$store.dispatch('getcarlists')
 			//在缓存中取出值
@@ -308,12 +311,27 @@
 				key:"forwardcartbool",
 				success(res) {
 					_this.forwardcartbool = res.data
+					// console.log(_this.forwardcartbool)
+				},
+				fail(){
+					_this.forwardcartbool = 1
 				}
 			})
 			// console.log(this.$store.state)
 		},
 		onLoad() {
-			this.statusBar = app.globalData.statusBar
+			const _this = this
+			uni.getStorage({
+				key:'bindtokey',
+				success(res){
+					app.globalData.Detectionupdatetokey(res.data)
+					_this.statusBar = app.globalData.statusBar
+				}
+			})
+			
+		},
+		onShow(){
+			this.$store.dispatch('getcarlists')
 		},
 		//当用户按手机系统返回的时候
 		onBackPress(opction){

@@ -113,7 +113,11 @@
 			},
 			particularsClick(e){
 				let {indexs,bool} = e.currentTarget.dataset
-			    this.tabcurindex = indexs
+			    if(indexs == this.tabcurindex){
+					this.tabcurindex = -1
+				}else{
+					this.tabcurindex = indexs
+				}
 			},
 			tolower(){
 				this.pages++
@@ -256,9 +260,9 @@
 			margin: 0 auto ;
 			padding: 4rpx;
 			overflow: hidden;
-		  	animation:mymove .5s ;
+		  	// animation:mymove .5s ;
 		  	/*Safari 和 Chrome:*/
-		  	-webkit-animation:mymove .5s ;
+		  	// -webkit-animation:mymove .5s ;
 		  }
 		  
 		  @keyframes mymove{

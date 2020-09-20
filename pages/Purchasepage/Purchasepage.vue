@@ -2,11 +2,7 @@
 	<view>
 		<view class="Purchasepage">
 			<pageheight :statusBar="statusBar"></pageheight>
-			<actionbar 
-				url="/pages/index/index" 
-				message="确认订单"
-				:isorder="isorder"
-			></actionbar>
+			<actionbar :url=" fromvalue==1 ? '/pages/shoppingCart/shoppingCart':'/pages/index/index'" message="确认订单" :isorder="isorder"></actionbar>
 			<!-- <view class="Buycontent">
 				<view class="Shippingaddress" @tap="Addressmodification">
 					<view class="Shippingaddress-left">
@@ -38,27 +34,27 @@
 						</view>
 						<view class="dercolocationBox" @tap="Addressmodification">
 							<view class="dercolocation-left">
-								<text class="dercolocation">{{Userselect}}</text>
+								<text class="dercolocation">{{province_name+city_name+area_name+Userselect}}</text>
 							</view>
-						   <view class="dercolocation-right">
-							    <text class="lg text-gray cuIcon-right"></text></view>
-						   </view>
-						  
+							<view class="dercolocation-right">
+								<text class="lg text-gray cuIcon-right"></text></view>
+						</view>
+
 					</view>
 					<!-- 底下的颜色 -->
 					<view class="Theordercolumn_right">
 						<!-- <view v-for="(item,index) in 5" class="violet active">13</view> -->
-						 <view class="activeBox" v-for="(item,index) in 5" :key="index">
-							 <view class="violet active"></view>
+						<view class="activeBox" v-for="(item,index) in 5" :key="index">
+							<view class="violet active"></view>
 							<view class="white active"></view>
 							<view class="red active"></view>
 							<view class="white active"></view>
-						 </view>
-							
+						</view>
+
 					</view>
-				</view>	
+				</view>
 			</view>
-			
+
 			<view class="Buycontent purchase-order">
 				<!-- 到时候循环这个order就可以 -->
 				<view class="order" v-for="(item,index) in orderinfolist" :key="index">
@@ -92,12 +88,13 @@
 						</view>
 						<!-- 这是优惠券的组件 -->
 						<storecoupon msg="使用" titlemsg="使用优惠券" :tokey="tokey" :storeid="item.store_id" :couplebooltext="couplebooltext"
-						 Whatcoupon="1" :Orderpaymentamount="item.good_price*item.good_num" @dingdancoupon="dingdancoupon" v-if="orderinfolist.length<=1 && good_type!=='nlt'"></storecoupon>
+						 Whatcoupon="1" :Orderpaymentamount="item.good_price*item.good_num" @dingdancoupon="dingdancoupon" v-if="orderinfolist.length<=1 && good_type!=='nlt'"
+						 :limit_gcategory="limit_gcategory" :limit_gids="limit_gids"></storecoupon>
 						<view class="distribution note">
 							<view class="cu-form-group">
 								<view class="title">订单备注</view>
 								<!-- <input placeholder="选填,请先和商家协商一致" name="input" v-model="value"></input> -->
-								<textarea  rows="5" cols="20"  placeholder="选填,请先和商家协商一致" v-model="value"></textarea> 
+								<textarea rows="5" cols="20" placeholder="选填,请先和商家协商一致" v-model="value"></textarea>
 							</view>
 						</view>
 						<view class="Payprice">
@@ -125,7 +122,7 @@
 			<view class="cu-modal bottom-modal" :class="modalName=='bottomModal'?'show':''">
 				<view class="cu-dialog">
 					<view class="cu-bar bg-white cu-modal-left-padding">
-						<view class="action text-blue" @tap="hideModal">取消支付</view>
+						<view class="action text-blue" @tap="Cancelpayment">取消支付</view>
 						<view class="action text-green" @tap="Determinepayment">确定支付</view>
 					</view>
 					<view class="padding-xl">
@@ -186,6 +183,12 @@
 				Username: "",
 				Userphone: "",
 				Userselect: "",
+				province: "",
+				city: "",
+				area: "",
+				province_name: "",
+				city_name: "",
+				area_name: "",
 				tokey: 0,
 				coupondetails: [],
 				Favorablebalance: "",
@@ -204,7 +207,7 @@
 				totalnumber: 0, //总数量
 				totalprice: 0, //总价格
 				ordergidlist: "", //购物车过来的全部id
-				couplebooltext: "", //判断是不是新人 新人只能使用新人优惠券
+				couplebooltext: [], //判断是不是新人 新人只能使用新人优惠券
 				c_ids: "", //判断余额支付的时候使用的哪张优惠券的id
 				passwordindex: 0, //用于判断用户输入错几次密码
 				share_code: "", //用于保存分享码
@@ -212,50 +215,71 @@
 				total_price: '',
 				mali: 0, //运费
 				code: 0,
-				imgpath:this.$store.state.imgyuming,
-				openidbool:true,
-				good_type:"",//type类型看看优惠券显不显示
-				isorder:true,
-				loadingbool:true,//加载图标显示
+				imgpath: this.$store.state.imgyuming,
+				openidbool: true,
+				good_type: "", //type类型看看优惠券显不显示
+				isorder: true,
+				loadingbool: true, //加载图标显示
+				fromvalue: 0,
+				limit_gcategory: [], //优惠券的gc_id
+				limit_gids: [], //优惠券的商品id
 			}
 		},
 		methods: {
+			Cancelpayment() {
+				const _this = this
+				_this.hideModal()
+				uni.showModal({
+					title: "确定要放弃支付",
+					content: "放弃支付无法生成待付款订单",
+					showCancel: true,
+					cancelText: "取消",
+					cancelColor: "#ff0000",
+					confirmText: "确定放弃",
+					confirmColor: "#00ff00",
+					success(res) {
+						if (res.confirm) {
+							uni.navigateBack()
+						}
+					}
+				})
+			},
 			//封装个方法 如果用户点击微信绑定确定或者功能
-			showtotal(){
+			showtotal() {
 				//如果用户没有绑定openid的话 就让用户跳到绑定openid的页面
 				uni.showModal({
-					title:"请进行绑定微信",
-					content:"为了您的正常提现",
-					showCancel:true,
-					cancelText:"取消",
-					cancelColor:"#ff0000",
-					confirmText:"确定绑定",
-					confirmColor:"#00ff00",
+					title: "请进行绑定微信",
+					content: "为了您的正常提现",
+					showCancel: true,
+					cancelText: "取消",
+					cancelColor: "#ff0000",
+					confirmText: "确定绑定",
+					confirmColor: "#00ff00",
 					success(res) {
-						if(res.confirm){
+						if (res.confirm) {
 							uni.navigateTo({
-								url:`/pages/WeChatLanding/WeChatLanding`
+								url: `/pages/WeChatLanding/WeChatLanding`
 							})
-						}else{
+						} else {
 							uni.navigateBack()
 						}
 					}
 				})
 			},
 			//封装个方法 判断用户有没有绑定微信的openid
-			getopenid(){
+			getopenid() {
 				const _this = this
 				uni.getStorage({
-					key:"bindopenid",
-					success(res){
-						if(res.data!==""){
+					key: "bindopenid",
+					success(res) {
+						if (res.data !== "") {
 							_this.openidbool = true
-						}else{
-							_this.openidbool =false
+						} else {
+							_this.openidbool = false
 							_this.showtotal()
 						}
 					},
-					fail(err){
+					fail(err) {
 						_this.openidbool = false
 						_this.showtotal()
 					}
@@ -281,7 +305,7 @@
 				}
 			},
 			showModal(e) {
-				
+
 				const _this = this
 				//取出缓存中的数据的地址的长度
 				let addresslength = ""
@@ -291,26 +315,26 @@
 						// console.log(resaddress)
 						// console.log(123)
 						addresslength = resaddress.data
-						
-						if(addresslength !==0 && addresslength!==""){
+
+						if (addresslength !== 0 && addresslength !== "") {
 							let {
 								total_price
 							} = e.currentTarget.dataset
-							
+
 							_this.modalName = e.currentTarget.dataset.target
 							_this.total_price = total_price
-						}else{
+						} else {
 							uni.showModal({
-								title:"当前地址为空",
-								content:"是否要新增地址",
-								showCancel:true,
-								cancelText:"取消新增",
-								cancelColor:"#ff0000",
-								confirmText:"确定新增",
-								confirmColor:"#00ff00",
+								title: "当前地址为空",
+								content: "是否要新增地址",
+								showCancel: true,
+								cancelText: "取消新增",
+								cancelColor: "#ff0000",
+								confirmText: "确定新增",
+								confirmColor: "#00ff00",
 								success(resadd) {
 									// console.log(resadd)
-									if(resadd.confirm){
+									if (resadd.confirm) {
 										_this.Addressmodification()
 									}
 								},
@@ -329,9 +353,9 @@
 
 				let payid = ""; //给后端进行返回
 				if (this.radio == 'radio0') { //微信支付
-					if(this.address_id == ""){
+					if (this.address_id == "") {
 						app.globalData.showtoastsame("请到地址栏中添加地址")
-					}else{
+					} else {
 						payid = "wxpay"
 						this.GetorderdetailsData(payid)
 						//当用户点击微信支付的时候 加载图标出来
@@ -628,7 +652,7 @@
 												good_title: good_name,
 												good_pic: good_pic,
 												good_price: good_price,
-												good_purchase_price:good_purchase_price,
+												good_purchase_price: good_purchase_price,
 												good_num: good_num,
 												total_price: _this.total_price,
 												cms_category: rescommissionconfiguration.data.data.good_type,
@@ -694,13 +718,13 @@
 								orderInfo: obj,
 								success(e) {
 									// console.log("success", e);
-									
+
 									//微信支付 请求后端的接口进行更改订单状态
 									// console.log(swiftNo)
 									uni.request({
-										url:`${app.globalData.Requestpath}notify/wechatpay`,
-										method:'POST',
-										data:{
+										url: `${app.globalData.Requestpath}notify/wechatpay`,
+										method: 'POST',
+										data: {
 											pay_type: 1,
 											swift_id: swiftNo
 										},
@@ -708,28 +732,28 @@
 											_this.loadingbool = true
 											// console.log(res)
 											//只要支付成功以后就到订单页面
-											if(res.data.code==0){
+											if (res.data.code == 0) {
 												uni.showToast({
 													title: "支付完成"
 												})
-												setTimeout(()=>{
+												setTimeout(() => {
 													uni.redirectTo({
-														url:`/pages/orderpageRouter/orderpageRouter?is_order=isorder`
+														url: `/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 													})
-												},1000)
-											}else{
+												}, 1000)
+											} else {
 												uni.showToast({
 													title: `${res.data.msg}`
 												})
-												setTimeout(()=>{
+												setTimeout(() => {
 													uni.redirectTo({
-														url:`/pages/orderpageRouter/orderpageRouter?is_order=isorder`
+														url: `/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 													})
-												},1000)
+												}, 1000)
 											}
 											_this.hideModal()
 										},
-										fail(err){
+										fail(err) {
 											_this.loadingbool = true
 											// console.log(err)
 										}
@@ -742,11 +766,11 @@
 								fail(err) {
 									_this.loadingbool = true
 									// console.log(err)
-									setTimeout(()=>{
+									setTimeout(() => {
 										uni.redirectTo({
-											url:`/pages/orderpageRouter/orderpageRouter?is_order=isorder`
+											url: `/pages/orderpageRouter/orderpageRouter?is_order=isorder`
 										})
-									},1000)
+									}, 1000)
 								}
 							})
 						}
@@ -761,21 +785,33 @@
 			const _this = this
 			// console.log(JSON.parse(decodeURI(opction.selectitem)))
 			// console.log(opction.selectitem)
+			_this.fromvalue = opction.fromvalue
 			if (opction.selectitem) {
 				// console.log(2222)
 				let {
 					consignee_name,
 					consignee_phone,
 					street_number,
-					address_id
+					address_id,
+					province,
+					city,
+					area,
+					province_name,
+					s
 				} = JSON.parse(decodeURI(opction.selectitem))
 				this.Username = consignee_name
 				this.Userphone = consignee_phone
 				this.Userselect = street_number
 				this.address_id = address_id
+				this.province = province
+				this.city = city
+				this.area = area
+				this.province_name = province_name
+				this.city_name = city_name
+				this.area_name = area_name
 				uni.setStorage({
 					key: "addresslength",
-					data:1
+					data: 1
 				})
 			} else {
 				// console.log(111)
@@ -796,28 +832,34 @@
 								// consignee_name consignee_phone street_number
 								if (reslove.data.code == 0) {
 									//如果有默认地址 就取默认地址 没有默认地址 就取第一个地址
-									reslove.data.data.forEach((item,index)=>{
-										if(item.is_default){
+									reslove.data.data.forEach((item, index) => {
+										if (item.is_default) {
 											_this.Username = item.consignee_name
 											_this.Userphone = item.consignee_phone
 											_this.Userselect = item.street_number
 											_this.address_id = item.address_id
-										}else{
+											_this.province_name = item.province_name
+											_this.city_name = item.city_name
+											_this.area_name = item.area_name
+										} else if (_this.Username == '') {
 											_this.Username = reslove.data.data[0].consignee_name
 											_this.Userphone = reslove.data.data[0].consignee_phone
 											_this.Userselect = reslove.data.data[0].street_number
 											_this.address_id = reslove.data.data[0].address_id
+											_this.province_name = reslove.data.data[0].province_name
+											_this.city_name = reslove.data.data[0].city_name
+											_this.area_name = reslove.data.data[0].area_name
 										}
 									})
 									uni.setStorage({
 										key: "addresslength",
-										data:1
+										data: 1
 									})
-									
-								}else{
+
+								} else {
 									uni.setStorage({
 										key: "addresslength",
-										data:0
+										data: 0
 									})
 								}
 							}
@@ -832,9 +874,17 @@
 					_this.orderinfolist = res.data
 					let stoIdArr = [] //开始的数组
 					let stoIdSet = [] //去重后的店铺ID
+					let coupons_gc = [] //商品id
+					_this.couplebooltext = []
+					//limit_gids
 					_this.orderinfolist.forEach((item, index) => {
-						// console.log(item)
-						item.good_price = (item.good_price).replace(/,/g,'')
+						console.log(item.activityType)
+						/*这里为了存放商品id ----开始*/
+						coupons_gc.push(item.good_id)
+						// console.log(coupons_gc)
+						_this.limit_gids = coupons_gc
+						/*这里为了存放商品id ----结束*/
+						item.good_price = (item.good_price).replace(/,/g, '')
 						stoIdArr.push(item.store_id)
 						// console.log(item)
 						_this.totalnumber += item.good_num
@@ -857,27 +907,30 @@
 							_this.ordergidlist += item.cart_id + ','
 						}
 						//这块的判断是不是新人  新人的话 就是1 否则就是0
-						if (item.good_type == 'npt' || item.good_type == 1 || item.good_type=='nlt') {
-							_this.couplebooltext = 1
+						if (item.good_type == 'npt' || item.good_type == 1 || item.good_type == 'nlt') {
+							_this.couplebooltext[0] = 1
 							_this.good_type = item.good_type
 							// console.log(_this.good_type)
 						} else {
-							_this.couplebooltext = 0
+							_this.couplebooltext[0] = 0
 						}
 						if (item.share_code && item.share_from == 1) {
 							//这是直播
 							_this.share_code = item.share_code
 							_this.share_from = 1
 						} else if (item.share_code && item.share_from == 2) {
-							
+
 							//这是团长
 							_this.share_code = item.share_code
 							_this.share_from = 2
 							// console.log(_this.share_code,_this.share_from,"这是团长进来的")
+						} else if (item.activityType == 'activity') {
+							_this.couplebooltext[0] = 2
 						} else {
 							// console.log("这是普通商品")
 							_this.share_code = ""
 							_this.share_from = ""
+							_this.couplebooltext[0] = 0
 						}
 					})
 					stoIdSet = ([...new Set(stoIdArr)])
@@ -909,6 +962,10 @@
 						_this.totalprice = _this.totalprice
 						// console.log(_this.totalprice,2222)
 					}
+					//这里处理优惠券的id
+					// console.log(res.data[0])
+					_this.limit_gcategory = res.data[0].limit_gcategory
+					// console.log(_this.limit_gcategory)
 				}
 			})
 			// #ifdef H5
@@ -967,9 +1024,9 @@
 						}
 					})
 				},
-				fail(err){
-					uni.reLaunch({
-						url:"/pages/login/login"
+				fail(err) {
+					uni.navigateTo({
+						url: "/pages/login/login"
 					})
 				}
 			})
@@ -1002,9 +1059,9 @@
 						}
 					})
 				},
-				fail(err){
-					uni.reLaunch({
-						url:"/pages/login/login"
+				fail(err) {
+					uni.navigateTo({
+						url: "/pages/login/login"
 					})
 				}
 			})
@@ -1126,7 +1183,8 @@
 							width: 70%;
 							// height: 76rpx;
 							font-size: 28rpx;
-							.shopgoosorder-title_text{
+
+							.shopgoosorder-title_text {
 								display: -webkit-box;
 								-webkit-box-orient: vertical;
 								-webkit-line-clamp: 2;
@@ -1156,9 +1214,11 @@
 
 				.Deliverynote {
 					margin-top: 48rpx;
-					textarea{
-					    width: 400rpx ;
-						}
+
+					textarea {
+						width: 400rpx;
+					}
+
 					.distribution {
 						display: flex;
 						justify-content: space-around;
@@ -1248,81 +1308,96 @@
 	.cu-modal-left-padding {
 		padding: 0 20rpx;
 	}
+
 	// 新地址
-	.TheordercolumnBox{
-			margin-top: 20rpx;
-			display: flex;
-			justify-content: center;
-			.Theordercolumn{
-				position: relative;
-				width:710rpx;
-				// height: 200rpx;
-				background-color: #fff;
-				border-radius: 20rpx;
-				overflow: hidden;
-				.Theordercolumn_left{
-					padding: 30rpx 30rpx 50rpx 30rpx;
-					.message{
-						font-size: 32rpx;
-						font-weight: 500;
-					}
-					.dercophone{
-						margin-left: 20rpx;
-					}
-					.dercolocationBox{
-						display: flex;
-						flex-wrap: wrap;
-						flex-grow: 1;
-						margin-top: 25rpx;
-						line-height: 50rpx;
-						.dercolocation-left{
-							flex:1;
-							.dercolocation{
-								flex-grow: 5;
-								font-size: 38rpx;
-								font-weight: 600;	
-							}
-						}
-						.dercolocation-right{
-							display: flex;
-							justify-content: center;
-							align-items: center;
-							width: 10%;
-							.cuIcon-right{
-								font-size: 36rpx;
-							}
-						}
-					}
+	.TheordercolumnBox {
+		margin-top: 20rpx;
+		display: flex;
+		justify-content: center;
+
+		.Theordercolumn {
+			position: relative;
+			width: 710rpx;
+			// height: 200rpx;
+			background-color: #fff;
+			border-radius: 20rpx;
+			overflow: hidden;
+
+			.Theordercolumn_left {
+				padding: 30rpx 30rpx 50rpx 30rpx;
+
+				.message {
+					font-size: 32rpx;
+					font-weight: 500;
 				}
-				.Theordercolumn_right{
-					position:absolute;
-					bottom: 0;
+
+				.dercophone {
+					margin-left: 20rpx;
+				}
+
+				.dercolocationBox {
 					display: flex;
 					flex-wrap: wrap;
-					width: 100%;
-					// height: 16rpx;
-					padding-left: 10rpx;
-					// background-color: #7b6fe3;
-					.activeBox{
+					flex-grow: 1;
+					margin-top: 25rpx;
+					line-height: 50rpx;
+
+					.dercolocation-left {
+						flex: 1;
+
+						.dercolocation {
+							flex-grow: 5;
+							font-size: 38rpx;
+							font-weight: 600;
+						}
+					}
+
+					.dercolocation-right {
 						display: flex;
-						flex-wrap: nowrap;
-					}
-					.active{
-						transform:skewX(-10deg);
-						width: 35rpx;
-						height: 10rpx;
-					}
-					.violet{
-						background-color: #7b6fe3;
-					}
-					.white{
-						background-color: #fff;
-					}
-					.red{
-						background-color: #ef2950;
+						justify-content: center;
+						align-items: center;
+						width: 10%;
+
+						.cuIcon-right {
+							font-size: 36rpx;
+						}
 					}
 				}
 			}
-		}
 
+			.Theordercolumn_right {
+				position: absolute;
+				bottom: 0;
+				display: flex;
+				flex-wrap: wrap;
+				width: 100%;
+				// height: 16rpx;
+				padding-left: 10rpx;
+
+				// background-color: #7b6fe3;
+				.activeBox {
+					display: flex;
+					flex-wrap: nowrap;
+				}
+
+				.active {
+					transform: skewX(-10deg);
+					width: 35rpx;
+					height: 10rpx;
+				}
+
+				.violet {
+					background-color: #7b6fe3;
+				}
+
+				.white {
+					background-color: #fff;
+				}
+
+				.red {
+					background-color: #ef2950;
+				}
+			}
+		}
+	}
 </style>

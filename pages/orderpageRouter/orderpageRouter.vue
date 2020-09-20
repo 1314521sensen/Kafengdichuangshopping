@@ -65,6 +65,7 @@
 							</view>
 						</view>
 				</view>
+				<Nopage v-show="this.$store.state.Temporarynonpaymentlist.length == 0" :prompttext="prompttext"></Nopage>
 		</scroll-view>
 		<ReturntheMoneylist v-if="indexs==5"></ReturntheMoneylist>
 	</view>
@@ -74,6 +75,7 @@
 	const app = getApp()
 	import ReturntheMoneylist from "@/components/Commoditycomponent/ReturntheMoneylist.vue"
 	import actionbar from "@/components/actionbar/actionbar.vue"
+	import Nopage from "@/components/Nopage.vue"
 	export default {
 		data() {
 			return {
@@ -105,12 +107,14 @@
 				judge:true,
 				imgpath:this.$store.state.imgyuming,
 				isoder:false,
-				TabCurBool:0
+				TabCurBool:1,
+				prompttext:'暂无订单'
 			}
 		},
 		components:{
 			ReturntheMoneylist,
-			actionbar
+			actionbar,
+			Nopage
 		},
 		methods:{
 			scrollBottom(){

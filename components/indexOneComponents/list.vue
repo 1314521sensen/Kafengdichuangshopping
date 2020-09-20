@@ -24,22 +24,30 @@
 						<view class="text-grey">
 							<text 
 								class="recommend"
-								 v-show="parseInt(item.is_distribution)!==0"
+								v-show="item.is_distribution==1?parseInt((item.distribution_type==0?item.distribution_cms:Number(((item.distribution_cms*item.good_promotion_price)/100)).toFixed(2))):0!==0"
 							>
 								买手推荐
 							</text>
-							<text>{{item.good_title?item.good_title:item.goods_name}}</text>
+							<text style="letter-spacing:2rpx">{{item.good_title?item.good_title:item.goods_name}}</text>
 						</view>
-						<view class="text-title" v-show="parseInt(item.is_distribution)==0">
+						<view 
+							class="text-title" 
+							v-show="(item.is_distribution==1?parseInt((item.distribution_type==0?item.distribution_cms:Number(((item.distribution_cms*item.good_promotion_price)/100)).toFixed(2))):0)==0"
+						>
 							<text>{{item.good_sub_title}}</text>
 						</view>
-						<view class="earnings" v-show="parseInt(item.is_distribution)!==0">
+						<view 
+							class="earnings" 
+							v-show="item.is_distribution==1?parseInt((item.distribution_type==0?item.distribution_cms:Number(((item.distribution_cms*item.good_promotion_price)/100)).toFixed(2))):0!==0">
 							<text>
 								预计收益:{{item.is_distribution==1?(item.distribution_type==0?item.distribution_cms:Number(((item.distribution_cms*item.good_promotion_price)/100)).toFixed(2)):0}}
 							</text>
 						</view> 
 						<!-- :class="parseInt(item.is_distribution)==0?'active_margin':''" -->
-						<view class="price" :class="parseInt(item.is_distribution)==0 && item.good_sub_title==''?'active_margin':''">
+						<view 
+							class="price" 
+							:class="(item.is_distribution==1?parseInt((item.distribution_type==0?item.distribution_cms:Number(((item.distribution_cms*item.good_promotion_price)/100)).toFixed(2))):0)==0 && item.good_sub_title==''?'active_margin':''"
+						>
 							￥{{item.good_promotion_price?item.good_promotion_price:(item.fav_price?item.fav_price:item.track_price)}}
 							<text class="lg text-gray cuIcon-delete" :style="{'display':display}" @tap="deletescollectionAndfootprint"
 							 :data-index="index"></text>
@@ -57,7 +65,7 @@
 								:data-sid="item.store_id"
 								:data-price="item.good_promotion_price"
 								:data-shoptitle="item.good_title?item.good_title:item.goods_name"
-								 v-show="parseInt(item.is_distribution)!==0"
+								 v-show="item.is_distribution==1?parseInt((item.distribution_type==0?item.distribution_cms:Number(((item.distribution_cms*item.good_promotion_price)/100)).toFixed(2))):0!==0"
 							>
 								<text class="lg text-gray cuIcon-share"></text>
 							</view>
@@ -171,7 +179,7 @@
 						})
 					},
 					fail(err){
-						uni.reLaunch({
+						uni.navigateTo({
 							url:`/pages/login/login`
 						})
 					}

@@ -36,6 +36,9 @@
 					</view>
 				</view>
 			</view>
+			<!-- <view class="del" @tap="del">
+				<text>暂不使用</text>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -104,7 +107,9 @@
 			}
 		},
 		created() {
+			// console.log(1355)
 			const _this  = this
+			// console.log(_this.couplebooltext)
 			if(_this.Whatcoupon=='0'){//在详情的优惠券
 				uni.request({
 					url:`${app.globalData.Requestpath}activity/getStoreCouponTypeList`,
@@ -135,9 +140,12 @@
 						token:_this.tokey,
 						sid:newcouponboollist,
 						t_price:_this.Orderpaymentamount,
-						c_category:_this.couplebooltext
+						c_category:_this.couplebooltext,
+						limit_gids:_this.limit_gids,
+						limit_gcategory:_this.limit_gcategory
 					},
 					success(res) {
+						// console.log(res)
 						if(res.data.code==0){
 							_this.list = res.data.data
 							// console.log(_this.list)
@@ -151,7 +159,7 @@
 			}
 			
 		},
-		props:["tokey","storeid","msg","Whatcoupon","Orderpaymentamount","titlemsg","couplebooltext"]
+		props:["tokey","storeid","msg","Whatcoupon","Orderpaymentamount","titlemsg","couplebooltext","limit_gcategory","limit_gids"]
 	}
 </script>
 

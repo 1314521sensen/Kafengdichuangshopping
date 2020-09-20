@@ -115,6 +115,7 @@
 				passwordzhifutanchuang:false,//是否弹出输入支付密码弹窗
 				isIphoneX:false,//Iphone全面屏系列底部适配
 				zhifumimatext:"",
+				Paypasswordnumber:0
 				// refundparagraphlist:[//这一会注释
 				// 	"不喜欢/不想要",
 				// 	"空包裹",
@@ -172,9 +173,13 @@
 				}else if(this.radioname=='radio5'){//支付宝支付
 					
 				}else{//余额支付
-					// console.log()
-					this.passwordzhifutanchuang = true
-					this.isIphoneX = true
+					if(this.Paypasswordnumber<=2){
+						this.passwordzhifutanchuang = true
+						this.isIphoneX = true
+					}else{
+						app.globalData.showtoastsame("输入次数过多,请前往设置重置密码")
+					}
+					
 				}
 			},
 			//封装个方法 判断用户有没有绑定openid
@@ -199,7 +204,7 @@
 			},
 			//退款
 			refundlink(){
-				console.log(88888)
+				// console.log(88888)
 				const _this = this
 				uni.navigateTo({
 					url:`/pages/refund/refund?o_sn=${_this.order_sn}`
@@ -253,6 +258,8 @@
 								},
 								success(res) {
 									if(res.data.code==0){
+										//支付密码次数
+										_this.Paypasswordnumber = 0
 										app.globalData.showtoastsame(res.data.msg)
 										// console.log(_this.$store.state.orderlistshop)
 										if(_this.$store.state.orderlistshop[0].share_from!==null){
@@ -262,6 +269,9 @@
 											url: `/pages/Temporarynonpayment/Temporarynonpayment`
 										});
 									}else{
+										//支付密码的次数
+										_this.Paypasswordnumber +=1
+										
 										app.globalData.showtoastsame(res.data.msg)
 									}
 								}

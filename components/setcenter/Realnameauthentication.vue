@@ -8,7 +8,7 @@
 					<text class="lg text-gray cuIcon-right"></text>
 				</view>
 			</view>
-			<form @submit="Realnamesubmit">
+			<form @submit="Realnamesubmit" class="realname">
 				<view class="cu-modal" :class="modalName=='setphonetan'?'show':''">
 					<view class="cu-dialog">
 						<view class="cu-bar bg-white justify-end">
@@ -49,7 +49,7 @@
 						<view class="cu-bar bg-white justify-end">
 							<view class="action btn">
 								<button class="cu-btn line-green text-green" form-type="submit">确定</button>
-								<button class="cu-btn line-green text-red">进行实名</button>
+								<!-- <button class="cu-btn line-green text-red">进行实名</button> -->
 							</view>
 						</view>
 					</view>
@@ -73,7 +73,8 @@
 				this.modalName = e.currentTarget.dataset.target
 			},
 			hideModal(e) {
-				this.modalName = null
+				const _this = this
+				_this.modalName = null
 			},
 			ChooseImage() {
 				uni.chooseImage({
@@ -99,6 +100,73 @@
 				this.imgList.splice(e.currentTarget.dataset.index, 1)
 			},
 			//实名提交
+			// Realnamesubmit(e){
+			// 	const _this = this
+			// 	let {name,idcard} = e.detail.value
+				
+			// 	//正则匹配姓名和身份证
+			// 	let regname = /^[\u4E00-\u9FA5]{2,4}$/
+			// 	// 正则表达式：
+			// 	let idcardReg = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+			// 	if(regname.test(name) && idcardReg.test(idcard) && this.imgList.length!=0){//当验证全部同过以后才能往下执行
+			// 		//进行上传图片
+
+			// 		uni.uploadFile({
+			// 			url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
+			// 			method:"POST",
+			// 			filePath:this.imgList[0],
+			// 			name:'file',
+			// 			fileType:"image",
+			// 			success:(resimg)=>{
+			// 				// console.log(resimg)
+			// 				if(JSON.parse(resimg.data).code==0){
+			// 					let resdata = JSON.parse(resimg.data).data.src
+			// 					// resdata//这是返回了第一次图片
+			// 					uni.uploadFile({
+			// 						url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
+			// 						method:"POST",
+			// 						filePath:this.imgList[1],
+			// 						name:'file',
+			// 						fileType:"image",
+			// 						success(resimg2){
+			// 							// console.log(resimg2)
+			// 							if(JSON.parse(resimg2.data).code==0){
+			// 								let resdata2 = JSON.parse(resimg.data).data.src
+			// 								// resdata//这是返回了第一次图片
+			// 								//发起请求
+			// 								uni.request({
+			// 									url:`${app.globalData.Requestpath}user/submitRealNameAuthentication`,
+			// 									method:"POST",
+			// 									data:{
+			// 										token:_this.tokey,
+			// 										real_name:name,
+			// 										id_card:idcard,
+			// 										fphoto:resdata,
+			// 										rphoto:resdata2
+			// 									},
+			// 									success:(resjieguo)=>{
+			// 										// console.log(resjieguo)
+			// 										if(resjieguo.data.code == 0){//提交成功
+			// 											// _this.hideModal()
+			// 											_this.modalName = null
+			// 											uni.showToast({
+			// 												title:"认证成功",
+			// 												icon:"none"
+			// 											})
+			// 										}
+			// 									}
+			// 								})
+			// 							}
+			// 						}
+			// 					})
+			// 				}
+			// 			}
+			// 		})
+					
+			// 	}
+			// }\
+			
+			//实名提交  
 			Realnamesubmit(e){
 				const _this = this
 				let {name,idcard} = e.detail.value
@@ -107,8 +175,9 @@
 				let regname = /^[\u4E00-\u9FA5]{2,4}$/
 				// 正则表达式：
 				let idcardReg = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
-				if(regname.test(name) && idcardReg.test(idcard) && this.imgList.length!=0){//当验证全部同过以后才能往下执行
-					//进行上传图片
+				
+				if(regname.test(name) && idcardReg.test(idcard) && this.imgList.length!=0){ //当验证全部同过以后才能往下执行  
+					//进行上传图片   
 
 					uni.uploadFile({
 						url:`${app.globalData.Requestpath}common/uploadImage?type=user`,
@@ -129,7 +198,7 @@
 									success(resimg2){
 										if(JSON.parse(resimg2.data).code==0){
 											let resdata2 = JSON.parse(resimg.data).data.src
-											// resdata//这是返回了第一次图片
+											// resdata//这是返回了第一次图片  
 											//发起请求
 											uni.request({
 												url:`${app.globalData.Requestpath}user/submitRealNameAuthentication`,
@@ -142,8 +211,10 @@
 													rphoto:resdata2
 												},
 												success:(resjieguo)=>{
-													if(resjieguo.data.code){//提交成功
-														_this.hideModal()
+													console.log(resjieguo)
+													if(resjieguo.data.code == 0){//提交成功    
+														_this.hideModal() 
+														_this.modalName = null
 														uni.showToast({
 															title:"认证成功",
 															icon:"none"
@@ -151,13 +222,16 @@
 													}
 												}
 											})
+										}else{
+											app.globalData.showtoastsame("请上传身份证正反面")
 										}
 									}
 								})
 							}
 						}
 					})
-					
+				}else{
+					app.globalData.showtoastsame("请输入正确用户信息和上传身份证正反面")
 				}
 			}
 		},
@@ -206,4 +280,8 @@
 	.cu-btn{
 		line-height:2;
 	}
+	.realname{
+			position: relative;
+			z-index: 2;
+		}
 </style>

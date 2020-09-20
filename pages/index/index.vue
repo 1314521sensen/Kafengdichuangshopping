@@ -34,7 +34,9 @@
 					<banner v-if="TabCur<1" :swiperList="swiperList"></banner>
 					<!-- <Oneyuanbuys v-show="one_yuan_cha==false && this.$store.state.is_newuser"></Oneyuanbuys> -->
 					<!-- <Oneyuanbuys ></Oneyuanbuys> -->
+					<!-- 打包注释-开始 -->
 					<Oneyuanbuy @oneyuancha="oneyuancha"></Oneyuanbuy>
+					<!-- 打包注释-结束 -->
 					<ScratchableLatex :cuIconList="cuIconList"></ScratchableLatex>
 					<!-- <faddish></faddish> -->
 					<!-- 后期解开 -->

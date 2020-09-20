@@ -43,6 +43,7 @@
 					class="inp"
 					@focus="focus"
 					@blur="blur"
+					:style="{color:inpcustom?'#000':'red'}"
 				/>
 			</view>
 			<view class="immediately">
@@ -88,7 +89,8 @@
 				statusBar:0,
 				checkindex:-1,
 				inpvalue:"",
-				user_commission:0
+				user_commission:0,
+				inpcustom:true
 			}
 		},
 		methods: {
@@ -104,13 +106,20 @@
 				this.checkindex = -1
 			},
 			blur(){
+				if(Number(this.values) && Number(this.values)>0){
+					this.values = Number(this.values).toFixed(2)
+					this.inpcustom = true
+				}else{
+					this.inpcustom = false
+					return app.globalData.showtoastsame("请输入正确的金额")
+				}
 				// console.log(this.values)
 				this.inpvalue = this.values
 			},
 			immediately(){
 				const _this = this
 				// && _this.inpvalue >0 && _this.inpvalue!==""
-				if(_this.checkindex!==-1 || (_this.inpvalue >0 && _this.inpvalue!=="")){
+				if(_this.checkindex!==-1 || (_this.inpvalue >0 && (_this.inpvalue!=="" && _this.inpvalue!==undefined))){
 					if(Number(_this.inpvalue) <= Number(_this.user_commission)){
 						uni.getStorage({
 							key:"bindtokey",

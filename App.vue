@@ -35,7 +35,7 @@
 			},
 			Logback(messagelogin){//封装个函数 用于重新登录
 				if(messagelogin=='令牌错误'){
-					uni.reLaunch({
+					uni.navigateTo({
 						url:"/pages/login/login"
 					})
 				}
@@ -50,7 +50,7 @@
 					},
 					success(res) {
 						if(res.data.code==1){
-							return uni.reLaunch({
+							return uni.navigateTo({
 								url:"/pages/login/login"
 							})
 						}
@@ -60,7 +60,7 @@
 			//封装tokey过期了
 			Requestmethod(codetokey,messagetokey){
 				if(codetokey==1 && messagetokey=='令牌错误'){//说明tokey过期了 跳转到登录页面
-					uni.reLaunch({
+					uni.navigateTo({
 						url:"/pages/login/login"
 					})
 					getApp().globalData.logintokeybool = false
@@ -92,6 +92,12 @@
 				// console.log(plus.os.name)//这是Android
 			// #endif
 			//接下来启动页---开始
+			/*
+				{
+				    "path" : "pages/Startpage/Startpage",
+				    "style" : {}
+				},
+			*/
 				//通过缓存来控制是否显示启动页
 				// #ifdef APP-PLUS
 				uni.setStorage({

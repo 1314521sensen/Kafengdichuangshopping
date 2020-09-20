@@ -12,7 +12,8 @@
 					<text class="non-payment" v-if="orderstatus==2">订单已发货</text>
 					<text class="non-payment" v-if="orderstatus==3">订单已完成</text>
 					<text v-if="orderstatus==0 && this.$store.state.remainingTime>0">{{this.$store.state.remainingTime}}分钟内自动取消订单</text>
-					<text v-if="orderstatus==0 && this.$store.state.remainingTime<=0" style="color: #FF0000;font-size: 40rpx;">订单已超时自动取消</text>
+					<!-- <text v-if="orderstatus==0 && this.$store.state.remainingTime<=0" style="color: #FF0000;font-size: 40rpx;">订单已超时自动取消</text> -->
+					<text v-if="iSorder" style="color: #FF0000;font-size: 40rpx;">订单已超时自动取消</text>
 					<!-- <xqcountdown 
 						:startTime="String(this.$store.state.Notcreated)" 
 						:endTime="String(this.$store.state.Notpaying)"
@@ -97,7 +98,7 @@
 			</view>
 			<view class="total_price">
 				<text class="total_price_title">实付款</text>
-				<text class="total_price_text">{{total_price}}</text>
+				<text class="total_price_text">{{orderstatus == -1 ? (0).toFixed(2):total_price}}</text>
 			</view>
 			<!-- <orderInformation></orderInformation> -->
 			<view class="orderInformation">
@@ -145,6 +146,7 @@
 	export default {
 		data() {
 			return {
+				iSorder:false,
 				statusBar:0,
 				min:30,
 				miao:35,
@@ -253,6 +255,12 @@
 												address_id:resinfo.data.data.address_id,
 											},
 											success(resaddinfo) {
+											// 延迟过一秒再执行
+											setTimeout(function(){
+												if(_this.orderstatus==0 && _this.$store.state.remainingTime<=0){
+													_this.iSorder = true
+														  }
+													},1000)
 												// console.log(resaddinfo)
 												_this.addressCode = resaddinfo.data.code
 												// console.log(resaddinfo,"收货地址详情")

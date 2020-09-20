@@ -33,7 +33,7 @@
 				// console.log(this.swiperList)
 				// console.log(e.currentTarget.dataset)
 				let {category,adv_link} = e.currentTarget.dataset
-				// console.log(adv_link)
+				// console.log(category,adv_link)
 				if(parseInt(category)==1){
 					let storeid = adv_link.split("?")[1].split("=")
 					// console.log(storeid)
@@ -41,6 +41,10 @@
 						url:`/pages/Store/store?storeid=${storeid[1]}`
 					})
 					//
+				}else if(parseInt(category)==2){
+					uni.navigateTo({
+						url:`/pages/festivalActivities/festivalActivities`
+					})
 				}
 			}
 		},

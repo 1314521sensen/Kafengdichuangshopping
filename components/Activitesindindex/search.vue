@@ -17,7 +17,7 @@
 			></input>
 			</view>
 			<view class="action" v-if="showbtn">
-				<button class="cu-btn shadow-blur round">搜索</button>
+				<button class="cu-btn shadow-blur round" @tap="InputFocus">搜索</button>
 			</view>
 		</view>
 		<view class="scan">
@@ -98,7 +98,7 @@
 							token:res.data
 						},
 						success(res) {
-							// console.log(res,"会员")
+							// console.log(res)
 							uni.setStorage({
 								key:'beesVip',
 								data:0
@@ -113,6 +113,19 @@
 									key:'beesVip',
 									data:res.data.data.is_member
 								})
+								//将appopenid 微信的opendid
+								if(res.data.data.app_openid){
+									// console.log(222)
+									uni.setStorage({
+										key:"bindopenid",
+										data:res.data.data.app_openid,
+									})
+								}else{
+									uni.setStorage({
+										key:"bindopenid",
+										data:"",
+									})
+								}
 								let {user_sid} = res.data.data
 								_this.code = res.data.data.code
 								_this.user_pic = res.data.data.user_pic

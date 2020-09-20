@@ -8,7 +8,7 @@
 				<view v-for="(items,indexs) in $store.state.evaluationlistitem[index]" :key="indexs">
 					<!-- {{yuming+items.good_pic}} -->
 					<view class="company-top">
-						{{item.store_name}}
+						<!-- {{item.store_name}} -->
 					</view>
 					<view class="company-bottom">
 						<view class="bottom-left">

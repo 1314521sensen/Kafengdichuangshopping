@@ -23,7 +23,7 @@
 				list:[
 					{
 						title:"绑定邮箱",
-						textright:"进行绑定",
+						textright:"",
 					},
 				]
 			}
@@ -86,7 +86,28 @@
 		onLoad() {
 		},
 		created() {
-			
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res) {
+					uni.request({
+						url:`${app.globalData.Requestpath}user/getUserBindInfo`,
+							method:"POST",
+							data:{
+								token:res.data
+							},
+							success(res) {
+								if(res.data.code == 0){
+									if(res.data.data.user_email){
+										_this.list[0].textright = "进行更改"
+									}else{ 
+										_this.list[0].textright = "进行绑定"
+									}
+								}
+							} 
+					})
+				}
+			})
 		}
 	}
 </script>

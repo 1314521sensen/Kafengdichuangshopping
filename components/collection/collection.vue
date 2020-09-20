@@ -69,7 +69,7 @@
 			</view>
 			<!-- <uniLoadMore :iconSize="20" :contentText="{contentdown:text}" v-if="list.length>=10"></uniLoadMore> -->
 		</scroll-view>
-		<Nopage v-show="list.length==0"></Nopage>
+		<Nopage v-show="list.length==0" :prompttext="prompttext"></Nopage>
 		<loading v-if="loadingbool==false"></loading>
 		<suspensionshopcart v-show="loadingbool"></suspensionshopcart>
 	</view>
@@ -103,7 +103,8 @@
 				deletelist:[],
 				Delete:false,
 				loadingbool:false,
-				imgpath:this.$store.state.imgyuming
+				imgpath:this.$store.state.imgyuming,
+				prompttext:""
 			}
 		},
 		components:{
@@ -244,9 +245,11 @@
 				userMyfootprint 我的足迹
 			*/
 			if(titlename=='userMycollection'){
+				this.prompttext = "暂无收藏商品"
 				this.geturl = `user/getGoodFavoriteList`
 				this.deleteurl = `user/deleteFavoriteInfo`
 			}else if(titlename=='userMyfootprint'){
+				this.prompttext = "暂无足迹商品"
 				this.geturl = `user/getTrackList`
 				this.deleteurl = `user/deleteTrackInfo`
 			}

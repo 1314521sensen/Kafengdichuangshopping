@@ -168,7 +168,7 @@
 		// 底部的介绍
 		.introduce{
 			display: flex;
-			padding:20rpx 0 0 24rpx;
+			padding:5rpx 0 0 24rpx;
 			justify-content: space-around;
 			// 底部左边部分
 			.left{

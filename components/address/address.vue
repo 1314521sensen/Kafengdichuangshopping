@@ -5,11 +5,23 @@
 		<view class="from">
 			<view class="cu-form-group">
 				<view class="title">收货人</view>
-				<input v-model="value1" placeholder="收货人姓名" name="input"></input>
+				<input 
+					v-model="value1" 
+					placeholder="收货人姓名" 
+					name="input"
+					class="inputdetection"
+				></input>
 			</view>
 			<view class="cu-form-group borderadd">
 				<view class="title">手机号码</view>
-				<input v-model="value2" placeholder="收货人手机号" name="input"></input>
+				<input 
+					v-model="value2" 
+					placeholder="收货人手机号" 
+					name="input" 
+					class="inputdetection"
+					@blur="phoneinp"
+					:class="phoneblur?'':'inputdetection_active'"
+				></input>
 				<view class="cu-capsule radius">
 					<view class='cu-tag bg-blue '>
 						+86
@@ -24,6 +36,7 @@
 				@selectiondata="selectiondata" 
 				message="所在地区" 
 				style="margin-top:0;border-bottom:2rpx solid #f2f2f2;"
+				:Haschosenlist="Haschosenlist"
 			></areaselection>
 			<!-- </view> -->
 			<view class="cu-form-group borderadd">
@@ -70,6 +83,7 @@
 				value6:"",
 				statusBar:0,
 				selectiondatalist:[],
+				Haschosenlist:[],
 				tokey:0,
 				Addressoption:"",
 				address:"",
@@ -87,6 +101,7 @@
 				freight:"",
 				spec_id:0,
 				switchA: false,
+				phoneblur:true
 			}
 		},
 		methods:{
@@ -94,12 +109,31 @@
 				
 				this.switchA = e.detail.value
 			},
+			phoneinp(){
+				//当用户输入手机号牌失去焦点的时候
+				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				if(this.value2!==undefined){
+					if(this.value2.match(userphone)!==null){
+						this.phoneblur = true
+					}else{
+						this.phoneblur = false
+						app.globalData.showtoastsame("请输入正确的手机号")
+					}
+				}
+			},
 			// Addressselection(){
 			// 	this.show = true
 			// },
 			submits(){
 				const _this = this
 				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				if(this.value2==undefined){
+					return app.globalData.showtoastsame("手机号不能为空")
+				}
+				let bool = this.selectiondatalist[0][0].area_id
+				let province = this.selectiondatalist[0]
+				let city = this.selectiondatalist[1]
+				let area = this.selectiondatalist[2]
 				// console.log(this.value2.match(userphone))
 				// console.log(this.value1,this.value2,this.value3,this.value4)
 				if(this.value1 && this.value2.match(userphone)!==null && this.value4 && this.selectiondatalist.length>=3){
@@ -112,9 +146,9 @@
 							method:"POST",
 							data:{
 								token:this.tokey,
-								province:this.selectiondatalist[0][0].area_id+1,
-								city:this.selectiondatalist[1][0].area_id+1,
-								area:this.selectiondatalist[2][0].area_id+1,
+								province:bool?this.selectiondatalist[0][0].area_id+1:province,
+								city:bool?this.selectiondatalist[1][0].area_id+1:city,
+								area:bool?this.selectiondatalist[2][0].area_id+1:area,
 								street_number:this.value4,
 								postal_code:"",//这到明天需要改
 								consignee_name:this.value1,
@@ -150,9 +184,9 @@
 							data:{
 								token:this.tokey,
 								address_id:this.address,
-								province:this.selectiondatalist[0][0].area_id+1,
-								city:this.selectiondatalist[1][0].area_id+1,
-								area:this.selectiondatalist[2][0].area_id+1,
+								province:bool?this.selectiondatalist[0][0].area_id+1:province,
+								city:bool?this.selectiondatalist[1][0].area_id+1:city,
+								area:bool?this.selectiondatalist[2][0].area_id+1:area,
 								street_number:this.value4,
 								postal_code:"",//这到明天需要改
 								consignee_name:this.value1,
@@ -182,11 +216,23 @@
 					}
 					//当点击的时候把值加入到把数据提交到数据库当中 在另一个页面进行数据的请求 渲染
 				}else{
-					uni.showToast({
-						title:"请输入完整信息",
-						mask:true,
-						icon:"none"
-					})
+					if(_this.value1=="" || _this.value1==undefined){
+						return app.globalData.showtoastsame("请填写收货人")
+					}else if(_this.value2=="" || _this.value2==undefined){
+						if(_this.value2!==undefined){
+							
+							if(_this.value2.match(userphone)==null){
+								return app.globalData.showtoastsame("请填写正确的手机号")
+							}
+						}else{
+							
+							return app.globalData.showtoastsame("手机号不能为空")
+						}
+					}else if(_this.value4=="" || _this.value4==undefined){
+						return app.globalData.showtoastsame("请填写详细地址,快递更准确配送")
+					}else if(_this.selectiondatalist.length<3){
+						return app.globalData.showtoastsame("请选择地址")
+					}
 				}
 				
 			},
@@ -219,6 +265,12 @@
 			 this.value2 = opction.value2;
 			 this.value4 = opction.value4
 			 this.value6 = opction.value6
+			 this.selectiondatalist[0] = opction.province
+			this.selectiondatalist[1] = opction.city
+			this.selectiondatalist[2] = opction.area
+			this.Haschosenlist[0] = opction.province_name
+			this.Haschosenlist[1] = opction.city_name
+			this.Haschosenlist[2] = opction.area_name
 			 if(parseInt(this.value6)){
 				 this.switchA = true
 			 }else{
@@ -305,5 +357,11 @@
 				font-size: 24rpx;
 			}
 		}
+	}
+	.inputdetection{
+		color:#000
+	}
+	.inputdetection_active{
+		color:red;
 	}
 </style>

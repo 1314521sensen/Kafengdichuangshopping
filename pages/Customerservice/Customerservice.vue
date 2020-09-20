@@ -415,16 +415,33 @@
 			sendmsg(){
 				const _this = this
 				// console.log(_this.inpvalue)
+				// 原来的发送聊天
+				// this.editorCtx.getContents({
+				// 	success(res){
+						
+				// 		_this.$store.commit("Customersendmsg",{textvalue:res.html})
+				// 		_this.editorCtx.clear({
+				// 			success: function(res) {
+				// 			}
+				// 		})
+				// 	}
+				// })
+				// 我写的发送聊天
 				this.editorCtx.getContents({
 					success(res){
-						
-						_this.$store.commit("Customersendmsg",{textvalue:res.html})
+						// console.log(res.text,123)
+						if(res.text == true){
+							_this.$store.commit("Customersendmsg",{textvalue:res.html})
+						}else{
+							app.globalData.showtoastsame("请输入文字")
+						}				
 						_this.editorCtx.clear({
 							success: function(res) {
 							}
 						})
 					}
 				})
+
 				uni.createSelectorQuery().select("#gundong").boundingClientRect((res)=>{
 					// console.log(res) 
 					var newbottom = res.bottom

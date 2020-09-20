@@ -34,7 +34,8 @@
 			<scroll-view :scroll-y="true" class="scroll-view" @scrolltolower="scrolltolower">
 				<view class="detail-bottom" v-for="(item,index) in accountlist" :key="index">
 					<text class="dtail-text-left">{{item.create_time}}</text>
-					<text class="dtail-text-right">{{Number(item.recharge).toFixed(2)}}</text>
+					<text class="dtail-text-right" v-if="Number(item.recharge).toFixed(2)>0">+{{Number(item.recharge).toFixed(2)}}</text>
+					<text class="dtail-text-right" v-else>{{Number(item.recharge).toFixed(2)}}</text>
 				</view>
 			</scroll-view>
 			
@@ -129,7 +130,7 @@
 				}else{
 					//如果用户没有绑定openid的话 就让用户跳到绑定openid的页面
 					uni.showModal({
-						title:"请进行绑定微信",
+						title:"为了您的正常提现，请先绑定微信",
 						content:"为了您的正常提现",
 						showCancel:true,
 						cancelText:"取消",

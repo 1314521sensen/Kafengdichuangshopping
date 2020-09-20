@@ -89,9 +89,9 @@ let getters = {
 		})
 		let countarr = String(state.count).split('.')
 		if (countarr[1]) {
-			return Number(countarr[0] + '.' + countarr[1].substr(0, 2))
+			return (Number(countarr[0] + '.' + countarr[1].substr(0, 2))).toFixed(2) 
 		} else {
-			return Number(String(state.count)) + '.00'
+			return (Number(String(state.count))).toFixed(2) 
 		}
 	}
 }
@@ -668,7 +668,7 @@ let mutations = {
 							}
 						} else {
 							if (res.data.code == 1 && res.data.msg == "令牌错误") {
-								uni.reLaunch({
+								uni.navigateTo({
 									url: "/pages/login/login"
 								})
 								return
@@ -708,6 +708,7 @@ let mutations = {
 			indexs,
 			childindex
 		} = itemObj
+		// console.log(state.cartList[indexs].sub)
 		//当每个小商品选中的按钮点击时 就改变每个小按钮的状态
 		let checkboxs = state.cartList[indexs].sub[[childindex]].checked
 		//如果当前的小按钮的状态如果true的时候 就让变为false
@@ -891,6 +892,7 @@ let mutations = {
 		if (remainder >= this.state.pages) {
 			this.state.pages++
 		} else {
+			this.state.pages++
 			this.commit("getcarlist")
 		}
 	},
@@ -903,17 +905,43 @@ let mutations = {
 			publicShopdetails
 		} = shopvalue
 		_this.state.orderlist = []
+		
 		//判断传过来的标识 如果1就是购物车过来的 否则就是商品详情过来的
 		if (parseInt(fromvalue)) {
+			let couponsstrId = []
 			//这里是购物车过来的
+			// console.log(_this.state.cartList)
 			_this.state.cartList.forEach((item, index) => {
 				item.sub.forEach((items, indexs) => {
 					if (items.checked) {
+						/* 这里为了处理 优惠券的gc_id的值 ---开始*/
+						if(items.gc_id3){
+							if(items.gc_id2){
+								if(items.gc_id1){
+									couponsstrId[index] = items.gc_id1+'-'+items.gc_id2+'-'+items.gc_id3
+								}
+							}else{
+								if(items.gc_id1){
+									couponsstrId[index] = items.gc_id1
+								}
+							}
+						}else {
+							if(items.gc_id2){
+								if(items.gc_id1){
+									couponsstrId[index] = items.gc_id1+'-'+items.gc_id2
+								}
+							}else{
+								couponsstrId[index] = items.gc_id1
+							}
+						}
+						/* 这里为了处理 优惠券的gc_id的值 ---结束*/
 						_this.state.orderlist.push(items)
 					}
 				})
 			})
-			// console.log(_this.state.orderlist)
+			// console.log(couponsstrId)
+			_this.state.orderlist[0].limit_gcategory = couponsstrId
+			/* console.log(_this.state.orderlist) */
 		} else {
 			//这里是商品详情过来的
 			_this.state.orderlist.push(publicShopdetails)
@@ -925,10 +953,12 @@ let mutations = {
 				data: _this.state.orderlist,
 				success() {
 					uni.navigateTo({
-						url: `/pages/Purchasepage/Purchasepage`
+						url: `/pages/Purchasepage/Purchasepage?fromvalue=${fromvalue}`
 					})
 				}
 			})
+		}else{
+			_this.commit("getshowmodel", {msg:"请选中商品进行结算"})
 		}
 	},
 
@@ -1448,7 +1478,7 @@ let mutations = {
 						// console.log(res,'退款订单列表')
 						if (res.data.code == 0) {
 							state.refundreturnlist = res.data.data.list
-							console.log(state.refundreturnlist,1111)
+							// console.log(state.refundreturnlist,1111)
 						}
 					}
 				})
