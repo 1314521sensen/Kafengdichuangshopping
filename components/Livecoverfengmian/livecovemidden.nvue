@@ -4,7 +4,7 @@
 			<text class="textcolorwrite text-center covertext font-size-forty" v-if="fengmianbool==false">添加封面</text>
 			<cover-image :src="imgurl" class="covermidden-imgs" v-if="fengmianbool"></cover-image>
 		</cover-view>
-		<cover-view class="cover-imgsbottomtext">
+		<!-- <cover-view class="cover-imgsbottomtext">
 			<text class="textcolorwrite text-center font-size-forty">您要直播什么呢?</text>
 		</cover-view>
 		<cover-view class="cover-infotext" :style="{width:(windowWidth/2)+'px'}">
@@ -14,17 +14,26 @@
 				v-model="value" 
 				placeholder="请输入直播描述,最多10个字符"  
 				@blur="inpLivedescribe"/>
-		</cover-view>
+		</cover-view> -->
 		<cover-view class="cover-imgsbottomtext">
-			<text class="textcolorwrite text-center font-size-forty">您要设置的直播昵称</text>
+			<text class="textcolorwrite text-center font-size-forty">点击图片更换封面</text>
 		</cover-view>
+		<!-- <cover-view class="cover-imgsbottomtext">
+			<text class="textcolorwrite text-center font-size-forty">您要设置的直播昵称</text>
+		</cover-view> -->
+		
 		<cover-view class="cover-infotext" :style="{width:(windowWidth/2)+'px'}">
+			
 			<input 
 				type="text" 
-				class="infotextinp font-size-twenty-four textcolorwrite text-center" 
-				v-model="value2" 
-				placeholder="请输入直播的昵称(姓名)"  
-				@blur="inpLivenickname"/>
+				class="infotextinp  textcolorwrite " 
+				max-length="5"
+				v-model="value2"
+				placeholder="请输入直播的昵称(姓名)"
+				@blur="inpLivenickname"
+				@focus="focus"
+			/>
+			<cover-image v-if="bool" class="text-img" src="/static/amend.png"></cover-image>
 		</cover-view>
 	</cover-view>
 </template>
@@ -36,11 +45,15 @@
 			return {
 				fengmianbool:false,
 				value:"",
-				// value2:"",
-				imgurl:""
+				value2:"",
+				imgurl:"",
+				bool:true
 			}
 		},
 		methods:{
+			focus(e){
+				this.bool = false
+			},
 			uploadimgs(){
 				const _this = this
 				uni.chooseImage({
@@ -51,24 +64,29 @@
 						_this.imgurl = res.tempFilePaths[0]
 						// console.log(res.tempFilePaths[0],"本地的")
 						if(res.tempFilePaths[0]!==""){
-							uni.uploadFile({
-								url:`${app.globalData.Requestpath}common/uploadImage?type=liveuser`,
-								filePath:res.tempFilePaths[0],
-								name:"file",
-								fileType:"image",
-								success(resimg){
-									// console.log(resimg,"这是返回的")
-									// console.log(JSON.parse(resimg.data))
-									let json = JSON.parse(resimg.data)
-									if(json.code==0){
-										_this.fengmianbool = true
-										_this.$emit('coverurl',json.data.src)
-										_this.$emit("inpvalue",_this.value)
-									}else{
-										app.globalData.showtoastsame("上传失败,请重新上传")
-									}
-								}
-							})
+							_this.uploadFile(res.tempFilePaths[0])
+						}
+					}
+				})
+			},
+			// 上传图片
+			uploadFile(img){
+				const _this = this
+				uni.uploadFile({
+					url:`${app.globalData.Requestpath}common/uploadImage?type=liveuser`,
+					filePath:img,
+					name:"file",
+					fileType:"image",
+					success(resimg){
+						// console.log(resimg,"这是返回的")
+						// console.log(JSON.parse(resimg.data))
+						let json = JSON.parse(resimg.data)
+						if(json.code==0 || img){
+							_this.fengmianbool = true
+							_this.$emit('coverurl',json.data.src)
+							_this.$emit("inpvalue",_this.value)
+						}else{
+							app.globalData.showtoastsame("上传失败,请重新上传")
 						}
 					}
 				})
@@ -84,12 +102,40 @@
 			// //你要直播的昵称
 			inpLivenickname(){
 				//名字控制到5个字
+				this.bool = true
 				if(this.value2.length<=5){
 					this.$emit('nickname',this.value2)
 				}else{
-					app.globalData.showtoastsame("建议输入5个字符")
+					app.globalData.showtoastsame("最长输入5个字符")
 				}
 			}
+		},
+		created() {
+			const _this = this
+			
+			uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						uni.request({
+							url: `${app.globalData.Requestpath}live_user/getLiveUserInfo`,
+							method: "POST",
+							data: {
+								token: res.data,
+							},
+							success(res) {
+								_this.value2 = res.data.data.live_nick
+								_this.imgurl = _this.$store.state.imgyuming + res.data.data.live_pic
+								_this.fengmianbool = true
+								if(_this.imgurl){
+									_this.uploadFile(_this.imgurl)
+									console.log(_this.imgurl)
+									console.log(1111)
+								}
+							}
+						})
+					}
+			})
+			
 		},
 		props:["windowWidth"]
 	}
@@ -117,11 +163,26 @@
 	margin-top:30rpx;
 }
 .cover-infotext{
+	/* width: 100%; */
+	flex-direction:row;
 	/* background-color:red; */
-	height:60rpx;
+	/* height:60rpx; */
+	flex-wrap:nowrap;
 	justify-content: center;
 }
+.live-text{
+	font-size: 30rpx;
+	color: #FFFFFF;
+}
+.text-img{
+	width: 30rpx;
+	height: 30rpx;
+	margin-top: 15rpx;
+}
 .infotextinp{
+	text-align: left;
+	font-size: 30rpx;
+	width: 180rpx;
 	/* background-color:pink; */
 }
 

@@ -1,7 +1,7 @@
 <template>
 	<view class="addressTo">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<actionbar url="/pages/PersonalMy/PersonalMy" message="添加地址" isorder='isorder'></actionbar>
+		<actionbar url="/pages/PersonalMy/PersonalMy" message="添加地址" ></actionbar>
 		<view class="newaddressTO-box">
 			<view class="newaddressTO" @tap="tonews">
 				<button class="cu-btn bg-red lg newaddressbtn">
@@ -102,14 +102,14 @@
 						// console.log("购物车")
 						// console.log(this.freight)
 						uni.redirectTo({
-							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}&bool=1`
 						})
 						// console.log(this.gid)
 					}else{
 						// console.log("执行这里详情")
 						// console.log(this.freight)
 						uni.redirectTo({
-							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}&freight=${this.freight}&spec_id=${this.spec_id}`
+							url:`/pages/Purchasepage/Purchasepage?gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&selectitem=${encodeURI(JSON.stringify(itemitem))}&storeid=${this.storeid}&freight=${this.freight}&spec_id=${this.spec_id}&bool=1`
 						})
 					}
 				}else{
@@ -139,15 +139,15 @@
 			},
 			tonews(){
 				if(this.way==1){
-					uni.navigateTo({
+					uni.redirectTo({
 						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}&freight=${this.freight}`
 					})
 				}else if(this.way==2){
-					uni.navigateTo({
+					uni.redirectTo({
 						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}&freight=${this.freight}&spec_id=${this.spec_id}`
 					})
 				}else{
-					uni.navigateTo({
+					uni.redirectTo({
 						url:`/components/address/address?title=newaddress&titleparameter=${this.titleparameter}`
 					})
 				}
@@ -200,12 +200,12 @@
 				let area_name = itemStr.area_name
 				if(this.way==1){
 					uni.redirectTo({
-						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}&value1=${value1}&value2=${value2}&value4=${value4}&value6=${value6}&amend=1`
+						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&cids=${this.cids}&storeid=${this.storeid}&value1=${value1}&value2=${value2}&value4=${value4}&value6=${value6}&amend=1&province=${province}&city=${city}&area=${area}&province_name=${province_name}&city_name=${city_name}&area_name=${area_name}`
 					})
 					// console.log()
 				}else if(this.way==2){
 					uni.redirectTo({
-						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}&spec_id=${this.spec_id}&value1=${value1}&value2=${value2}&value4=${value4}&value6=${value6}&amend=1`
+						url:`/components/address/address?title=setaddress&address=${address_id}&titleparameter=${this.titleparameter}&gid=${this.gid}&specname=${this.specname}&num=${this.num}&way=${this.way}&img=${this.img}&storename=${this.storename}&price=${this.price}&goodtitle=${this.goodtitle}&storeid=${this.storeid}&spec_id=${this.spec_id}&value1=${value1}&value2=${value2}&value4=${value4}&value6=${value6}&amend=1&province=${province}&city=${city}&area=${area}&province_name=${province_name}&city_name=${city_name}&area_name=${area_name}`
 					})
 				}else{
 					uni.redirectTo({

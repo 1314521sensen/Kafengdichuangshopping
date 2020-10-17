@@ -31,6 +31,7 @@
 	.midden-childTop-info{
 		flex-direction:row;
 		padding:0 50rpx 0 30rpx;
+		/* background-color: yellow; */
 	}
 	.midden-childTop-left{
 		flex:1;

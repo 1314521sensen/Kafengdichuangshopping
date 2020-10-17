@@ -24,9 +24,14 @@
 				let url = e.currentTarget.dataset.url
 				// console.log(this.isorder)
 				if(this.isorder){
+					// console.log(1111)
 					uni.redirectTo({
 						url:url
 					})
+				}else if(this.bool == 1){
+					uni.navigateBack({
+						delta: 2
+					});
 				}else{
 					if(this.Jumpchoose){
 						// uni.redirectTo({
@@ -42,7 +47,7 @@
 				}
 			}
 		},
-		props:["url","message","bg","textcolor",'Jumpchoose',"isorder"]
+		props:["url","message","bg","textcolor",'Jumpchoose',"isorder","bool"]
 	}
 </script>
 

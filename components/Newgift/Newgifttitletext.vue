@@ -1,15 +1,17 @@
 <template>
 	
 		<view class="exclusive">
-			<text>领取</text>
+			<text>{{NewgiftLeftTitle}}</text>
 			<text class="color-red">新人专享</text>
-			<text>礼券</text>
+			<text>{{GiftVouchers}}</text>
 		</view>
 	
 </template>
 
 <script>
-	
+	export default {
+		props:["NewgiftLeftTitle","GiftVouchers"]
+	}
 </script>
 
 <style lang="less">

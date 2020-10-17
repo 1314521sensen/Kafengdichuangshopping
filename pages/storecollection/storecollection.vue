@@ -36,8 +36,9 @@
 					</view>
 				</view>
 			</view>
+			<Nopage v-show="storelist.length==0" :prompttext="prompttext"></Nopage>
 		</scroll-view>
-		<view class="storecollection_bottom">
+		<view v-if="storelist.length" class="storecollection_bottom">
 			<button class="cu-btn round bg-red btn" @tap="store_remove">移除</button>
 		</view>
 	</view>
@@ -47,6 +48,8 @@
 	const app = getApp()
 	//引入 头部导航
 	import actionbar from "@/components/actionbar/actionbar.vue"
+	//引入暂无店铺的
+	import Nopage from "@/components/Nopage.vue"
 	export default {
 		data() {
 			return {
@@ -57,7 +60,8 @@
 				imgpath:this.$store.state.imgyuming,
 				itemindex:-1,
 				fav_id:0,
-				delectbool:false
+				delectbool:false,
+				prompttext:"暂无收藏店铺"
 			}
 		},
 		methods: {
@@ -140,7 +144,8 @@
 			}
 		},
 		components:{
-			actionbar
+			actionbar,
+			Nopage
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar

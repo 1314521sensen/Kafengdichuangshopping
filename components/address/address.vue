@@ -111,7 +111,7 @@
 			},
 			phoneinp(){
 				//当用户输入手机号牌失去焦点的时候
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				if(this.value2!==undefined){
 					if(this.value2.match(userphone)!==null){
 						this.phoneblur = true
@@ -126,17 +126,18 @@
 			// },
 			submits(){
 				const _this = this
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				if(this.value2==undefined){
 					return app.globalData.showtoastsame("手机号不能为空")
 				}
-				let bool = this.selectiondatalist[0][0].area_id
-				let province = this.selectiondatalist[0]
-				let city = this.selectiondatalist[1]
-				let area = this.selectiondatalist[2]
+				
 				// console.log(this.value2.match(userphone))
 				// console.log(this.value1,this.value2,this.value3,this.value4)
-				if(this.value1 && this.value2.match(userphone)!==null && this.value4 && this.selectiondatalist.length>=3){
+			if(this.value1 && this.value2.match(userphone)!==null && this.value4 && this.selectiondatalist.length>=3){
+					let bool = this.selectiondatalist[1][0].area_id
+					let province = this.selectiondatalist[0]
+					let city = this.selectiondatalist[1]
+					let area = this.selectiondatalist[2]
 					//这是跳转上页
 					// console.log(this.tokey)
 					// console.log(this.selectiondatalist[0][0].area_id+1)
@@ -249,7 +250,7 @@
 			}
 		},
 		components:{
-			areaselection,
+			areaselection
 		},
 		onLoad(opction){
 			if(opction.amend == 1){

@@ -80,13 +80,13 @@
 				uni.chooseImage({
 					count: 2, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['album'], //从相册选择
-					success: (res) => {
+					sourceType: ['album','camera'], //从相册选择
+					success:(res) => {
 						if (this.imgList.length != 0) {//如果提交了一张 imgList 会等于undefined
 							this.imgList = this.imgList.concat(res.tempFilePaths)
 						} else {
 							this.imgList = res.tempFilePaths
-						}
+						} 
 					}
 				});
 			},
@@ -211,7 +211,7 @@
 													rphoto:resdata2
 												},
 												success:(resjieguo)=>{
-													console.log(resjieguo)
+													// console.log(resjieguo)
 													if(resjieguo.data.code == 0){//提交成功    
 														_this.hideModal() 
 														_this.modalName = null

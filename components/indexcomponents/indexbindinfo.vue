@@ -168,9 +168,7 @@
 								data:1
 							})
 							this.hideModal()
-							uni.navigateTo({
-								url:"/components/setcenter/setcenter?title=userset&titlename=设置"
-							})
+							uni.navigateBack()
 						}else{
 							app.globalData.showtoastsame(res.data.msg)
 						}
@@ -239,11 +237,11 @@
 										if(newssms!==""){
 											this.bindNewEmail(this.tokey,newsaccount,newssms)
 										}else{
-											this.showtext("验证码不能为空")
+											// this.showtext("验证码不能为空")
 										}
 										
 									}else{
-										this.showtext("邮箱不能为空")
+										// this.showtext("邮箱不能为空")
 									}
 								}else{
 									this.styleregbool = 'block'
@@ -258,7 +256,7 @@
 					}
 					 
 				}else{
-					this.showtext("验证码不能为空")
+					// this.showtext("验证码不能为空")
 					this.hideModal()
 				}
 			}

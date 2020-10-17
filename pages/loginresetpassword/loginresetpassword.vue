@@ -25,12 +25,15 @@
 				</view>
 			</form>
 		</view>
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 	</view>
 </template>
 
 <script>
 	//引入图标组件
 	import logobg from "@/components/login/loginbg.vue";
+	//引入返回的按钮
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	//引入登录的标题
 	const app = getApp()
 	export default {
@@ -47,7 +50,7 @@
 		methods: {
 			//点击验证码时
 			countdown(){//
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				this.regphone()
 				//这个发起请求获取验证码
 				if(this.phone.match(userphone)){
@@ -69,7 +72,7 @@
 			},
 			//封装个匹配手机号的方法
 			regphone(){
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				if(this.phone.match(userphone)){
 					this.bool = false
 					clearInterval(this.times)
@@ -104,7 +107,7 @@
 			smslogin(e){
 				const _this = this
 				let {phone,sms,username} = e.detail.value
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				//这是给后端穿的参
 				if(phone.match(userphone) && sms!=="" && username!==""){
 					uni.request({
@@ -118,7 +121,7 @@
 						success(res) {
 							if(res.data.code==0){
 								app.globalData.showtoastsame(res.data.msg)
-								uni.redirectTo({
+								uni.navigateTo({
 									url:`/pages/loginForgotpassword/loginForgotpassword`
 								})
 							}else{
@@ -133,6 +136,7 @@
 		},
 		components:{
 			logobg,
+			defaultbgblackcolorwhitebar
 		}
 	}
 </script>

@@ -9,8 +9,8 @@
 					<view class="cu-bar search bg-white">
 						<view class="search-form round">
 							<text class="cuIcon-search"></text>
-							<input :value="value?value:value3" :focus="focusbool" @confirm="Enter" @focus="InputFocus" @blur="InputBlur"
-							 :adjust-position="false" type="text" :placeholder="value2" confirm-type="search"></input>
+							<input  :focus="focusbool" @confirm="Enter" @focus="InputFocus" @blur="InputBlur"
+							 :adjust-position="false" type="text" :placeholder="value2" confirm-type="search" v-model="values"></input>
 						</view>
 						<!-- #ifdef APP-PLUS || H5 -->
 						<view class="action">
@@ -40,10 +40,11 @@
 
 		data() {
 			return {
-				list: [],
+				// list: [],
 				value: "",
 				value2: "请搜索你的商品",
-				focusbool: true
+				focusbool: true,
+				values:''
 			}
 		},
 		methods: {
@@ -91,7 +92,9 @@
 				})
 			},
 			seachshijian() {
-				this.enterseach()
+				const _this = this
+				_this.values = ""
+				_this.enterseach()
 			},
 			delectrecord() {
 				const _this = this
@@ -126,18 +129,18 @@
 				})
 			}
 		},
-		props: ["value3"],
-		created() {
-			const _this = this
-			uni.getStorage({
-				key: "searchArr",
-				success(res) {
-					let arr = res.data
-					_this.list = [...new Set(arr)]
-				}
-			})
-
-		}
+		props: ["value3","list"],
+		// created() {
+		// 	const _this = this
+			
+		// 	uni.getStorage({
+		// 		key: "searchArr",
+		// 		success(res) {
+		// 			let arr = res.data
+		// 			_this.list = [...new Set(arr)]
+		// 		}
+		// 	})
+		// }
 	}
 </script>
 

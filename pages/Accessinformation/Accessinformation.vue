@@ -34,7 +34,7 @@
 								provider:"weixin",
 								success:(loginRes)=>{//这里获取到code码
 									// console.log(JSON.stringify(loginRes))
-									// console.log(loginRes)
+									console.log(loginRes)
 									let appid = 'wx2fd0ff4416ce6219'
 									let SECRET = 'e1d79c653010b1b3991b4b26edb9d143'
 									uni.request({

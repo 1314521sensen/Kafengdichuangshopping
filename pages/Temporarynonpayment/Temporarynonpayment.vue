@@ -111,12 +111,14 @@
 						<text>订单编号：</text>
 						<text>订单流水号：</text>
 						<text>创建时间：</text>
+						<text>订单备注：</text>
 					</view>
 					<view class="serial-right">
 						<text>{{dispatch_price}}</text>
 						<text>{{order_sn}}</text>
 						<text>{{swift_no}}</text>
 						<text>{{this.$store.state.ordercreatetime}}</text>
+						<text>{{remark}}</text>
 					</view>
 				</view>
 			</view>
@@ -128,6 +130,7 @@
 				:s_id='s_id' 
 				:s_name='s_name'
 				:addressCode="addressCode"
+				:iSorder="iSorder"
 			></shopoderbottom>
 		</scroll-view>
 	</view>
@@ -170,6 +173,7 @@
 				addressCode:0,
 				addressdetailed:"",
 				total_price:"",//订单总价
+				remark:''
 			}
 		},
 		components:{
@@ -230,7 +234,7 @@
 									sn:res.data.order_sn
 								},
 								success(resinfo) {
-									
+									_this.remark = resinfo.data.data.remark
 									_this.s_id = resinfo.data.data.store_id
 									_this.s_name = resinfo.data.data.store_name
 									_this.total_price = resinfo.data.data.price
@@ -454,6 +458,7 @@
 				line-height: 50rpx;
 			}
 			.serial-right{
+				width: 70%;
 				padding-left: 20rpx;
 				display: flex;
 				flex-direction: column;

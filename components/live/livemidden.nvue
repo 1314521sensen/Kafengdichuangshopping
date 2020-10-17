@@ -26,7 +26,7 @@
 				
 			</cover-view>
 			<!-- 下面占一半 在让他们的子元素占上面还是占下面-->
-			<cover-view class="midden-bottom" :style="{height:(componentheight/2)+'px','padding-bottom':(bottomheight+10)+'px'}">
+			<cover-view class="midden-bottom" :style="{height:(componentheight/2)+'px','padding-bottom':(bottomheight+15)+'px'}">
 				<cover-view class="midden-bottom-childBottom">
 					
 					<livechatlist :componentwidth="componentwidth"></livechatlist>
@@ -249,9 +249,12 @@
 
 <style>
 	.midden-cover-view{
+		/* height:100vh; */
+		/* overflow:hidden; */
 		/* background-color:red; */
 	}
 	.midden-view-box{
+		/* overflow:hidden; */
 		/* background-color:green; */
 	}
 	/*这是顶部的-----开始*/
@@ -259,7 +262,7 @@
 		/* background-color:pink */
 	}
 	.midden-top-childTop{
-		
+		/* background-color: yellow; */
 	}
 	.midden-childtopmidden-info{
 		padding:0 50rpx 0 30rpx;
@@ -296,7 +299,7 @@
 		/* background-color:yellow; */
 	}
 	.bottomevent{
-		/* background-color:green; */
+		background-color:green;
 		
 		/* position:absolute;
 		bottom:0;
@@ -309,6 +312,7 @@
 	}
 	.bottomeventweicolor{
 		background-color:transparent;
+		/* background-color: green; */
 	}
 	.bottomeventcolor{
 		background-color:#fff;

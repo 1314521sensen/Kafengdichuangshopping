@@ -219,8 +219,21 @@
 			// }
 			//加入购物车
 			addcart(e){
+				const _this = this
 				let {sid,gid,g_title,s_title,g_pic} = e.currentTarget.dataset
-				this.$store.commit("Addcart",{s_name:s_title,g_name:g_title,g_pic:g_pic,gid:gid,sid:sid,couplebool:'nt'})
+				uni.getStorage({
+					key:"bindtokey",
+					success(restoken) {
+						app.globalData.Detectionupdatetokey(restoken.data)
+						_this.$store.commit("Addcart",{s_name:s_title,g_name:g_title,g_pic:g_pic,gid:gid,sid:sid,couplebool:'nt'})
+					},
+					fail(err){
+						uni.navigateTo({
+							url:`/pages/login/login`
+						})
+					}
+				})
+				
 			},
 			getrendomlist(){
 				const _this = this

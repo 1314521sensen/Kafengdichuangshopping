@@ -13,7 +13,7 @@
 							:class="index==0?'item-left':'' || index==2?'item-right':''"
 							>
 								<view class="src">
-									<image src="/static/indexOne/watches.png"></image>
+									<!-- <image src="/static/indexOne/watches.png"></image> -->
 								</view>
 								<view class="item-center item-title">
 									商城采购

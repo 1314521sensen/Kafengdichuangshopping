@@ -107,7 +107,7 @@
 				judge:true,
 				imgpath:this.$store.state.imgyuming,
 				isoder:false,
-				TabCurBool:1,
+				TabCurBool:0,
 				prompttext:'暂无订单'
 			}
 		},
@@ -152,11 +152,15 @@
 			deletescollectionAndfootprint(e){
 				this.$store.state.orderpage = this.$store.state.orderpage -1
 				let {order_sn} = e.currentTarget.dataset
+				this.page = 1
+				this.$store.state.orderpage = 1
 				this.$store.commit("deletescollectionAndfootprint",{order_sn,TabCur:this.TabCur,url:this.url})
 			}
 		},
 		created(){
 			this.$store.state.Temporarynonpaymentlist = []
+			this.$store.state.orderpage = 1
+			this.TabCurBool =this.TabCur
 		},
 		onLoad(opction){
 			// console.log(opction.index)
@@ -196,6 +200,13 @@
 			}
 			_this.$store.commit("getTemporarynonpayment",{index:parseInt(index),geturl:_this.url})
 			this.statusBar = app.globalData.statusBar
+		},
+		onBackPress(e){
+			if(e.from=="backbutton"){
+				uni.redirectTo({
+					url:"/pages/PersonalMy/PersonalMy"
+				})
+			}
 		}
 	}
 </script>

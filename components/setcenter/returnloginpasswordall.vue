@@ -113,7 +113,7 @@
 			//封装一个获取不同的验证码
 			Verificationode(){
 				// console.log(this.phonecode)//这个是手机号或者邮箱通用
-				let regphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let regphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				let regemail =  /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
 				if(regphone.test(this.phonecode) || regemail.test(this.phonecode)){
 					this.disabled = true
@@ -153,7 +153,7 @@
 				//邮箱正则
 				let regemail =  /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
 				//手机号正则
-				let regphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let regphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				//新密码的正则
 				let regnewspassword = /^\w{6,16}$/;
 				if(this.option=="radio0"){//当用户点击了普通登录

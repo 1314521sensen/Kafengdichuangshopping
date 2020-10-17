@@ -50,7 +50,7 @@
 				</view>
 				<view class="refund_cause">
 					<text class="type_name">退款原因：</text>
-					<textarea class="aaa" maxlength="-1" :disabled="modalName!=null" @blur="textareaAInput" placeholder="请输入退款理由"></textarea>
+					<textarea class="aaa" maxlength="-1" :disabled="modalName!=null" @blur="textareaAInput" placeholder="请输入退款理由(选填)"></textarea>
 				</view>
 			</view>
 			<view class="refund_message" v-if="refundtype==2">
@@ -66,15 +66,35 @@
 			</view>
 		</view>
 		<view class="bottom">
-			<button class="cu-btn bg-red margin-tb-sm lg" @tap="submit">提交</button>
+			<button class="cu-btn bg-red margin-tb-sm lg" data-target="DialogModal1" @tap="submit">提交</button>
 		</view>
-		<paymoney
+		<!-- <paymoney
 			@Enterpasswordcompletepayment="Enterpasswordcompletepayment"
 			:show="passwordzhifutanchuang" 
 			@close="close"
 			:balancetext="String(price)"
 		>
-		</paymoney>
+		</paymoney> -->
+		<view class="cu-modal" :class="modalName=='DialogModal1'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">退款/退货退款</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					是否确认退款
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="CancelRefund">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="Enterpasswordcompletepayment">确定</button>
+		
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -115,6 +135,12 @@
 			};
 		},
 		methods:{
+			CancelRefund(e){
+				this.modalName = null
+			},
+			// ConfirmRefund(e){
+			// 	this.modalName = null
+			// },
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 			},
@@ -154,22 +180,24 @@
 			},
 			submit(e){
 				if(this.refundtype == 1){
-					this.passwordzhifutanchuang = true
+					this.modalName = e.currentTarget.dataset.target
+					// this.passwordzhifutanchuang = true
 				}else if(this.e_id == ''){
 					app.globalData.showtoastsame("请填写正确的快递单号")
 				}else{
-					this.passwordzhifutanchuang = true
+					this.modalName = e.currentTarget.dataset.target
+					// this.passwordzhifutanchuang = true
 				}
 			},
 			//当用户输入完密码会将密码传到这里
-			Enterpasswordcompletepayment(e){
+			Enterpasswordcompletepayment(){
 				const _this = this
-				_this.zhifumimatext = e
+				// _this.zhifumimatext = e
 				let json1 = {
 					token:_this.token,
 					o_sn:_this.o_sn,
 					af_price:_this.price,
-					pay_pwd:_this.zhifumimatext,
+					// pay_pwd:_this.zhifumimatext,
 					r_type:_this.refundtype,
 					r_text:_this.r_text
 				}
@@ -177,32 +205,31 @@
 					token:_this.token,
 					o_sn:_this.o_sn,
 					af_price:_this.price,
-					pay_pwd:_this.zhifumimatext,
+					// pay_pwd:_this.zhifumimatext,
 					r_type:_this.refundtype,
 					r_text:_this.r_text,
 					e_id:_this.e_id,
 					e_sn:_this.e_sn
 				}
-				if(_this.zhifumimatext){
+				// if(_this.zhifumimatext){
 					uni.request({
 						url:`${app.globalData.Requestpath}order/applyForRefundOrder`,
 						method:"POST",
 						data:_this.refundtype == 1?json1:json2,
 						success(res) {
-							// console.log(res,4255)
 							if(res.data.code == 0){
 								app.globalData.showtoastsame(res.data.msg)
-								_this.passwordzhifutanchuang = false
-								// uni.navigateTo({
-								// 	url:`/pages/orderpageRouter/orderpageRouter?index=5&is_order=is_order`
-								// })
-								uni.navigateBack()
-							}else if(res.data.code == 1){
+								_this.modalName = null
+								uni.redirectTo({
+									url:`/pages/orderpageRouter/orderpageRouter?index=5&is_order=is_order`
+								})
+							}else{
+								_this.modalName = null
 								app.globalData.showtoastsame(res.data.msg)
 							}
 						}
 					})
-				}
+				// }
 			},
 			close(e){
 				console.log(e)
@@ -260,7 +287,8 @@
 
 <style lang="less" scoped>
 	.padding-xl{
-		height: 500rpx;
+		// height: 500rpx;
+		font-size: 40rpx;
 		.radio_list{
 			display: flex;
 			justify-content: space-between;

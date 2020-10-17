@@ -1,6 +1,6 @@
 <template>
  <!-- #ifdef APP-PLUS -->
-	<view class="livecover" :style="{width:windowWidth+'px',height:windowHeight+'px'}">
+	<view class="livecover" :style="{width:windowWidth+'px',height:(windowHeight-18)+'px'}">
 		<!--这是直播推流组件 url-->
 		<live-pusher 
 			id='livePusher' 
@@ -35,11 +35,11 @@
 		>
 			<!-- <livecovetop></livecovetop> -->
 			<cover-view class="livecovetop">
-				<cover-view class="livecovetop-left">
+				<!-- <cover-view class="livecovetop-left">
 					<cover-view class="icon iconmargin" v-for="(item,index) in righticon" :key="index" :data-index="index" @click="cameraimgs">
 						<cover-image class="icon-imgs" :src="item.url"></cover-image>
 					</cover-view>
-				</cover-view>
+				</cover-view> -->
 				<cover-view class="livecovetop-right" @click="Shutdown">
 					<cover-image src="/static/Pushflow/cha.png" class="icon-imgs"></cover-image>
 				</cover-view>
@@ -51,9 +51,15 @@
 					<cover-image class="locationicon icon" src="/static/Pushflow/location.png"></cover-image>
 					<text class="locationicontext textcolorwrite font-size-thirty">德州市</text>
 				</cover-view> -->
+				<cover-view class="livecovetop-left">
+					<cover-view class="icon iconmargin" v-for="(item,index) in righticon" :key="index" :data-index="index" @click="cameraimgs">
+						<cover-image class="icon-imgs" :src="item.url"></cover-image>
+					</cover-view>
+				</cover-view>
 				<!-- 这是直播的按钮 -->
 				<button class="livecover-btn border-radiusOnehundred bg-btn-red" @tap="Begintolive">
-					<text class="textcolorwrite text-weight">开始直播</text>
+					<text class="textcolorwrite text-weight">开始视频直播</text>
+					
 				</button>
 			</cover-view>
 			<cover-view class="slider" :style="{top:(windowHeight/2)+'px'}"  v-if="Skincare">
@@ -326,7 +332,7 @@
 						}
 					})
 				}else{
-					console.log("当前的状态为false")
+					// console.log("当前的状态为false")
 					uni.closeSocket({
 						code:1000,
 						success(reswebclose) {
@@ -379,7 +385,8 @@
 			// },
 			//封装一个执行上面的模态框的方法
 			Detectionlive(_this){
-				if(_this.Backcoverurl!=="" && _this.Backinpvalue!=="" && _this.livenickname!==""){//如果两个值不为空的情况下
+				// console.log(_this.Backcoverurl,_this.livenickname)
+				if(_this.Backcoverurl!==""  && _this.livenickname!==""){//如果两个值不为空的情况下
 					//关闭摄像头预览
 					// _this.context.stopPreview()
 					//开启推流
@@ -391,15 +398,16 @@
 					// _this.covermodel('封面图片未选择',"为了让其他人更好的关注您,请设置封面图片")
 					app.globalData.showtoastsame("封面图片未选择")
 					return 
-				}else if(_this.Backinpvalue==""){//如果描述为空的情况下
-					// _this.covermodel("标题未填写","为了让其他人更好的关注您,请填写标题")
-					app.globalData.showtoastsame("标题未填写")
-					return
 				}else if(_this.livenickname==""){
 					// _this.covermodel("昵称未填写","为了让其他人更好的关注您,请填写昵称")
 					app.globalData.showtoastsame("昵称未填写")
 					return 
 				}
+				// else if(_this.Backinpvalue==""){//如果描述为空的情况下
+				// 	// _this.covermodel("标题未填写","为了让其他人更好的关注您,请填写标题")
+				// 	app.globalData.showtoastsame("标题未填写")
+				// 	return
+				// }
 			},
 			//开始直播
 			Begintolive(){
@@ -555,10 +563,12 @@
 			},
 			//这是子组件穿回来的值
 			coverurl(e){
+				console.log(666)
 				this.Backcoverurl = e
 				// console.log(this.Backcoverurl)
 			},
 			inpvalue(e){
+				console.log(e)
 				this.Backinpvalue = e
 			},
 			nickname(e){
@@ -612,6 +622,25 @@
 					_this.windowBottom = res.windowBottom
 				}
 			})
+			// 获取主播详情
+			uni.getStorage({
+				key:"bindtokey",
+				success(restokey) {
+					uni.request({
+						url:`${app.globalData.Requestpath}live_user/getLiveUserInfo`,
+						method:"POST",
+						data:{
+							token:restokey.data
+						},
+						success(res) {
+							let {live_nick,live_pic} = res.data.data
+							_this.Backcoverurl = live_pic
+							_this.livenickname = live_nick
+						}
+					})
+				}
+			})
+			
 			//把头像在缓存中取出来
 			// uni.getStorage({
 			// 	key:"userportrait",
@@ -887,7 +916,7 @@
 .livecovetop{
 	/* height:30px; */
 	/* background-color:red; */
-	flex-direction: row;
+	flex-direction: row-reverse;
 	padding:0 40rpx;
 }
 .livecovetop-left{
@@ -911,7 +940,7 @@
 }
 .livecover-bottom{
 	position: absolute;
-	bottom:0;
+	bottom:20;
 	left:0;
 	/* width: 100px; */
 	height:100px;

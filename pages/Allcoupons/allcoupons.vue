@@ -4,11 +4,11 @@
 		<!-- <view class="allcoupons"> -->
 			<actionbar url="/pages/PersonalMy/PersonalMy" message="优惠券"></actionbar>
 			<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
-				<!-- <view class="nav-text">
+				<view class="nav-text">
 					<view class="cu-item" :class="index==TabCur?'nav-bg text-red cur':''" v-for="(item,index) in coupons" :key="index" @tap="tabSelect" :data-id="index" :data-items="item">
 						{{item}}
 					</view>
-				</view> -->
+				</view>
 				<!--  v-if="items==coupons[TabCur]" :couponslist="couponslist" -->
 			<securitiesbottom @storeIsStillAndPlatform="storeIsStillAndPlatform" :TabCur="TabCur" :bottomindex="bottomindex"></securitiesbottom>
 			</scroll-view>
@@ -40,11 +40,13 @@
 		},
 		methods:{
 			tabSelect(e) {//当上面的三个点击时候触发
+				this.$store.state.couponspages = 1
+				this.$store.state.couponslist = []
 				let {id,items} = e.currentTarget.dataset
 				this.items = items
 				this.TabCur = id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
-				this.$store.commit("getallcouponslist",{topindex:parseInt(this.TabCur),bottomindex:parseInt(this.bottomindex),pages:this.pages})
+				this.$store.commit("getallcouponslist",{topindex:parseInt(Number(this.TabCur) + 1),bottomindex:parseInt(this.bottomindex),pages:this.pages})
 			},
 			//这是子组件传过来的 判断点击了平台 还是店铺
 			storeIsStillAndPlatform(e){
@@ -56,9 +58,10 @@
 			securitiesbottom
 		},
 		created() {
-			this.$store.state.couponslist = []
+			//初始化获取优惠券的页数
+					this.$store.state.couponspages = 1
 			//初始化 优惠券列表
-			this.$store.commit("getallcouponslist",{topindex:0,bottomindex:0,pages:this.pages})
+			this.$store.commit("getallcouponslist",{topindex:1,bottomindex:0,pages:this.pages})
 		},
 		onLoad() {
 			this.statusBar = app.globalData.statusBar

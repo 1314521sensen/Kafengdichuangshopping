@@ -2,7 +2,7 @@
 	<view class="wxopenid">
 		<view class="wxPopup">
 			<view class="wxPopup-img">
-				<image src="/static/indexOne/wxbg.png" class="wximg"></image>
+				<image :src="httpUrl+'wxbind/wxbg.png'" class="wximg"></image>
 			</view>
 			<view class="wxPopuptext">
 				为了您后续的操作请进行微信绑定
@@ -19,7 +19,7 @@
 	export default{
 		data(){
 			return {
-				
+				httpUrl:this.$store.state.httpUrl
 			}
 		},
 		methods:{

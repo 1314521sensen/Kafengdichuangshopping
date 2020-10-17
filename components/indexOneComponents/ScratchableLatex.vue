@@ -9,6 +9,8 @@
 					@tap="collection"
 					:data-url="item.url"
 					:data-Routinghopname="item.Routinghopname"
+					:data-index="index"
+					:data-code="item.code"
 					:data-name="item.name">
 					<view class="list-imgs">
 						<image :src="item.imgs" class="imgs"></image>
@@ -31,11 +33,39 @@
 		},
 		methods:{
 			collection(e){
-				let {url,routinghopname,name} = e.currentTarget.dataset
+				let {url,routinghopname,name,index,code} = e.currentTarget.dataset
 				if(url!==undefined){
-					uni.navigateTo({
-						url:`${url}?title=${name}&titlename=${routinghopname}`
-					})
+					if(code!==undefined){
+						uni.request({
+							url:`${app.globalData.Requestpath}activity/getActivityInfo`,
+							data:{
+								code:code
+							},
+							success(res) {
+								let start_time = res.data.data.start_time
+								let stop_time = res.data.data.stop_time
+								let startTime = start_time.replace(/-/g, '/');
+								var time1 = new Date(startTime);
+								time1 = time1.getTime();
+								let stopTime = stop_time.replace(/-/g, '/');
+								var time2 = new Date(stopTime);
+								time2 = time2.getTime();
+								let myDate = new Date().getTime();
+								let bool = myDate> time1 && myDate < time2
+								if(bool){
+									uni.navigateTo({
+										url:`${url}?title=${name}&titlename=${routinghopname}`
+									})
+								}else{
+									app.globalData.showtoastsame("活动还未开始")
+								}
+							}
+						})
+					}else{
+						uni.navigateTo({
+							url:`${url}?title=${name}&titlename=${routinghopname}`
+						})
+					}
 				}else{
 					app.globalData.showtoastsame("功能正在开发,请耐心等待")
 				}

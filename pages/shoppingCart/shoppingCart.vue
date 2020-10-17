@@ -149,6 +149,7 @@
 								<text class="specificationsname">{{item.spec_name}}</text>
 								<view class="specificationsitem">
 									<text 
+										class="specificationText"
 										@tap="Updatespecifications"
 										:data-gid="item.good_id"
 										:data-specificationId="item.id"
@@ -160,7 +161,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="cartweiicon" v-show="this.$store.state.cartList.length<=0">
+		<view class="cartweiicon" v-if="this.$store.state.cartListBool">
 			<view class="cartweiicon_center">
 				<view class="cartweiicon_center_img" :style="{'background-image':'url('+this.$store.state.httpUrl+'shopcart/btnbrowsebuy.png'+')'}"></view>
 				<view class="cartweiicon_center_text">
@@ -247,6 +248,7 @@
 			},
 			//当点击删除商品的时候
 			deleteshop(){
+		        this.$store.state.pages = 1
 				this.$store.commit("deleteshop")
 			},
 			//更新规格
@@ -328,6 +330,30 @@
 					_this.statusBar = app.globalData.statusBar
 				}
 			})
+			
+			uni.getStorage({
+						key: "bindtokey",
+						success(restokey) {
+							uni.request({
+								url: `${app.globalData.Requestpath}shopping_cart/getShoppingCartList`,
+								method: "POST",
+								data: { 
+									token: restokey.data,
+									page: 1,
+									pageSize: 10
+								},
+								success(res) {
+									// console.log(res,"购物车里的商品") 
+									 if(res.data.code == 0){
+										 
+									 }else{
+										 // console.log("没有商品")
+										 _this.$store.state.cartList = []
+									 }
+								}
+							})
+						}
+					})
 			
 		},
 		onShow(){
@@ -612,7 +638,7 @@
 				color:#999;
 				font-weight:bold;
 				font-size: 36rpx;
-				margin:20rpx 0;
+				// margin:20rpx 0;
 			}
 			.browse{
 				display:flex;
@@ -625,5 +651,8 @@
 			}
 			
 		}
+	}
+	.specificationText{
+		line-height: 50rpx;
 	}
 </style>

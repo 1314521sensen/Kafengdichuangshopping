@@ -103,7 +103,7 @@
 						class="content shadow"
 						:class="item.msgtype=='usersend'?'bg-green':''"
 					>
-						<text v-html="item.sendmsgdata"></text>
+						<text class="language" v-html="item.sendmsgdata"></text>
 					</view>
 				</view>
 				<!-- 这是用户的头像 -->
@@ -271,6 +271,7 @@
 				keyboardHeight:0,//键盘的高度 用于计算
 				oldbottom:0,//// 记录 滚动 元素的 bottom 值
 				scrollTop:0,//卷区的高度
+				gid:0,
 				Photo:[
 					{
 						img:`${this.$store.state.httpUrl}chat/Photoalbum.png`,
@@ -402,7 +403,16 @@
 			},
 			// 当用户点击 商品发送给客服的时候触发该事件
 			sendCustomershop(){
-				this.shopbool = true
+				const _this = this
+				_this.shopbool = true
+				if(_this.$store.state.kf_id){
+					_this.shopbool = true
+					_this.$store.commit("Sendproductlink",{gid:_this.gid})
+					// console.log("连接成功")
+					app.globalData.showtoastsame('发送成功')
+				}else{
+					app.globalData.showtoastsame('正在连接客服，请稍等...')
+				}
 			},
 			InputBlur(e) {
 				this.InputBottom = 0
@@ -419,7 +429,7 @@
 				// this.editorCtx.getContents({
 				// 	success(res){
 						
-				// 		_this.$store.commit("Customersendmsg",{textvalue:res.html})
+						// _this.$store.commit("Customersendmsg",{textvalue:res.html})
 				// 		_this.editorCtx.clear({
 				// 			success: function(res) {
 				// 			}
@@ -430,11 +440,11 @@
 				this.editorCtx.getContents({
 					success(res){
 						// console.log(res.text,123)
-						if(res.text == true){
+						// if(res.text == true){
 							_this.$store.commit("Customersendmsg",{textvalue:res.html})
-						}else{
-							app.globalData.showtoastsame("请输入文字")
-						}				
+						// }else{
+							// app.globalData.showtoastsame("请输入文字")
+						// }				
 						_this.editorCtx.clear({
 							success: function(res) {
 							}
@@ -550,6 +560,7 @@
 			// console.log(this.expressionlist)
 			// console.log("已经入onload的事件")
 			const _this = this
+			_this.gid = opction.gid
 			let {shoplink,statestore} = opction
 			_this.shoplinknew = shoplink
 			_this.statestore = statestore
@@ -859,4 +870,8 @@
 	  .cu-chatActive{
 		  height: 60vh;
 	  }
+	  .language{
+	  		  word-wrap:break-word;
+	  		  width:100%;
+	  	  }
 </style>

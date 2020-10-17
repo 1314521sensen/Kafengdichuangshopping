@@ -19,7 +19,7 @@
 					</view>
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<view class="title">密码:</view>
-						<input  placeholder="密码最小设置6位,包含单词数字_" name="password" type="password" v-model="password"></input>
+						<input  placeholder="最小设置6位,包含单词数字下划线" name="password" type="password" v-model="password"></input>
 					</view>
 					<view class="cu-form-group margin-top inp inp-bottom">
 						<view class="title">确认密码:</view>
@@ -77,8 +77,8 @@
 			},
 			//验证码
 			countdown(){
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
-				if(this.password == this.Confirmpassword){
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
+				if (this.password == this.Confirmpassword) {
 					this.regphone()
 					if(this.phone.match(userphone)){
 						//在app.vue里面的globalData对象中封装了方法 用来请求信息 用户注册的时候传用户名
@@ -104,9 +104,10 @@
 			},
 			//封装个匹配手机号的方法
 			regphone(){
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
+				this.phone =this.phone.replace(/(^\s*)|(\s*$)/g, "");
 				//用户和手机不能为空
-				if(this.username && this.phone.match(userphone)){
+				if (this.username && this.phone.match(userphone)) {
 					this.disabled = false
 					clearInterval(this.times)
 				}else{
@@ -150,12 +151,12 @@
 				let regname = /^[\W|\w]{2,20}$/;
 				//密码为6-16位 单词，数字加_
 				let userpassword = /^\w{6,16}$/;
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
-				if(!(username.match(regname))){
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
+				if (!(username.match(regname))) {
 					app.globalData.showtoastsame("注册账号至少2位最多20位")
 				}else if(!(password.match(userpassword))){
-					app.globalData.showtoastsame("密码最小设置6位,最大16位，包含单词数字_")
-				}else if(password==Confirmpassword){
+					app.globalData.showtoastsame("密码最小设置6位,最大16位，包含单词数字下划线")
+				}else if(password!==Confirmpassword){
 					app.globalData.showtoastsame("请保持和前面的密码一致")
 				}else if(!(phone.match(userphone))){
 					app.globalData.showtoastsame("请输入正确的手机号")
@@ -169,10 +170,12 @@
 						//如果都通过了 发起请求 就可以跳转到登录页面
 						//这里是要传给后台的信息
 						//这是app端的数据
+						// console.log(myDate)
 						let registeredjson = {
 							username:username,
 							password:password,
 							mobile_phone:phone,
+							user_phone_uuid:this.$store.state.uuid,
 							code:phonecode,
 							referrer_mobile:referrer_mobile,
 							referrer_sc:this.code
@@ -254,11 +257,13 @@
 						// #endif
 						//这里进行请求
 						// #ifdef APP-PLUS || H5
+						// console.log(registeredjson)
 						uni.request({
 							url:`${app.globalData.Requestpath}login_and_register/userRegister`,
 							method:"POST",
 							data:registeredjson,
 							success(res){//请求成功的时候
+							// console.log(res)
 								if(res.data.code==0){
 									// #ifdef APP-PLUS || H5
 										//app直接跳转不用绑定
@@ -283,11 +288,11 @@
 									// #endif
 								}else{
 									uni.showToast({
-										title:"该用户已经注册过了",
+										title:res.data.msg,
 										icon:"none",
 										success() {
 											uni.showModal({
-												title:"该用户已经注册过了",
+												title:res.data.msg,
 												content:"是否前往登录页面",
 												showCancel:true,
 												cancelText:"取消",
@@ -354,6 +359,7 @@
 	  display:flex;
 	  justify-content: center;
 	  height:100vh;
+	  overflow: hidden;
 	  background-color: #fff;
 	  .newfreeregistration{
 		  width: 80%;
@@ -392,6 +398,7 @@
 	   .cu-form-group{
 	    border-bottom:2rpx solid #CCCCCC;
 	    margin-bottom:20rpx;
+		padding:1rpx 8rpx;
 	   }
 	   .loginButton{
 	    margin-top:60rpx;
@@ -418,10 +425,11 @@
 	 }
 	 
 	 .fa-verification{
-	  border-bottom-color: #FFFFFF !important;
+	  // border-bottom-color: #FFFFFF !important;
 	  margin-top: 40rpx;
+	  border-bottom:2rpx solid #ccc;
 	  .verification{
-	   border-bottom:2rpx solid #CCCCCC;
+	   // border-bottom:2rpx solid #CCCCCC;
 	   display: inline-block;
 	   
 	  }

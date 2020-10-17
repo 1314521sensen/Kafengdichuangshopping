@@ -35,10 +35,11 @@
 						</view>
 					</view>
 				</view>
+				<view class="del" @tap="del">
+					<text>暂不使用</text>
+				</view>
 			</view>
-			<!-- <view class="del" @tap="del">
-				<text>暂不使用</text>
-			</view> -->
+			
 		</view>
 	</view>
 </template>
@@ -54,6 +55,19 @@
 			}
 		},
 		methods:{
+			del(){
+				this.modalName = null
+				this.changetitlemsgtext = ''
+				let arr = [
+					{
+						c_id: '',
+						c_type: '',
+						money: '',
+						sid: '',
+					}
+				]
+				this.$emit("dingdancoupon",arr)
+			},
 			showModal(e){
 				this.modalName = e.currentTarget.dataset.target
 			},
@@ -90,7 +104,7 @@
 						// console.log("这是订单详情过来的")
 						_this.modalName = null
 						// //这是拿到使用的文本
-						_this.changetitlemsgtext = dingdanitem.coupon_name
+						_this.changetitlemsgtext = dingdanitem.money+"元优惠券"
 						// console.log(_this.storeid)
 						let obj = {}
 						let arr = []
@@ -108,6 +122,7 @@
 		},
 		created() {
 			// console.log(1355)
+			
 			const _this  = this
 			// console.log(_this.couplebooltext)
 			if(_this.Whatcoupon=='0'){//在详情的优惠券
@@ -133,6 +148,7 @@
 				let newcouponboollist = []
 				newcouponboollist[0] = parseInt(_this.storeid)
 				newcouponboollist[1] = 0
+				// console.log(newcouponboollist,_this.Orderpaymentamount,_this.couplebooltext,_this.limit_gids,_this.limit_gcategory)
 				uni.request({
 					url:`${app.globalData.Requestpath}activity/getUserValidCouponList`,
 					method:"POST",
@@ -148,11 +164,14 @@
 						// console.log(res)
 						if(res.data.code==0){
 							_this.list = res.data.data
+							_this.$emit("fissionconponsleng",_this.list.length)
 							// console.log(_this.list)
 							_this.list.forEach((item,index)=>{
 								item.start_time = item.start_time.trim().split(" ")[0]
 								item.stop_time = item.stop_time.trim().split(" ")[0]
 							})
+						}else{
+							_this.$emit("fissionconponsleng",0)
 						}
 					}
 				})
@@ -164,6 +183,9 @@
 </script>
 
 <style lang="less" scoped>
+	.del{
+		padding: 10rpx;
+	}
 	.cu-bar{
 		min-height: 70rpx;
 		.action{

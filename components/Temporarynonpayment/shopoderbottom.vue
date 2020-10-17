@@ -5,13 +5,13 @@
 				class="cu-btn round line-grey" 
 				@tap="showModal" 
 				data-target="RadioModal"
-				v-if="orderstatus==0"
+				v-if="orderstatus==0 && iSorder == false"
 			>取消订单</button>
 			<button 
 				class="cu-btn round line-orange" 
 				@tap="Notpayingdefaultpayment" 
 				data-target="bottomModal"
-				v-if="orderstatus==0"
+				v-if="orderstatus==0 && iSorder == false"
 			>付款</button>
 			<button
 				class="cu-btn round line-green" 
@@ -65,23 +65,6 @@
 				</view>
 			</view>
 		</view>
-		<!-- <view class="cu-modal" :class="modalName=='refundparagraph'?'show':''">
-			<view class="cu-dialog" @tap.stop="">
-				<radio-group class="block" @change="refundparagraphChange">
-					<view class="cu-list menu text-left">
-						<view class="cu-item" v-for="(item,index) in refundparagraphlist" :key="index">
-							<label class="flex justify-between align-center flex-sub">
-								<view class="flex-sub">{{item}}</view>
-								<radio class="round" :class="refundindex=='refundindex' + index?'checked':''" :checked="refundindex=='refundindex' + index?true:false"
-								 :value="'refundindex' + index"></radio>
-							</label>
-						</view>
-					</view>
-				</radio-group>
-				<button class="cu-btn round bg-red refundbtn" @tap="hideModal">取消</button>
-				<button class="cu-btn round bg-green refundbtn"  @tap="refundparagraph">确定</button>
-			</view>
-		</view> -->
 		<paymoney 
 			:show="passwordzhifutanchuang" 
 			:isIphoneX="isIphoneX" 
@@ -159,7 +142,12 @@
 				// console.log( e.currentTarget.dataset.target)
 				// this.modalName = e.currentTarget.dataset.target
 				if(!(this.addressCode == 1) ){
-					this.modalName = e.currentTarget.dataset.target
+					if(Number(this.price)==0.00){
+						this.radioname = 'radio1'
+						this.Determinepayment()
+					}else{
+						this.modalName = e.currentTarget.dataset.target
+					}
 				}else{
 					app.globalData.showtoastsame("未查询到收货地址，请重新购买")
 				}
@@ -407,7 +395,7 @@
 		components:{
 			paymoney
 		},
-		props:["price","order_sn","orderstatus","swift_no","s_id","s_name","addressCode"]
+		props:["price","order_sn","orderstatus","swift_no","s_id","s_name","addressCode","iSorder"],
 	}
 </script>
 

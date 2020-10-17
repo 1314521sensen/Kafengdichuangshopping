@@ -2,14 +2,14 @@
 	export default {
 		globalData:{
 			statusBar:0,
-			Requestpath:"http://hbk.huiboke.com/api/",
-			imgyuming:"http://hbk.huiboke.com",
+			Requestpath:"http://www.huiboke.com/api/",
+			imgyuming:"http://www.huiboke.com",
 			logintokeybool:false,
-			Guidepagebool:false,//这是用于判断 用户的引导页
+			Guidepagebool:false,//这是用于判断 用户的引导页http://hbk.huiboke.com/
 			VerificationCode(json){//封装一个方法来获取验证码
-				// console.log(json)
+				// console.log(json)http://www.huiboke.com
 				uni.request({
-					url:"http://hbk.huiboke.com/api/common/getSMSCaptcha",
+					url:"http://www.huiboke.com/api/common/getSMSCaptcha",
 					method:"POST",
 					data:json,
 					success(res){//成功的回调
@@ -19,7 +19,7 @@
 			},
 			emailreg(json){
 				uni.request({
-					url:"http://hbk.huiboke.com/api/common/getEmailCaptcha",
+					url:"http://www.huiboke.com/api/common/getEmailCaptcha",
 					method:"POST",
 					data:json,
 					success(res) {
@@ -43,7 +43,7 @@
 			//封装一个检测tokey值更新tokey值
 			Detectionupdatetokey(tokey){
 				uni.request({
-					url:"http://hbk.huiboke.com/api/common/refreshToken",
+					url:"http://www.huiboke.com/api/common/refreshToken",
 					method:"POST",
 					data:{
 						token:tokey
@@ -87,9 +87,17 @@
 			})
 			////这里为了设置状态栏的高 ----结束
 			// #ifdef APP-PLUS
-				// console.log(plus.runtime.version)//这是版本号
-				// console.log(plus.runtime.appid)//这是appid
-				// console.log(plus.os.name)//这是Android
+				//获取设备信息
+				plus.device.getInfo({
+					success(res){
+						// console.log(res.uuid)
+						_this.$store.state.uuid = res.uuid
+						// console.log(_this.$store.state.uuid)
+					},
+					fail(err){
+						// console.log(err)
+					}
+				})
 			// #endif
 			//接下来启动页---开始
 			/*

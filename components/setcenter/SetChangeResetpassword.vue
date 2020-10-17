@@ -95,7 +95,8 @@
 							affirmpassword:"确认支付密码",
 							zhifuplaceholder:"请设置您的支付密码",
 							namezjifu:"zhifupassword",
-							nameaffirm:"zhifupasswords"
+							nameaffirm:"zhifupasswords",
+							zhifuplaceholderA:"请确认您的支付密码",
 						},
 						{
 							titlename:"原支付密码",
@@ -198,46 +199,48 @@
 						app.globalData.showtoastsame("请输入完整信息")
 					}
 				}else{//否则就是0 设置密码 用户一上来会走这个 设置成功会走上面的if
-					let {loginpassword,zhifupassword} = e.detail.value
-					if(loginpassword!=="" && zhifupassword!==""){
-						if(regnewspassword.test(zhifupassword)){
-							uni.request({
-								url:`${app.globalData.Requestpath}user/savePayPassword`,
-								method:"POST",
-								data:{
-									token:this.tokey,
-									user_password:loginpassword,
-									new_pay_password:zhifupassword,
-									isAllow:0
-								},
-								success:(res)=>{
-									if(res.data.code==0){
-										app.globalData.showtoastsame("设置成功")
-										if(_this.business=="pay"){
-											uni.showModal({
-												title:"是否回到之前的订单",
-												content:"点击确认回到之前订单",
-												showCancel:true,
-												cancelColor:"#ff0000",
-												confirmColor:"#green",
-												success(res) {
-													uni.navigateBack({
-													    delta: 2
-													});
-												}
-											})
+					let {loginpassword,zhifupassword,zhifupasswords} = e.detail.value
+					if(loginpassword!=="" && zhifupassword!=="" && zhifupasswords !== ""){
+						if(zhifupassword == zhifupasswords){
+							if(regnewspassword.test(zhifupassword)){
+								uni.request({
+									url:`${app.globalData.Requestpath}user/savePayPassword`,
+									method:"POST",
+									data:{
+										token:this.tokey,
+										user_password:loginpassword,
+										new_pay_password:zhifupassword,
+										isAllow:0
+									},
+									success:(res)=>{
+										if(res.data.code==0){
+											app.globalData.showtoastsame("设置成功")
+											if(_this.business=="pay"){
+												uni.showModal({
+													title:"是否回到之前的订单",
+													content:"点击确认回到之前订单",
+													showCancel:true,
+													cancelColor:"#ff0000",
+													confirmColor:"#green",
+													success(res) {
+														uni.navigateBack({
+														    delta: 2
+														});
+													}
+												})
+											}else{
+												uni.navigateBack()
+											}
 										}else{
-											uni.reLaunch({
-												url:"/components/setcenter/setcenter?title=userset&titlename=设置"
-											})
+											app.globalData.showtoastsame("登录密码错误或不能和登录密码一致")
 										}
-									}else{
-										app.globalData.showtoastsame("登录密码错误或不能和登录密码一致")
 									}
-								}
-							})
+								})
+							}else{
+								app.globalData.showtoastsame("密码请设置6位数")
+							}
 						}else{
-							app.globalData.showtoastsame("密码请设置6位数")
+							app.globalData.showtoastsame("两次密码不一致")
 						}
 					}else{
 						app.globalData.showtoastsame("请输入完整信息")
@@ -279,9 +282,9 @@
 			changeform(e){
 				let {code,idcard,loginpassword,newpaypassword} = e.detail.value
 				//验证手机号
-				let regphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let regphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				//验证身份证
-				let idcardReg = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+				let idcardReg =/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
 				//验证密码
 				let regnewspassword = /^\w{6,6}$/;
 				if(code!=="" && idcard!=="" && loginpassword!=="" && newpaypassword!==""){
@@ -303,9 +306,7 @@
 								if(res.data.code==0){
 									app.globalData.showtoastsame("重置成功")
 									this.hideModal()
-									uni.navigateTo({
-										url:"/components/setcenter/setcenter?title=userset&titlename=设置"
-									})
+									uni.navigateBack()
 								}else{
 									app.globalData.showtoastsame(res.data.msg)
 								}

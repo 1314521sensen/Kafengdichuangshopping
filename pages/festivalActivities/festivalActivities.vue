@@ -1,5 +1,6 @@
 <template>
 	<view class="festivalActivities" :style="{'padding-top':statusBar+'px'}">
+		<!--  v-show="loadingbool" -->
 		<view class="scroll-view">
 		<!-- <view class="scroll-view"> :scroll-y="true" @scrolltolower="shopscrolltolower"-->
 			<view class="festivalActivities_top" :style="{'background-image':'url('+imgpath+'festivalactivities/lantern_project.png'+')'}">
@@ -11,12 +12,13 @@
 								play-btn-position="center" -->
 						<!-- <cover-view style="background-color:green;" class="videofill"> -->
 							<video 
-								src="http://shop.huiboke.com/uploads/video/zq.mp4" 
+								:src="shopimgpath+'/uploads/video/zq.mp4'" 
 								id="myVideo"
 								class="video"
 								:muted="false"
 								:autoplay="true"
 								:loop="true"
+								:show-mute-btn="true"
 								play-btn-position="center"
 							>
 							</video>
@@ -39,7 +41,7 @@
 				:scroll-x="true" 
 				@scrolltolower="couponsscrolltolower"
 			>
-				<view :style="{width:(26*coupons_list.length+22)+'%'}">
+				<view :style="{width:coupons_list.length>3?(26*coupons_list.length+22)+'%':'100%'}">
 					<view class="festivalActivities_coupons_list">
 						<view class="coupons_item">
 							<!-- coupons_list -->
@@ -69,7 +71,7 @@
 										</view>
 										<view class="Full_reduction">
 											<view class="Full_reduction_text">
-												{{Number(item.at_full)==0?'无门槛使用':`'满'+${item.at_full}+'元减`}}
+												{{Number(item.at_full)==0?'无门槛使用':`满${item.at_full}元减`}}
 											</view>
 										</view>
 									</view>
@@ -100,11 +102,15 @@
 									<text v-show="item[0].good_sub_title!==''">{{item[0].good_sub_title}}</text>
 								</view>
 								<view class="Activity_price">
-									<text class="price_text">
-										活动价:
-										<text class="price">{{item[0].good_promotion_price}}</text>
-										<text class="btn">立即抢购</text>
-									</text>
+									<view class="price_text">
+										<view class="Activity_price_left">
+											活动价:
+											<text class="price">{{item[0].good_promotion_price}}</text>
+										</view>
+										<view class="Activity_price_right">
+											<text class="btn">立即抢购</text>
+										</view>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -119,11 +125,15 @@
 									<image class="items_imgs" :src="shopimgpath+item[1].good_pic"></image>
 								</view>
 								<view class="items_bottom_price">
-									<text class="price_text">
-										活动价:
-										<text class="price">{{item[1].good_promotion_price}}</text>
-										<text class="btn">立即抢购</text>
-									</text>
+									<view class="price_text">
+										<view class="Activity_price_left">
+											活动价:
+											<text class="price">{{item[1].good_promotion_price}}</text>
+										</view>
+										<view class="Activity_price_right">
+											<text class="btn">立即抢购</text>
+										</view>
+									</view>
 								</view>
 							</view>
 							<view 
@@ -136,11 +146,15 @@
 									<image class="items_imgs" :src="shopimgpath+item[2].good_pic"></image>
 								</view>
 								<view class="items_bottom_price">
-									<text class="price_text">
-										活动价:
-										<text class="price">{{item[2].good_promotion_price}}</text>
-										<text class="btn">立即抢购</text>
-									</text>
+									<view class="price_text">
+										<view class="Activity_price_left">
+											活动价:
+											<text class="price">{{item[2].good_promotion_price}}</text>
+										</view>
+										<view class="Activity_price_right">
+											<text class="btn">立即抢购</text>
+										</view>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -150,6 +164,7 @@
 		</view>
 		<!-- </view> -->
 		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
+		<!-- <loading v-show="loadingbool==false"></loading> -->
 	</view>
 </template>
 
@@ -166,14 +181,15 @@
 				Couponpage:1,
 				statusBar:0,
 				shoplistpage:1,
-				shoplist:[]
+				shoplist:[],
+				loadingbool:false
 			}
 		},
 		methods: {
 			//用户领取优惠券
 			receivecoupons(e){
 				const _this = this
-				console.log(e.currentTarget.dataset)
+				// console.log(e.currentTarget.dataset)
 				let {ids} = e.currentTarget.dataset
 				uni.getStorage({
 					key:"bindtokey",
@@ -190,9 +206,18 @@
 								if(res.data.code==0){
 									app.globalData.showtoastsame("领取成功")
 								}else{
-									app.globalData.showtoastsame(res.data.msg)
+									if(res.data.code==1 && res.data.msg=="令牌错误"){
+										app.globalData.showtoastsame("请登录领取")
+									}else{
+										app.globalData.showtoastsame(res.data.msg)
+									}
 								}
 							}
+						})
+					},
+					fail(err){
+						uni.navigateTo({
+							url:`/pages/login/login`
 						})
 					}
 				})
@@ -208,6 +233,7 @@
 						pageSize:5
 					},
 					success(res){
+						// console.log(res)
 						if(res.data.code==0){
 							if(_this.Couponpage > 1){
 								_this.coupons_list = _this.coupons_list.concat(res.data.data.list)
@@ -229,6 +255,7 @@
 					},
 					success(res) {
 						if(res.data.code==0){
+							_this.loadingbool = true
 							if(_this.shoplistpage>1){
 								_this.shoplist = _this.shoplist.concat(res.data.data.list)
 							}else{
@@ -250,7 +277,9 @@
 			},
 			//当点击每个商品的时候
 			shopdefail(e){
+				// console.log(111)
 				let {sid,gid} = e.currentTarget.dataset
+				// console.log(sid)
 				uni.navigateTo({
 					url:`/pages/Details/Details?id=${gid}&storeid=${sid}&activityType=activity`
 				})
@@ -273,7 +302,10 @@
 		},
 		onReachBottom(){
 			this.shopscrolltolower()
-		}
+		},
+		onHide(){
+			this.videoContext.stop()
+		},
 	}
 </script>
 
@@ -531,11 +563,15 @@
 	.price_text{
 		display:flex;
 		align-items: center;
-		padding:10rpx 16rpx;
+		padding:10rpx 10rpx;
 		background-color: #f72d32;
 		border-radius:30rpx;
 		color:#fdd4a0;
-		font-size: 29rpx;
+		font-size: 24rpx;
+		justify-content: space-between;
+		.Activity_price_left{
+			flex:1;
+		}
 		.btn{
 			padding:10rpx 10rpx;
 			background-color:#edcaa8;
@@ -545,7 +581,7 @@
 			margin-left:10rpx;
 		}
 		.price{
-			font-size: 36rpx;
+			font-size: 30rpx;
 			color:#ffdca6;
 			vertical-align: middle;
 		}

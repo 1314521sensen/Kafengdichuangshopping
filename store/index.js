@@ -2,14 +2,15 @@ import Vue from "vue"
 import Vuex from "vuex"
 Vue.use(Vuex)
 
-let Requestpath = "http://hbk.huiboke.com/api/"
+let Requestpath = "http://www.huiboke.com/api/"
 
 let state = {
-	Request: "http://hbk.huiboke.com/api/",
-	imgyuming: "http://hbk.huiboke.com", //http://hbk.huiboke.com
+	Request: "http://www.huiboke.com/api/",
+	imgyuming: "http://www.huiboke.com", //http://hbk.huiboke.com
 	detailsbool: false, //首页显示隐藏详情
 	bannerbool: true, //详情页显示信息判断
 	cartList: [], //购物车的数据
+	cartListBool:false,//购物车暂无数据的判断
 	allSelected: false, //购物车的全选状态
 	count: 0, //这是用来存储总价
 	specificationslist: [], //这是规格的数据
@@ -36,6 +37,7 @@ let state = {
 	remainingTime: "", //订单剩余时间
 	ordercode: "", //订单里面的code码
 	couponslist: [], //这是优惠券的数据
+	couponspages:1,//优惠券的页数
 	BrandList: [], //这是品牌的数据
 	Brandpage: 1, //品牌的页数
 	Brandloadbool: false, //用于请求请求活动的加载图标
@@ -44,7 +46,7 @@ let state = {
 	isdownload: false, //更新app的状态是否显示的整包的更新
 	doloadurl: "", //app的下载地址
 	progress: "0%", //下载进度
-	httpUrl: "http://hbk.huiboke.com/uploads/app/image/", //http://hbk.3call.net
+	httpUrl: "http://www.huiboke.com/uploads/app/image/", //http://hbk.3call.net
 	Delete: false,
 	orderpage: 1, //订单请求的页数
 	liveshoplist: [], //存放主播开播前需要携带直播的商品
@@ -62,7 +64,7 @@ let state = {
 	kf_id: "", //这是后台返回来的客服id
 	kf_name: "", //这是后台返回来的客服名字
 	sokettime: null, //客服的长连接定时器
-	hiensoketime:null,//当用户黑屏的时候 继续定时器
+	hiensoketime: null, //当用户黑屏的时候 继续定时器
 	isconnectserver: false, //联系客服的是否显示 
 	chatpages: 0, //聊天记录的那一页
 	chattotal: 0, //聊天记录的总条数
@@ -72,7 +74,10 @@ let state = {
 	verifyStatus: '', //直播状态显示权限
 	indexpopupbool: true, //首页弹窗是不是显示
 	firstOrderbool: false,
-	is_newuser: true, //判断是不是新用户 0是 1不是
+	is_newuser: false, //判断是不是新用户 0是 1不是
+	NewExclusivebool:true,
+	is_receive:0,//判断是否领取过
+	uuid:0,//用于存储用户手机的唯一标识
 }
 //getters 用于计算
 let getters = {
@@ -89,9 +94,10 @@ let getters = {
 		})
 		let countarr = String(state.count).split('.')
 		if (countarr[1]) {
-			return (Number(countarr[0] + '.' + countarr[1].substr(0, 2))).toFixed(2) 
+			return (Number(countarr[0] + '.' + countarr[1])).toFixed(2)
+			// .substr(0, 2)
 		} else {
-			return (Number(String(state.count))).toFixed(2) 
+			return (Number(String(state.count))).toFixed(2)
 		}
 	}
 }
@@ -125,6 +131,7 @@ let mutations = {
 			version,
 			modelboll
 		} = wholeobj
+		// console.log(version,modelboll)
 		uni.request({
 			url: `${Requestpath}update/getUpdateInfo`,
 			method: "POST",
@@ -132,6 +139,7 @@ let mutations = {
 				type: 2
 			},
 			success(res) {
+				// console.log(res)
 				if (res.data.code == 0) {
 					let returnApplicationnum = res.data.data.data.version_id.split(".").join("")
 					// console.log(returnApplicationnum,"这是后台的版本号")
@@ -402,15 +410,15 @@ let mutations = {
 			}
 		})
 		//链接失败
-		uni.onSocketError(function(resError){
+		uni.onSocketError(function(resError) {
 			// console.log(resError)
-		},function(errError){
+		}, function(errError) {
 			// console.log(errError)
 		})
-		uni.onSocketClose(function(resClose){
+		uni.onSocketClose(function(resClose) {
 			// console.log(resClose)
 			state.linkstate = "链接已断开"
-		},function(errClose){
+		}, function(errClose) {
 			// console.log(errClose)
 		})
 	},
@@ -425,7 +433,7 @@ let mutations = {
 	},
 
 	//链接客服持续发送ping
-	ContinuousSendPing(){
+	ContinuousSendPing() {
 		// console.log("执行这个函数了")
 		uni.onSocketOpen((res) => {
 			// console.log(res)
@@ -446,14 +454,14 @@ let mutations = {
 					}
 				})
 			}, 30000)
-		
+
 			// console.log('onOpen', res);
-		},(err)=>{
+		}, (err) => {
 			// console.log(err)
 		})
 	},
-	
-	hiendsocket(){
+
+	hiendsocket() {
 		//hiensoketime
 		state.socketOpen = true
 		state.isconnectserver = false
@@ -472,7 +480,7 @@ let mutations = {
 			})
 		}, 30000)
 	},
-	
+
 	record(state, pages) {
 		const _this = this
 		uni.request({
@@ -661,6 +669,7 @@ let mutations = {
 					success(res) {
 						// console.log(res)
 						if (res.data.code == 0) {
+							state.cartListBool = false
 							if (_this.state.pages > 1) {
 								_this.state.cartList = _this.state.cartList.concat(res.data.data)
 							} else {
@@ -674,6 +683,9 @@ let mutations = {
 								return
 							} else if (state.shopcatdeletandlistbool == false && res.data.code == 1) {
 								state.cartList = []
+							}
+							if(_this.state.pages==1){
+								state.cartListBool = true
 							}
 						}
 					}
@@ -832,8 +844,10 @@ let mutations = {
 			})
 		})
 		// console.log(arr)
-		if(arr.length<=0){
-			return _this.commit("getshowmodel", {msg:"请选中商品删除"})
+		if (arr.length <= 0) {
+			return _this.commit("getshowmodel", {
+				msg: "请选中商品删除"
+			})
 		}
 		// console.log( _this.state.tokey)
 		uni.request({
@@ -905,7 +919,7 @@ let mutations = {
 			publicShopdetails
 		} = shopvalue
 		_this.state.orderlist = []
-		
+
 		//判断传过来的标识 如果1就是购物车过来的 否则就是商品详情过来的
 		if (parseInt(fromvalue)) {
 			let couponsstrId = []
@@ -915,22 +929,22 @@ let mutations = {
 				item.sub.forEach((items, indexs) => {
 					if (items.checked) {
 						/* 这里为了处理 优惠券的gc_id的值 ---开始*/
-						if(items.gc_id3){
-							if(items.gc_id2){
-								if(items.gc_id1){
-									couponsstrId[index] = items.gc_id1+'-'+items.gc_id2+'-'+items.gc_id3
+						if (items.gc_id3) {
+							if (items.gc_id2) {
+								if (items.gc_id1) {
+									couponsstrId[index] = items.gc_id1 + '-' + items.gc_id2 + '-' + items.gc_id3
 								}
-							}else{
-								if(items.gc_id1){
+							} else {
+								if (items.gc_id1) {
 									couponsstrId[index] = items.gc_id1
 								}
 							}
-						}else {
-							if(items.gc_id2){
-								if(items.gc_id1){
-									couponsstrId[index] = items.gc_id1+'-'+items.gc_id2
+						} else {
+							if (items.gc_id2) {
+								if (items.gc_id1) {
+									couponsstrId[index] = items.gc_id1 + '-' + items.gc_id2
 								}
-							}else{
+							} else {
 								couponsstrId[index] = items.gc_id1
 							}
 						}
@@ -940,7 +954,12 @@ let mutations = {
 				})
 			})
 			// console.log(couponsstrId)
-			_this.state.orderlist[0].limit_gcategory = couponsstrId
+			if (_this.state.orderlist.length >= 1) {
+				_this.state.orderlist[0].limit_gcategory = couponsstrId
+			}
+			
+
+			// _this.state.orderlist[0].limit_gcategory = couponsstrId
 			/* console.log(_this.state.orderlist) */
 		} else {
 			//这里是商品详情过来的
@@ -957,8 +976,10 @@ let mutations = {
 					})
 				}
 			})
-		}else{
-			_this.commit("getshowmodel", {msg:"请选中商品进行结算"})
+		} else {
+			_this.commit("getshowmodel", {
+				msg: "请选中商品进行结算"
+			})
 		}
 	},
 
@@ -1028,7 +1049,7 @@ let mutations = {
 		this.commit("gettokey")
 		uni.showModal({
 			title: "亲!",
-			content: "您确定要删除的该订单",
+			content: "您确定要删除该订单嘛？",
 			showCancel: true,
 			cancelText: "取消",
 			cancelColor: '#f00',
@@ -1335,7 +1356,7 @@ let mutations = {
 			url,
 			pages
 		} = evaluationobj
-		state.evaluationlistitem = []
+		// state.evaluationlistitem = []
 		// console.log(evaluationobj,111)
 		_this.commit("gettokey")
 		//这是请求的订单评价超时的时间
@@ -1365,7 +1386,7 @@ let mutations = {
 									state.evaluationlist = state.evaluationlist.concat(res.data.data.list)
 								}
 
-								
+
 
 								// console.log(CompletiontimeS)
 								res.data.data.list.forEach((item, index) => {
@@ -1491,7 +1512,7 @@ let mutations = {
 		const _this = this
 		uni.getStorage({
 			key: "bindtokey",
-			success(restokey){
+			success(restokey) {
 				uni.request({
 					url: `${Requestpath}order/getRefundAndGoodsOrderList`,
 					method: "POST",
@@ -1508,7 +1529,7 @@ let mutations = {
 				})
 			}
 		})
-		
+
 	},
 
 
@@ -1524,48 +1545,32 @@ let mutations = {
 			bottomindex,
 			pages
 		} = couponsobj
-		if (bottomindex == 0) {
-			//这是店铺的
-			uni.request({
-				url: `${Requestpath}activity/getUserStoreCouponList`,
-				method: "POST",
-				data: {
-					token: state.tokey,
-					sid: -2,
-					page: pages,
-					pageSize: 10
-				},
-				success(res) {
-					if (res.data.code == 0) {
-						if (pages == 1) {
-							state.couponslist = res.data.data.list
-						} else {
-							state.couponslist = state.couponslist.concat(res.data.data.list)
+		// if (bottomindex == 0) {
+		//这是店铺的
+		uni.getStorage({
+			key: "bindtokey",
+			success(restokey) {
+				uni.request({
+					url: `${Requestpath}activity/getUserCouponList`,
+					method: "POST",
+					data: {
+						token: restokey.data,
+						type: topindex,
+						page: pages,
+						pageSize: 10
+					},
+					success(res) {
+						if (res.data.code == 0) {
+							if (pages == 1) {
+								state.couponslist = res.data.data.list
+							} else {
+								state.couponslist = state.couponslist.concat(res.data.data.list)
+							}
 						}
 					}
-				}
-			})
-		} else {
-			//这是平台的
-			uni.request({
-				url: `${Requestpath}activity/getUserPlatformCouponList`,
-				method: "POST",
-				data: {
-					token: state.tokey,
-					page: pages,
-					pageSize: 10
-				},
-				success(res) {
-					if (res.data.code == 0) {
-						if (pages == 1) {
-							state.couponslist = res.data.data.list
-						} else {
-							state.couponslist = state.couponslist.concat(res.data.data.list)
-						}
-					}
-				}
-			})
-		}
+				})
+			}
+		})
 	},
 
 
@@ -1792,11 +1797,11 @@ let mutations = {
 	},
 	//当前端接收到服务端的消息的时候
 	livereceivemsg(state, livemsgobj) {
-			let {
-				msg
-			} = livemsgobj
-			state.liveuserlist.push(msg)
-			// console.log(state.liveuserlist)
+		let {
+			msg
+		} = livemsgobj
+		state.liveuserlist.push(msg)
+		// console.log(state.liveuserlist)
 		// console.log(state.liveuserlist, "这是index.js里面的")
 		// const length = state.liveuserlist.length
 		// console.log(length)
@@ -1814,47 +1819,74 @@ let mutations = {
 	//客服页面点击发送按钮的时候
 	Customersendmsg(state, sendmsgobj) {
 		const _this = this
-		let {
-			textvalue
-		} = sendmsgobj
-		console.log(JSON.stringify({
-			textvalue
-		}))
-
-		if (textvalue !== "") {
-			let obj = {
-				type: "chatMessage",
-				data: {
-					to_id: state.kf_id,
-					to_name: state.kf_name,
-					content: textvalue,
-					from_name: state.uname,
-					from_id: state.uid,
-					from_avatar: state.imgyuming + state.avatar
+		let aa = sendmsgobj.textvalue
+		let bb = aa.substring(4,6)
+		if( bb !=="br"){
+			let {
+				textvalue
+			} = sendmsgobj
+			console.log(JSON.stringify({
+				textvalue
+			}))
+			
+			if (textvalue !== "") {
+				let obj = {
+					type: "chatMessage",
+					data: {
+						to_id: state.kf_id,
+						to_name: state.kf_name,
+						content: textvalue,
+						from_name: state.uname,
+						from_id: state.uid,
+						from_avatar: state.imgyuming + state.avatar
+					}
 				}
+				//这是往服务器中发送消息
+				uni.sendSocketMessage({
+					data: JSON.stringify(obj),
+					success(res) {
+						// Customersendmsglist
+						// console.log(res, "这是发送成功")
+						state.Customersendmsglist.push({
+							'sendmsgdata': textvalue,
+							'msgtype': 'usersend',
+							'avatar': state.imgyuming + state.avatar
+						})
+					},
+					fail(err) {
+						// console.log(err, "这是发送失败")
+					}
+				});
+				// console.log(state.Customersendmsglist)
+			} else {
+				_this.commit('getshowmodel', {
+					msg: "文字不能为空"
+				})
 			}
-			//这是往服务器中发送消息
-			uni.sendSocketMessage({
-				data: JSON.stringify(obj),
-				success(res) {
-					// Customersendmsglist
-					// console.log(res, "这是发送成功")
-					state.Customersendmsglist.push({
-						'sendmsgdata': textvalue,
-						'msgtype': 'usersend',
-						'avatar': state.imgyuming + state.avatar
-					})
-				},
-				fail(err) {
-					// console.log(err, "这是发送失败")
-				}
-			});
-			// console.log(state.Customersendmsglist)
-		} else {
-			_this.commit('getshowmodel', {
-				msg: "文字不能为空"
-			})
 		}
+	},
+	
+	// *****店铺客服发送商品*****
+	Sendproductlink(state,cgid){
+		const _this = this
+		let {gid} = cgid
+		let obj = {
+			type: "currentGood",
+			  uid: state.uid,//用户ID
+			  gid,//商品ID      
+			  group: 1,//客服分组 1售前 2售后  
+			  kf_id: state.kf_id,//客服ID  
+		}
+		uni.sendSocketMessage({
+			data: JSON.stringify(obj),
+			success(res) {
+				// console.log(JSON.stringify(obj))	
+				// console.log(res,'返回')
+			},
+			fail(res) {
+				// console.log(res,"返回值")
+			}
+		});
 	}
 
 }

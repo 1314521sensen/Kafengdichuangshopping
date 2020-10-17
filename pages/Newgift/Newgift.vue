@@ -11,7 +11,11 @@
 			<scroll-view class="fa-new" scroll-y="true" >
 				<view class="new-top-img" :style="{'background-image':'url('+this.$store.state.httpUrl+'/Newgift/bgtitle.png'+')'}"></view>
 				<view class="new-bottom">
-					<NewPeople v-if="couponslist.length>0"></NewPeople>
+					<NewPeople 
+						v-if="couponslist.length>0"
+						NewgiftLeftTitle="领取"
+						GiftVouchers="礼劵"
+					></NewPeople>
 					<scroll-view :scroll-x="true" @scrolltolower="scrolltolower">
 						<view class="fa-discounts" :style="{'width':(countswidth*2+10)*couponslist.length+'rpx'}">
 							<view class="discounts-list">
@@ -38,7 +42,10 @@
 							</view>
 						</view>
 					</scroll-view>
-					<NewPeople></NewPeople>
+					<NewPeople
+						NewgiftLeftTitle="抢购"
+						GiftVouchers="礼品"
+					></NewPeople>
 					<!-- <scroll-view scroll-y="true" class="scroll-view" @scrolltolower="scrollbottom"> -->
 					<view class="commodity-list">
 						<view class="commodity" 
@@ -101,12 +108,14 @@
 				yuming:`${this.$store.state.imgyuming}/uploads/app/image/`,
 				timenum:5000,
 				countswidth:168,
-				imgpath:this.$store.state.imgyuming
+				imgpath:this.$store.state.imgyuming,
+				tokey:''
 			}
 		},
 		methods:{
 			//领取优惠券
 			Getnew(e){
+				app.globalData.Detectionupdatetokey(this.tokey)
 				let {coupon_id,storeid} = e.currentTarget.dataset
 				uni.getStorage({
 					key:"bindtokey",
@@ -212,6 +221,21 @@
 			_this.CouponTypeList(1)
 			//调用礼品的接口
 			_this.giftlist(4)
+			uni.getStorage({
+				key:"bindtokey",
+				success(res) {
+					_this.tokey = res.data
+				},
+			})
+		},
+		onShow() {
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res) {
+					_this.tokey = res.data
+				},
+			})
 		}
 	}
 </script>

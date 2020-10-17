@@ -110,7 +110,8 @@
 				neirongtext:"",
 				imgreturnlist:[],//后台返回的图片数组
 				arraylastimages:[],
-				pages:1
+				pages:1,
+				num:0
 			}
 		},
 		components:{
@@ -222,35 +223,50 @@
 						}
 					})
 			},
+			// 封装了一个上传图片的方法
+			uploadFile(index){
+				const _this = this
+				let imgreturnlistarr = []
+				let {topvalue,imgreturnlist,neirongtext,Logisticsvalue,attitudevaluevalue} = _this.$data
+				uni.uploadFile({
+					url:`${app.globalData.Requestpath}common/uploadImage?type=order`,
+					filePath:imgreturnlist[index],	
+					name:"file",
+					fileType:"image",
+					success(res){
+						//JSON  转字符串
+						  console.log(index)
+						if(JSON.parse(res.data).code==0){
+							//把每张图片追加到一个自定义数组当中
+							_this.arraylastimages.push(JSON.parse(res.data).data.src)
+							if(_this.num == _this.$data.imgreturnlist.length-1){
+								console.log(_this.arraylastimages)
+								_this.num = 0
+								_this.plicestarevaluation(_this.arraylastimages)
+								_this.arraylastimages = []
+							}else{
+								_this.num++
+							}
+						}
+					}
+				})
+			},
 			//将评价提交到后台
 			submitevaluation(){
 				const _this = this
 				let imgreturnlistarr = []
-				let {topvalue,imgreturnlist,neirongtext,Logisticsvalue,attitudevaluevalue} = this.$data
+				let {topvalue,imgreturnlist,neirongtext,Logisticsvalue,attitudevaluevalue} = _this.$data
 				// console.log(imgreturnlist,"这是要上传的而图片")
 				// console.log(imgreturnlist.length)  
 				if(parseInt(imgreturnlist.length)>0){
 					// console.log("执行有图片")
 					//每次上传图片都渲染
 					for(var i = 0 ; i < imgreturnlist.length ; i++){
-						uni.uploadFile({
-							url:`${app.globalData.Requestpath}common/uploadImages?type=order`,
-							filePath:imgreturnlist[i],	
-							name:"file",
-							fileType:"image",
-							success(res){
-							    
-								//JSON  转字符串   
-								if(JSON.parse(res.data).code==0){
-									// console.log(JSON.parse(res.data).data[0])
-									//把每张图片追加到一个自定义数组当中
-									_this.arraylastimages.push(JSON.parse(res.data).data[0])
-								}
-							}
-						})
+						// console.log(imgreturnlist[i],11111)
+						console.log(i)
+						_this.uploadFile(i)
+						
 					}
-					_this.plicestarevaluation(_this.arraylastimages)
-					
 				}else{
 					// console.log(imgreturnlistarr)
 					_this.plicestarevaluation(_this.arraylastimages)

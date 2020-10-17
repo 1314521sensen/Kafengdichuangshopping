@@ -52,18 +52,19 @@
 		},
 		methods: {
 			nameLogin(){
-				uni.navigateTo({
-					url: '/pages/login/login'
-				});
+				// uni.navigateTo({
+				// 	url: '/pages/login/login'
+				// });
+				uni.navigateBack()
 			},
 			//点击验证码时
 			countdown(){//
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				this.regphone()
 				//这个发起请求获取验证码
 				if(this.phone.match(userphone)){
 					// console.log("验证成功")
-					
+					this.regphone()
 					let json = {
 						mobile:this.phone,
 						type:1
@@ -80,7 +81,7 @@
 			},
 			//封装个匹配手机号的方法
 			regphone(){
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				if(this.phone.match(userphone)){
 					this.bool = false
 					clearInterval(this.times)
@@ -114,7 +115,7 @@
 			//点击button的时候 就进行登录验证
 			smslogin(e){
 				let {phone,sms} = e.detail.value
-				let userphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/
+				let userphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 				//这是给后端穿的参
 				let jsons = {
 					login_type:"mobile",

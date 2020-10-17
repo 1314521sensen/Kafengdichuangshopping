@@ -137,7 +137,6 @@
 					view{
 						width: 110rpx;
 						height: 150rpx;
-						// background: url(/static/myspelllist/watches.png) no-repeat;
 						background-size: 100% 100%;
 					}
 				}

@@ -27,6 +27,7 @@
 				</view>
 			</form>
 		</view>
+		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 	</view>
 </template>
 
@@ -35,6 +36,8 @@
 	import logobg from "@/components/login/loginbg.vue";
 	//引入登录的标题
 	import logintitle from "@/components/login/logintitle.vue"
+	//引入返回按钮
+	import defaultbgblackcolorwhitebar from "@/components/actionbar/defaultbgblackcolorwhitebar.vue"
 	const app = getApp()
 	export default {
 		data() {//这是短信登录
@@ -60,8 +63,11 @@
 						success(res) {
 							if(res.data.code==0){
 								app.globalData.showtoastsame(res.data.msg)
-								uni.reLaunch({
-									url:`/pages/login/login`
+								// uni.reLaunch({
+								// 	url:`/pages/login/login`
+								// })
+								uni.navigateBack({
+									delta:2
 								})
 							}else{
 								app.globalData.showtoastsame(res.data.msg)
@@ -75,7 +81,8 @@
 		},
 		components:{
 			logobg,
-			logintitle
+			logintitle,
+			defaultbgblackcolorwhitebar
 		}
 	}
 </script>

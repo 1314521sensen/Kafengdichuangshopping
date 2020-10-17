@@ -35,14 +35,16 @@
 					<!-- <Oneyuanbuys v-show="one_yuan_cha==false && this.$store.state.is_newuser"></Oneyuanbuys> -->
 					<!-- <Oneyuanbuys ></Oneyuanbuys> -->
 					<!-- 打包注释-开始 -->
-					<Oneyuanbuy @oneyuancha="oneyuancha"></Oneyuanbuy>
+					<!-- <Oneyuanbuy @oneyuancha="oneyuancha"></Oneyuanbuy> -->
 					<!-- 打包注释-结束 -->
 					<ScratchableLatex :cuIconList="cuIconList"></ScratchableLatex>
+					<!-- 新人礼包 -->
+					<NewExclusive v-if="store.is_newuser&&store.is_receive==0&&store.NewExclusivebool"></NewExclusive>
 					<!-- <faddish></faddish> -->
 					<!-- 后期解开 -->
 					<!-- <activity></activity> -->
 					<!-- 临时用的开始-->
-					<activityimg v-show="one_yuan_cha==false && this.$store.state.is_newuser"></activityimg>
+					<!-- <activityimg v-show="one_yuan_cha==false && this.$store.state.is_newuser"></activityimg> -->
 					<linshi></linshi>
 					<!-- 临时用的结束 -->
 					<!-- <feature></feature> -->
@@ -99,9 +101,9 @@
 	// import Details from "@/components/indexcomponents/indexDetails.vue"
 	//临时的---开始
 	import linshi from "@/components/indexOneComponents/linshi.vue"
-	import activityimg from "@/components/indexOneComponents/activityimg.vue"
+	// import activityimg from "@/components/indexOneComponents/activityimg.vue"
 	//这是弹窗的一元购
-	import Oneyuanbuy from "@/components/indexOneComponents/Oneyuanbuy.vue"
+	// import Oneyuanbuy from "@/components/indexOneComponents/Oneyuanbuy.vue"
 	//这是横条的一元购
 	// import Oneyuanbuys from "@/components/indexOneComponents/Oneyuanbuys.vue"
 	//临时的---结束
@@ -109,9 +111,12 @@
 	import indexpopup from "@/components/indexcomponents/indexpopup.vue"
 	//引入底部tabbber
 	import tabber from "@/components/indexcomponents/indextaber.vue"
+	// 新人礼包
+	import NewExclusive from "@/components/NewExclusive/NewExclusive.vue"
 	export default {
 		data() {
 			return {
+				store:this.$store.state,
 				nanlist: [],
 				liveheight: 0, //下拉直播组件的高度
 				livebool: true, //判断是否下拉
@@ -194,7 +199,8 @@
 						name: '新人专区',
 						imgs: `${this.$store.state.httpUrl}newindexScratchable/Newgift.gif`,
 						url: "/pages/Newgift/Newgift",
-						Routinghopname: "Newgift"
+						Routinghopname: "Newgift",
+						code:"NEWPEOPLE"
 					},
 					// {
 					// 	cuIcon: 'questionfill',
@@ -204,6 +210,15 @@
 					// 	imgs:`${this.$store.state.httpUrl}newindexScratchable/help.png`
 					// 	// url:""///pages/help/help
 					// }
+					{
+						cuIcon: 'fission',
+						color: 'mauve',
+						badge: 0,
+						name: '免费领',
+						imgs: `${this.$store.state.httpUrl}newindexScratchable/fission.png`,
+						url: "/pages/InvitationFission/InvitationFission",
+						code:"JBDH"
+					}
 				],
 				swiperList: [],
 				DetailsList: [],
@@ -212,7 +227,9 @@
 				old: {
 					scrollTop: 0
 				},
-				scrollTopbool:false
+				scrollTopbool:false,
+				JBDHclose:0,
+				token:''
 			}
 		},
 		components: {
@@ -231,15 +248,16 @@
 			// Details
 			//临时的--开始
 			linshi,
-			activityimg,
+			// activityimg,
 			//临时的结束
 			//一元购
-			Oneyuanbuy,
+			// Oneyuanbuy,
 			// Oneyuanbuys,
 			//首页服务的弹窗
 			indexpopup,
 			//底部tabber
-			tabber
+			tabber,
+			NewExclusive
 		},
 		methods: {
 			//****一元专区---开始****
@@ -396,8 +414,54 @@
 				data: false
 			})
 		},
+		onShow() {
+			const _this = this
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					_this.token = res.data
+					uni.request({
+						url:`${app.globalData.Requestpath}user/getUserDetail`,
+						method:"POST",
+						data:{
+							token:res.data
+						},
+						success(res) {
+							if(res.data.code == 0){
+								_this.$store.state.is_receive = res.data.data.is_receive
+								if(res.data.data.is_newuser){
+									_this.$store.state.is_receive == false
+								}else{
+								_this.$store.state.is_receive == true
+								}
+							}
+						}
+					})
+				}
+			})
+		},
 		created() {
 			const _this = this
+			// 裂变活动是否开启
+			// uni.request({
+			// 	url: `${app.globalData.Requestpath}activity/getActivityInfo?code=JBDH`,
+			// 	success(res) {
+			// 		let start_time = res.data.data.start_time
+			// 		let stop_time = res.data.data.stop_time
+			// 		// 开始时间
+			// 		let startTime = start_time.replace(/-/g, '/');
+			// 		var time1 = new Date(startTime);
+			// 		time1 = time1.getTime();
+			// 		// 结束时间
+			// 		let stopTime = stop_time.replace(/-/g, '/');
+			// 		var time2 = new Date(stopTime);
+			// 		time2 = time2.getTime();
+			// 		let myDate = new Date().getTime();
+			// 		let bool = myDate> time1 && myDate < time2
+			// 		_this.JBDHclose = bool
+			// 	}
+			// })
+			
 			_this.indexshoplist(1)
 			uni.request({
 				url: `${app.globalData.Requestpath}platform_config/getThumbSlideshow`,

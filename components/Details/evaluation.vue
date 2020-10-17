@@ -7,7 +7,8 @@
 						<view class="cu-bar bg-white margin-top" data-target="bottomModal" :style="{'border-bottom':'4rpx solid #f8f8f8'}">
 							<view class="action">
 								商品评价
-								<text>{{'('+listone.length+')'}}</text>
+								<!-- <text>{{'('+listone.length+')'}}</text> -->
+								<text>{{'('+appraisenum+')'}}</text>
 							</view>
 							<view class="action" @tap="Allevaluation">
 								<!-- <button class="cu-btn bg-green shadow"  >Bottom</button> -->
@@ -49,6 +50,7 @@
 	export default{
 		data(){
 			return {
+				appraisenum:0,//评价的数量
 				listone:[],
 				imgpath:this.$store.state.imgyuming
 			}
@@ -72,7 +74,9 @@
 					pageSize:1
 				},
 				success(res) {
+					// console.log()
 					if(res.data.code==0){
+						_this.appraisenum = res.data.data.total
 						_this.listone = res.data.data.list
 						_this.listone.forEach((item,index)=>{
 							// console.log(item)

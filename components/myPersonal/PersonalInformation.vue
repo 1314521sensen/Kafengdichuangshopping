@@ -19,11 +19,12 @@
 						</view>
 					</view>
 					<!-- 新增加的登录退出 -->
+					<!-- 到时候判断用户有没有登录 有的话就改成退出 -->
 					<!-- #ifdef APP-PLUS || H5 -->
 						<view class="login">
 							<view class="margin-tb-sm text-center">
-								<!-- 到时候判断用户有没有登录 有的话就改成退出 -->
-								<button class="cu-btn round bg-green" @tap="login">退出</button>
+								
+								<button class="cu-btn round bg-white text-black" @tap="login">退出</button>
 							</view>
 						</view>
 					<!-- #endif -->
@@ -66,7 +67,15 @@
 							uni.removeStorage({
 								key:"bindtokey",
 								success(res) {
-									// console.log(res)
+									//清空裂变的人数和金币
+									uni.setStorage({
+										key:"Fission_invitation",
+										data:0,
+									})
+									uni.setStorage({
+										key:"Fission_Gold",
+										data:0,
+									})
 									uni.navigateTo({
 										url:"/pages/login/login"
 									})

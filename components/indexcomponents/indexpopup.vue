@@ -7,7 +7,7 @@
 				</view>
 				<view class="loginagreementText">山东卡风迪创信息科技有限公司（注册地址：山东省德州市经济开发区宋官屯街道办事处三八东路董子文化街汇智街28号一层）一直以来都非常重视个人信息的保护。您可阅读惠播客<text class="agreementText" @tap="agreementText">《用户协议》</text>和<text class="agreementText" @tap="Privacyagreement">《隐私政策》</text>在您浏览访问惠播客平台网站、应用程序、微信小程序等或者注册登录使用惠播客的任何产品和服务时，我们将按照法律法规要求，采取相应安全保护措施，尽力保护您的个人信息安全可控。</view>
 				<view class="agreement">
-					<text class="agreement-one">继续使用代表您已阅读并同意上述内容及</text>
+					<text class="agreement-one">继续使用代表您已阅读并同意上述内容</text>
 				</view>
 			</view>
 			<view class="popup-bottom">

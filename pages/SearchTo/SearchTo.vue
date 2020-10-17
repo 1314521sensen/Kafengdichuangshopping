@@ -1,7 +1,7 @@
 <template>
 	<view class="SeachTo">
 		<pageheight :statusBar="statusBar"></pageheight>
-		<searchbusiness :value3="value"></searchbusiness>
+		<searchbusiness :value3="value" :list = 'list'></searchbusiness>
 	</view>
 </template>
 
@@ -13,7 +13,8 @@
 		data() {
 			return {
 				statusBar:0,
-				value:""
+				value:"",
+				list:[]
 			}
 		},
 		methods: {
@@ -26,6 +27,26 @@
 			// console.log()
 			this.value = option.value
 			this.statusBar = app.globalData.statusBar
+		},
+		created() {
+			const _this = this
+			uni.getStorage({
+				key: "searchArr",
+				success(res) {
+					let arr = res.data
+					_this.list = [...new Set(arr)]
+				}
+			})
+		},
+		onShow() {
+			const _this = this
+			uni.getStorage({
+				key: "searchArr",
+				success(res) {
+					let arr = res.data
+					_this.list = [...new Set(arr)]
+				}
+			})
 		}
 	}
 </script>

@@ -56,8 +56,8 @@
 				value:"",
 				value2:"",
 				countdowntext:"获取验证码",
-                wait:60,
-               	disabled:false
+                wait:60,
+               	disabled:false
 			}
 		},
 		methods:{
@@ -146,7 +146,8 @@
 									this.submitbtn = "获取验证码"
 									
 									let {newsaccount,newssms} = e.detail.value
-									let regphone = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+									
+									let regphone = /^[1][3,4,5,7,8,9][0-9]{9}$/
 									if(regphone.test(newsaccount)){
 										let json = {
 											mobile:newsaccount,

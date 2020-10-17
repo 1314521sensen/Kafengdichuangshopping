@@ -21,7 +21,7 @@
 				<view class="btn-group">
 					<button 
 						class="cu-btn bg-orange round shadow-blur" 
-						v-if="parseInt(producttype)!==2 && couplebool!=='nlt' && activityType==''" 
+						v-if="parseInt(producttype)!==2 && couplebool!=='nlt' && activityType=='' && parseInt(fissiontype)!==4" 
 						@tap="Addcart(pic)"
 					>加入购物车</button>
 					<button 
@@ -44,6 +44,7 @@
 				:code="code"
 				:producttype="producttype"
 				:activityType="activityType"
+				:fissiontype="fissiontype"
 			></immediatelypopup>
 		</view>
 </template>
@@ -54,7 +55,7 @@
 	export default{
 		data(){
 			return {
-				tokey:"",
+				// tokey:"",
 				newscarobj:{},
 				newcararr:[],
 				len:"",
@@ -105,74 +106,96 @@
 				//店铺跳转的时候  把图片 商品的标题商品的 价格 发送的过去
 				uni.navigateTo({
 					url:`/pages/Customerservice/Customerservice?
-						shoplink=storeshop&shopimg=${JSON.stringify(this.pic.good_pic)}&shoptitle=${this.pic.good_title}&shopprice=${this.pic.good_price}&shoppromotion_price=${this.pic.good_promotion_price}&storename=${this.pic.store_name}&statestore=${this.storeid}`
+						shoplink=storeshop&shopimg=${JSON.stringify(this.pic.good_pic)}&shoptitle=${this.pic.good_title}&shopprice=${this.pic.good_price}&shoppromotion_price=${this.pic.good_promotion_price}&storename=${this.pic.store_name}&statestore=${this.storeid}&gid=${this.gid}`
 				})
 			},
 			Addcart(obj){
-				app.globalData.Detectionupdatetokey(this.tokey)
-				let {store_name,good_title,good_price,good_pic} = obj
-				this.$store.commit("Addcart",{s_name:store_name,g_name:good_title,g_pic:good_pic,gid:this.gid,sid:this.storeid,couplebool:this.couplebool})
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						app.globalData.Detectionupdatetokey(res.data)
+						let {store_name,good_title,good_price,good_pic} = obj
+						_this.$store.commit("Addcart",{s_name:store_name,g_name:good_title,g_pic:good_pic,gid:_this.gid,sid:_this.storeid,couplebool:_this.couplebool})
+					},
+					fail(err){
+						uni.navigateTo({
+							url:"/pages/login/login"
+						})
+					}
+				})
+				
 			},
 			//这是点击弹窗的确定是否确定添加收藏
 			collectionwork(){
-				app.globalData.Detectionupdatetokey(this.tokey)
-				//this.Noteinformation收藏信息
-						//在这里添加数据
-					
-					if(this.collectionbool==false){//如果为false的话代表用户为添加收藏 
-						// console.log("当前为true")
-						this.collectionbool = true
-						this.collection = "已收藏"
-						uni.request({//请求添加收藏信息的接口
-							url:`${app.globalData.Requestpath}user/addGoodFavoriteInfo`,
-							method:"POST",
-							data:{
-								token:this.tokey,
-								good_id:this.pic.good_id,
-								good_name:this.pic.good_title,
-								good_image:this.pic.good_pic,
-								fav_price:this.pic.good_promotion_price,
-								fav_remark:""
-							},
-							success:(res)=>{
-								
-								// console.log(res)
-								if(res.data.code==0){
-									app.globalData.showtoastsame("收藏成功")
-									this.favid = parseInt(res.data.data.fav_id)
-								}else{
-									//这个函数 如果用户的tokey过期了 那么就跳转到登录页
-									app.globalData.Logback(res.data.msg)
+				const _this = this
+				uni.getStorage({
+					key:"bindtokey",
+					success(res){
+						app.globalData.Detectionupdatetokey(res.data)
+					//this.Noteinformation收藏信息
+							//在这里添加数据
+						if(_this.collectionbool==false){//如果为false的话代表用户为添加收藏 
+							// console.log("当前为true")
+							_this.collectionbool = true
+							_this.collection = "已收藏"
+							uni.request({//请求添加收藏信息的接口
+								url:`${app.globalData.Requestpath}user/addGoodFavoriteInfo`,
+								method:"POST",
+								data:{
+									token:res.data,
+									good_id:_this.pic.good_id,
+									good_name:_this.pic.good_title,
+									good_image:_this.pic.good_pic,
+									fav_price:_this.pic.good_promotion_price,
+									fav_remark:""
+								},
+								success(res){
+									
+									// console.log(res)
+									if(res.data.code==0){
+										app.globalData.showtoastsame("收藏成功")
+										_this.favid = parseInt(res.data.data.fav_id)
+									}else{
+										//这个函数 如果用户的tokey过期了 那么就跳转到登录页
+										app.globalData.Logback(res.data.msg)
+									}
 								}
-							}
-						})
-					}else{//如果用户点击收藏的时候 为true的时候 就让用户取消收藏
-						//这里是删除收藏
-						const _this = this
-						_this.collectionbool = false
-						_this.collection = "收藏"
-						uni.request({
-							url:`${app.globalData.Requestpath}user/deleteFavoriteInfo`,
-							method:"POST",
-							data:{
-								token:_this.tokey,
-								fav_id:_this.favid
-							},
-							success(res) {
-								if(res.data.code==0){
-									app.globalData.showtoastsame("取消成功")
-								}else{
-									app.globalData.showtoastsame(res.data.msg)
+							})
+						}else{//如果用户点击收藏的时候 为true的时候 就让用户取消收藏
+							//这里是删除收藏
+							_this.collectionbool = false
+							_this.collection = "收藏"
+							uni.request({
+								url:`${app.globalData.Requestpath}user/deleteFavoriteInfo`,
+								method:"POST",
+								data:{
+									token:res.data,
+									fav_id:_this.favid
+								},
+								success(res) {
+									if(res.data.code==0){
+										app.globalData.showtoastsame("取消成功")
+									}else{
+										app.globalData.showtoastsame(res.data.msg)
+									}
 								}
-							}
+							})
+						}
+					},
+					fail(err){
+						uni.navigateTo({
+							url:`/pages/login/login`
 						})
 					}
+				})
 			},
 			Skiporder(e){
 				const _this = this
 				uni.getStorage({
 					key:"bindtokey",
 					success(res) {
+						// console.log(2222)
 						app.globalData.Detectionupdatetokey(res.data)
 						// console.log(this.immediatelylist.length)
 						/*
@@ -230,7 +253,8 @@
 								good_type:_this.couplebool,
 								good_purchase_price:_this.pic.good_purchase_price,
 								limit_gcategory:[couponsstrId],
-								activityType:_this.activityType
+								activityType:_this.activityType,
+								fissiontype:_this.fissiontype
 							}
 							//如果是团长类型增加 属性值
 							if(parseInt(_this.producttype)==2){
@@ -244,6 +268,7 @@
 						}
 					},
 					fail(err){
+						// console.log(err)
 						uni.navigateTo({
 							url:"/pages/login/login"
 						})
@@ -255,13 +280,13 @@
 				this.modalName = e
 			}
 		},
-		props:["pic","gid","storeid","couplebool","good_state","good_verify","good_delete","producttype","code","activityType"],
+		props:["pic","gid","storeid","couplebool","good_state","good_verify","good_delete","producttype","code","activityType","tokey","fissiontype"],
 		created(){
 			const _this = this
 			uni.getStorage({
 				key:"bindtokey",
 				success(res){
-					_this.tokey = res.data
+					// _this.tokey = res.data
 					uni.request({//请求一条商品来看一下 用户收藏没收藏
 						url:`${app.globalData.Requestpath}user/getGoodFavoriteInfo`,
 						method:"POST",

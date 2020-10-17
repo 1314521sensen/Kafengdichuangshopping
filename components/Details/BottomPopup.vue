@@ -18,7 +18,7 @@
 						<text>品牌参数</text>
 						<view class="popup-list">
 							<view class="popup-list-auxiliary" v-for="(item,index) in brandlist" :key="index">
-								<view class="popup-list-same popup-list-left">{{item.attr_name}}</view>
+								<view class="popup-list-same popup-list-left">{{item.attr_name}}:</view>
 								<view class="popup-list-same popup-list-right">{{item.attr_value}}</view>
 							</view>
 						</view>

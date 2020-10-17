@@ -17,14 +17,11 @@
 			<view class="immediately-midden-scrollarea">
 				<scroll-view scroll-y="true" class="scrollarea" :class="immediatelylist.length>1?'scrollareaactive':''">
 					<view class="scrollareapagespecifications">
-						<view class="scrollareapagespecifications-item" v-for="(item,index) in immediatelylist" :key="index">
+						<view class="scrollareapagespecifications-item">
 							<view class="item-text">
-								{{item.spec_name}}
+								规格
 							</view>
-							<!-- v-for="(items,indexs) in item.spec_value" 
-									:key="indexs" :style="{'color':color}"  
-									@tap="choose(items,index,indexs,item)"items,index,indexs,item -->
-							<view class="item-specifications" @tap.stop="choose" :data-specid="item.id" :data-index="index">
+							<view class="item-specifications" @tap.stop="choose"  v-for="(item,index) in immediatelylist" :key="index" :data-specid="item.id" :data-index="index">
 								<text class="test" :class="index==indexs?'active':''">{{item.spec_value}}</text>  
 							</view>
 						</view>
@@ -172,7 +169,8 @@
 						good_type:this.couplebool,
 						good_purchase_price:this.purchase_price,
 						limit_gcategory:[couponsstrId],
-						activityType:this.activityType
+						activityType:this.activityType,
+						fissiontype:this.fissiontype
 					}
 					//如果是团长类型增加 属性值
 					if(parseInt(this.producttype)==2){
@@ -210,7 +208,7 @@
 				this.$emit("hiddends",null)
 			}
 		},
-		props:["immediatelylist","bool","gid","pic","storeid","couplebool","code","producttype","activityType"],
+		props:["immediatelylist","bool","gid","pic","storeid","couplebool","code","producttype","activityType","fissiontype"],
 		created() {
 			// console.log(this.immediatelylist)
 		}

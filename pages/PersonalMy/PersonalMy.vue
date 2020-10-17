@@ -145,7 +145,10 @@
 						success(resinfo) {
 							// console.log(resinfo)
 							if(resinfo.data.code==0){
-								let {user_nick,user_pic,user_amount,user_integral,is_commander,is_member,user_sid,user_commission,invite_num,share_code,app_openid} = resinfo.data.data
+								let {user_nick,user_pic,user_amount,user_integral,is_commander,is_member,user_sid,user_commission,invite_num,share_code,app_openid,user_gold,invite_all_num} = resinfo.data.data
+								
+								//  这是列变
+								
 								// console.log(app_openid)openidbool
 								// console.log(user_commission)
 								// console.log(is_commander,"是不是团长")
@@ -198,6 +201,17 @@
 									key:"share_code",
 									data:share_code
 								})
+								/***这是列变***/
+								// //将金币和人数 加入到缓存中
+								uni.setStorage({
+									key:"Fission_invitation",
+									data:invite_all_num,
+								})
+								uni.setStorage({
+									key:"Fission_Gold",
+									data:user_gold,
+								})
+								/**这是列变***/
 								//请求用户的手机号和邮箱 如果邮箱有的话就 加入到key为userbindstate的1 没有就是0 为了用户更改邮箱号用
 								uni.request({
 									url:`${app.globalData.Requestpath}user/getUserBindInfo`,
@@ -246,31 +260,18 @@
 					})
 					//这获取用户的优惠券的数量
 					uni.request({
-						url:`${app.globalData.Requestpath}activity/getUserStoreCouponList`,
-						method:"POST",
-						data:{
-							token:res.data,
-							sid:-2
+						url: `${app.globalData.Requestpath}activity/getUserCouponList`,
+						method: "POST",
+						data: {
+							token: res.data,
+							type: 1,
+							page: 1,
+							pageSize: 1
 						},
-						success(Storecoupon) {//这是获取到店铺的优惠券
-								// console.log(Storecoupon)
-								let sidnum = 0
-								//当用户 获取店铺优惠券数量成功的时候 就获取对应的数据 否则为0
-								Storecoupon.data.code==0 ? sidnum = Storecoupon.data.data.total : sidnum = 0
-								uni.request({
-									url:`${app.globalData.Requestpath}activity/getUserPlatformCouponList`,
-									method:"POST",
-									data:{
-										token:res.data,
-									},
-									success(Platformcoupon) {//这是获取了平台的优惠券
-										let Platformcouponnuma = 0
-										
-										Platformcoupon.data.code==0 ? Platformcouponnuma = Platformcoupon.data.data.total : Platformcouponnuma = 0
-										_this.moneylist[2].num = Platformcouponnuma + sidnum
-									}
-								})
-							
+						success(res) {
+							if (res.data.code == 0) {
+								_this.moneylist[2].num = res.data.data.total
+							}
 						}
 					})
 				},

@@ -21,22 +21,22 @@
 				taberlist:[
 					{
 						"pagePath": "pages/index/index",
-						"selectedIconPath": "/static/tabber/index.png",
+						"selectedIconPath": this.$store.state.httpUrl+"tabber/index.png",
 						"text": "首页"
 					},  
 					{
 						"pagePath": "pages/Liveplatformlist/Liveplatformlist",
-						"selectedIconPath": "/static/tabber/Liveplatform.png",
+						"selectedIconPath": this.$store.state.httpUrl+"tabber/Liveplatform.png",
 						"text": "直播"
 					}, 
 					{
 						"pagePath": "pages/shoppingCart/shoppingCart",
-						"selectedIconPath": "/static/tabber/car.png",
+						"selectedIconPath": this.$store.state.httpUrl+"tabber/car.png",
 						"text": "购物车"
 					},
 					{
 						"pagePath": "pages/PersonalMy/PersonalMy",
-						"selectedIconPath": "/static/tabber/my.png",
+						"selectedIconPath": this.$store.state.httpUrl+"tabber/my.png",
 						"text": "我的"
 					}
 				],

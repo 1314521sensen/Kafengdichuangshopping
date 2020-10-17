@@ -24,6 +24,7 @@
 		methods:{
 			shezhipasswrd(){
 				//跳转
+				console.log(this.business)
 				if(this.business=="pay"){//如果等于pay的话 就是订单页面跳转过来的
 					uni.navigateTo({
 						url:`/components/setcenter/SetChangeResetpassword?index=${this.setzhifumimabool}&tokey=${this.tokey}&phone=${this.userphone}&id=${this.userid}&business=${this.business}&Realnamebool=${this.Realnamebool}`

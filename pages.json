@@ -348,7 +348,19 @@
         ,{
             "path" : "pages/festivalActivities/festivalActivities",
             "style" : {}
-        }
+        },
+		{
+		    "path" : "pages/InvitationFission/InvitationFission",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/FissionConsumption/FissionConsumption",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/exchangecoupons/exchangecoupons",
+		    "style" : {}
+		}
     ],
 	
 	"globalStyle": {

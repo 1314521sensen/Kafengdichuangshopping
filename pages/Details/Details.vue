@@ -26,6 +26,7 @@
 			:producttype="producttype"
 			:code="code"
 			:activityType="activityType"
+			:fissiontype="fissiontype"
 		></bottomcar>
 		<suspensionshopcart></suspensionshopcart>
 		<shoreicon :pic="pic"></shoreicon>
@@ -70,6 +71,7 @@
 				producttype:"",//判断商品是不是团长类型
 				activityType:"",//判断是不是活动商品
 				code:0,//团长分享码
+				fissiontype:0,//裂变类型
 			}
 		},
 		methods: {
@@ -88,7 +90,7 @@
 		onLoad(opction){
 			// couplebool
 			// console.log(opction)
-			let {id,storeid,goodtype,liveshopstate,type,activityType} = opction
+			let {id,storeid,goodtype,liveshopstate,type,activityType,fissiontype} = opction
 			//activityType 针对活动的商品
 			const _this = this
 			//这是商品的id
@@ -120,6 +122,13 @@
 				this.activityType = "activity"
 			}else{
 				this.activityType = ""
+			}
+			//判断是不是裂变
+			// console.log(fissiontype)
+			if(fissiontype==4){
+				this.fissiontype = 4
+			}else{
+				this.fissiontype = 0
 			}
 			//在去请求详情页的其他数据
 			// console.log(shopJSON)
@@ -201,6 +210,12 @@
 			const _this = this
 			_this.$store.state.bannerbool = true
 			_this.$store.state.firstOrderbool = false
+			uni.getStorage({
+				key:"bindtokey",
+				success(res){
+					_this.tokey = res.data
+				}
+			})
 		}
 	}
 </script>

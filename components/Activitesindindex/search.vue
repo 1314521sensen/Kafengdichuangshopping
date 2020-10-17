@@ -105,6 +105,18 @@
 							})
 							
 							if(res.data.code == 0){
+								// 判断是否领取过新人礼包
+								_this.$store.state.is_receive = res.data.data.is_receive
+								//这是列变----开始
+								uni.setStorage({
+									key:"Fission_invitation",
+									data:res.data.data.invite_all_num,
+								})
+								uni.setStorage({
+									key:"Fission_Gold",
+									data:res.data.data.user_gold,
+								})
+								//这是列变---结束
 								uni.setStorage({
 									key:"share_code",
 									data:res.data.data.share_code
@@ -145,6 +157,9 @@
 							
 						}
 					})
+				},
+				fail(err) {
+					_this.$store.state.is_newuser = true
 				}
 			})
 		}

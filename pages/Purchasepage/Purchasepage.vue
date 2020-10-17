@@ -2,7 +2,7 @@
 	<view>
 		<view class="Purchasepage">
 			<pageheight :statusBar="statusBar"></pageheight>
-			<actionbar :url=" fromvalue==1 ? '/pages/shoppingCart/shoppingCart':'/pages/index/index'" message="确认订单" :isorder="isorder"></actionbar>
+			<actionbar  message="确认订单" :bool="linkbool"></actionbar>
 			<!-- <view class="Buycontent">
 				<view class="Shippingaddress" @tap="Addressmodification">
 					<view class="Shippingaddress-left">
@@ -50,7 +50,6 @@
 							<view class="red active"></view>
 							<view class="white active"></view>
 						</view>
-
 					</view>
 				</view>
 			</view>
@@ -88,16 +87,16 @@
 						</view>
 						<!-- 这是优惠券的组件 -->
 						<storecoupon msg="使用" titlemsg="使用优惠券" :tokey="tokey" :storeid="item.store_id" :couplebooltext="couplebooltext"
-						 Whatcoupon="1" :Orderpaymentamount="item.good_price*item.good_num" @dingdancoupon="dingdancoupon" v-if="orderinfolist.length<=1 && good_type!=='nlt'"
-						 :limit_gcategory="limit_gcategory" :limit_gids="limit_gids"></storecoupon>
+						 Whatcoupon="1" :Orderpaymentamount="item.good_price*item.good_num" @dingdancoupon="dingdancoupon" v-if="orderinfolist.length<=1 && good_type!=='nlt' && parseInt(fissionitem)==0"
+						 :limit_gcategory="limit_gcategory" :limit_gids="limit_gids" @fissionconponsleng="fissionconponsleng"></storecoupon>
 						<view class="distribution note">
 							<view class="cu-form-group">
-								<view class="title">订单备注</view>
+								<view class="title order_title_text">订单备注</view>
 								<!-- <input placeholder="选填,请先和商家协商一致" name="input" v-model="value"></input> -->
-								<textarea rows="5" cols="20" placeholder="选填,请先和商家协商一致" v-model="value"></textarea>
+								<textarea rows="5" cols="20" placeholder="选填,请先和商家协商一致" @input="blur" :data-index="index" :data-g_id="item.good_id"></textarea>
 							</view>
 						</view>
-						<view class="Payprice">
+						<view class="Payprice" v-if="orderinfolist.length>1">
 							<text>共{{item.good_num}}件</text>
 							<text>小计:</text>
 							<!-- Favorablebalance优惠卷的面额 有值的时候采用有值 没值的时候采用0 -->
@@ -107,15 +106,45 @@
 						</view>
 					</view>
 				</view>
+				<!-- 这是后加的裂变开始 -->
+				<view class="fission_box" v-show="parseInt(couplebooltext[0])==3">
+					<view 
+						class="fission_plice fission_Gold_box" 
+						v-for="(item,index) in fissionlist" 
+						:key="index"
+						@tap="fission_options"
+						:data-indexs="index"
+					>
+						<view class="fission_Gold">
+							<view class="fission_circle" :class="fissionitem==index && item.checkbool?'active_circle':''">
+								<text v-show="fissionitem==index && item.checkbool">√</text>
+							</view>
+							<text>{{item.name}}</text>
+						</view>
+						<text class="available_Gold" v-show="index==0">{{parseInt(fissionconponsinfo)!==0?`可用${fissionconponsinfo}张`:'暂无优惠券'}}</text>
+						<!-- 这是金币 -->
+						<text class="available_Gold" v-show="index==1">剩余{{parseInt(fissionitem)!==1 ? fissionGold : fissionGoldcombined}}金币</text>
+					</view>
+				</view>
+				<!-- 这是列变-结束 -->
 			</view>
 			<view class="detailscar">
 				<view class="detailscar-pic">
 					<text>共{{totalnumber}}件,</text>
 					<text>合计</text>
 					<!-- v-text="'¥'+((price*nums+freight)-(Favorablebalance?Favorablebalance:0)).toFixed(2)" -->
-					<text>{{Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2)}}</text>
+					<text>
+						{{parseInt(fissionitem)!==1&&parseInt(fissionitem)!==2 ? Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2) : fissioncombined}}
+					</text>
 					<!-- @tap="priceorder showModal" -->
-					<button class="cu-btn round bg-orange" @tap="showModal" data-target="bottomModal" :data-total_price="String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2))">提交订单</button>
+					<button 
+						class="cu-btn round bg-orange" 
+						@tap="showModal" 
+						data-target="bottomModal" 
+						:data-total_price="parseInt(fissionitem)!==1&&parseInt(fissionitem)!==2 ?String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2)) : String(fissioncombined)"
+					>
+						提交订单
+					</button>
 				</view>
 			</view>
 			<!-- 底部弹出框 框里面嵌套单选-->
@@ -140,8 +169,13 @@
 					</view>
 				</view>
 			</view>
-			<passkeyborad :show="passwordzhifutanchuang" :isIphoneX="isIphoneX" @Enterpasswordcompletepayment="Enterpasswordcompletepayment"
-			 :balancetext="String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2))" @close="close"></passkeyborad>
+			<passkeyborad 
+				:show="passwordzhifutanchuang" 
+				:isIphoneX="isIphoneX" 
+				@Enterpasswordcompletepayment="Enterpasswordcompletepayment"
+				:balancetext="parseInt(fissionitem)!==1&&parseInt(fissionitem)!==2 ? String(Number(totalprice-(Favorablebalance?Favorablebalance:0)).toFixed(2)) :String(fissioncombined)" 
+				@close="close"
+			></passkeyborad>
 			<loading v-show="loadingbool==false"></loading>
 		</view>
 	</view>
@@ -223,9 +257,104 @@
 				fromvalue: 0,
 				limit_gcategory: [], //优惠券的gc_id
 				limit_gids: [], //优惠券的商品id
+				arr:[],
+				linkbool:'',
+				fissionlist:[
+					{
+						name:"优惠券",
+						checkbool:false
+					},
+					{
+						name:"金币",
+						checkbool:false
+					},
+					{
+						name:"不使用任何优惠",
+						checkbool:false
+					}
+				],//裂变的列表
+				fissionitem:0,//列表的选项
+				fissionGold:0,
+				fissioncombined:0,//裂变的总价
+				fissionGoldcombined:0,//积分的总价
+				fissionGoldremaining:0,//金币的剩余
+				fissionconponsinfo:0,//裂变可使用优惠卷的几张
 			}
 		},
 		methods: {
+			//裂变获取用户可使用优惠券有几张
+			fissionconponsleng(e){
+				// console.log(e)
+				this.fissionconponsinfo = e
+			},
+			//裂变当用户点击选择的时候
+			fission_options(e){
+				// console.log(e)
+				let {indexs} = e.currentTarget.dataset
+				//定义两个变量 用来存储 金币量和价格 金币的剩余
+				let jin_bi = 0
+				let zong_jia = 0
+				let jin_bi_remaining = 0
+				this.fissionitem = indexs
+				this.fissionlist[indexs].checkbool = true
+				console.log(this.fissionitem,indexs)
+				// if(this.fissionlist[indexs].checkbool){
+				// 	this.fissionlist[indexs].checkbool = false
+				// }else{
+				// 	this.fissionlist[indexs].checkbool = true
+				// }
+				// console.log(parseInt(indexs))
+				if(parseInt(indexs)!==0){
+					this.fissionGoldremaining = 0
+					this.c_ids = ""
+					this.Favorablebalance = 0
+				}
+				//计算裂变的总价
+				if(parseInt(indexs)==1){
+					// // 当金币大于或者等于总价
+					// if(this.fissionGold>=this.totalprice){
+					
+						
+					// }else{
+					// 	//当金币小于或者等于 金币量
+						
+					// }
+					
+					// 	//这是底下的金币的量 金币量不存在小数
+					jin_bi= (Number(this.fissionGold)-Number(this.totalprice)>=0 ? Number(this.fissionGold)-Number(this.totalprice) : 0).toFixed(2)
+					//计算使用了多少金币 总金币-剩余的金币数  就代表得出使用的金币数
+					jin_bi_remaining = (Number(this.fissionGold)-Number(jin_bi)).toFixed(2)
+					//计算总价
+					//当订单价 - 金币量 <=0 就让总金额 = 0
+					if(Number(this.totalprice) - Number(this.fissionGold)<=0){
+						zong_jia = Number(0).toFixed(2)
+					}else{
+						zong_jia = (Number(this.totalprice) - Number(this.fissionGold)).toFixed(2)
+					}
+					this.fissionGoldremaining = jin_bi_remaining
+					this.fissionGoldcombined = jin_bi
+					this.fissioncombined = zong_jia
+				}else if(parseInt(indexs)==2){
+					this.fissionGoldremaining = 0
+					// console.log(this.totalprice)
+					this.fissioncombined = this.totalprice
+				}else if(parseInt(indexs)==0){
+					// console.log(this.fissionlist[indexs].checkbool)
+					if(this.fissionlist[indexs].checkbool){
+						this.fissionGoldremaining = 0
+						return
+					}else{
+						// this.fissionGoldremaining = 0
+						// this.c_ids = ""
+						// this.Favorablebalance = 0
+					}
+				}
+			},
+			blur(e){
+				const _this = this
+				let index = e.currentTarget.dataset.index
+				_this.arr[index].msg = e.detail.value
+			},
 			Cancelpayment() {
 				const _this = this
 				_this.hideModal()
@@ -323,6 +452,14 @@
 
 							_this.modalName = e.currentTarget.dataset.target
 							_this.total_price = total_price
+							//这里裂变 如果余额小于等于0的情况就直接走余额 不用框弹出来
+							if(Number(_this.total_price)<=0.00){
+								_this.modalName = null
+								let payid = "YUE"
+								_this.GetorderdetailsData(payid)
+							}else{
+								_this.modalName = e.currentTarget.dataset.target
+							}
 						} else {
 							uni.showModal({
 								title: "当前地址为空",
@@ -407,12 +544,12 @@
 									url: `${app.globalData.Requestpath}order/createCartUnPayOrderInfo`,
 									method: "POST",
 									data: {
-										token: this.tokey,
+										token: _this.tokey,
 										c_ids: str, //购物车选中的购物商品的id   _this.ordergidlist
-										o_from: this.o_from, //根据用户哪一端进来的
-										address_id: this.address_id, //地址对应的id
-										coupon_ids: this.coupondetails, //这是返回用户选择的那张优惠券
-										p_msg: Leavearr //用户的留言
+										o_from: _this.o_from, //根据用户哪一端进来的
+										address_id: _this.address_id, //地址对应的id
+										coupon_ids: _this.coupondetails, //这是返回用户选择的那张优惠券
+										p_msg: _this.arr //用户的留言
 									},
 									success(res) {
 										// console.log(res)
@@ -445,6 +582,7 @@
 									this.cid = this.coupondetails[0].c_id
 									this.ctype = this.coupondetails[0].c_type
 								}
+								// console.log("token:",this.tokey,"gid:",_this.orderinfolist[0].good_id,"spec_id:", _this.orderinfolist[0].spec_id,"quantity:",_this.orderinfolist[0].good_num,"o_from:",this.o_from,"address_id:",this.address_id,"p_msg:",this.arr[0].msg,"c_id:",this.c_ids,"share_code:",this.share_code,"share_from:",this.share_from,"g_type:",_this.couplebooltext[0],"gold_num:",Number(_this.fissionGoldremaining))
 								uni.request({
 									url: `${app.globalData.Requestpath}order/createUnPayOrderInfo`,
 									method: "POST",
@@ -455,13 +593,18 @@
 										quantity: _this.orderinfolist[0].good_num,
 										o_from: this.o_from, //根据用户哪一端进来的
 										address_id: this.address_id, //地址对应的id
-										p_msg: this.value, //用户的留言
+										p_msg: this.arr[0].msg, //用户的留言
 										c_id: this.c_ids, //这是返回用户选择的那张优惠券
 										c_type: this.ctype ? 'store' : 'platform',
 										share_code: this.share_code,
-										share_from: this.share_from
+										share_from: this.share_from,
+										g_type:_this.couplebooltext[0],
+										gold_num:Number(_this.fissionGoldremaining)
 									},
 									success(res) {
+									
+										// console.log( _this.couplebooltext[0],Number(_this.fissionGoldremaining))
+										// console.log(res)
 										// console.log(res)
 										// console.log(res.data.data.orderSnArray)//订单编号
 										// console.log(res.data.data.swiftNo)//订单流水号
@@ -783,9 +926,10 @@
 			// let {way} = opction
 			// this.way = way//判断是从购物车来的 还是详情来的
 			const _this = this
+			_this.linkbool = opction.bool
 			// console.log(JSON.parse(decodeURI(opction.selectitem)))
 			// console.log(opction.selectitem)
-			_this.fromvalue = opction.fromvalue
+			// _this.fromvalue = opction.fromvalue
 			if (opction.selectitem) {
 				// console.log(2222)
 				let {
@@ -797,7 +941,8 @@
 					city,
 					area,
 					province_name,
-					s
+					city_name,
+					area_name
 				} = JSON.parse(decodeURI(opction.selectitem))
 				this.Username = consignee_name
 				this.Userphone = consignee_phone
@@ -872,13 +1017,23 @@
 				key: "orderinfo",
 				success(res) {
 					_this.orderinfolist = res.data
+					
+					let arrasd = [];
+					for (var i = 0; i < _this.orderinfolist.length; i++) {
+						let objasd = {};
+					    objasd.sid = _this.orderinfolist[i].store_id;
+						objasd.msg = '';
+					    arrasd.push(objasd);
+					}
+					_this.arr = arrasd
+					
 					let stoIdArr = [] //开始的数组
 					let stoIdSet = [] //去重后的店铺ID
 					let coupons_gc = [] //商品id
 					_this.couplebooltext = []
 					//limit_gids
 					_this.orderinfolist.forEach((item, index) => {
-						console.log(item.activityType)
+						// console.log(item.activityType)
 						/*这里为了存放商品id ----开始*/
 						coupons_gc.push(item.good_id)
 						// console.log(coupons_gc)
@@ -907,13 +1062,13 @@
 							_this.ordergidlist += item.cart_id + ','
 						}
 						//这块的判断是不是新人  新人的话 就是1 否则就是0
-						if (item.good_type == 'npt' || item.good_type == 1 || item.good_type == 'nlt') {
-							_this.couplebooltext[0] = 1
-							_this.good_type = item.good_type
-							// console.log(_this.good_type)
-						} else {
-							_this.couplebooltext[0] = 0
-						}
+						// if (item.good_type == 'npt' || item.good_type == 1 || item.good_type == 'nlt') {
+						// 	_this.couplebooltext[0] = 1
+						// 	_this.good_type = item.good_type
+						// 	// console.log(_this.good_type)
+						// } else {
+						// 	_this.couplebooltext[0] = 0
+						// }
 						if (item.share_code && item.share_from == 1) {
 							//这是直播
 							_this.share_code = item.share_code
@@ -926,7 +1081,15 @@
 							// console.log(_this.share_code,_this.share_from,"这是团长进来的")
 						} else if (item.activityType == 'activity') {
 							_this.couplebooltext[0] = 2
-						} else {
+						} else if (item.good_type == 'npt' || item.good_type == 1 || item.good_type == 'nlt') {
+							// console.log(852)
+							_this.couplebooltext[0] = 1
+							_this.good_type = item.good_type
+							// console.log(_this.good_type)
+						}else if(item.fissiontype==4){
+							// 处理裂变
+							_this.couplebooltext[0] = 3
+						}else {
 							// console.log("这是普通商品")
 							_this.share_code = ""
 							_this.share_from = ""
@@ -1013,9 +1176,12 @@
 							pageSize: 1,
 						},
 						success(reslove) {
-							// console.log(reslove)
+							// console.log(reslove,1111)
 							_this.code = reslove.data.code
 							if (reslove.data.code !== 0) {
+								_this.province_name = ""
+								_this.city_name = ""
+								_this.area_name=""
 								// console.log(333)
 								_this.Username = ""
 								_this.Userphone = ""
@@ -1028,6 +1194,13 @@
 					uni.navigateTo({
 						url: "/pages/login/login"
 					})
+				}
+			})
+			//将金币取出来
+			uni.getStorage({
+				key:"Fission_Gold",
+				success(resGold){
+					_this.fissionGold = resGold.data
 				}
 			})
 		},
@@ -1051,7 +1224,9 @@
 							// console.log(reslove)
 							_this.code = reslove.data.code
 							if (reslove.data.code !== 0) {
-								// console.log(333)
+								_this.province_name = ""
+								_this.city_name = ""
+								_this.area_name=""
 								_this.Username = ""
 								_this.Userphone = ""
 								_this.Userselect = "+手动添加收货地址"
@@ -1397,6 +1572,51 @@
 				.red {
 					background-color: #ef2950;
 				}
+			}
+		}
+	}
+	.cu-form-group{
+		display:flex;
+		align-items: stretch;
+		.order_title_text{
+			margin-top:20rpx;
+		}
+	}
+	//这是列变的css
+	.fission_box{
+		background-color: #fff;
+		margin-top:20rpx;
+		.fission_plice{
+			display:flex;
+			align-items: center;
+			border-bottom:2rpx solid #ccc;
+			padding:20rpx 10rpx;
+			&:last-child{
+				border-bottom:0;
+			}
+			.active_circle{
+				color:#fff;
+				background-color:red;
+				font-size: 24rpx;
+				text-align: center;
+			}
+			.fission_circle{
+				width: 30rpx;
+				height: 30rpx;
+				border-radius:50%;
+				border:2rpx solid #f00;
+				// background-color: red;
+				margin-right:20rpx;
+			}
+			.fission_Gold{
+				display:flex;
+			}
+		}
+		.fission_Gold_box{
+			justify-content: space-between;
+			align-items: center;
+			.available_Gold{
+				color:rgb(128,128,128);
 			}
 		}
 	}

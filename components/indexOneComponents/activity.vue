@@ -12,10 +12,10 @@
 				</view>
 				<view class="left-bottom">
 					<view class="img-left" :style="{'background-image':'linear-gradient('+item.imgBgOneTop+','+item.imgBgOneBottom+')'}">
-						<image src="../../static/indexOne/watches.png" mode=""></image>
+						<!-- <image src="../../static/indexOne/watches.png" mode=""></image> -->
 					</view>
 					<view class="img-left" :style="{'background-image':'linear-gradient('+item.imgBgTwoTop+','+item.imgBgTwoBottom+')'}">
-						<image src="../../static/indexOne/watches.png" mode=""></image>
+						<!-- <image src="../../static/indexOne/watches.png" mode=""></image> -->
 					</view>
 				</view>
 			</view>

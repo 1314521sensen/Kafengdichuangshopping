@@ -6,7 +6,7 @@
 			 <video 
 				id="myVideo"
 				:src="url" 
-				:style="{width:wdith+'px',height :height+ 'px'}"
+				:style="{width:wdith+'px',height :height-18+ 'px'}"
 				:autoplay="true" 
 				:page-gesture="true" 
 				:show-fullscreen-btn="false" 

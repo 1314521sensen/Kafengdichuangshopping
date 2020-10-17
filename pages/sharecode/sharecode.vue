@@ -3,7 +3,8 @@
 		<defaultbgblackcolorwhitebar></defaultbgblackcolorwhitebar>
 			<!-- <canvas canvas-id="qrcode" :style="{width:200+'rpx',height:200+'rpx'}"  class="qrcodea" /> -->
 			<!-- <view > -->
-				<canvas canvas-id="qrcode" :style="{width:200+'rpx',height:200+'rpx'}"  class="qrcodea" />
+			<view class="App_scancode">请使用惠播客APP进行扫码</view>
+			<canvas canvas-id="qrcode" :style="{width:200+'rpx',height:200+'rpx'}"  class="qrcodea" />
 			<!-- </view> -->
 	</view>
 	
@@ -77,6 +78,16 @@
 				top:49vh;
 				left:19vh;
 			/* #endif */
+		}
+		.App_scancode{
+			position: absolute;
+			// width: 100%;
+			top:39vh;
+			left:14vh;
+			color:#fff;
+			font-weight: bold;
+			font-size: 30rpx;
+			// background-color: red;
 		}
 	}
 </style>

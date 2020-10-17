@@ -72,7 +72,7 @@
 					<adlet :live_url="live_url" :livenick="livenick" :roomid="roomid" :livepic="livepic" :uname="uname" :uid="uid"
 					 :livedesc="livedesc" v-if="adletbool"></adlet>
 					<!-- 新品活动xxx等  可能是轮播图 -->
-					<storebanner></storebanner>
+					<!-- <storebanner></storebanner> -->
 					<!-- 优惠券 -->
 					<discountcoupon :list='list' v-if="bool"></discountcoupon>
 					<!-- 新品开业 -->
@@ -110,7 +110,7 @@
 	//引入视频
 	// import storevideo from "@/components/store/storevideo.vue"
 	// 引入轮播图   
-	import storebanner from "@/components/store/storebanner.vue"
+	// import storebanner from "@/components/store/storebanner.vue"
 	// 优惠券
 	import discountcoupon from "@/components/store/discountcoupon.vue"
 	// 新品开业    
@@ -287,6 +287,7 @@
 					uni.getStorage({
 						key: "bindtokey",
 						success(res) {
+							app.globalData.Detectionupdatetokey(res.data)
 							uni.request({
 								url: `${app.globalData.Requestpath}user/addStoreFavoriteInfo`,
 								method: "POST",
@@ -305,6 +306,11 @@
 										_this.Focusbool = true
 									}
 								}
+							})
+						},
+						fail(err){
+							uni.navigateTo({
+								url:"/pages/login/login"
 							})
 						}
 					})
@@ -509,7 +515,7 @@
 			storerecommended,
 			storebady,
 			storenews,
-			storebanner,
+			// storebanner,
 			discountcoupon,
 			storenewArrival,
 			boutiqueBarley,
@@ -553,6 +559,7 @@
 			uni.getStorage({
 				key: "bindtokey",
 				success(res) {
+					app.globalData.Detectionupdatetokey(res.data)
 					uni.request({
 						url: `${app.globalData.Requestpath}user/getStoreFavoriteInfo`,
 						method: "POST",
@@ -576,6 +583,11 @@
 					})
 
 
+				},
+				fail(err){
+					uni.navigateTo({
+						url:`/pages/login/login`
+					})
 				}
 			})
 			//优惠券
